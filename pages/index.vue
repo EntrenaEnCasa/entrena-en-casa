@@ -1,5 +1,4 @@
 <template>
-    <div>
-        <h1>My App</h1>
-    </div>
+    <HomeBanner />
 </template>
+<style scoped></style>
