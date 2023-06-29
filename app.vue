@@ -13,5 +13,9 @@ body {
 .tellural {
   font-family: 'tellural', sans-serif;
 }
+
+p {
+  margin: 0;
+}
 </style>
                 
