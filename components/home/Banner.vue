@@ -62,7 +62,7 @@
                         <div class="ms-1 d-flex flex-column lh-1">
                             <p class="fs-6 fw-semibold mb-1">Modalidad
                             </p>
-                            <p class="p">Online o presencial, tu escoges</p>
+                            <p class="fs-7">Online o presencial, tu escoges</p>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                         <div class="ms-2 d-flex flex-column lh-1">
                             <p class="fs-6 fw-semibold mb-1">Modalidad
                             </p>
-                            <p class="p">Programa tus propias
+                            <p class="fs-7">Programa tus propias
                                 sesiones, ve a tu propio ritmo</p>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                         <div class="ms-1 d-flex flex-column lh-1">
                             <p class="fs-6 fw-semibold mb-1">Modalidad
                             </p>
-                            <p class="p">Entrena tanto
+                            <p class="fs-7">Entrena tanto
                                 individual como grupal</p>
                         </div>
                     </div>
@@ -111,9 +111,5 @@
     bottom: 0;
     left: 50%;
     transform: translate(-50%, 50%);
-}
-
-.p {
-    font-size: .85rem;
 }
 </style>
