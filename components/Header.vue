@@ -1,9 +1,11 @@
 <template>
     <nav class="navbar navbar-expand-lg bg-gradiente">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="/logo-horizontal.png" class="object-fit-contain" alt="Bootstrap" width="150" height="50">
-            </a>
+        <div class="container w-100">
+            <div class="flex-grow-1">
+                <a class="navbar-brand" href="#">
+                    <img src="/logo-horizontal.png" class="object-fit-contain" alt="Bootstrap" width="150" height="50">
+                </a>
+            </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
