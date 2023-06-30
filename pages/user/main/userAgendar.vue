@@ -4,7 +4,7 @@
         <form class="mb-3">
             <div class="row">
                 <div class="col-md-3">
-                    <select id="selectCredito" class="form-select form-select-lg">
+                    <select id="selectCredito" class="form-select">
                         <option selected>Seleccionar tipo de credito</option>
                         <option>Oro</option>
                         <option>Plata</option>
@@ -12,7 +12,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select id="selectProfesional" class="form-select form-select-lg">
+                    <select id="selectProfesional" class="form-select">
                         <option selected>Seleccionar Profesional</option>
                         <option>Entrenador Fisico</option>
                         <option>Nutricionista</option>
@@ -21,13 +21,13 @@
                 <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon2">Desde</span>
-                        <input type="date" class="form-control form-control-lg" aria-describedby="basic-addon2" id="desde">
+                        <input type="date" class="form-control" aria-describedby="basic-addon2" id="desde">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon2">Hasta</span>
-                        <input type="date" class="form-control form-control-lg" aria-describedby="basic-addon2" id="hasta">
+                        <input type="date" class="form-control" aria-describedby="basic-addon2" id="hasta">
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -36,7 +36,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M32 144h448M112 256h288M208 368h96"/>
                             </svg>
-                            Filtar
+                            Filtrar
                         </button>
                     </div>
                 </div>
@@ -161,7 +161,7 @@ export default {
     }
 
     .titulo{
-        font-size: 30px;
+        font-size: 25px;
         color: black;
         font-weight: 500;
     }
@@ -175,7 +175,7 @@ export default {
     .boton{
         display: inline;
         align-items: center;
-        font-size: 25px;
+        font-size: 15px;
     }
 
     .btn.btn-primary{
@@ -195,7 +195,7 @@ export default {
     }
 
     th{
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .btn.btn-success{
@@ -205,12 +205,12 @@ export default {
     }
 
     img{
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
     }
 
     td{
-        font-size: 18px;
+        font-size: 15px;
         color: $color_principal;
     }
 
