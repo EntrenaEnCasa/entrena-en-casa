@@ -1,21 +1,21 @@
 <template >
-    <div class="userInicio py-5">
-        <div class="row row-gap-5">
-            <div class="col-md-6 px-5">
+    <div class="userInicio py-5 px-5 column-gap-5">
+        <div class="row row-gap-4 ">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Últimas sesiones</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 px-5">
+            <div class="col-md-6">
                 <div class="card" >
                     <div class="card-body">
                         <h5 class="card-title">Próximas sesiones</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 px-5">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-body cartaGrande">
                         <div class="titulo">
