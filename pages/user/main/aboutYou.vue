@@ -1,23 +1,25 @@
 <template>
     <div class="about-you py-5 px-5">
-        <div class="topSection mt-3 mb-5 mx-3">
-            <img class="img-fluid mx-auto d-block" src="/logo.png" alt="">
+        <div class="topSection mt-2 mb-5 mx-3">
+            <nuxt-link to="/">
+
+                <img class="img-fluid mx-auto d-block" width="120" src="/logo.png" alt="">
+            </nuxt-link>
             <p>Cuéntanos un poco sobre ti</p>
         </div>
-        
 
-        <form class="row g-3 mx-5 row-gap-3">
+        <form class="row g-3 mx-5 row-gap-3 w-80">
             <div class="col-md-4">
                 <label for="inputNombre" class="form-label">¿Cuál es tu Nombre?</label>
-                <input type="text" class="form-control form-control-lg" id="inputNombre" placeholder="Jorge">
+                <input type="text" class="form-control py-3" id="inputNombre" placeholder="Jorge">
             </div>
             <div class="col-md-4">
                 <label for="inputApellido" class="form-label">¿Cuál es tu Apellido?</label>
-                <input type="text" class="form-control form-control-lg" id="inputApellido" placeholder="Sierra">
+                <input type="text" class="form-control py-3" id="inputApellido" placeholder="Sierra">
             </div>
             <div class="col-md-4">
                 <label for="inputGenero" class="form-label">¿Cuál es tu género?</label>
-                <select id="inputGenero" class="form-select form-select-lg">
+                <select id="inputGenero" class="form-select py-3 ">
                     <option selected>Selecciona tu género</option>
                     <option>Masculino</option>
                     <option>Femenino</option>
@@ -27,32 +29,32 @@
             </div>
             <div class="col-md-4">
                     <label for="inputNacimiento" class="form-label">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control form-control-lg">
+                    <input type="date" class="form-control py-3">
             </div>
             <div class="col-md-4">
                 <label for="inputPeso" class="form-label">¿Cuál es tu peso actual?</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control form-control-lg" placeholder="80" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control py-3" placeholder="80" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <span class="input-group-text" id="basic-addon2">Kg</span>
                 </div>
             </div>
             <div class="col-md-4">
                 <label for="inputPeso" class="form-label">¿Cuál es tu estatura?</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control form-control-lg" placeholder="170" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control py-3" placeholder="170" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <span class="input-group-text" id="basic-addon2">cm</span>
                 </div>
             </div>
-            <div class="col-12 mt-4 mb-5">
+            <div class="col-12 mt-4 mb-3">
                 <div class="form-label extra">Estos datos son necesarios para informar al profesor durante la sesión agendada e ir midiendo tu avance.</div>
             </div>
-            <div class="row justify-content-between mt-3">
-                <div class="col-md-4 skip">
-                    <a href="#" class="link-info">Recordarmelo más tarde ></a>
-                </div>
-                <div class="col-md-4 boton">
+            <div class="row justify-content-between mt-2">
+                <nuxt-link class="col-md-4 skip" to="/" style="text-decoration: none; color: inherit;">
+                    <p class="link-info">Recordarmelo más tarde </p>
+                </nuxt-link>
+                <nuxt-link class="col-md-4 boton" to="/">
                     <button type="submit" class="btn float-right">Confirmar</button>
-                </div>
+                </nuxt-link>
             </div>
         </form>
     </div>
@@ -87,14 +89,11 @@
         text-align: center;
     }
 
-    img{
-        width: 240px;
-    }
 
     .topSection p{
         color: $color_enfasis;
         font-family: $font_family_primary;
-        font-size: 50px;
+        font-size: 25px;
         font-weight: 600;
         line-height: 119.5%;
     }
@@ -106,10 +105,11 @@
     form label{
         margin: 0px 10px;
         color: $color_principal;
-        font-size: 22px;
+        font-size: 17px;
         font-family: $font_family_primary;
         font-style: normal;
         font-weight: 500;
+        margin-bottom: 3px;
     }
 
     form .form-control{
@@ -137,7 +137,7 @@
     .form-label.extra{
         margin: 0px 10px;
         color: $extra-color;
-        font-size: 22px;
+        font-size: 15px;
         font-family: $font_family_primary;
         font-style: normal;
         font-weight: 500;
@@ -146,13 +146,13 @@
 
     .skip{
         justify-content: left;
-        font-size: 22px;
+        font-size: 18px;
         font-family: $font_family_primary;
     }
 
     .btn{
         float: right;
-        font-size: 22px;
+        font-size: 18px;
         font-family: $font_family_primary;
         color: white;
         background-color: $green;
