@@ -7,7 +7,7 @@
         </div>
     </div>
 </template>
-<style>
+<style scoped>
     #slott{
         margin-left: 19vw;
         margin-top: 75px;

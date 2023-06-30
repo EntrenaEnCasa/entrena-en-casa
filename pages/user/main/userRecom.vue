@@ -71,9 +71,9 @@
 </template>
 
 <script>
-export default {
-    
-}
+    definePageMeta({
+        layout: "user",
+    });
 </script>
 
 <style scoped lang="scss">
