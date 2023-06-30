@@ -59,14 +59,15 @@
 </template>
 
 
-<script>
-export default {
-    
-}
+<script setup>
+    definePageMeta({
+        layout: "auth",
+    });
 </script>
+    
 
 
-<style lang="scss">
+<style scoped  lang="scss">
     $color_enfasis: #0EB3E0;
     $color_principal: #505050;
     $color_secondary: #C3C3C3;
