@@ -143,7 +143,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
     $color_enfasis: #0EB3E0;
     $color_principal: #505050;
     $color_secondary: #C3C3C3;
@@ -153,6 +153,7 @@ export default {
 
     $font_family_primary: 'Poppins', sans-serif;
     $font_family_Secondary: 'tellural', sans-serif;
+
 
     .userAgendar{
         font-family: $font_family_primary;
@@ -174,7 +175,7 @@ export default {
 
     .boton{
         display: inline;
-        align-items: center;
+        align-items: right;
         font-size: 15px;
     }
 
