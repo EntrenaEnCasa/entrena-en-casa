@@ -32,10 +32,10 @@
 </template>
 
 
-<script>
-export default {
-    
-}
+<script setup>
+    definePageMeta({
+        layout: "user",
+    });
 </script>
 
 
