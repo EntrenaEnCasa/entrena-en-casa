@@ -58,7 +58,7 @@
             <div class="col-md-6 disabled">
                 <div class="card secondary rounded-4 px-3">
                     <div class="card-body row row-gap-3">
-                        <div class="col-sm-6 fecha"><p>25 de Julio</p></div>
+                        <div class="col-sm-6 fecha"><p>25 de Junio</p></div>
                         <div class="col-sm-6 hora"><p>16:00hrs</p></div>
                         <div class="col-lg-12 titulo"><b>Tipo de sesión</b></div>
                         <div class="col-lg-12 nombreProfesional">Nombre Profesional - Tipo Profesional</div>
@@ -66,19 +66,19 @@
                         <div class="col-lg-12 calificar align-right justify-content-end">
                             <p>Calificar sesión</p>
                             <svg viewBox="0 0 78 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z"/>
+                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z" fill="#949494"/>
                             </svg>
                             <svg viewBox="0 0 78 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z"/>
+                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z" fill="#949494"/>
                             </svg>
                             <svg viewBox="0 0 78 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z"/>
+                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z" fill="#949494"/>
                             </svg>
                             <svg viewBox="0 0 78 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z"/>
+                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z" fill="#949494"/>
                             </svg>
                             <svg viewBox="0 0 78 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z"/>
+                                <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z" fill="#949494"/>
                             </svg>
                         </div>
                     </div>
@@ -87,13 +87,13 @@
             <div class="col-md-6 disabled">
                 <div class="card secondary rounded-4 px-3">
                     <div class="card-body row row-gap-3">
-                        <div class="col-sm-6 fecha"><p>26 de Julio</p></div>
+                        <div class="col-sm-6 fecha"><p>26 de Junio</p></div>
                         <div class="col-sm-6 hora"><p>16:00hrs</p></div>
                         <div class="col-lg-12 titulo"><b>Tipo de sesión</b></div>
                         <div class="col-lg-12 nombreProfesional">Nombre Profesional - Tipo Profesional</div>
                         <div class="col-lg-12 method"><a href="#">Online</a></div>
                         <div class="col-lg-12 calificar">
-                            <p>Calificar sesión</p>
+                            <p>Calificada</p>
                             <svg viewBox="0 0 78 73" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M39 0L47.9806 27.6393H77.0423L53.5309 44.7214L62.5114 72.3607L39 55.2786L15.4886 72.3607L24.4691 44.7214L0.957741 27.6393H30.0194L39 0Z"/>
                             </svg>
