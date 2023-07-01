@@ -8,14 +8,17 @@
                             <h1 class="poppins fw-bold text-light" style="font-size: 70px;">¡Bienvenido <br> de nuevo!</h1>
                             <p class="poppins text-light" style="font-size: 22px;">¿Listo para un nuevo desafío?</p>
                         </div>
+                        
                         <img src="/emoji/runners.svg" alt="" width="50%" >
                     </div> 
                 </div>
                 <div class="col w-50 d-flex flex-column justify-content-center align-items-center " style="        margin-bottom: 50px;">
-                    <img src="/logo.png" class="mb-4" alt="" width="150px">
-                    <form @submit.prevent style="width: 80%;" class="">
+                    <nuxt-link to="/">
+                        <img src="/logo.png" class="mb-4" alt="" width="150px">
+                    </nuxt-link>
+                    <form @submit.prevent style="width: 80%;" >
                         <div class="container-group" >
-                            <label for="exampleInputEmail1" class="form-label" >Email address</label>
+                            <label for="exampleInputEmail1" class="form-label" >Correo electrónico</label>
                             <div class=" input-group px-1 py-2 ">
                                 <div class="input-group-text" alt="">
 
@@ -26,7 +29,7 @@
                             </div>
                         </div>
                         <div class="container-group">
-                            <label for="exampleInputPassword1" class="form-label">Password</label>
+                            <label for="exampleInputPassword1" class="form-label">Contraseña</label>
 
                             <div class=" input-group px-1 py-2">
                                 <div class="input-group-text" alt="">
@@ -37,11 +40,6 @@
 
                         </div>
                         <div class="row d-flex">
-                            <div class="col container-group form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                
-                                <label class="form-check-label" for="exampleCheck1" style="font-size: 14px;">Check me out</label>
-                            </div>
                             <div class="col">
                                 <p class="text-end" style="color: #0EB3E0;"> ¿Olvidaste tu contraseña?</p>
                             </div>
@@ -56,9 +54,10 @@
 </template>
 <script setup>
 
-   
+   import {useUserStore} from '~/stores/userStore'
 
     const router = useRouter();
+    const userStore = useUserStore();
 
     const formData = reactive({
         email: "",
@@ -70,8 +69,14 @@
     });
 
     const login = () => {
+        if(formData.email == "" || formData.password == ""){
+            alert("Por favor, ingrese todos los datos");
+            return;
+        }
+        //llamada a la api
+
         //una vez que te logeas, te envía a la página de usuario
-        router.push('');
+        router.push('/user/main/userInicio');
     }
 
 </script>

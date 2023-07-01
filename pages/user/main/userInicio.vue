@@ -2,21 +2,21 @@
     <div class="userInicio py-5 px-5 column-gap-5">
         <div class="row row-gap-4 ">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card cardInicio">
                     <div class="card-body">
                         <h5 class="card-title">Últimas sesiones</h5>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card" >
+                <div class="card cardInicio">
                     <div class="card-body">
                         <h5 class="card-title">Próximas sesiones</h5>
                     </div>
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="card">
+                <div class="card cardInicio">
                     <div class="card-body cartaGrande">
                         <div class="titulo">
                             <h5 class="card-title">Estadísticas</h5>
@@ -32,10 +32,10 @@
 </template>
 
 
-<script>
-export default {
-    
-}
+<script setup>
+    definePageMeta({
+        layout: "user",
+    });
 </script>
 
 
@@ -60,7 +60,7 @@ export default {
         background-color: red;
     }
 
-    .card{
+    .card.cardInicio{
         width: 100%;
         height: 300px;
         border-radius: 20px;
