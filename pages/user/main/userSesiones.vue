@@ -4,7 +4,7 @@
             <div>
                 <h3 class="">Sesión en curso</h3>
                 <div class="col-md-12" >
-                    <div class="card principal rounded-4 px-3 m-0" style="height: 80px;">
+                    <div class="card principal rounded-4 px-3 m-0">
                         <div class="card-body row d-flex  align-items-center">
                             <div class="col-lg-1 hora"><p>16:00hrs</p></div>
                             <div class="col-lg-2 titulo"><b>Tipo de sesión</b></div>
@@ -34,11 +34,11 @@
             </div>
             <div class="">
                 <h3>Sesiones próximas</h3>
-                <div class="row" >
+                <div class="row row-gap-3" >
 
                     <div class="col-md-6">
                         <div class="card secondary rounded-4 px-3">
-                            <div class="card-body row row-gap-1">
+                            <div class="card-body row row-gap-3">
                                 <div class="col-sm-6 fecha"><p>25 de Julio</p></div>
                                 <div class="col-sm-6 hora"><p>16:00hrs</p></div>
                                 <div class="col-lg-12 titulo"><b>Tipo de sesión</b></div>
@@ -66,7 +66,7 @@
             <div>
 
                 <h3>Sesiones pasadas</h3>
-                <div class="row">
+                <div class="row row-gap-3">
                     <div class="col-md-6 disabled">
                         <div class="card secondary rounded-4 px-3">
                             <div class="card-body row row-gap-3">
