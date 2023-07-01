@@ -25,10 +25,12 @@
                 <div class="ms-auto">
                     <ul class="navbar-nav justify-content-center me-auto mb-2 mb-lg-0">
                         <li class="nav-item p-2">
-                            <a class="nav-link " href="#">Registro</a>
+                            <nuxt-link class="nav-link " to="/user/auth/register">Registro</nuxt-link>
                         </li>
                         <li class="nav-item p-2">
-                            <button type="button" class="btn btn-outline-success">Iniciar sesión</button>
+                            <nuxt-link to="/user/auth/login"> 
+                                <button type="button" @click="" class="btn btn-outline-success">Iniciar sesión</button>
+                            </nuxt-link>
                         </li>
                     </ul>
                 </div>
@@ -37,7 +39,7 @@
         </div>
     </nav>
 </template>
-<style>
+<style scoped>
 .bg-gradiente {
     background: url('/background.svg') no-repeat center center fixed;
     /* background: linear-gradient(136deg, rgba(198, 243, 255, 0.15) 0%, rgba(113, 212, 240, 0.15) 64.54%, rgba(0, 142, 181, 0.15) 100%); */

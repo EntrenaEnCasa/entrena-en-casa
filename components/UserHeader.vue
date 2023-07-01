@@ -4,9 +4,9 @@
             <nav class=" navbar navbar-expand-lg bg-white" style="box-shadow: 0px 0px 27px -6px rgba(0, 0, 0, 0.10); position: fixed; left:0; top:0; width: 100vw; z-index: 100;">
                 <div class="container w-100" style="height: 60px;">
                     <div class="flex-grow-1">
-                        <a class="navbar-brand" href="#">
+                        <nuxt-link class="navbar-brand" to="/">
                             <img src="/logo-horizontal.png" class="object-fit-contain" alt="Bootstrap" width="150" height="35">
-                        </a>
+                        </nuxt-link>
                     </div>
                     <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,11 +26,11 @@
                                     </li>
                                     <li class="nav-item  d-flex align-items-center medal">
                                         <img src="/plans/silver-medal.png" alt="" width="20" style="object-fit:contain;">
-                                        <p class="text-gray">1</p>
+                                        <p class="text-gray">0</p>
                                     </li>
                                     <li class="nav-item  d-flex align-items-center medal">
                                         <img src="/plans/bronze-medal.png" alt="" width="20px" style="object-fit:contain;">
-                                        <p class="text-gray">2</p>
+                                        <p class="text-gray">0</p>
                                     </li>
                                     
                                 </ul>

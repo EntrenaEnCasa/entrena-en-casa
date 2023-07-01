@@ -34,7 +34,7 @@
                                     <div class="input-group-text" alt="">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M368 192h-16v-80a96 96 0 10-192 0v80h-16a64.07 64.07 0 00-64 64v176a64.07 64.07 0 0064 64h224a64.07 64.07 0 0064-64V256a64.07 64.07 0 00-64-64zm-48 0H192v-80a64 64 0 11128 0z" fill="#0EB3E0"/></svg>
                                     </div>
-                                    <input  type="repassword"  class="form-control shadow-none " id="InputPassword2" placeholder="* * * * * * * *">
+                                    <input v-model="formData.repassword" type="password"  class="form-control shadow-none " id="InputPassword2" placeholder="* * * * * * * *">
                                 </div>
     
                             </div>
@@ -74,7 +74,8 @@
 
     const formData = reactive({
         email: "",
-        password: ""
+        password: "",
+        repassword: ""
     });
 
     definePageMeta({
@@ -82,6 +83,15 @@
     });
 
     const signup = () => {
+        if(formData.email == "" || formData.password == "" || formData.repassword == ""){
+            alert("Por favor, rellene todos los campos");
+            return;
+        }
+        if(formData.password != formData.repassword){
+            alert("Las contraseñas no coinciden");
+            return;
+        }
+
         //una vez que te logeas, te envía a la página de usuario
         router.push('/user/main/aboutYou');
     }
