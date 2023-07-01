@@ -26,5 +26,9 @@ $red: #FF3A3A;
 .fs-7 {
   font-size: .85rem;
 }
+
+.bg-gradiente {
+  background: url('/background.svg') no-repeat center center fixed;
+}
 </style>
                 
