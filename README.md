@@ -1,63 +1,13 @@
-# Nuxt 3 Minimal Starter
+Para este proyecto se utilizó **NUXT 3**, que a su vez, utiliza **VUE 3**. Se utilizó al igual **Boostrap**.
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## **Comandos**
 
-## Setup
-
-Make sure to install the dependencies:
+Para correr el proyecto, deben utilizar los siguientes comandos (se debe tener pnpm instalado):
 
 ```bash
-# npm
-npm install
-
-# pnpm
+# Instalamos las dependencias
 pnpm install
 
-# yarn
-yarn install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
+# Corremos el servidor local de NUXT
 pnpm run dev
-
-# yarn
-yarn dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
