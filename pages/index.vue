@@ -4,5 +4,6 @@
     <HomePlans />
     <HomeWhatIs />
     <HomeOurStudents />
+    <HomeContact />
 </template>
 <style scoped></style>
