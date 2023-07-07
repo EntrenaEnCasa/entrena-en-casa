@@ -44,8 +44,11 @@
                                 <p class="text-end" style="color: #0EB3E0;"> ¿Olvidaste tu contraseña?</p>
                             </div>
                         </div>
+                        <nuxt-link to="/user/main/userInicio"> 
+
                         <button @click="login" class="p-2 w-100 border-0 text-white fw-medium mt-2" style="font-size: 20px;
                         border-radius: 3px;">Iniciar sesión</button>
+                        </nuxt-link>
                     </form>
                 </div>
             </div>
@@ -64,9 +67,9 @@
 //         password: ""
 //     });
 
-//     definePageMeta({
-//         layout: "auth",
-//     });
+    definePageMeta({
+        layout: "auth",
+    });
 
 //     const login = () => {
 //         if(formData.email == "" || formData.password == ""){

@@ -49,8 +49,10 @@
                                 <p class="text-end" style="color: #0EB3E0;"> ¿Olvidaste tu contraseña?</p>
                             </div>
                         </div>
-                        <button @click="signup" class="p-2 w-100 border-0 text-white fw-medium mt-2" style="font-size: 20px;
+                        <nuxt-link to="/user/main/userInicio"> 
+                            <button class="p-2 w-100 border-0 text-white fw-medium mt-2" style="font-size: 20px;
                         border-radius: 3px;">Registrarse</button>
+                        </nuxt-link>
                     </form>
                 </div>
                 <div class="col w-50 d-flex flex-column align-items-center justify-content-center min-vh-100 text-center" style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.80) 100%);" >
