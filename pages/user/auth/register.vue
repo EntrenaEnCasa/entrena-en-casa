@@ -13,7 +13,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M424 80H88a56.06 56.06 0 00-56 56v240a56.06 56.06 0 0056 56h336a56.06 56.06 0 0056-56V136a56.06 56.06 0 00-56-56zm-14.18 92.63l-144 112a16 16 0 01-19.64 0l-144-112a16 16 0 1119.64-25.26L256 251.73l134.18-104.36a16 16 0 0119.64 25.26z"  fill="#0EB3E0"/></svg>
                                 </div>
                                 
-                                <input type="email"  v-model="formData.email" class="form-control shadow-none" id="InputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu correo electrónico">
+                                <input type="email"   class="form-control shadow-none" id="InputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu correo electrónico">
                             </div>
                         </div>
                         <div class="container-group row">
@@ -24,7 +24,7 @@
                                     <div class="input-group-text" alt="">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M368 192h-16v-80a96 96 0 10-192 0v80h-16a64.07 64.07 0 00-64 64v176a64.07 64.07 0 0064 64h224a64.07 64.07 0 0064-64V256a64.07 64.07 0 00-64-64zm-48 0H192v-80a64 64 0 11128 0z" fill="#0EB3E0"/></svg>
                                     </div>
-                                    <input v-model="formData.password" type="password"  class="form-control shadow-none " id="InputPassword1" placeholder="* * * * * * * *">
+                                    <input  type="password"  class="form-control shadow-none " id="InputPassword1" placeholder="* * * * * * * *">
                                 </div>
                             </div>
                             <div class="col container-group">
@@ -34,7 +34,7 @@
                                     <div class="input-group-text" alt="">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M368 192h-16v-80a96 96 0 10-192 0v80h-16a64.07 64.07 0 00-64 64v176a64.07 64.07 0 0064 64h224a64.07 64.07 0 0064-64V256a64.07 64.07 0 00-64-64zm-48 0H192v-80a64 64 0 11128 0z" fill="#0EB3E0"/></svg>
                                     </div>
-                                    <input v-model="formData.repassword" type="password"  class="form-control shadow-none " id="InputPassword2" placeholder="* * * * * * * *">
+                                    <input  type="password"  class="form-control shadow-none " id="InputPassword2" placeholder="* * * * * * * *">
                                 </div>
     
                             </div>
@@ -70,31 +70,31 @@
 
    
 
-    const router = useRouter();
+    // const router = useRouter();
 
-    const formData = reactive({
-        email: "",
-        password: "",
-        repassword: ""
-    });
+    // const formData = reactive({
+    //     email: "",
+    //     password: "",
+    //     repassword: ""
+    // });
 
     definePageMeta({
         layout: "auth",
     });
 
-    const signup = () => {
-        if(formData.email == "" || formData.password == "" || formData.repassword == ""){
-            alert("Por favor, rellene todos los campos");
-            return;
-        }
-        if(formData.password != formData.repassword){
-            alert("Las contraseñas no coinciden");
-            return;
-        }
+    // const signup = () => {
+    //     if(formData.email == "" || formData.password == "" || formData.repassword == ""){
+    //         alert("Por favor, rellene todos los campos");
+    //         return;
+    //     }
+    //     if(formData.password != formData.repassword){
+    //         alert("Las contraseñas no coinciden");
+    //         return;
+    //     }
 
-        //una vez que te logeas, te envía a la página de usuario
-        router.push('/user/main/aboutYou');
-    }
+    //     //una vez que te logeas, te envía a la página de usuario
+    //     router.push('/user/main/aboutYou');
+    // }
 
 </script>
 <style lang="scss">
