@@ -1,13 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
-  devtools: { enabled: true }, 
-  modules:[
-    '@pinia/nuxt',
+  devtools: { enabled: true },
+  modules: [
+    '@pinia/nuxt', '@nuxtjs/tailwindcss'
   ],
-  app:{
-    head:{
-      link:[
+  app: {
+    head: {
+      link: [
         {
           href: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css",
           rel: "stylesheet",
@@ -15,7 +15,7 @@ export default defineNuxtConfig({
           crossorigin: "anonymous"
         }
       ],
-      script:[
+      script: [
         {
           src: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js",
           integrity: "sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz",

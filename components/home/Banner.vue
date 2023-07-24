@@ -1,13 +1,13 @@
 <template>
-    <div class="pt-5 bg-gradiente position-relative" style="padding-bottom: 100px">
+    <div class="pt-5 bg-gradiente relative" style="padding-bottom: 100px">
         <div class="tellural">
-            <h1 class="text-center fw-bold">
+            <h1 class="text-center font-bold text-4xl">
                 Son cada vez más
                 <br>
                 alumnos entrenando
             </h1>
             <div class="container text-center">
-                <div class="row align-items-center">
+                <div class="row items-center">
                     <div class="col d-flex flex-column">
                         <div class="align-self-start">
                             <img src="/icons/star.svg" alt="running" height="60">
