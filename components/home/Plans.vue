@@ -75,6 +75,7 @@
                 <h5 class="text-4xl font-medium">Nuestros planes</h5>
                 <p class="text-sm tracking-[.2rem]">MÁS VENDIDOS</p>
                 <img src=" /home/runner.png" alt="" width="350">
+                <router-link to="/" class="bg-primary text-white px-2 py-2 tellural">Ver todos los planes</router-link>
             </div>
         </div>
     </div>
