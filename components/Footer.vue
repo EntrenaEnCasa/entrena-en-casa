@@ -1,11 +1,11 @@
 <template>
-    <div style="background-color: #0EB3E0">
-        <div class="py-5 container d-flex justify-content-between">
-            <img src="/logo-white.png" width="150" alt="">
-            <div class="d-flex gap-4 text-white">
+    <div class="bg-secondary">
+        <div class="w-10/12 mx-auto py-10 flex justify-between">
+            <img src="/logo-white.png" width="150" alt="logo-white">
+            <div class="flex gap-4 text-white">
                 <div>
                     <h5>Contacto</h5>
-                    <div class="">
+                    <div>
                         <p>Correo electrónico</p>
                         <p>entrenaencasa0@gmail.com</p>
                     </div>
