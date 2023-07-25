@@ -1,10 +1,10 @@
 <template>
-    <div class="my-5 d-flex flex-column align-items-center">
-        <p class="fs-7" style="letter-spacing: .15rem;">SOBRE NOSOTROS</p>
-        <h2 class="fw-medium fs-1">¿Qué es Entrena en Casa?</h2>
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-6">
+    <div class="my-10 flex flex-col items-center">
+        <p class="text-sm tracking-[.15rem]">SOBRE NOSOTROS</p>
+        <h2 class="font-medium text-4xl">¿Qué es Entrena en Casa?</h2>
+        <div class="mt-10">
+            <div class="grid grid-cols-2 items-center w-11/12 mx-auto">
+                <div>
                     <div class="contenedor">
                         <iframe class="responsive-iframe " width="560" height="315"
                             src="https://www.youtube.com/embed/LMNJWdFQrHg?&autohide=1&showinfo=0&controls=0"
@@ -14,21 +14,21 @@
                         </iframe>
                     </div>
                 </div>
-                <div class="col-5 mx-auto lh-sm fw-light d-flex flex-column justify-content-center"
-                    style="text-align: justify;">
+                <div class="w-10/12 mx-auto leading-tight font-light flex flex-col justify-center text-justify">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit obcaecati libero voluptates in? Ducimus
-                        eius corrupti libero esse voluptatibus eveniet quod, facilis voluptate, tempora eligendi pariatur
+                        eius <span class="font-semibold">corrupti</span> libero esse voluptatibus eveniet quod, facilis
+                        voluptate, tempora eligendi pariatur
                         assumenda iure?</p>
                     <br>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
                         porro et,
                         exercitationem nobis
-                        rem explicabo quaerat vero. <span class="fw-semibold">Illum</span> odit vel error dolor ad saepe
+                        rem explicabo quaerat vero. <span class="font-semibold">Illum</span> odit vel error dolor ad saepe
                         voluptatum, qui numquam eligendi
                         exercitationem ipsam?</p>
                     <br>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis porro et, exercitationem nobis
-                        rem <span class="fw-semibold">explicabo</span> quaerat vero. Illum odit vel error dolor ad saepe
+                        rem <span class="font-semibold">explicabo</span> quaerat vero. Illum odit vel error dolor ad saepe
                         <span class="fw-semibold">voluptatum</span>, qui numquam eligendi
                         exercitationem ipsam?
                     </p>
