@@ -1,5 +1,5 @@
 <template>
-    <div class="pt-5 bg-gradiente relative" style="padding-bottom: 100px">
+    <div class="pt-10 bg-gradiente relative" style="padding-bottom: 100px">
         <div class="tellural">
             <h1 class="text-center font-bold text-5xl">
                 Son cada vez más
@@ -83,11 +83,10 @@
                     </div>
                 </div>
                 <div class="flex">
-                    <div>
-                        <button class="border-0 rounded-lg text-white px-3 py-2 font-medium"
-                            style="background-color: #00A4E8">Registrarse
-                            ahora</button>
-                    </div>
+                    <router-link to="/user/auth/register" class="border-0 rounded-lg text-white px-3 py-2 font-medium"
+                        style="background-color: #00A4E8">Registrarse
+                        ahora
+                    </router-link>
                 </div>
             </div>
 
