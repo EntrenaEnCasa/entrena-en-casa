@@ -1,53 +1,52 @@
 <template>
     <div class="pt-5 bg-gradiente relative" style="padding-bottom: 100px">
         <div class="tellural">
-            <h1 class="text-center font-bold text-4xl">
+            <h1 class="text-center font-bold text-5xl">
                 Son cada vez más
                 <br>
                 alumnos entrenando
+                <br>
+                <div class="inline-block px-5 py-2 text-white rounded text-3xl font-bold bg-primary">
+                    online
+                </div>
             </h1>
-            <div class="container text-center">
-                <div class="row items-center">
-                    <div class="col d-flex flex-column">
-                        <div class="align-self-start">
-                            <img src="/icons/star.svg" alt="running" height="60">
+            <div class="grid grid-cols-3 items-center">
+                <div class="col d-flex flex-column">
+                    <div class="align-self-start">
+                        <img src="/icons/star.svg" alt="running" height="60">
+                    </div>
+                    <div>
+                        <img src="/home/dad-son-exercising.png" alt="dad-son-exercising" class="img-fluid">
+                    </div>
+                    <div class="align-self-end">
+                        <img src="/icons/star.svg" alt="running" height="40">
+                    </div>
+                </div>
+                <div class="col gap-4 d-flex align-items-center flex-column">
+                    <div class="px-5 py-2 text-white rounded-pill lh-sm shadow" style="background-color: #00A4E8">
+                        Conoce la nueva
+                        <br>
+                        metodología
+                    </div>
+                </div>
+                <div class="col d-flex">
+                    <img src="/home/yoga-couple.png" alt="yoga-couple" width="200">
+                    <div>
+                        <div>
+                            <span class="fs-2">+50</span>
+                            <p class="lh-1 text-secondary">
+                                Alumnos
+                                <br>
+                                activos
+                            </p>
                         </div>
                         <div>
-                            <img src="/home/dad-son-exercising.png" alt="dad-son-exercising" class="img-fluid">
-                        </div>
-                        <div class="align-self-end">
-                            <img src="/icons/star.svg" alt="running" height="40">
-                        </div>
-                    </div>
-                    <div class="col gap-4 d-flex align-items-center flex-column">
-                        <div class="px-3 py-1 text-white rounded fs-3 fw-bold" style="background-color: #B5CD13">
-                            online
-                        </div>
-                        <div class="px-5 py-2 text-white rounded-pill lh-sm shadow" style="background-color: #00A4E8">
-                            Conoce la nueva
-                            <br>
-                            metodología
-                        </div>
-                    </div>
-                    <div class="col d-flex">
-                        <img src="/home/yoga-couple.png" alt="yoga-couple" width="200">
-                        <div>
-                            <div>
-                                <span class="fs-2">+50</span>
-                                <p class="lh-1 text-secondary">
-                                    Alumnos
-                                    <br>
-                                    activos
-                                </p>
-                            </div>
-                            <div>
-                                <span class="fs-2">+60</span>
-                                <p class="lh-1 text-secondary">
-                                    Clases
-                                    <br>
-                                    grupales
-                                </p>
-                            </div>
+                            <span class="fs-2">+60</span>
+                            <p class="lh-1 text-secondary">
+                                Clases
+                                <br>
+                                grupales
+                            </p>
                         </div>
                     </div>
                 </div>
