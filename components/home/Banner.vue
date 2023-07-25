@@ -6,34 +6,35 @@
                 <br>
                 alumnos entrenando
                 <br>
-                <div class="inline-block px-5 py-2 text-white rounded text-3xl font-bold bg-primary">
+                <div class="mt-4 inline-block px-5 py-2 text-white rounded-xl text-3xl font-bold bg-primary">
                     online
                 </div>
             </h1>
-            <div class="grid grid-cols-3 items-center">
-                <div class="col d-flex flex-column">
-                    <div class="align-self-start">
-                        <img src="/icons/star.svg" alt="running" height="60">
+            <div class="grid grid-cols-3 place-items-center">
+                <div class="flex flex-col space-y-4">
+                    <div class="self-start ml-8">
+                        <img src="/icons/star.svg" alt="running" width="60">
                     </div>
                     <div>
-                        <img src="/home/dad-son-exercising.png" alt="dad-son-exercising" class="img-fluid">
+                        <img src="/home/dad-son-exercising.png" alt="dad-son-exercising" class="w-full h-auto">
                     </div>
-                    <div class="align-self-end">
-                        <img src="/icons/star.svg" alt="running" height="40">
+                    <div class="self-end mr-4">
+                        <img src="/icons/star.svg" alt="running" width="40">
                     </div>
                 </div>
-                <div class="col gap-4 d-flex align-items-center flex-column">
-                    <div class="px-5 py-2 text-white rounded-pill lh-sm shadow" style="background-color: #00A4E8">
+                <div class="gap-4 flex items-center justify-center flex-col space-y-6">
+                    <div class="px-10 py-2 text-white rounded-full leading-tight shadow-xl"
+                        style="background-color: #00A4E8">
                         Conoce la nueva
                         <br>
                         metodología
                     </div>
                 </div>
-                <div class="col d-flex">
+                <div class="flex">
                     <img src="/home/yoga-couple.png" alt="yoga-couple" width="200">
                     <div>
                         <div>
-                            <span class="fs-2">+50</span>
+                            <span class="text-3xl">+50</span>
                             <p class="lh-1 text-secondary">
                                 Alumnos
                                 <br>
@@ -41,7 +42,7 @@
                             </p>
                         </div>
                         <div>
-                            <span class="fs-2">+60</span>
+                            <span class="text-3xl">+60</span>
                             <p class="lh-1 text-secondary">
                                 Clases
                                 <br>
@@ -53,43 +54,37 @@
             </div>
         </div>
 
-        <div class="rounded shadow bg-white w-75 p-4 absolute">
-            <div class="row row-cols-1 row-cols-md-2 row-gap-4 row-cols-lg-4 align-items-center">
-                <div class="col">
-                    <div class="d-flex">
-                        <img src="/icons/location.svg" alt="location icon" width="40">
-                        <div class="ms-1 d-flex flex-column lh-1">
-                            <p class="fs-6 fw-semibold mb-1">Modalidad
-                            </p>
-                            <p class="fs-7">Online o presencial, tu escoges</p>
-                        </div>
+        <div class="rounded-lg shadow-lg bg-white w-10/12 p-4 absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 place-items-center">
+                <div class="flex">
+                    <img src="/icons/location.svg" alt="location icon" width="40">
+                    <div class="ml-1 flex flex-col leading-tight">
+                        <p class="font-semibold mb-1">Modalidad
+                        </p>
+                        <p class="text-sm">Online o presencial, tu escoges</p>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="d-flex">
-                        <img src="/icons/dumbbell.svg" alt="location icon" width="40">
-                        <div class="ms-2 d-flex flex-column lh-1">
-                            <p class="fs-6 fw-semibold mb-1">Modalidad
-                            </p>
-                            <p class="fs-7">Programa tus propias
-                                sesiones, ve a tu propio ritmo</p>
-                        </div>
+                <div class="flex">
+                    <img src="/icons/dumbbell.svg" alt="location icon" width="40">
+                    <div class="ml-2 flex flex-col leading-tight">
+                        <p class="font-semibold mb-1">Modalidad
+                        </p>
+                        <p class="text-sm">Programa tus propias
+                            sesiones, ve a tu propio ritmo</p>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="d-flex">
-                        <img src="/icons/user.svg" alt="location icon" width="40">
-                        <div class="ms-1 d-flex flex-column lh-1">
-                            <p class="fs-6 fw-semibold mb-1">Modalidad
-                            </p>
-                            <p class="fs-7">Entrena tanto
-                                individual como grupal</p>
-                        </div>
+                <div class="flex">
+                    <img src="/icons/user.svg" alt="location icon" width="40">
+                    <div class="ml-1 flex flex-col leading-tight">
+                        <p class="font-semibold mb-1">Modalidad
+                        </p>
+                        <p class="text-sm">Entrena tanto
+                            individual como grupal</p>
                     </div>
                 </div>
-                <div class="col d-flex justify-content-center">
+                <div class="flex">
                     <div>
-                        <button class="border-0 rounded text-white px-3 py-2 fw-medium"
+                        <button class="border-0 rounded-lg text-white px-3 py-2 font-medium"
                             style="background-color: #00A4E8">Registrarse
                             ahora</button>
                     </div>
@@ -103,12 +98,5 @@
 .bg-gradiente {
     background: url('/background.svg') no-repeat center center fixed;
     /* background: linear-gradient(136deg, rgba(198, 243, 255, 0.15) 0%, rgba(113, 212, 240, 0.15) 64.54%, rgba(0, 142, 181, 0.15) 100%); */
-}
-
-.absolute {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 50%);
 }
 </style>
