@@ -144,7 +144,7 @@
         </div>
     </aside>
 
-    <div @click="sidebarOpen = false" class="mt-[3.5rem] sm:ml-64 transition-[background]"
+    <div @click="sidebarOpen = false" class="mt-[4.5rem] sm:ml-64 transition-[background]"
         :class="{ 'bg-black/20 sm:bg-transparent': sidebarOpen }">
         <slot></slot>
     </div>
