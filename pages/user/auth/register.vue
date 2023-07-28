@@ -107,7 +107,7 @@ const register = () => {
     // }
 
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 button {
     background: #B5CD13;
 }

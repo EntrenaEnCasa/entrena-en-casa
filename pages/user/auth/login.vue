@@ -102,7 +102,7 @@ const login = () => {
 //     }
 
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 svg {
     width: 20px;
     height: 20px;
