@@ -1,21 +1,7 @@
 <template>
     <div>
-        <UserHeader />
-        <div id="slott">
-
-            <slot ></slot>
-        </div>
+        <userHeader>
+            <slot></slot>
+        </userHeader>
     </div>
 </template>
-<style scoped>
-    #slott{
-        margin-left: 19vw;
-        margin-top: 75px;
-    }
-    @media (max-width: 992px){
-        #slott{
-            margin-left: 13vw;
-
-        }
-    }
-</style>
