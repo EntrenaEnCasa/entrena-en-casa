@@ -5,9 +5,8 @@
                 <h3>Sesión en curso</h3>
             </div>
             <div>
-                <div class="w-full lg:h-15 py-4 px-6 rounded-2xl border border-zinc-200 lg:flex gap-6 items-center"
+                <div class="w-full lg:h-15 py-4 px-6 rounded-2xl border border-zinc-200 lg:flex gap-6 items-center justify-evenly"
                     style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
-
                     <div class="text-[#949494] text-sm">16:00hrs</div>
                     <div class="text-[#000000] text-lg font-medium text-center"><b>Tipo de sesión</b></div>
                     <div class="text-[#949494] text-base text-center">Nombre Profesional - Tipo Profesional</div>
