@@ -2,7 +2,7 @@
     <div class="py-5 px-5">
         <div class="row space-y-4 mx-5">
             <div>
-                <h3>Sesión en curso</h3>
+                <h3 class="text-xl font-medium">Sesión en curso</h3>
             </div>
             <div>
                 <div class="w-full lg:h-15 py-4 px-6 rounded-2xl border border-zinc-200 lg:flex gap-6 items-center justify-evenly"
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div>
-                <h3>Sesiones próximas</h3>
+                <h3 class="text-xl font-medium">Sesiones próximas</h3>
             </div>
             <div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div>
-                <h3>Sesiones pasadas</h3>
+                <h3 class="text-xl font-medium">Sesiones pasadas</h3>
             </div>
             <div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
