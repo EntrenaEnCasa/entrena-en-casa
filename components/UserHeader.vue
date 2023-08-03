@@ -92,17 +92,6 @@
             </div>
         </div>
     </nav>
-
-    <UserSidebar ref="sidebar" />
-
-    <div @click="sidebar.sidebarOpen = false" class="mt-[4.5rem] lg:ml-64 transition-[background]">
-        <div class="relative">
-            <slot></slot>
-            <div class="absolute top-0 w-full h-full"
-                :class="{ 'bg-black/20 backdrop-blur-[3px] lg:bg-transparent transition-all': sidebar.sidebarOpen }">
-            </div>
-        </div>
-    </div>
 </template>
 
 <script setup>
@@ -111,8 +100,7 @@ import { ref } from 'vue';
 
 const router = useRouter();
 
-const sidebar = ref(null);
-const toggleSidebar = () => sidebar.value.toggleSidebar();
+const toggleSidebar = () => emit('toggleSidebar');
 
 const userMenuOpen = ref(false);
 const toggleUserMenu = () => userMenuOpen.value = !userMenuOpen.value;
@@ -122,4 +110,7 @@ const logout = () => {
     // localStorage.removeItem('user');
     router.push('/');
 }
+
+const emit = defineEmits(['toggleSidebar'])
+
 </script>
