@@ -65,20 +65,15 @@
                             </div>
                             <ul class="py-1" role="none">
                                 <li>
-                                    <routerLink @click="userMenuOpen = false" to="/user/main/userInicio"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                        Dashboard</routerLink>
-                                </li>
-                                <li>
                                     <routerLink @click="userMenuOpen = false" to="/user/main/userAjustes"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Configuración</routerLink>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <routerLink @click="userMenuOpen = false" to="/user/main/userSoporte"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Soporte</routerLink>
-                                </li>
+                                </li> -->
                                 <li>
                                     <button @click="logout"
                                         class="w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
