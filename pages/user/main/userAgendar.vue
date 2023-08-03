@@ -12,7 +12,7 @@
                         <Icon class="text-2xl" name="ic:round-filter-list" />
                     </button>
                 </div>
-                <h3 class="text-xl font-medium">Agendar sesión</h3>
+                <h3 class="text-xl font-medium mb-4">Agendar sesión</h3>
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full table-auto text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
