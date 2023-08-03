@@ -59,6 +59,12 @@
                     <button class="text-xl rounded-sm p-2 w-full text-white font-medium mt-2">Registrarse</button>
                 </nuxt-link>
             </form>
+            <p class="mt-4 text-gray-500">
+                ¿Ya tienes cuenta?
+                <router-link to="/user/auth/register" class="text-secondary">
+                    Iniciar sesión
+                </router-link>
+            </p>
         </div>
         <div class="flex flex-col items-center justify-center text-center"
             style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.80) 100%);">
