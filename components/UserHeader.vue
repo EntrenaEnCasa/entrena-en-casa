@@ -2,10 +2,10 @@
     <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
-                <div class="flex sm:hidden  items-center justify-start">
+                <div class="flex lg:hidden items-center justify-start">
                     <button @click="toggleSidebar" data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar"
                         aria-controls="logo-sidebar" type="button"
-                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
                         <span class="sr-only">Open sidebar</span>
                         <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
@@ -15,7 +15,7 @@
                         </svg>
                     </button>
                 </div>
-                <div class="hidden sm:block">
+                <div class="hidden lg:block">
                     <router-link to="/" class="flex ml-3">
                         <img src="/logo-horizontal.png" class="h-8" alt="Logo" />
                     </router-link>
@@ -94,7 +94,7 @@
     </nav>
 
     <aside id="logo-sidebar"
-        class="fixed top-0 left-0 z-40 w-64 h-screen pt-24 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-24 transition-transform -translate-x-full bg-white border-r border-gray-200 lg:translate-x-0"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
             <ul class="space-y-2 font-medium">
@@ -144,8 +144,8 @@
         </div>
     </aside>
 
-    <div @click="sidebarOpen = false" class="mt-[4.5rem] sm:ml-64 transition-[background]"
-        :class="{ 'bg-black/20 sm:bg-transparent': sidebarOpen }">
+    <div @click="sidebarOpen = false" class="mt-[4.5rem] lg:ml-64 transition-[background]"
+        :class="{ 'bg-black/20 lg:bg-transparent': sidebarOpen }">
         <slot></slot>
     </div>
 </template>
