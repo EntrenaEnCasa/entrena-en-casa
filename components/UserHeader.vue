@@ -95,9 +95,13 @@
 
     <UserSidebar ref="sidebar" />
 
-    <div @click="sidebarOpen = false" class="mt-[4.5rem] lg:ml-64 transition-[background]"
-        :class="{ 'bg-black/20 lg:bg-transparent': sidebarOpen }">
-        <slot></slot>
+    <div @click="sidebar.sidebarOpen = false" class="mt-[4.5rem] lg:ml-64 transition-[background]">
+        <div class="relative">
+            <slot></slot>
+            <div class="absolute top-0 w-full h-full"
+                :class="{ 'bg-black/20 backdrop-blur-[3px] lg:bg-transparent transition-all': sidebar.sidebarOpen }">
+            </div>
+        </div>
     </div>
 </template>
 
