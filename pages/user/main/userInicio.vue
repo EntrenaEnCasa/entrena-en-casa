@@ -1,5 +1,5 @@
 <template >
-    <div class="bg-[#F7FAFA] p-6 sm:p-8 space-y-4">
+    <div class="p-6 sm:p-8 space-y-4">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="w-full h-72 py-4 px-6 rounded-2xl border border-zinc-200"
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
