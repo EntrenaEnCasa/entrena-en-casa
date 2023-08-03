@@ -56,7 +56,8 @@ const sidebarOpen = ref(false);
 const toggleSidebar = () => sidebarOpen.value = !sidebarOpen.value;
 
 defineExpose({
-    toggleSidebar
+    toggleSidebar,
+    sidebarOpen
 });
 
 </script>
