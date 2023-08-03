@@ -14,8 +14,8 @@
                 </div>
                 <h3 class="text-xl font-medium mb-4">Agendar sesión</h3>
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full table-auto text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                             <tr>
                                 <th scope="col" class="p-6">
                                     Fecha
