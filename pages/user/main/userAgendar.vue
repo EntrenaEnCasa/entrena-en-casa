@@ -13,102 +13,71 @@
                     </button>
                 </div>
                 <h3 class="text-xl font-medium">Agendar sesión</h3>
-                <div class="">
-                    <table class="rounded-4">
-                        <thead>
+                <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-full table-auto text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Hora</th>
-                                <th scope="col">Modalidad</th>
-                                <th scope="col">Formato</th>
-                                <th scope="col">Profesional</th>
-                                <th scope="col">Créditos</th>
-                                <th scope="col"></th>
+                                <th scope="col" class="p-6">
+                                    Fecha
+                                </th>
+                                <th scope="col" class="p-6">
+                                    Hora
+                                </th>
+                                <th scope="col" class="p-6">
+                                    Modalidad
+                                </th>
+                                <th scope="col" class="p-6">
+                                    Formato
+                                </th>
+                                <th scope="col" class="p-6">
+                                    Profesional
+                                </th>
+                                <th scope="col" class="p-6">
+                                    Créditos
+                                </th>
+                                <th scope="col" class="p-6">
+                                    Acción
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Domingo 25/7</td>
-                                <td>16:00hrs</td>
-                                <td>Presencial - Borde costero</td>
-                                <td>Grupal</td>
-                                <td>Jorge<br>Entrenador Fisico</td>
-                                <td><img src="/plans/silver-medal.png" alt="">1</td>
-                                <td>
-                                    <button class="btn btn-success">Agendar</button>
+                            <tr v-for="session in sessions" class="border-b" :key="session.id">
+                                <td class="px-6 py-4 whitespace-nowrap ">
+                                    {{ session.date }}
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Domingo 25/7</td>
-                                <td>17:00hrs</td>
-                                <td>Online</td>
-                                <td>Grupal</td>
-                                <td>Gonzalo<br>Entrenador Fisico</td>
-                                <td><img src="/plans/bronze-medal.png" alt="">1</td>
-                                <td>
-                                    <button class="btn btn-success">Agendar</button>
+                                <td class="px-6 py-4 whitespace-nowrap ">
+                                    {{ session.time }}
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Domingo 25/7</td>
-                                <td>19:00hrs</td>
-                                <td>Online</td>
-                                <td>Grupal</td>
-                                <td>Jorge<br>Entrenador Fisico</td>
-                                <td><img src="/plans/bronze-medal.png" alt="">1</td>
-                                <td>
-                                    <button class="btn btn-success">Agendar</button>
+                                <td class="px-6 py-4 whitespace-nowrap ">
+                                    {{ session.modality }}
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Lunes 26/7</td>
-                                <td>16:00hrs</td>
-                                <td>Online</td>
-                                <td>Individual</td>
-                                <td>Maria<br>Nutricionista</td>
-                                <td><img src="/plans/bronze-medal.png" alt="">1</td>
-                                <td>
-                                    <button class="btn btn-success">Agendar</button>
+                                <td class="px-6 py-4 whitespace-nowrap ">
+                                    {{ session.format }}
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Lunes 26/7</td>
-                                <td>11:00hrs</td>
-                                <td>Presencial - Viña del Mar</td>
-                                <td>Individual</td>
-                                <td>Francisco<br>Entrenador Fisico</td>
-                                <td><img src="/plans/gold-medal.png" alt="">1</td>
-                                <td>
-                                    <button class="btn btn-success disabled">Agendar</button>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ session.professional.name }}
+                                    <br>
+                                    {{ session.professional.profession }}
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Lunes 26/7</td>
-                                <td>13:00hrs</td>
-                                <td>Presencial - Santiago</td>
-                                <td>Individual</td>
-                                <td>Jorge<br>Entrenador Fisico</td>
-                                <td><img src="/plans/gold-medal.png" alt="">1</td>
-                                <td>
-                                    <button class="btn btn-success disabled">Agendar</button>
+                                <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
+                                    <div class="flex items-center gap-x-1">
+                                        <img :src="`/plans/${session.credits.type}-medal.png`" class="w-6 h-6"
+                                            :alt="session.credits.type">
+                                        {{ session.credits.value }}
+                                    </div>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Lunes 26/7</td>
-                                <td>16:00hrs</td>
-                                <td>Presencial - Santiago</td>
-                                <td>Grupal</td>
-                                <td>Jorge<br>Entrenador Fisico</td>
-                                <td><img src="/plans/gold-medal.png" alt="">3</td>
-                                <td>
-                                    <button class="btn btn-success disabled">Agendar</button>
+                                <td class="px-6 py-4">
+                                    <button :disabled="!session.available"
+                                        class="px-4 py-2 bg-primary text-white rounded-md font-medium disabled:bg-primary-100 disabled disabled:cursor-not-allowed">
+                                        Agendar
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="absolute top-0 left-0 w-full h-full bg-black/20 backdrop-blur-[3px] transition-all"
+            <div class="absolute top-0 left-0 w-full h-full min-h-[calc(100vh_-_4.5rem)] bg-black/10 backdrop-blur-[3px] transition-all"
                 :class="{ 'hidden': !filterSidebarOpen }">
             </div>
         </div>
@@ -167,6 +136,122 @@ import { ref } from "vue";
 
 const filterSidebarOpen = ref(false);
 const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
+
+const sessions = [
+    {
+        id: 1,
+        date: "Domingo 25/7",
+        time: "16:00hrs",
+        modality: "Presencial - Borde costero",
+        format: "Grupal",
+        professional: {
+            name: "Jorge",
+            profession: "Entrenador Físico",
+        },
+        credits: {
+            value: 1,
+            type: "silver",
+        },
+        available: true,
+    },
+    {
+        id: 2,
+        date: "Domingo 25/7",
+        time: "17:00hrs",
+        modality: "Online",
+        format: "Grupal",
+        professional: {
+            name: "Gonzalo",
+            profession: "Entrenador Físico"
+        },
+        credits: {
+            value: 1,
+            type: "bronze",
+        },
+        available: true,
+    },
+    {
+        id: 3,
+        date: "Domingo 25/7",
+        time: "19:00hrs",
+        modality: "Online",
+        format: "Grupal",
+        professional: {
+            name: "Jorge",
+            profession: "Entrenador Físico"
+        },
+        credits: {
+            value: 1,
+            type: "bronze",
+        },
+        available: true,
+    },
+    {
+        id: 4,
+        date: "Lunes 26/7",
+        time: "16:00hrs",
+        modality: "Online",
+        format: "Individual",
+        professional: {
+            name: "Maria",
+            profession: "Nutricionista"
+        },
+        credits: {
+            value: 1,
+            type: "bronze",
+        },
+        available: true,
+    },
+    {
+        id: 5,
+        date: "Lunes 26/7",
+        time: "11:00hrs",
+        modality: "Presencial - Viña del Mar",
+        format: "Individual",
+        professional: {
+            name: "Francisco",
+            profession: "Entrenador Físico"
+        },
+        credits: {
+            value: 1,
+            type: "gold",
+        },
+        available: false,
+    },
+    {
+        id: 6,
+        date: "Lunes 26/7",
+        time: "13:00hrs",
+        modality: "Presencial - Santiago",
+        format: "Individual",
+        professional: {
+            name: "Jorge",
+            profession: "Entrenador Físico"
+        },
+        credits: {
+            value: 1,
+            type: "gold",
+        },
+        available: false,
+    },
+    {
+        id: 7,
+        date: "Lunes 26/7",
+        time: "16:00hrs",
+        modality: "Presencial - Santiago",
+        format: "Grupal",
+        professional: {
+            name: "Jorge",
+            profession: "Entrenador Físico"
+        },
+        credits: {
+            value: 3,
+            type: "gold",
+        },
+        available: false,
+    }
+
+]
 
 const filter = () => {
     console.log("filter");
