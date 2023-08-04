@@ -1,8 +1,8 @@
 <template>
     <div class="bg-secondary">
-        <div class="w-10/12 mx-auto py-10 flex justify-between">
-            <img src="/logo-white.png" width="150" alt="logo-white">
-            <div class="flex gap-4 text-white">
+        <div class="w-11/12 lg:w-9/12 mx-auto py-10 flex flex-col sm:flex-row justify-between items-center">
+            <img src="/logo-white.png" class="w-40 h-full" alt="logo-white">
+            <div class="flex flex-wrap gap-4 text-white">
                 <div>
                     <h5>Contacto</h5>
                     <div>
