@@ -1,6 +1,6 @@
 <template>
-    <div class="p-6 sm:p-8 ">
-        <div class="row space-y-4 mx-5">
+    <div class="p-6 sm:p-8">
+        <div class="space-y-4">
             <div>
                 <h3 class="text-xl font-medium">Sesión en curso</h3>
             </div>
