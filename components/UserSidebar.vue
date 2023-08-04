@@ -6,22 +6,22 @@
             <ul class="space-y-2 font-medium">
                 <li>
                     <router-link @click="sidebarOpen = false" to="/user/main/userInicio"
-                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
-                        <Icon name="fa6-solid:house-chimney" class="w-5 h-5 text-gray-500 group-hover:text-white" />
+                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
+                        <Icon name="fa6-solid:house-chimney" class="w-5 h-5  group-hover:text-white" />
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Inicio</span>
                     </router-link>
                 </li>
                 <li>
                     <router-link @click="sidebarOpen = false" to="/user/main/userSesiones"
-                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
-                        <Icon name="fa6-solid:circle-check" class="w-5 h-5 text-gray-500 group-hover:text-white" />
+                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
+                        <Icon name="fa6-solid:circle-check" class="w-5 h-5  group-hover:text-white" />
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Sesiones agendadas</span>
                     </router-link>
                 </li>
                 <li>
                     <router-link @click="sidebarOpen = false" to="/user/main/userAgendar"
-                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
-                        <Icon name="fa6-solid:calendar-days" class="w-5 h-5 text-gray-500 group-hover:text-white" />
+                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
+                        <Icon name="fa6-solid:calendar-days" class="w-5 h-5  group-hover:text-white" />
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Agendar sesión</span>
                     </router-link>
                 </li>
@@ -50,6 +50,15 @@
         </div>
     </aside>
 </template>
+<style>
+.router-link-active {
+    @apply bg-secondary text-white;
+}
+
+.router-link-active:hover {
+    @apply bg-secondary text-white;
+}
+</style>
 <script setup>
 
 const sidebarOpen = ref(false);
