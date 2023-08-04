@@ -1,7 +1,7 @@
 <template>
-    <div class="bg-gradiente relative" style="padding-top: 100px; padding-bottom: 100px; z-index: -2;">
-        <div class="grid grid-cols-2 items-center w-11/12 mx-auto">
-            <div class="text-center">
+    <div class="bg-gradiente relative pt-14 pb-28 -z-10">
+        <div class="grid grod-cols-1 lg:grid-cols-2 items-center w-11/12 mx-auto">
+            <div class="text-center mb-8 lg:mb-0">
                 <p class="text-sm tracking-[.15rem]">TESTIOMONIOS</p>
                 <h2 class="font-medium text-4xl ">Nuestros alumnos</h2>
                 <p class="w-9/12 mx-auto">Algunos comentarios de alumnos que han utilizado Entrena en Casa</p>
