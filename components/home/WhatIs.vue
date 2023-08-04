@@ -1,9 +1,9 @@
 <template>
-    <div class="my-10 flex flex-col items-center">
+    <div class="py-10 flex flex-col items-center">
         <p class="text-sm tracking-[.15rem]">SOBRE NOSOTROS</p>
         <h2 class="font-medium text-4xl">¿Qué es Entrena en Casa?</h2>
         <div class="mt-10">
-            <div class="grid grid-cols-2 items-center w-11/12 mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center w-11/12 mx-auto">
                 <div>
                     <div class="contenedor">
                         <iframe class="responsive-iframe " width="560" height="315"
@@ -14,7 +14,7 @@
                         </iframe>
                     </div>
                 </div>
-                <div class="w-10/12 mx-auto leading-tight font-light flex flex-col justify-center text-justify">
+                <div class="w-full lg:w-11/12 mx-auto leading-tight font-light flex flex-col justify-center text-justify">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit obcaecati libero voluptates in? Ducimus
                         eius <span class="font-semibold">corrupti</span> libero esse voluptatibus eveniet quod, facilis
                         voluptate, tempora eligendi pariatur
