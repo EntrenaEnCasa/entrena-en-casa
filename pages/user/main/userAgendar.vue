@@ -1,18 +1,18 @@
 <template>
-    <div>
-        <div class="p-6 sm:p-8 relative">
+    <div class="p-6 sm:p-8 ">
+        <div class="relative">
             <div name="content">
-                <div class="flex items-center justify-end">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-medium ">Agendar sesión</h3>
                     <button @click="toggleFilterSidebar"
                         class="bg-secondary text-white px-5 py-2 inline-flex items-center gap-1 rounded-lg">
                         <span class="sr-only">Open filter sidebar</span>
+                        <Icon class="text-2xl" name="ic:round-filter-list" />
                         <span>
                             Filtros
                         </span>
-                        <Icon class="text-2xl" name="ic:round-filter-list" />
                     </button>
                 </div>
-                <h3 class="text-xl font-medium mb-4">Agendar sesión</h3>
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200">
