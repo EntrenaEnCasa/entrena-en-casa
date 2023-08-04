@@ -1,9 +1,9 @@
 <template>
-    <div class="py-10 flex flex-col items-center">
+    <div class="py-10 flex flex-col items-center w-11/12 mx-auto">
         <p class="text-sm tracking-[.15rem]">SOBRE NOSOTROS</p>
-        <h2 class="font-medium text-4xl">¿Qué es Entrena en Casa?</h2>
+        <h2 class="font-medium text-3xl md:text-4xl">¿Qué es Entrena en Casa?</h2>
         <div class="mt-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center w-11/12 mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center  mx-auto">
                 <div>
                     <div class="contenedor">
                         <iframe class="responsive-iframe " width="560" height="315"
