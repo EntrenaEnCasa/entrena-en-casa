@@ -6,7 +6,8 @@
                 <div class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex items-center justify-between">
                         <p class="text-sm text-gray-500">Nombre de usuario</p>
-                        <button class="px-8 py-1 rounded-lg bg-primary text-white">
+                        <button disabled
+                            class="px-8 py-1 rounded-lg bg-primary text-white disabled:bg-primary-100 disabled:cursor-not-allowed">
                             Editar
                         </button>
                     </div>
@@ -24,7 +25,8 @@
                 <div class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex justify-between items-center">
                         <p class="text-sm text-gray-500">Fecha de nacimiento</p>
-                        <button class="px-8 py-1 rounded-lg bg-primary text-white">
+                        <button disabled
+                            class="px-8 py-1 rounded-lg bg-primary text-white disabled:bg-primary-100 disabled:cursor-not-allowed">
                             Editar
                         </button>
                     </div>
