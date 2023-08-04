@@ -1,7 +1,7 @@
 <template>
-    <div class="bg-gradiente" style="padding-top: 100px; padding-bottom: 70px;">
-        <div class="grid grid-cols-3">
-            <div class="col-span-2">
+    <div class="bg-gradiente py-10 lg:pt-32 lg:pb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+            <div class="order-last lg:order-none col-span-2">
                 <div class="flex flex-col gap-8">
                     <div class="px-4 py-3 border mx-auto bg-white relative w-10/12">
                         <p class="font-semibold tracking-[.2rem]">ENTRENAMIENTO FUNCIONAL</p>
@@ -70,7 +70,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-1 flex flex-col justify-center items-center space-y-2">
+            <div class="col-span-1 flex flex-col justify-center items-center space-y-2 mb-10 lg:mb-0">
                 <p class="text-sm tracking-[.2rem]">SERVICIOS</p>
                 <h5 class="text-4xl font-medium">Nuestros planes</h5>
                 <p class="text-sm tracking-[.2rem]">MÁS VENDIDOS</p>
