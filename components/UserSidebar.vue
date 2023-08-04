@@ -50,7 +50,7 @@
         </div>
     </aside>
 </template>
-<style>
+<style scoped>
 .router-link-active {
     @apply bg-secondary text-white;
 }
