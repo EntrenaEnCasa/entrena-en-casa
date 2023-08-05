@@ -20,13 +20,13 @@
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Sesiones programadas</span>
                     </router-link>
                 </li>
-                <!-- <li>
-                    <router-link @click="sidebarOpen = false" to="/user/dashboard/schedule"
+                <li>
+                    <router-link @click="sidebarOpen = false" to="/professional/dashboard/schedule"
                         class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
                         <Icon name="fa6-solid:calendar-days" class="w-5 h-5  group-hover:text-white" />
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Agendar sesión</span>
+                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Horario disponible</span>
                     </router-link>
-                </li> -->
+                </li>
                 <!-- <li>
                     <router-link @click="sidebarOpen = false" to="/user/dashboard/recommendations"
                         class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
