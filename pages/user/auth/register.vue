@@ -61,7 +61,7 @@
             </form>
             <p class="mt-4 text-gray-500">
                 ¿Ya tienes cuenta?
-                <router-link to="/user/auth/register" class="text-secondary">
+                <router-link to="/user/auth/login" class="text-secondary">
                     Iniciar sesión
                 </router-link>
             </p>
