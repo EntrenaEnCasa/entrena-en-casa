@@ -35,7 +35,7 @@
                     </div>
                     <p class=" text-secondary">Olvidé mi contraseña</p>
                 </div>
-                <nuxt-link class="block" to="/user/dashboard/inicio">
+                <nuxt-link class="block" to="/user/dashboard/home">
                     <button type="submit"
                         class="bg-primary py-3 w-full text-white font-medium mt-2 text-xl rounded-sm">Iniciar
                         sesión</button>

@@ -52,10 +52,10 @@
                     agendada e ir midiendo tu avance.</div>
             </div>
             <div class="row justify-content-between mt-2">
-                <nuxt-link class="col-md-4 skip" to="/user/dashboard/inicio" style="text-decoration: none; color: inherit;">
+                <nuxt-link class="col-md-4 skip" to="/user/dashboard/home" style="text-decoration: none; color: inherit;">
                     <p class="link-info">Recordarmelo más tarde </p>
                 </nuxt-link>
-                <nuxt-link class="col-md-4 boton" to="/user/dashboard/inicio">
+                <nuxt-link class="col-md-4 boton" to="/user/dashboard/home">
                     <button type="submit" class="btn float-right">Confirmar</button>
                 </nuxt-link>
             </div>

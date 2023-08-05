@@ -5,7 +5,7 @@
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
             <ul class="space-y-2 font-medium">
                 <li>
-                    <router-link @click="sidebarOpen = false" to="/user/dashboard/inicio"
+                    <router-link @click="sidebarOpen = false" to="/user/dashboard/home"
                         class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
                         <Icon name="fa6-solid:house-chimney" class="w-5 h-5  group-hover:text-white" />
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Inicio</span>
