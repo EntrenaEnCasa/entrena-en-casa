@@ -12,7 +12,7 @@
                     </router-link>
                 </li> -->
                 <li>
-                    <router-link @click="sidebarOpen = false" to="/user/dashboard/sessions"
+                    <router-link @click="sidebarOpen = false" to="/professional/dashboard/programmedSessions"
                         class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
                         <div>
                             <Icon name="fa6-solid:circle-check" class="w-5 h-5  group-hover:text-white" />
