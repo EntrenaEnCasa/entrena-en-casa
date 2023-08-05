@@ -1,9 +1,9 @@
 <template>
     <div class="bg-gradiente py-10 lg:pt-32 lg:pb-20">
-        <div class="grid grid-cols-1 lg:grid-cols-3">
+        <div class="grid grid-cols-1 lg:grid-cols-3 w-11/12 mx-auto">
             <div class="order-last lg:order-none col-span-2">
-                <div class="flex flex-col gap-8">
-                    <div class="px-4 py-3 border mx-auto bg-white relative w-10/12">
+                <div class="flex flex-col gap-8 w-11/12 mx-auto">
+                    <div class="px-4 py-3 border mx-auto bg-white relative w-full">
                         <p class="font-semibold tracking-[.2rem]">ENTRENAMIENTO FUNCIONAL</p>
                         <p class="font-semibold text-sm" style="letter-spacing: .15rem;">BORDE COSTERO</p>
                         <p class="text-center my-2">
@@ -21,7 +21,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="px-4 py-3 border mx-auto bg-white relative w-10/12">
+                    <div class="px-4 py-3 border mx-auto bg-white relative w-full">
                         <p class="font-semibold tracking-[.2rem]">PLAN ESTÁNDAR</p>
                         <p class="text-center my-2">
                             Entrenamiento dos veces por semana
@@ -44,7 +44,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="px-4 py-3 border mx-auto bg-white relative w-10/12">
+                    <div class="px-4 py-3 border mx-auto bg-white relative w-full">
                         <p class="font-semibold tracking-[.2rem]">PLAN ESTÁNDAR</p>
                         <p class="font-semibold text-sm" style="letter-spacing: .15rem;">VIÑA DEL MAR</p>
                         <p class="text-center my-2">

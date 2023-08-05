@@ -6,7 +6,7 @@
                 <h2 class="font-medium text-4xl ">Nuestros alumnos</h2>
                 <p class="w-9/12 mx-auto">Algunos comentarios de alumnos que han utilizado Entrena en Casa</p>
             </div>
-            <div class="shadow p-4 flex flex-col bg-white gap-2 relative rounded-2xl">
+            <div class="shadow p-4 flex flex-col bg-white gap-2 relative rounded-2xl mx-auto w-11/12">
                 <div class="self-end">
                     <img src="/icons/stars-group.svg" alt="">
                 </div>
