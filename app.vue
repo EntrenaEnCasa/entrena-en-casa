@@ -15,18 +15,6 @@ body {
   font-family: 'tellural', sans-serif;
 }
 
-p {
-  margin: 0;
-}
-
-$green: #B5CD13;
-$blue: #0EB3E0;
-$red: #FF3A3A;
-
-.fs-7 {
-  font-size: .85rem;
-}
-
 .bg-gradiente {
   background: url('/background.svg') no-repeat center center fixed;
 }
