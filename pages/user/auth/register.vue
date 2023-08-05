@@ -54,7 +54,7 @@
                     <label class="text-gray-500" for="remember">Acepto los <span class="underline">términos y
                             condiciones</span></label>
                 </div>
-                <nuxt-link class="block" to="/user/main/userInicio">
+                <nuxt-link class="block" to="/user/dashboard/inicio">
                     <button class="text-xl rounded-sm p-2 w-full text-white font-medium mt-2">Registrarse</button>
                 </nuxt-link>
             </form>

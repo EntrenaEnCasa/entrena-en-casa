@@ -44,7 +44,7 @@
                     </div>
                     <p class=" text-secondary">Olvidé mi contraseña</p>
                 </div>
-                <nuxt-link class="block" to="/user/main/userInicio">
+                <nuxt-link class="block" to="/user/dashboard/inicio">
                     <button type="submit"
                         class="bg-primary py-3 w-full text-white font-medium mt-2 text-xl rounded-sm">Iniciar
                         sesión</button>
@@ -89,7 +89,7 @@ const login = () => {
 //         //guardar en el store
 //         userStore.setName();
 //         //una vez que te logeas, te envía a la página de usuario
-//         router.push('/user/main/userInicio');
+//         router.push('/user/dashboard/inicio');
 //     }
 
 </script>
