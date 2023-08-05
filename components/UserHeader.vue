@@ -70,7 +70,7 @@
                                         Configuración</routerLink>
                                 </li>
                                 <!-- <li>
-                                    <routerLink @click="userMenuOpen = false" to="/user/main/userSoporte"
+                                    <routerLink @click="userMenuOpen = false" to="/user/dashboard/support"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Soporte</routerLink>
                                 </li> -->
