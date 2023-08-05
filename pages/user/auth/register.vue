@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-2 min-h-screen">
+    <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         <div class="flex flex-col justify-center items-center mb-12">
             <img src="/logo.png" class="mb-4 w-36" alt="logo">
             <form class="space-y-4 w-4/5" @submit.prevent="register">
@@ -18,7 +18,7 @@
                             placeholder="Ingresa tu correo electrónico">
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-x-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block mb-1" for="password">Contraseña</label>
                         <div class="border rounded-md px-4 py-3 flex items-center space-x-4 w-full"
@@ -44,8 +44,7 @@
                                         fill="#0EB3E0" />
                                 </svg>
                             </div>
-                            <input type="password" class="form-control shadow-none " id="password-repeat"
-                                placeholder="* * * * * * * *">
+                            <input type="password" class="w-full" id="password-repeat" placeholder="* * * * * * * *">
                         </div>
 
                     </div>
@@ -66,7 +65,7 @@
                 </router-link>
             </p>
         </div>
-        <div class="flex flex-col items-center justify-center text-center"
+        <div class="hidden lg:flex items-center justify-center text-center"
             style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.80) 100%);">
             <div class="space-y-10">
                 <div class="mb-4">

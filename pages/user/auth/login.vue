@@ -1,6 +1,6 @@
 <template>
-    <div class="grid grid-cols-2">
-        <div class="flex flex-col items-center justify-center min-h-screen text-center"
+    <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+        <div class="hidden lg:flex items-center justify-center text-center"
             style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.80) 100%);">
             <div>
                 <div class="mb-10">
