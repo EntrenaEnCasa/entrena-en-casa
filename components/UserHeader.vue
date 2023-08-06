@@ -20,20 +20,20 @@
                         <img src="/logo-horizontal.png" class="h-8" alt="Logo" />
                     </router-link>
                 </div>
-                <div>
+                <div v-show= "user.type === 'Alumno'">
                     <h3>Créditos disponibles</h3>
                     <div class="flex justify-center items-center space-x-4">
                         <div class="flex items-center space-x-1">
                             <img src="/plans/bronze-medal.png" class="w-4 h-4" alt="">
-                            <span>0</span>
+                            <span>{{ user.credits.bronze }}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <img src="/plans/silver-medal.png" class="w-4 h-4" alt="">
-                            <span>0</span>
+                            <span>{{ user.credits.silver }}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <img src="/plans/silver-medal.png" class="w-4 h-4" alt="">
-                            <span>0</span>
+                            <span>{{ user.credits.gold }}</span>
                         </div>
                     </div>
                 </div>
@@ -41,8 +41,8 @@
                     <div class="flex items-center ml-3">
                         <div class="flex space-x-4">
                             <div class="text-right hidden sm:block">
-                                <p class="font-medium">Nombre de usuario</p>
-                                <p class="font-light text-sm">Alumno</p>
+                                <p class="font-medium">{{ user.name }}</p>
+                                <p class="font-light text-sm">{{user.type}}</p>
                             </div>
                             <div>
                                 <button type="button" @click="toggleUserMenu"
@@ -57,15 +57,18 @@
                             :class="{ hidden: !userMenuOpen }" id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900" role="none">
-                                    Neil Sims
+                                    {{user.name}}
                                 </p>
                                 <p class="text-sm font-medium text-gray-900 truncate" role="none">
-                                    neil.sims@flowbite.com
+                                    {{user.email}}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
-                                <li>
-                                    <routerLink @click="userMenuOpen = false" to="/user/dashboard/settings"
+                                <li v-show="user.type!='Admin'">
+                                    <routerLink v-if="user.type === 'Alumno'" @click="userMenuOpen = false" to="/user/dashboard/settings"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                        Configuración</routerLink>
+                                    <routerLink v-else-if="user.type === 'Profesional'" @click="userMenuOpen = false" to="/professional/dashboard/settings"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Configuración</routerLink>
                                 </li>
@@ -98,6 +101,18 @@ const router = useRouter();
 const toggleSidebar = () => emit('toggleSidebar');
 
 const userMenuOpen = ref(false);
+const user = {
+    id:1,
+    name:"Nombre de usuario",
+    type:"Alumno",
+    email:"prueba@prueba.cl",
+    credits:{
+        bronze: 0,
+        silver: 0,
+        gold: 0
+    }
+}
+
 const toggleUserMenu = () => userMenuOpen.value = !userMenuOpen.value;
 
 const logout = () => {
