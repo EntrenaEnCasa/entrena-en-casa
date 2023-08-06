@@ -95,7 +95,7 @@ const students = [
         },
     },
     {
-        id: 1,
+        id: 2,
         name:"Juan",
         lastName:"Garcia",
         email:"juan.garcia@gmail.com",
@@ -106,7 +106,7 @@ const students = [
         },
     },
     {
-        id: 1,
+        id: 3,
         name:"Andres",
         lastName:"Araya",
         email:"andres.araya@gmail.com",
@@ -117,7 +117,7 @@ const students = [
         },
     },
     {
-        id: 1,
+        id: 4,
         name:"Catalina",
         lastName:"Schencke",
         email:"cata.schencke@gmail.com",
