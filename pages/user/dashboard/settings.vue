@@ -1,7 +1,7 @@
 <template>
     <div class="p-6 sm:p-8">
         <div class="row row-gap-4 mb-5">
-            <h3 class="text-xl font-medium mb-4">Agendar sesión</h3>
+            <h3 class="text-xl font-medium mb-4">Configuración</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex items-center justify-between">
