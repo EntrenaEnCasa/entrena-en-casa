@@ -9,8 +9,8 @@ export const useAuthStore = defineStore('AuthStore', {
     },
     actions: {
         logIn(userData, userDataCredits) {
-            const userStore = useUserStore();
 
+            const userStore = useUserStore();
             this.loggedIn = true;
 
             const user = {

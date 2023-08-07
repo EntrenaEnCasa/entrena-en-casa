@@ -4,13 +4,13 @@ export const useUserStore = defineStore('UserStore', {
     state: () => {
         return {
             user: null || {
-                id: null,
-                email: null,
-                role: null,
-                credits: {
-                    bronze: null,
-                    silver: null,
-                    gold: null
+                id: -1,
+                email: "",
+                role: 0,
+                credits: null || {
+                    bronze: 0,
+                    silver: 0,
+                    gold: 0
                 }
             },
         }
