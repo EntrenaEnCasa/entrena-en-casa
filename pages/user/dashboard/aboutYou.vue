@@ -63,15 +63,12 @@
     </div>
 </template>
 
-
 <script setup>
 definePageMeta({
     layout: "auth",
 });
 </script>
     
-
-
 <style scoped  lang="scss">
 $color_enfasis: #0EB3E0;
 $color_principal: #505050;

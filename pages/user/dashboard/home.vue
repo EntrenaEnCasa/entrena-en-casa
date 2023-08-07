@@ -40,9 +40,3 @@
     box-shadow: 0px -29px 89px 0px rgba(0, 0, 0, 0.10);
 }
 </style>
-
-<script setup>
-definePageMeta({
-    layout: "user",
-});
-</script>

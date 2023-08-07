@@ -257,7 +257,4 @@ const filter = () => {
     console.log("filter");
 }
 
-definePageMeta({
-    layout: "user",
-});
 </script>

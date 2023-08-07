@@ -62,12 +62,6 @@
     </div>
 </template>
 
-<script>
-definePageMeta({
-    layout: "user",
-});
-</script>
-
 <style scoped lang="scss">
 $color_enfasis: #0EB3E0;
 $color_principal: #505050;
@@ -114,4 +108,5 @@ $font_family_Secondary: 'tellural', sans-serif;
 .accordion {
     margin-bottom: 100px;
 
-}</style>
+}
+</style>
