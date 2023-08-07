@@ -11,6 +11,10 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 .tellural {
   font-family: 'tellural', sans-serif;
 }
