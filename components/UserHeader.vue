@@ -41,8 +41,12 @@
                     <div class="flex items-center ml-3">
                         <div class="flex space-x-4">
                             <div class="text-right hidden sm:block">
-                                <p class="font-medium">{{ user.name }}</p>
-                                <p class="font-light text-sm">{{user.type}}</p>
+                                <p  class="font-medium">{{ user.email }}</p>
+
+                                <p v-if="user.type == 2" class="font-light text-sm">Alumno</p>
+                                <p v-if="user.type == 1" class="font-light text-sm">Profesional</p>
+                                <p v-if="user.type == 0" class="font-light text-sm">Administrador</p>
+
                             </div>
                             <div>
                                 <button type="button" @click="toggleUserMenu"
@@ -56,19 +60,16 @@
                         <div class="absolute top-14 border right-5 z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow-md"
                             :class="{ hidden: !userMenuOpen }" id="dropdown-user">
                             <div class="px-4 py-3" role="none">
-                                <p class="text-sm text-gray-900" role="none">
-                                    {{user.name}}
-                                </p>
                                 <p class="text-sm font-medium text-gray-900 truncate" role="none">
                                     {{user.email}}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
-                                <li v-show="user.type!='Admin'">
-                                    <routerLink v-if="user.type === 'Alumno'" @click="userMenuOpen = false" to="/user/dashboard/settings"
+                                <li v-show="user.type!=0">
+                                    <routerLink v-if="user.type === 2" @click="userMenuOpen = false" to="/user/dashboard/settings"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Configuración</routerLink>
-                                    <routerLink v-else-if="user.type === 'Profesional'" @click="userMenuOpen = false" to="/professional/dashboard/settings"
+                                    <routerLink v-else-if="user.type === 1" @click="userMenuOpen = false" to="/professional/dashboard/settings"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Configuración</routerLink>
                                 </li>
@@ -103,8 +104,7 @@ const toggleSidebar = () => emit('toggleSidebar');
 const userMenuOpen = ref(false);
 const user = {
     id:1,
-    name:"Nombre de usuario",
-    type:"Alumno",
+    type:2,
     email:"prueba@prueba.cl",
     credits:{
         bronze: 0,
