@@ -20,7 +20,7 @@
                         <img src="/logo-horizontal.png" class="h-8" alt="Logo" />
                     </router-link>
                 </div>
-                <div v-show= "user.type === 'Alumno'">
+                <div v-if="user.role === 2">
                     <h3>Créditos disponibles</h3>
                     <div class="flex justify-center items-center space-x-4">
                         <div class="flex items-center space-x-1">
@@ -41,11 +41,11 @@
                     <div class="flex items-center ml-3">
                         <div class="flex space-x-4">
                             <div class="text-right hidden sm:block">
-                                <p  class="font-medium">{{ user.email }}</p>
+                                <p class="font-medium">{{ user.email }}</p>
 
-                                <p v-if="user.type == 2" class="font-light text-sm">Alumno</p>
-                                <p v-if="user.type == 1" class="font-light text-sm">Profesional</p>
-                                <p v-if="user.type == 0" class="font-light text-sm">Administrador</p>
+                                <p v-if="user.role == 2" class="font-light text-sm">Alumno</p>
+                                <p v-if="user.role == 1" class="font-light text-sm">Profesional</p>
+                                <p v-if="user.role == 0" class="font-light text-sm">Administrador</p>
 
                             </div>
                             <div>
@@ -61,15 +61,17 @@
                             :class="{ hidden: !userMenuOpen }" id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm font-medium text-gray-900 truncate" role="none">
-                                    {{user.email}}
+                                    {{ user.email }}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
-                                <li v-show="user.type!=0">
-                                    <routerLink v-if="user.type === 2" @click="userMenuOpen = false" to="/user/dashboard/settings"
+                                <li v-show="user.role != 0">
+                                    <routerLink v-if="user.role === 2" @click="userMenuOpen = false"
+                                        to="/user/dashboard/settings"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Configuración</routerLink>
-                                    <routerLink v-else-if="user.type === 1" @click="userMenuOpen = false" to="/professional/dashboard/settings"
+                                    <routerLink v-else-if="user.role === 1" @click="userMenuOpen = false"
+                                        to="/professional/dashboard/settings"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Configuración</routerLink>
                                 </li>
@@ -95,29 +97,26 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useAuthStore } from '~/stores/AuthStore';
+import { useUserStore } from '~/stores/UserStore';
 
 const router = useRouter();
+const authStore = useAuthStore();
+const userStore = useUserStore();
 
 const toggleSidebar = () => emit('toggleSidebar');
-
 const userMenuOpen = ref(false);
-const user = {
-    id:1,
-    type:2,
-    email:"prueba@prueba.cl",
-    credits:{
-        bronze: 0,
-        silver: 0,
-        gold: 0
-    }
-}
+const user = ref({})
+
+onMounted(() => {
+    user.value = userStore.user;
+})
 
 const toggleUserMenu = () => userMenuOpen.value = !userMenuOpen.value;
 
 const logout = () => {
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('user');
+    authStore.logOut();
     router.push('/');
 }
 
