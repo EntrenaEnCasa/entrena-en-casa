@@ -1,8 +1,8 @@
 <template>
     <div>
-        <UserHeader @toggleSidebar="toggleSidebar" />
+        <UserHeader ref="header" @toggleSidebar="toggleSidebar" />
         <UserSidebar ref="sidebar" />
-        <main @click="sidebar.sidebarOpen = false" class="mt-[4.5rem] lg:ml-64 transition-[background]">
+        <main @click="closeElements" class="mt-[4.5rem] lg:ml-64 transition-[background]">
             <div class="relative">
                 <div class="min-h-[calc(100vh_-_4.5rem)] bg-[#F7FAFA]">
                     <slot></slot>
@@ -19,7 +19,14 @@
 
 import { ref } from "vue";
 
+const header = ref(null);
+
 const sidebar = ref(null);
 const toggleSidebar = () => sidebar.value.toggleSidebar();
+
+const closeElements = () => {
+    header.value.userMenuOpen = false;
+    sidebar.value.sidebarOpen = false;
+}
 
 </script>

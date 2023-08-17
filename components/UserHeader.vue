@@ -121,5 +121,8 @@ const logout = () => {
 }
 
 const emit = defineEmits(['toggleSidebar'])
+defineExpose({
+    userMenuOpen
+});
 
 </script>
