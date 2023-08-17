@@ -1,5 +1,5 @@
 <template>
-    <div class="about-you py-5 px-5">
+    <div class="about-you">
         <div class="topSection mt-2 mb-5 mx-3">
             <nuxt-link to="/">
 

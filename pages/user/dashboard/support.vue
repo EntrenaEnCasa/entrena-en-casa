@@ -1,5 +1,5 @@
 <template>
-    <div class="userSoporte p-5">
+    <div class="userSoporte">
         <div class="row row-gap-3">
             <div class="col-md-12 tituloSoporte">Soporte Técnico</div>
             <div class="col-md-12 pregFrecSoporte">Preguntas frecuentes</div>

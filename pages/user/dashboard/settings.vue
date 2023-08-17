@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 sm:p-8">
+    <div>
         <div class="row row-gap-4 mb-5">
             <h3 class="text-xl font-medium mb-4">Configuración</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">

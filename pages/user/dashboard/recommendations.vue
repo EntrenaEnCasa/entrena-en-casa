@@ -1,5 +1,5 @@
 <template>
-    <div class="recomendaciones p-5">
+    <div class="recomendaciones">
         <p class="tituloPrincipal">Recomendaciones</p>
         <div class="row row-gap-3">
             <div class="col-md-6">
@@ -150,4 +150,5 @@ $font_family_Secondary: 'tellural', sans-serif;
 a {
     color: $color_enfasis;
     text-decoration: none;
-}</style>
+}
+</style>

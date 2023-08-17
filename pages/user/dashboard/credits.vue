@@ -1,5 +1,5 @@
 <template>
-    <div class="creditos p-5">
+    <div class="creditos">
         <div class="row">
             <div class="col-12 tituloPrincipal">
                 Créditos
@@ -171,4 +171,5 @@ img {
 
 .precio {
     color: $color_enfasis;
-}</style>
+}
+</style>
