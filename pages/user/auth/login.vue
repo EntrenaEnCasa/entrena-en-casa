@@ -63,7 +63,6 @@ import { useUserStore } from '~/stores/UserStore'
 import { useAuthStore } from '~/stores/AuthStore'
 
 const router = useRouter();
-const userStore = useUserStore();
 const authStore = useAuthStore();
 const formData = reactive({
     email: "",
