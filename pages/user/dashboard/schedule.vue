@@ -1,6 +1,6 @@
 <template>
-    <div class="p-6 sm:p-8 ">
-        <div class="relative">
+    <div class="relative">
+        <div>
             <div name="content">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-xl font-medium ">Agendar sesión</h3>
@@ -41,33 +41,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="session in sessions" class="border-b" :key="session.id">
+                            <tr v-for="session in sessions" class="border-b" :key="session.id_usuario">
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.date }}
+                                    {{ formatDate(session.fecha) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.time }}
+                                    {{ formatTime(session.hora) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.modality }}
+                                    {{ session.presencial ? 'Presencial' : 'Online' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.format }}
+                                    {{ session.formato }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ session.professional.name }}
+                                    {{ session.profesional.nombreProfesional }}
+                                    {{ session.profesional.apellidoProfesional }}
                                     <br>
-                                    {{ session.professional.profession }}
+                                    {{ session.profesional.tituloProfesional }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
                                     <div class="flex items-center gap-x-1">
-                                        <img :src="`/plans/${session.credits.type}-medal.png`" class="w-6 h-6"
-                                            :alt="session.credits.type">
-                                        {{ session.credits.value }}
+                                        <img :src="`/plans/${session.credito.tipoCredito}-medal.png`" class="w-6 h-6"
+                                            :alt="session.credito.tipoCredito">
+                                        {{ session.credito.cantidadCreditos }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <button :disabled="!session.available"
+                                    <button :disabled="!session.disponible" @click="scheduleSession(session)"
                                         class="px-4 py-2 bg-primary text-white rounded-md font-medium disabled:bg-primary-100 disabled disabled:cursor-not-allowed">
                                         Agendar
                                     </button>
@@ -132,129 +133,76 @@
 
 <script setup>
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 const filterSidebarOpen = ref(false);
 const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
 
-const sessions = [
-    {
-        id: 1,
-        date: "Domingo 25/7",
-        time: "16:00hrs",
-        modality: "Presencial - Borde costero",
-        format: "Grupal",
-        professional: {
-            name: "Jorge",
-            profession: "Entrenador Físico",
-        },
-        credits: {
-            value: 1,
-            type: "silver",
-        },
-        available: true,
-    },
-    {
-        id: 2,
-        date: "Domingo 25/7",
-        time: "17:00hrs",
-        modality: "Online",
-        format: "Grupal",
-        professional: {
-            name: "Gonzalo",
-            profession: "Entrenador Físico"
-        },
-        credits: {
-            value: 1,
-            type: "bronze",
-        },
-        available: true,
-    },
-    {
-        id: 3,
-        date: "Domingo 25/7",
-        time: "19:00hrs",
-        modality: "Online",
-        format: "Grupal",
-        professional: {
-            name: "Jorge",
-            profession: "Entrenador Físico"
-        },
-        credits: {
-            value: 1,
-            type: "bronze",
-        },
-        available: true,
-    },
-    {
-        id: 4,
-        date: "Lunes 26/7",
-        time: "16:00hrs",
-        modality: "Online",
-        format: "Individual",
-        professional: {
-            name: "Maria",
-            profession: "Nutricionista"
-        },
-        credits: {
-            value: 1,
-            type: "bronze",
-        },
-        available: true,
-    },
-    {
-        id: 5,
-        date: "Lunes 26/7",
-        time: "11:00hrs",
-        modality: "Presencial - Viña del Mar",
-        format: "Individual",
-        professional: {
-            name: "Francisco",
-            profession: "Entrenador Físico"
-        },
-        credits: {
-            value: 1,
-            type: "gold",
-        },
-        available: false,
-    },
-    {
-        id: 6,
-        date: "Lunes 26/7",
-        time: "13:00hrs",
-        modality: "Presencial - Santiago",
-        format: "Individual",
-        professional: {
-            name: "Jorge",
-            profession: "Entrenador Físico"
-        },
-        credits: {
-            value: 1,
-            type: "gold",
-        },
-        available: false,
-    },
-    {
-        id: 7,
-        date: "Lunes 26/7",
-        time: "16:00hrs",
-        modality: "Presencial - Santiago",
-        format: "Grupal",
-        professional: {
-            name: "Jorge",
-            profession: "Entrenador Físico"
-        },
-        credits: {
-            value: 3,
-            type: "gold",
-        },
-        available: false,
-    }
+const sessions = ref([]);
 
-]
+const getSessions = async () => {
+    const { data, pending, error, refresh } = await useFetch('http://localhost:3002/sesiones/disponibles-agendar', {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        onResponse({ request, response, options }) {
+            const responseData = response._data;
+            responseData.sort((session1, session2) => {
+                const date1 = new Date(session1.fecha);
+                const date2 = new Date(session2.fecha);
+                return date1 - date2;
+            });
+            sessions.value = responseData;
+        },
+    });
+}
+
+const scheduleSession = async (session) => {
+    const { data, pending, error, refresh } = await useFetch('http://localhost:3002/sesiones/agendar', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            idSesion: session.idSesion,
+            idUsuario: userStore.user.idUsuario,
+        }),
+        onResponse({ request, response, options }) {
+            const responseData = response._data;
+            console.log(responseData);
+            if (responseData.status === "success") {
+                alert(responseData.message);
+            } else {
+                alert(responseData.error);
+            }
+        },
+    });
+}
+
+const formatDate = (date) => {
+    const daysOfWeek = [
+        "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
+    ];
+
+    const dateObj = new Date(date);
+    const dayOfWeek = daysOfWeek[dateObj.getDay()];
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    return `${dayOfWeek} ${day}/${month}`;
+}
+
+const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return `${hours}:${minutes}hrs`;
+}
 
 const filter = () => {
     console.log("filter");
 }
+
+onMounted(() => {
+    getSessions();
+});
 
 </script>
