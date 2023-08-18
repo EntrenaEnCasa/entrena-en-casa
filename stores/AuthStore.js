@@ -8,24 +8,14 @@ export const useAuthStore = defineStore('AuthStore', {
         }
     },
     actions: {
-        logIn(userData, userDataCredits) {
+        logIn(userData) {
 
             const userStore = useUserStore();
+
             this.loggedIn = true;
 
-            const user = {
-                id: userData.id_usuario,
-                email: userData.correo,
-                role: userData.tipo_usuario,
-                credits: {
-                    bronze: userDataCredits.bronce,
-                    silver: userDataCredits.silver,
-                    gold: userDataCredits.gold
-                }
-            }
-
             localStorage.setItem('token', userData.token);
-            userStore.setUserData(user);
+            userStore.setUserData(userData);
 
         },
         logOut() {

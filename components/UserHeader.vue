@@ -20,7 +20,7 @@
                         <img src="/logo-horizontal.png" class="h-8" alt="Logo" />
                     </router-link>
                 </div>
-                <div v-if="user.role === 2">
+                <div v-if="user.user_type === 2">
                     <h3>Créditos disponibles</h3>
                     <div class="flex justify-center items-center space-x-4">
                         <div class="flex items-center space-x-1">
@@ -43,9 +43,9 @@
                             <div class="text-right hidden sm:block">
                                 <p class="font-medium">{{ user.email }}</p>
 
-                                <p v-if="user.role == 2" class="font-light text-sm">Alumno</p>
-                                <p v-if="user.role == 1" class="font-light text-sm">Profesional</p>
-                                <p v-if="user.role == 0" class="font-light text-sm">Administrador</p>
+                                <p v-if="user.user_type == 2" class="font-light text-sm">Alumno</p>
+                                <p v-if="user.user_type == 1" class="font-light text-sm">Profesional</p>
+                                <p v-if="user.user_type == 0" class="font-light text-sm">Administrador</p>
 
                             </div>
                             <div>
@@ -65,12 +65,12 @@
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
-                                <li v-show="user.role != 0">
-                                    <routerLink v-if="user.role === 2" @click="userMenuOpen = false"
+                                <li v-show="user.user_type != 0">
+                                    <routerLink v-if="user.user_type === 2" @click="userMenuOpen = false"
                                         to="/user/dashboard/settings"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Configuración</routerLink>
-                                    <routerLink v-else-if="user.role === 1" @click="userMenuOpen = false"
+                                    <routerLink v-else-if="user.user_type === 1" @click="userMenuOpen = false"
                                         to="/professional/dashboard/settings"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Configuración</routerLink>

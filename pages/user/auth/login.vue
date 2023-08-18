@@ -59,7 +59,6 @@
 </template>
 <script setup>
 
-import { useUserStore } from '~/stores/UserStore'
 import { useAuthStore } from '~/stores/AuthStore'
 
 const router = useRouter();
@@ -75,51 +74,28 @@ definePageMeta({
 
 const login = async () => {
 
-    const { data, pending, error, refresh } = await useFetch('http://localhost:3002/login', {
+    await useFetch('http://localhost:1234/student/log-in', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
         },
         body: {
-            correo: formData.email,
-            contraseña: formData.password,
+            email: formData.email,
+            password: formData.password,
         },
         onResponse({ request, response, options }) {
 
             const responseData = response._data;
 
-            // Process the response data
             if (responseData.success) {
-                getCredits(responseData);
-            }
-            else {
-                alert(responseData.error);
-            }
-        },
-    });
-}
-
-const getCredits = async (responseData) => {
-    const { data, pending, error, refresh } = useFetch("http://localhost:3002/obtenercreditos/", {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: {
-            idUsuario: responseData.id_usuario
-        },
-        onResponse({ request, response, options }) {
-            const responseDataCredits = response._data;
-            if (responseDataCredits.success) {
-                authStore.logIn(responseData, responseDataCredits.creditos);
+                authStore.logIn(responseData.user);
                 router.push('/user/dashboard/home');
             }
             else {
-                alert(responseData.error);
+                alert(responseData.message);
             }
         },
     });
-
 }
 
 </script>
@@ -130,7 +106,6 @@ svg {
 }
 
 *:focus {
-
     outline: none !important;
     box-shadow: none;
 }
