@@ -2,7 +2,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         <div class="flex flex-col justify-center items-center mb-12">
             <img src="/logo.png" class="mb-4 w-36" alt="logo">
-            <form class="space-y-4 w-4/5" @submit.prevent="register">
+            <Form class="space-y-4 w-4/5" @submit="register">
                 <div>
                     <label class="block mb-1" for="email">Correo electrónico</label>
                     <div class="border rounded-md px-4 py-3 flex items-center space-x-4 w-full"
@@ -14,9 +14,10 @@
                                     fill="#0EB3E0" />
                             </svg>
                         </div>
-                        <input type="email" class="w-full" id="email" aria-describedby="emailHelp"
-                            placeholder="Ingresa tu correo electrónico">
+                        <Field name="email" type="email" class="w-full" id="email" :rules="validateEmail"
+                            placeholder="Ingresa tu correo electrónico" />
                     </div>
+                    <ErrorMessage class="mt-1 block rounded-lg text-red-500" name="email" />
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -30,8 +31,10 @@
                                         fill="#0EB3E0" />
                                 </svg>
                             </div>
-                            <input type="password" class="w-full" id="password" placeholder="* * * * * * * *">
+                            <Field name="password" type="password" class="w-full" id="password" :rules="validatePassword"
+                                v-model="password" placeholder="* * * * * * * *" />
                         </div>
+                        <ErrorMessage class="mt-1 block rounded-lg text-red-500" name="password" />
                     </div>
                     <div>
                         <label class="block mb-1" for="password-repeat">Confirmar Contraseña</label>
@@ -44,9 +47,10 @@
                                         fill="#0EB3E0" />
                                 </svg>
                             </div>
-                            <input type="password" class="w-full" id="password-repeat" placeholder="* * * * * * * *">
+                            <Field name="password-repeat" type="password" class="w-full" id="password-repeat"
+                                :rules="validatePasswordRepeat" placeholder="* * * * * * * *" />
                         </div>
-
+                        <ErrorMessage class="mt-1 block rounded-lg text-red-500" name="password-repeat" />
                     </div>
                 </div>
                 <div class="flex items-center space-x-1">
@@ -54,10 +58,9 @@
                     <label class="text-gray-500" for="remember">Acepto los <span class="underline">términos y
                             condiciones</span></label>
                 </div>
-                <nuxt-link class="block" to="/user/dashboard/home">
-                    <button class="text-xl rounded-sm p-2 w-full text-white font-medium mt-2">Registrarse</button>
-                </nuxt-link>
-            </form>
+                <button class="cursor-pointer bg-primary text-xl rounded-sm p-2 w-full text-white font-medium mt-2"
+                    value="registrarse" to="/user/dashboard/home">Registrarse</button>
+            </Form>
             <p class="mt-4 text-gray-500">
                 ¿Ya tienes cuenta?
                 <router-link to="/user/auth/login" class="text-secondary">
@@ -79,68 +82,95 @@
 </template>
 <script setup>
 
+import { ref } from 'vue';
+import { useForm } from 'vee-validate';
 
+const router = useRouter();
 
-// const router = useRouter();
+const password = ref('');
 
-// const formData = reactive({
-//     email: "",
-//     password: "",
-//     repassword: ""
-// });
+const validateEmail = (value) => {
+    // if the field is empty
+    if (!value) {
+        return 'El email es requerido';
+    }
+    // if the field is not a valid email
+    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (!regex.test(value)) {
+        return 'El email no es válido';
+    }
+    // All is good
+    return true;
+}
+
+const validatePassword = (password) => {
+
+    if (!password) {
+        return 'La contraseña es requerida';
+    }
+
+    // Check if the password is at least 8 characters long
+    if (password.length < 8) {
+        return 'La contraseña debe tener al menos 8 caracteres';
+    }
+    // Check if the password contains at least one number
+    let hasNumber = false;
+    for (let char of password) {
+        if (char >= '0' && char <= '9') {
+            hasNumber = true;
+            break;
+        }
+    }
+    if (!hasNumber) {
+        return 'La contraseña debe tener al menos un número';
+    }
+    // Check if the password contains at least one capital letter
+    let hasCapital = false;
+    for (let char of password) {
+        if (char >= 'A' && char <= 'Z') {
+            hasCapital = true;
+            break;
+        }
+    }
+    if (!hasCapital) {
+        return 'La contraseña debe tener al menos una letra mayúscula';
+    }
+    // All good
+    return true;
+};
+
+const validatePasswordRepeat = (passRepeat) => {
+    if (!passRepeat) {
+        return 'Debes repetir la contraseña';
+    }
+
+    if (passRepeat !== password.value) {
+        return 'Las contraseñas no coinciden';
+    }
+
+    return true;
+};
+
+const register = (values) => {
+
+    const { email, password } = values;
+    const registerData = {
+        email: email,
+        password: password
+    }
+
+    console.log(registerData);
+}
 
 definePageMeta({
     layout: "auth",
 });
-
-const register = () => {
-    console.log("register");
-}
-
-    // const signup = () => {
-    //     if(formData.email == "" || formData.password == "" || formData.repassword == ""){
-    //         alert("Por favor, rellene todos los campos");
-    //         return;
-    //     }
-    //     if(formData.password != formData.repassword){
-    //         alert("Las contraseñas no coinciden");
-    //         return;
-    //     }
-
-    //     //una vez que te logeas, te envía a la página de usuario
-    //     router.push('/user/main/aboutYou');
-    // }
-
 </script>
+
 <style scoped lang="scss">
-button {
-    background: #B5CD13;
-}
-
-.input-group-text {
-    background: none;
-    outline: none;
-}
-
 svg {
     width: 20px;
     height: 20px;
-}
-
-.input-group>* {
-    border: none;
-    outline: none;
-}
-
-.input-group {
-
-    border-radius: 3px;
-    box-shadow: 0px 0px 27px -6px rgba(0, 0, 0, 0.10);
-
-}
-
-.container-group {
-    margin-bottom: 30px;
 }
 
 *:focus {
