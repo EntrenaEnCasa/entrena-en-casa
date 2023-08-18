@@ -3,6 +3,6 @@ export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
   modules: [
-    '@pinia/nuxt', '@nuxtjs/tailwindcss', 'nuxt-icon'
+    '@pinia/nuxt', '@nuxtjs/tailwindcss', 'nuxt-icon', '@vee-validate/nuxt'
   ],
 })
