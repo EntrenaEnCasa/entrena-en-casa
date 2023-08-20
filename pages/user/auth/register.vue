@@ -1,8 +1,8 @@
 <template>
     <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-        <div class="flex flex-col justify-center items-center mb-12">
+        <div class="flex flex-col justify-center items-center mb-12 w-4/5 mx-auto">
             <img src="/logo.png" class="mb-4 w-36" alt="logo">
-            <Form class="space-y-4 w-4/5" @submit="register">
+            <Form class="w-full space-y-4" @submit="register" v-slot="{ meta }">
                 <div>
                     <label class="block mb-1" for="email">Correo electrónico</label>
                     <div class="border rounded-md px-4 py-3 flex items-center space-x-4 w-full"
@@ -58,8 +58,9 @@
                     <label class="text-gray-500" for="remember">Acepto los <span class="underline">términos y
                             condiciones</span></label>
                 </div>
-                <button class="cursor-pointer bg-primary text-xl rounded-sm p-2 w-full text-white font-medium mt-2"
-                    value="registrarse" to="/user/dashboard/home">Registrarse</button>
+                <button
+                    class="bg-primary text-xl rounded-sm p-2 w-full text-white font-medium mt-2 disabled:bg-primary-100 disabled:cursor-not-allowed"
+                    :disabled="!meta.valid" value="registrarse" to="/user/dashboard/home">Registrarse</button>
             </Form>
             <p class="mt-4 text-gray-500">
                 ¿Ya tienes cuenta?
@@ -67,6 +68,9 @@
                     Iniciar sesión
                 </router-link>
             </p>
+            <div v-if="registrationState.error" class="w-full mt-5 border rounded-md border-red-500 px-5 py-2 text-red-500">
+                <p>{{ registrationState.errorMessage }}</p>
+            </div>
         </div>
         <div class="hidden lg:flex items-center justify-center text-center"
             style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.80) 100%);">
@@ -82,12 +86,20 @@
 </template>
 <script setup>
 
+import { useAuthStore } from '~/stores/AuthStore'
+
 import { ref } from 'vue';
 import { useForm } from 'vee-validate';
 
+const authStore = useAuthStore();
 const router = useRouter();
-
 const password = ref('');
+
+const registrationState = reactive({
+    error: false,
+    errorMessage: '',
+});
+
 
 const validateEmail = (value) => {
     // if the field is empty
@@ -151,15 +163,39 @@ const validatePasswordRepeat = (passRepeat) => {
     return true;
 };
 
-const register = (values) => {
+const register = async (values) => {
 
     const { email, password } = values;
+
     const registerData = {
         email: email,
         password: password
     }
 
-    console.log(registerData);
+    registrationState.error = false;
+
+    await useFetch('http://localhost:1234/student/sign-up', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: registerData,
+        onResponse({ request, response, options }) {
+            const responseData = response._data;
+
+            console.log(responseData);
+
+            if (responseData.success) {
+                console.log("success");
+                authStore.signUp(responseData.user);
+                router.push('/user/dashboard/home');
+            }
+            else {
+                registrationState.error = true;
+                registrationState.errorMessage = responseData.message;
+            }
+        },
+    });
 }
 
 definePageMeta({
