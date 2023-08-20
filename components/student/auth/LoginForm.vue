@@ -1,0 +1,80 @@
+<template>
+    <Form class="w-4/5 space-y-5" @submit="login">
+        <CommonInput label="Correo Electrónico" v-model="formData.email" name="email" type="email" id="email"
+            icon="fa6-solid:envelope" placeholder="Ingresa tu correo electrónico" :rules="validateEmail" />
+        <CommonInput label="Contraseña" v-model="formData.password" name="password" type="password" id="password"
+            icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePassword" />
+
+        <div class="flex justify-between">
+            <div class="flex items-center space-x-1">
+                <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
+                <label class="text-gray-500" for="remember">Recuérdame</label>
+            </div>
+            <p class=" text-secondary">Olvidé mi contraseña</p>
+        </div>
+        <button class="bg-primary py-3 w-full text-white font-medium mt-2 text-xl rounded-sm">Iniciar
+            sesión</button>
+    </Form>
+</template>
+
+<script setup>
+
+import { useAuthStore } from '~/stores/AuthStore'
+
+const router = useRouter();
+const authStore = useAuthStore();
+const formData = reactive({
+    email: "",
+    password: ""
+});
+
+const validateEmail = (value) => {
+    // if the field is empty
+    if (!value) {
+        return 'El email es requerido';
+    }
+    // if the field is not a valid email
+    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (!regex.test(value)) {
+        return 'El email no es válido';
+    }
+    // All is good
+    return true;
+}
+
+const validatePassword = (password) => {
+
+    if (!password) {
+        return 'La contraseña es requerida';
+    }
+
+    return true;
+};
+
+const login = async () => {
+
+    await useFetch('http://localhost:1234/student/log-in', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: {
+            email: formData.email,
+            password: formData.password,
+        },
+        onResponse({ request, response, options }) {
+
+            const responseData = response._data;
+
+            if (responseData.success) {
+                authStore.logIn(responseData.user);
+                router.push('/user/dashboard/home');
+            }
+            else {
+                alert(responseData.message);
+            }
+        },
+    });
+}
+
+</script>
