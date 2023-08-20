@@ -9,11 +9,8 @@ export const useAuthStore = defineStore('AuthStore', {
     },
     actions: {
         logIn(userData) {
-
             const userStore = useUserStore();
-
             this.loggedIn = true;
-
             localStorage.setItem('token', userData.token);
             userStore.setUserData(userData);
 
@@ -25,14 +22,20 @@ export const useAuthStore = defineStore('AuthStore', {
             userStore.removeUserData();
         },
         checkIfUserIsLoggedIn() {
+            const userStore = useUserStore();
             if (localStorage.getItem('token')) {
-                const userStore = useUserStore();
                 userStore.setUserFromLocalStorage();
                 this.loggedIn = true;
             }
             else {
                 this.loggedIn = false;
             }
+        },
+        signUp(userData) {
+            const userStore = useUserStore();
+            this.loggedIn = true;
+            localStorage.setItem('token', userData.token);
+            userStore.setUserData(userData);
         }
     }
 })
