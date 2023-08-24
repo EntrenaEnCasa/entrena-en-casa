@@ -4,9 +4,9 @@ export const useUserStore = defineStore('UserStore', {
     state: () => {
         return {
             user: null || {
-                id: -1,
+                user_id: -1,
                 email: "",
-                role: 0,
+                user_type: 0,
                 credits: null || {
                     bronze: 0,
                     silver: 0,
@@ -32,6 +32,9 @@ export const useUserStore = defineStore('UserStore', {
         },
         removeUserFromLocalStorage() {
             localStorage.removeItem('user');
+        },
+        getUserToken() {
+            return localStorage.getItem('token');
         }
     }
 })
