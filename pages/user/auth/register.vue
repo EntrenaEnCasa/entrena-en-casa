@@ -172,7 +172,7 @@ const register = async (values) => {
 
     registrationState.error = false;
 
-    await useFetch('http://localhost:1234/student/sign-up', {
+    await useFetch(`${runtimeConfig.public.apiBase}/student/sign-up`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",

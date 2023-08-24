@@ -22,6 +22,7 @@
 import { useAuthStore } from '~/stores/AuthStore'
 
 const router = useRouter();
+const runtimeConfig = useRuntimeConfig();
 const authStore = useAuthStore();
 const formData = reactive({
     email: "",
@@ -53,7 +54,7 @@ const validatePassword = (password) => {
 
 const login = async () => {
 
-    await useFetch('http://localhost:1234/student/log-in', {
+    await useFetch(`${runtimeConfig.public.apiBase}/student/log-in`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
