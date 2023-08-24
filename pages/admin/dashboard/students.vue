@@ -129,9 +129,6 @@ const students = [
     },
 ]
 
-definePageMeta({
-    layout: "admin",
-});
 
 </script>
 
