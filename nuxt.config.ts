@@ -5,4 +5,9 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt', '@nuxtjs/tailwindcss', 'nuxt-icon', '@vee-validate/nuxt'
   ],
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:1234'
+    }
+  }
 })
