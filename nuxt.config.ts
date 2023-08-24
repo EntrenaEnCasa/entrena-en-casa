@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiBase: 'http://localhost:1234'
+      apiBase: 'https://entrena-en-casa-backend-production.up.railway.app'
     }
   }
 })
