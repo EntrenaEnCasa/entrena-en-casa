@@ -89,7 +89,6 @@
 import { useAuthStore } from '~/stores/AuthStore'
 
 import { ref } from 'vue';
-import { useForm } from 'vee-validate';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -99,7 +98,6 @@ const registrationState = reactive({
     error: false,
     errorMessage: '',
 });
-
 
 const validateEmail = (value) => {
     // if the field is empty
