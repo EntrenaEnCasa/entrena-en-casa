@@ -12,8 +12,7 @@
             </div>
             <p class=" text-secondary">Olvidé mi contraseña</p>
         </div>
-        <button class="bg-primary py-3 w-full text-white font-medium mt-2 text-xl rounded-sm">Iniciar
-            sesión</button>
+        <CommonButton text="Iniciar sesión" class="py-3 w-full font-medium" size="xl" :loading="loading" />
     </Form>
 </template>
 
@@ -28,6 +27,7 @@ const formData = reactive({
     email: "",
     password: ""
 });
+const loading = ref(false);
 
 const validateEmail = (value) => {
     // if the field is empty
@@ -54,6 +54,8 @@ const validatePassword = (password) => {
 
 const login = async () => {
 
+    loading.value = true;
+
     await useFetch(`${runtimeConfig.public.apiBase}/student/log-in`, {
         method: 'POST',
         headers: {
@@ -66,6 +68,7 @@ const login = async () => {
         onResponse({ request, response, options }) {
 
             const responseData = response._data;
+            loading.value = false;
 
             if (responseData.success) {
                 authStore.logIn(responseData.user);
@@ -74,6 +77,7 @@ const login = async () => {
             else {
                 alert(responseData.message);
             }
+
         },
     });
 }
