@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 sm:p-8">
+    <div>
         <div class="mb-4">
             <div class="flex flex-col sm:flex-row items-center justify-between">
                 <h3 class="text-xl font-medium">Horario disponible</h3>

@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 sm:p-8 space-y-6">
+    <div class="space-y-6">
         <div>
             <h3 class="text-xl font-medium mb-5">Sesiones próximas</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
