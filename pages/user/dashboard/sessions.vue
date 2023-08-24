@@ -30,10 +30,7 @@
             <div>
                 <h3 class="text-xl font-medium">Sesiones próximas</h3>
             </div>
-            <div v-if="futureSessions.loading" class="flex justify-center items-center gap-x-2">
-                <p>Cargando</p>
-                <Icon class="animate-spin text-2xl text-primary" name="fa6-solid:circle-notch" />
-            </div>
+            <CommonLoading v-if="futureSessions.loading" />
             <div v-else-if="futureSessions.success">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- <div
@@ -92,10 +89,7 @@
             <div>
                 <h3 class="text-xl font-medium">Sesiones pasadas</h3>
             </div>
-            <div v-if="pastSessions.loading" class="flex justify-center items-center gap-x-2">
-                <p>Cargando</p>
-                <Icon class="animate-spin text-2xl text-primary" name="fa6-solid:circle-notch" />
-            </div>
+            <CommonLoading v-if="pastSessions.loading" />
             <div v-else-if="pastSessions.success">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div v-for="session in pastSessions.sessions" :key="session.session_id"

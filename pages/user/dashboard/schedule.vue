@@ -13,10 +13,7 @@
                         </span>
                     </button>
                 </div>
-                <div v-if="sessionsData.loading" class="flex justify-center items-center gap-x-2">
-                    <p>Cargando</p>
-                    <Icon class="animate-spin text-2xl text-primary" name="fa6-solid:circle-notch" />
-                </div>
+                <CommonLoading v-if="sessionsData.loading" />
                 <div v-else-if="sessionsData.success" class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200">
