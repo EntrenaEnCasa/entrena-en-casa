@@ -10,10 +10,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
     const user = userStore.user;
 
     if (authStore.loggedIn) {
-        if (user?.role == 2 && !to.path.startsWith('/user')) {
+        if (user?.user_type == 2 && !to.path.startsWith('/user')) {
             return navigateTo('/user/dashboard/home');
         }
-        else if (user?.role == 1 && !to.path.startsWith('/professional')) {
+        else if (user?.user_type == 1 && !to.path.startsWith('/professional')) {
             return navigateTo('/professional/dashboard');
         }
     }
