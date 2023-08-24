@@ -1,6 +1,6 @@
 <template>
     <div class="p-6 sm:p-8 space-y-4">
-        <div class="relative">
+        <!-- <div class="relative">
             <div name="content">
                 <div class="mb-4">
                     <h3 class="text-xl font-medium ">Sesiones en curso</h3>
@@ -66,13 +66,13 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <div class="relative">
             <div name="content">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-medium ">Agendar sesión</h3>
+                    <h3 class="text-xl font-medium ">Sesiones futuras</h3>
                     <button @click="toggleFilterSidebar"
                         class="bg-secondary text-white px-5 py-2 inline-flex items-center gap-1 rounded-lg">
                         <span class="sr-only">Open filter sidebar</span>
@@ -110,7 +110,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="session in sessions" class="border-b" :key="session.id">
+                            <tr v-for="session in futureSessions.sessions" class="border-b" :key="session.id">
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ session.date }}
                                 </td>
@@ -124,13 +124,13 @@
                                     {{ session.format }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ session.professional.name }}
+                                    {{ session.professional.first_name }} {{ session.professional.last_name }}
                                     <br>
-                                    {{ session.professional.profession }}
+                                    {{ session.professional.title }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
                                     <div class="flex items-center gap-x-1">
-                                        {{ session.alumnos.taken }}/{{ session.alumnos.max }}
+                                        {{ session.actual_assistant }} / {{ session.assitant_limit }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -202,67 +202,49 @@
 
 <script setup>
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 const filterSidebarOpen = ref(false);
 const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
 
+import { useUserStore } from '~/stores/UserStore'
 
-const sessions = [
-    {
-        id: 1,
-        date: "Domingo 25/7",
-        time: "16:00hrs",
-        modality: "Presencial - Borde costero",
-        format: "Grupal",
-        professional: {
-            name: "Jorge",
-            profession: "Entrenador Físico",
+const runtimeConfig = useRuntimeConfig();
+const userStore = useUserStore();
+
+const futureSessions = ref({
+    success: false,
+    loading: false,
+    message: '',
+    sessions: [],
+});
+
+
+onMounted(async () => {
+    await getFutureSessions();
+
+});
+
+const getFutureSessions = async () => {
+
+    futureSessions.value.loading = true;
+    await useFetch(`${runtimeConfig.public.apiBase}/admin/session/future`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken(),
         },
-        alumnos: {
-            taken: 4,
-            max: 10,
+        onResponse({ request, response, options }) {
+            futureSessions.value = response._data;
+            futureSessions.value.loading = false;
         },
-    },
-    {
-        id: 2,
-        date: "Domingo 25/7",
-        time: "17:00hrs",
-        modality: "Online",
-        format: "Grupal",
-        professional: {
-            name: "Gonzalo",
-            profession: "Entrenador Físico"
-        },
-        alumnos: {
-            taken: 6,
-            max: 10,
-        },
-    },
-    {
-        id: 3,
-        date: "Domingo 25/7",
-        time: "19:00hrs",
-        modality: "Online",
-        format: "Grupal",
-        professional: {
-            name: "Jorge",
-            profession: "Entrenador Físico"
-        },
-        alumnos: {
-            taken: 5,
-            max: 10,
-        },
-    },
-]
+    });
+}
 
 const filter = () => {
     console.log("filter");
 }
 
-definePageMeta({
-    layout: "admin",
-});
 
 </script>
 
