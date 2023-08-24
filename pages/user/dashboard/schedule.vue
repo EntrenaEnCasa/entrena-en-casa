@@ -13,7 +13,11 @@
                         </span>
                     </button>
                 </div>
-                <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                <div v-if="sessionsData.loading" class="flex justify-center items-center gap-x-2">
+                    <p>Cargando</p>
+                    <Icon class="animate-spin text-2xl text-primary" name="fa6-solid:circle-notch" />
+                </div>
+                <div v-else-if="sessionsData.success" class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                             <tr>
@@ -41,34 +45,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="session in sessions" class="border-b" :key="session.id_usuario">
+                            <tr v-for="session in sessionsData.sessions" class="border-b" :key="session.id_usuario">
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ formatDate(session.fecha) }}
+                                    {{ formatDate(session.date) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ formatTime(session.hora) }}
+                                    {{ session.time }}hrs
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.presencial ? 'Presencial' : 'Online' }}
+                                    {{ session.modality }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.formato }}
+                                    {{ session.format }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ session.profesional.nombreProfesional }}
-                                    {{ session.profesional.apellidoProfesional }}
+                                    {{ session.professional.first_name }}
+                                    {{ session.professional.last_name }}
                                     <br>
-                                    {{ session.profesional.tituloProfesional }}
+                                    {{ session.professional.title }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
                                     <div class="flex items-center gap-x-1">
-                                        <img :src="`/plans/${session.credito.tipoCredito}-medal.png`" class="w-6 h-6"
-                                            :alt="session.credito.tipoCredito">
-                                        {{ session.credito.cantidadCreditos }}
+                                        <img :src="`/plans/${session.credit_type}-medal.png`" class="w-6 h-6"
+                                            :alt="session.credit_type">
+                                        {{ session.quantity }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <button :disabled="!session.disponible" @click="scheduleSession(session)"
+                                    <button :disabled="!session.available" @click="scheduleSession(session)"
                                         class="px-4 py-2 bg-primary text-white rounded-md font-medium disabled:bg-primary-100 disabled disabled:cursor-not-allowed">
                                         Agendar
                                     </button>
@@ -76,6 +80,10 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div v-else class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
+                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
+                    <div class="text-md  text-center"><b>{{ sessionsData.message }}</b></div>
                 </div>
             </div>
             <div class="absolute top-0 left-0 w-full h-full min-h-[calc(100vh_-_4.5rem)] bg-black/10 backdrop-blur-[3px] transition-all"
@@ -133,52 +141,60 @@
 
 <script setup>
 
+import { useUserStore } from '~/stores/UserStore'
 import { ref, onMounted } from "vue";
+
+const runtimeConfig = useRuntimeConfig();
+const userStore = useUserStore();
 
 const filterSidebarOpen = ref(false);
 const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
 
-const sessions = ref([]);
+const sessionsData = ref({
+    sessions: [],
+    loading: false,
+    success: false,
+    message: ""
+});
 
 const getSessions = async () => {
-    const { data, pending, error, refresh } = await useFetch('http://localhost:3002/sesiones/disponibles-agendar', {
+
+    sessionsData.value.loading = true;
+
+    await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/${userStore.user.user_id}/available`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken(),
         },
         onResponse({ request, response, options }) {
-            const responseData = response._data;
-            responseData.sort((session1, session2) => {
-                const date1 = new Date(session1.fecha);
-                const date2 = new Date(session2.fecha);
-                return date1 - date2;
-            });
-            sessions.value = responseData;
+            sessionsData.value = response._data;
+            sessionsData.value.oading = false;
         },
     });
 }
 
-const scheduleSession = async (session) => {
-    const { data, pending, error, refresh } = await useFetch('http://localhost:3002/sesiones/agendar', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            idSesion: session.idSesion,
-            idUsuario: userStore.user.idUsuario,
-        }),
-        onResponse({ request, response, options }) {
-            const responseData = response._data;
-            console.log(responseData);
-            if (responseData.status === "success") {
-                alert(responseData.message);
-            } else {
-                alert(responseData.error);
-            }
-        },
-    });
-}
+// const scheduleSession = async (session) => {
+//     const { data, pending, error, refresh } = await useFetch('http://localhost:3002/sesiones/agendar', {
+//         method: 'POST',
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//             idSesion: session.idSesion,
+//             idUsuario: userStore.user.idUsuario,
+//         }),
+//         onResponse({ request, response, options }) {
+//             const responseData = response._data;
+//             console.log(responseData);
+//             if (responseData.status === "success") {
+//                 alert(responseData.message);
+//             } else {
+//                 alert(responseData.error);
+//             }
+//         },
+//     });
+// }
 
 const formatDate = (date) => {
     const daysOfWeek = [
