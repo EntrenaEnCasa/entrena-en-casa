@@ -12,8 +12,8 @@ export const useAuthStore = defineStore('AuthStore', {
             const userStore = useUserStore();
             this.loggedIn = true;
             localStorage.setItem('token', userData.token);
+            delete userData.token;
             userStore.setUserData(userData);
-
         },
         logOut() {
             const userStore = useUserStore();
@@ -35,6 +35,7 @@ export const useAuthStore = defineStore('AuthStore', {
             const userStore = useUserStore();
             this.loggedIn = true;
             localStorage.setItem('token', userData.token);
+            delete userData.token;
             userStore.setUserData(userData);
         }
     }
