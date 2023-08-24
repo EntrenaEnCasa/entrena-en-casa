@@ -99,9 +99,7 @@ const professionals = [
     },
 ]
 
-definePageMeta({
-    layout: "admin",
-});
+
 
 </script>
 
