@@ -54,9 +54,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-definePageMeta({
-    layout: "professional",
-});
-</script>
