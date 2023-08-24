@@ -1,5 +1,6 @@
 <template>
-    <button class="bg-primary text-white rounded-sm" :class="'text-' + size">
+    <button class="bg-primary text-white rounded-sm disabled:bg-primary-100 disabled:cursor-not-allowed"
+        :class="'text-' + size" :disabled="disabled">
         <span v-if="!loading">
             {{ text }}
         </span>
@@ -29,6 +30,10 @@ const props = defineProps({
     size: {
         type: String,
         default: 'base'
+    },
+    disabled: {
+        type: Boolean,
+        default: false
     }
 });
 
