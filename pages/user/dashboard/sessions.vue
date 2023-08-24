@@ -30,8 +30,9 @@
             <div>
                 <h3 class="text-xl font-medium">Sesiones próximas</h3>
             </div>
-            <div v-if="futureSessions.loading">
-                Cargando datos...
+            <div v-if="futureSessions.loading" class="flex justify-center items-center gap-x-2">
+                <p>Cargando</p>
+                <Icon class="animate-spin text-2xl text-primary" name="fa6-solid:circle-notch" />
             </div>
             <div v-else-if="futureSessions.success">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -91,13 +92,14 @@
             <div>
                 <h3 class="text-xl font-medium">Sesiones pasadas</h3>
             </div>
-            <div v-if="pastSessions.loading">
-                Cargando datos...
+            <div v-if="pastSessions.loading" class="flex justify-center items-center gap-x-2">
+                <p>Cargando</p>
+                <Icon class="animate-spin text-2xl text-primary" name="fa6-solid:circle-notch" />
             </div>
             <div v-else-if="pastSessions.success">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div v-for="session in pastSessions.sessions" :key="session.session_id"
-                        class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3 opacity-60"
+                        class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3 opacity-60 hover:opacity-100 transition-opacity"
                         style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
                         <div class="px-3">
                             <div class="grid grid-cols-2 gap-1">
@@ -166,13 +168,11 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { reactive, onMounted } from "vue";
 import { useUserStore } from '~/stores/UserStore'
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
-
-const loadingData = ref(false);
 
 const futureSessions = ref({
     success: false,
@@ -195,7 +195,7 @@ onMounted(async () => {
 
 const getFutureSessions = async () => {
 
-    loadingData.value = true;
+    futureSessions.value.loading = true;
 
     await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/future`, {
         method: 'GET',
@@ -205,14 +205,12 @@ const getFutureSessions = async () => {
         },
         onResponse({ request, response, options }) {
             futureSessions.value = response._data;
-            futureSessions.loading = false;
+            futureSessions.value.loading = false;
         },
     });
 }
 
 const getPastSessions = async () => {
-    loadingData.value = true;
-
     await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/past`, {
         method: 'GET',
         headers: {
@@ -221,7 +219,7 @@ const getPastSessions = async () => {
         },
         onResponse({ request, response, options }) {
             pastSessions.value = response._data;
-            pastSessions.loading = false;
+            pastSessions.value.loading = false;
         },
     });
 }
