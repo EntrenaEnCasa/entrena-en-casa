@@ -1,5 +1,5 @@
 <template>
-    <Form class="w-4/5 space-y-5" @submit="login">
+    <Form class="w-4/5 space-y-5" @submit="login" v-slot="{ meta }">
         <CommonInput label="Correo Electrónico" v-model="formData.email" name="email" type="email" id="email"
             icon="fa6-solid:envelope" placeholder="Ingresa tu correo electrónico" :rules="validateEmail" />
         <CommonInput label="Contraseña" v-model="formData.password" name="password" type="password" id="password"
@@ -10,9 +10,10 @@
                 <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
                 <label class="text-gray-500" for="remember">Recuérdame</label>
             </div>
-            <p class=" text-secondary">Olvidé mi contraseña</p>
+            <p class="text-secondary text-right">Olvidé mi contraseña</p>
         </div>
-        <CommonButton text="Iniciar sesión" class="py-3 w-full font-medium" size="xl" :loading="loading" />
+        <CommonButton text="Iniciar sesión" class="py-2 w-full font-medium" size="xl" :loading="loading"
+            :disabled="!meta.valid" />
     </Form>
 </template>
 
