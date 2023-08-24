@@ -5,15 +5,19 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     const authStore = useAuthStore();
 
-    if (to.path.startsWith('/user/auth') && authStore.loggedIn) {
-        return navigateTo('/user/dashboard/home');
-    }
+    const paths = [
+        "/user",
+        "/user/",
+        "/user/dashboard",
+        "/user/dashboard/",
+    ];
 
-    if (to.path.startsWith('/user/dashboard') && !authStore.loggedIn) {
+    if (authStore.loggedIn) {
+        if (paths.includes(to.path)) {
+            return navigateTo('/user/dashboard/home');
+        }
+    }
+    else if (!authStore.loggedIn && to.path != "/user/auth/login") {
         return navigateTo('/user/auth/login');
-    }
-
-    if (to.path == "/user/dashboard" || to.path == "/user" || to.path == "/user/dashboard/" || to.path == "/user/") {
-        return navigateTo('/user/dashboard/home');
     }
 })
