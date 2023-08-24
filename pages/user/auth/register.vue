@@ -92,6 +92,7 @@ import { ref } from 'vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const runtimeConfig = useRuntimeConfig();
 const password = ref('');
 
 const registrationState = reactive({
