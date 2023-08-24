@@ -73,7 +73,7 @@ const login = async () => {
 
             if (responseData.success) {
                 authStore.logIn(responseData.user);
-                router.push('/user/dashboard/home');
+                router.push('/professional/dashboard/home');
             }
             else {
                 alert(responseData.message);
