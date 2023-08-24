@@ -2,7 +2,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         <div class="flex flex-col justify-center items-center mb-12 w-4/5 mx-auto">
             <img src="/logo.png" class="mb-4 w-36" alt="logo">
-            <Form class="w-full space-y-4" @submit="register" v-slot="{ meta }">
+            <StudentAuthRegisterForm ref="form" />
+            <!-- <Form class="w-full space-y-4" @submit="register" v-slot="{ meta }">
                 <div>
                     <label class="block mb-1" for="email">Correo electrónico</label>
                     <div class="border rounded-md px-4 py-3 flex items-center space-x-4 w-full"
@@ -61,15 +62,16 @@
                 <button
                     class="bg-primary text-xl rounded-sm p-2 w-full text-white font-medium mt-2 disabled:bg-primary-100 disabled:cursor-not-allowed"
                     :disabled="!meta.valid" value="registrarse" to="/user/dashboard/home">Registrarse</button>
-            </Form>
+            </Form> -->
             <p class="mt-4 text-gray-500">
                 ¿Ya tienes cuenta?
                 <router-link to="/user/auth/login" class="text-secondary">
                     Iniciar sesión
                 </router-link>
             </p>
-            <div v-if="registrationState.error" class="w-full mt-5 border rounded-md border-red-500 px-5 py-2 text-red-500">
-                <p>{{ registrationState.errorMessage }}</p>
+            <div v-if="form?.registrationState.error"
+                class="w-full mt-5 border rounded-md border-red-500 px-5 py-2 text-red-500">
+                <p>{{ form.registrationState.errorMessage }}</p>
             </div>
         </div>
         <div class="hidden lg:flex items-center justify-center text-center"
@@ -86,116 +88,9 @@
 </template>
 <script setup>
 
-import { useAuthStore } from '~/stores/AuthStore'
-
 import { ref } from 'vue';
 
-const authStore = useAuthStore();
-const router = useRouter();
-const runtimeConfig = useRuntimeConfig();
-const password = ref('');
-
-const registrationState = reactive({
-    error: false,
-    errorMessage: '',
-});
-
-const validateEmail = (value) => {
-    // if the field is empty
-    if (!value) {
-        return 'El email es requerido';
-    }
-    // if the field is not a valid email
-    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    if (!regex.test(value)) {
-        return 'El email no es válido';
-    }
-    // All is good
-    return true;
-}
-
-const validatePassword = (password) => {
-
-    if (!password) {
-        return 'La contraseña es requerida';
-    }
-
-    // Check if the password is at least 8 characters long
-    if (password.length < 8) {
-        return 'La contraseña debe tener al menos 8 caracteres';
-    }
-    // Check if the password contains at least one number
-    let hasNumber = false;
-    for (let char of password) {
-        if (char >= '0' && char <= '9') {
-            hasNumber = true;
-            break;
-        }
-    }
-    if (!hasNumber) {
-        return 'La contraseña debe tener al menos un número';
-    }
-    // Check if the password contains at least one capital letter
-    let hasCapital = false;
-    for (let char of password) {
-        if (char >= 'A' && char <= 'Z') {
-            hasCapital = true;
-            break;
-        }
-    }
-    if (!hasCapital) {
-        return 'La contraseña debe tener al menos una letra mayúscula';
-    }
-    // All good
-    return true;
-};
-
-const validatePasswordRepeat = (passRepeat) => {
-    if (!passRepeat) {
-        return 'Debes repetir la contraseña';
-    }
-
-    if (passRepeat !== password.value) {
-        return 'Las contraseñas no coinciden';
-    }
-
-    return true;
-};
-
-const register = async (values) => {
-
-    const { email, password } = values;
-
-    const registerData = {
-        email: email,
-        password: password
-    }
-
-    registrationState.error = false;
-
-    await useFetch(`${runtimeConfig.public.apiBase}/student/sign-up`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: registerData,
-        onResponse({ request, response, options }) {
-            const responseData = response._data;
-
-            console.log(responseData);
-
-            if (responseData.success) {
-                console.log("success");
-                authStore.signUp(responseData.user);
-                router.push('/user/dashboard/home');
-            }
-            else {
-                registrationState.error = true;
-                registrationState.errorMessage = responseData.message;
-            }
-        },
-    });
-}
+const form = ref(null);
 
 definePageMeta({
     layout: "auth",
