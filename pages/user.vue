@@ -4,7 +4,7 @@
 <script setup>
 
 definePageMeta({
-    middleware: 'alumno-auth',
+    middleware: 'student-auth',
 });
 
 </script>
