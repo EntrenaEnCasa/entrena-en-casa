@@ -113,9 +113,7 @@ const getAllStudents = async() => {
         },
     });
 
-
-
-}
+};
 
 
 
