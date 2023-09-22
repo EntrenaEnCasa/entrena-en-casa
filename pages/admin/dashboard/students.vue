@@ -101,7 +101,7 @@ onMounted(async () =>{
 
 const getAllStudents = async() => {
     allStudents.value.loading = true;
-    await useFetch(`${runtimeConfig.public.apiBase}/students`,{
+    await useFetch(`${runtimeConfig.public.apiBase}/admin/students`,{
         method: 'GET',
         headers:{
             "Content-Type": "application/json",
