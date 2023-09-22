@@ -52,8 +52,8 @@
                     agendada e ir midiendo tu avance.</div>
             </div>
             <div class="row justify-content-between mt-2">
-                <nuxt-link class="col-md-4 skip" to="/user/dashboard/home" style="text-decoration: none; color: inherit;">
-                    <p class="link-info">Recordarmelo más tarde </p>
+                <nuxt-link class="col-md-4 skip" to="/user/dashboard/aboutYou" style="text-decoration: none;  color: inherit;">
+                    <p class="link-info" @click="mostrarAlerta">Recordarmelo más tarde </p>
                 </nuxt-link>
                 <nuxt-link class="col-md-4 boton" to="/user/dashboard/home">
                     <button type="submit" class="btn float-right">Confirmar</button>
@@ -67,6 +67,14 @@
 definePageMeta({
     layout: "auth",
 });
+function mostrarAlerta() {
+    if (confirm("¿Estás seguro? Si no rellenas estos datos, no podrás agendar ninguna sesión.")){
+        window.location.href = '/user/dashboard/home'
+    }else{
+            
+    }
+    
+}
 </script>
     
 <style scoped  lang="scss">
