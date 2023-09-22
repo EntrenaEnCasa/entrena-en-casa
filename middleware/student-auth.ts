@@ -17,7 +17,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
             return navigateTo('/user/dashboard/home');
         }
     }
-    else if (!authStore.loggedIn && to.path != "/user/auth/login") {
+    else if (!authStore.loggedIn && (to.path != "/user/auth/login" && to.path != "/user/auth/register") ) {
         return navigateTo('/user/auth/login');
     }
 })
