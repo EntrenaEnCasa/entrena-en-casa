@@ -15,8 +15,12 @@
                 disponible
             </p>
         </div>
+        <div>
+
+        </div>
         <div class="overflow-x-auto sm:rounded-lg">
-            <table class="bg-white w-full table-fixed text-sm text-gray-500 border">
+            <CommonLoading v-if="loading" />
+            <table v-else class="bg-white w-full table-fixed text-sm text-gray-500 border">
                 <thead>
                     <tr>
                         <th scope="col" class="w-24"></th>
@@ -107,30 +111,23 @@
 </template>
 
 <script setup>
-
 import { ref, onMounted } from "vue";
+import { useUserStore } from '~/stores/UserStore';
 
 const daysList = ref([]);
 const timesList = ref([]);
 const modal = ref(null);
-const takenTimes = [
-    {
-        date: new Date(2023, 8, 6, 9),
-    },
-    {
-        date: new Date(2023, 8, 8, 10),
-    },
-    {
-        date: new Date(2023, 8, 8, 13),
-    },
-    {
-        date: new Date(2023, 8, 12, 18),
-    }
-];
+const loading = ref(false);
+
+const userStore = useUserStore();
+const runtimeConfig = useRuntimeConfig();
+
+// Simulated API response data (replace this with actual API call)
+const sessions = ref([])
 
 const openModal = () => {
     modal.value.openModal();
-}
+};
 
 const generateDaysList = () => {
     const today = new Date();
@@ -139,43 +136,74 @@ const generateDaysList = () => {
         newDate.setDate(today.getDate() + i);
         daysList.value.push(newDate);
     }
-}
+};
 
 const formatDate = (date) => {
     const daysOfWeek = ["Lun", "Mar", "Mier", "Jue", "Vie", "Sab", "Dom"];
     const dayOfWeek = daysOfWeek[date.getDay()];
     const dayOfMonth = date.getDate();
     return `${dayOfWeek} ${dayOfMonth}`;
-}
+};
 
 const generateTimesList = () => {
     const startTime = 9; // 9 AM
     const endTime = 20; // 8 PM
 
     for (let i = startTime; i <= endTime; i++) {
-        timesList.value.push(i);
+        const formattedTime = `${i < 10 ? "0" : ""}${i}:00`;
+        timesList.value.push(formattedTime);
     }
-}
+};
 
-const formatTime = (hour) => {
-    const amPm = hour >= 12 ? "PM" : "AM";
-    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
-
-    return `${formattedHour} ${amPm}`;
-}
+const formatTime = (time) => {
+    const [hour] = time.split(":");
+    return `${parseInt(hour)}:00`;
+};
 
 const timeTaken = (n, time) => {
+    // Check if the given time is taken based on the API response
     const date = new Date(daysList.value[n - 1]);
-    date.setHours(time);
+    // Split the time into hours and minutes
+    const [hour, minute] = time.split(":");
 
-    return takenTimes.some((takenTime) => {
-        return (takenTime.date.getHours() === date.getHours() && takenTime.date.getDate() === date.getDate());
+    // Set the hours and minutes for the date
+    date.setHours(parseInt(hour), parseInt(minute), 0, 0);
+
+    return sessions.value.some((session) => {
+        const sessionDate = new Date(session.date);
+        const sessionTime = session.time.split(":");
+        sessionDate.setHours(sessionTime[0], sessionTime[1]);
+        return sessionDate.getTime() === date.getTime();
+    });
+};
+
+const getSessions = async () => {
+    loading.value = true;
+    await useFetch(`${runtimeConfig.public.apiBase}/professional/session/user/${userStore.user.user_id}`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken()
+        },
+        onResponse({ request, response, options }) {
+
+            loading.value = false;
+            const responseData = response._data;
+
+            if (responseData.success) {
+                sessions.value = responseData.sessions;
+            }
+            else {
+                alert(responseData.message);
+            }
+
+        },
     });
 }
 
 onMounted(() => {
+    getSessions();
     generateDaysList();
     generateTimesList();
 });
-
 </script>
