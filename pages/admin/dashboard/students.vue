@@ -36,12 +36,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="student in students" class="border-b" :key="student.id">
+                            <tr v-for="student in allStudents.students" class="border-b" :key="student.user_id">
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ student.name }}
+                                    {{ student.first_name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ student.lastName }}
+                                    {{ student.last_name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ student.email }}
@@ -81,53 +81,42 @@
 </template>
 
 <script setup>
+import { useUserStore } from "~/stores/UserStore";
 
-const students = [
-    {
-        id: 1,
-        name:"Juan",
-        lastName:"Araya",
-        email:"juan.araya@gmail.com",
-        credits:{
-            gold:1,
-            silver:2,
-            bronze:1,
+
+const userStore = useUserStore();
+const runtimeConfig = useRuntimeConfig();
+
+const allStudents = ref({
+    success: false,
+    loading: false,
+    message: '',
+    students: [],
+});
+
+onMounted(async () =>{
+    await getAllStudents();
+
+});
+
+const getAllStudents = async() => {
+    allStudents.value.loading = true;
+    await useFetch(`${runtimeConfig.public.apiBase}/students`,{
+        method: 'GET',
+        headers:{
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken(),
         },
-    },
-    {
-        id: 2,
-        name:"Juan",
-        lastName:"Garcia",
-        email:"juan.garcia@gmail.com",
-        credits:{
-            gold:1,
-            silver:3,
-            bronze:1,
+        onResponse({request,response,options}){
+            allStudents.value = response._data;
+            allStudents.value.loading = false;
         },
-    },
-    {
-        id: 3,
-        name:"Andres",
-        lastName:"Araya",
-        email:"andres.araya@gmail.com",
-        credits:{
-            gold:3,
-            silver:2,
-            bronze:0,
-        },
-    },
-    {
-        id: 4,
-        name:"Catalina",
-        lastName:"Schencke",
-        email:"cata.schencke@gmail.com",
-        credits:{
-            gold:2,
-            silver:2,
-            bronze:5,
-        },
-    },
-]
+    });
+
+
+
+}
+
 
 
 </script>
