@@ -205,6 +205,9 @@ const getFutureSessions = async () => {
 }
 
 const getPastSessions = async () => {
+
+    pastSessions.value.loading = true;
+
     await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/past`, {
         method: 'GET',
         headers: {
