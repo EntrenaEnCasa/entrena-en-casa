@@ -14,8 +14,8 @@
                         </div>
                     </form>
                 </div>
-                <CommonLoading v-if="pastSessions.loading" />
-                <div v-else-if="pastSessions.success" class="overflow-x-auto shadow-md sm:rounded-lg">
+                <CommonLoading v-if="allStudents.loading" />
+                <div v-else-if="allStudents.success" class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                             <tr>
@@ -76,7 +76,7 @@
                 <div v-else>
                     <div class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
                         style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
-                        <div class="text-md  text-center"><b>{{ pastSessions.message }}</b></div>
+                        <div class="text-md  text-center"><b>{{ allStudents.message }}</b></div>
                     </div>
                 </div>
             </div>
