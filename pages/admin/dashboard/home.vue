@@ -228,7 +228,7 @@ onMounted(async () => {
 const getFutureSessions = async () => {
 
     futureSessions.value.loading = true;
-    await useFetch(`${runtimeConfig.public.apiBase}/admin/session/future`, {
+    await useFetch(`${runtimeConfig.public.apiBase}/admin/sessions/future`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
