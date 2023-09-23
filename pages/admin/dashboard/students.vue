@@ -14,7 +14,8 @@
                         </div>
                     </form>
                 </div>
-                <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                <CommonLoading v-if="pastSessions.loading" />
+                <div v-else-if="pastSessions.success" class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                             <tr>
@@ -72,6 +73,12 @@
                         </tbody>
                     </table>
                 </div>
+                <div v-else>
+                    <div class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
+                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
+                        <div class="text-md  text-center"><b>{{ pastSessions.message }}</b></div>
+                    </div>
+                </div>
             </div>
             <div class="absolute top-0 left-0 w-full h-full min-h-[calc(100vh_-_4.5rem)] bg-black/10 backdrop-blur-[3px] transition-all"
                 :class="{ 'hidden': !filterSidebarOpen }">
@@ -100,7 +107,9 @@ onMounted(async () =>{
 });
 
 const getAllStudents = async() => {
+
     allStudents.value.loading = true;
+
     await useFetch(`${runtimeConfig.public.apiBase}/admin/students`,{
         method: 'GET',
         headers:{
