@@ -36,18 +36,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="professional in professionals" class="border-b" :key="professional.id">
+                            <tr v-for="professional in allProfessionals.professionals" class="border-b" :key="professional.user_id">
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ professional.name }}
+                                    {{ professional.first_name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ professional.lastName }}
+                                    {{ professional.last_name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ professional.email }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal flex space-x-1">
-                                    {{ professional.type }}
+                                    {{ professional.title }}
                                 </td>
                                 <td class="px-6 py-4">
                                     <button class="px-4 py-2 bg-primary text-white rounded-md font-medium">
@@ -68,36 +68,40 @@
 
 <script setup>
 
-const professionals = [
-    {
-        id:1,
-        name:"Juan",
-        lastName:"Araya",
-        email:"juan.araya@gmail.com",
-        type:"Entrenador",
-    },
-    {
-        id:2,
-        name:"Andres",
-        lastName:"Araya",
-        email:"andres.araya@gmail.com",
-        type:"Nutricionista",
-    },
-    {
-        id:3,
-        name:"Catalina",
-        lastName:"Schencke",
-        email:"cata.schencke@gmail.com",
-        type:"Entrenador",
-    },
-    {
-        id:4,
-        name:"Jorge",
-        lastName:"Sierra",
-        email:"jsierracalderon@gmail.com",
-        type:"Entrenador",
-    },
-]
+import { useUserStore } from "~/stores/UserStore";
+
+
+const userStore = useUserStore();
+const runtimeConfig = useRuntimeConfig();
+
+const allProfessionals = ref({
+    success: false,
+    loading: false,
+    message: '',
+    professionals: [],
+});
+
+onMounted(async () =>{
+    await getAllProfessionals();
+});
+
+const getAllProfessionals= async() =>{
+
+    allProfessionals.value.loading = true;
+
+    await useFetch(`${runtimeConfig.public.apiBase}/admin/professionals`,{
+        method: 'GET',
+        headers:{
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken(),
+        },
+        onResponse({request,response,options}){
+            allProfessionals.value = response._data;
+            allProfessionals.value.loading = false;
+        },
+    });
+
+};
 
 
 
