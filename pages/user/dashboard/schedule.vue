@@ -42,7 +42,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="session in sessionsData.sessions" class="border-b" :key="session.id_usuario">
+                            <tr v-for="session in sessionsData.sessions" class="border-b" :key="session.session_id">
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ formatDate(session.date) }}
                                 </td>
@@ -158,6 +158,7 @@ const getSessions = async () => {
 
     sessionsData.value.loading = true;
 
+
     await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/${userStore.user.user_id}/available`, {
         method: 'GET',
         headers: {
@@ -167,9 +168,24 @@ const getSessions = async () => {
         onResponse({ request, response, options }) {
             sessionsData.value = response._data;
             sessionsData.value.oading = false;
+            console.log(sessionsData.value.sessions);
         },
     });
 }
+
+// const scheduleSession = async (session) =>{
+//     await useFetch(`${runtimeConfig.public.apiBase}/student/session`,{
+//         method: 'POST',
+//         headers: {
+//             "Content-Type": "application/json",
+//             "x-access-token":userStore.getUserToken(),
+//         },
+//         body: JSON.stringify({
+//             user_id: user.user_id,
+//             session_id: session.session_id,
+//         }),
+//     });
+// }
 
 // const scheduleSession = async (session) => {
 //     const { data, pending, error, refresh } = await useFetch('http://localhost:3002/sesiones/agendar', {
