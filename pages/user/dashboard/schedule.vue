@@ -168,11 +168,15 @@ const getSessions = async () => {
         },
         onResponse({ request, response, options }) {
             sessionsData.value = response._data;
-            sessionsData.value.oading = false;
+            sessionsData.value.loading = false;
         },
     });
 }
 
+
+//no se descuentan los creditos
+//mensaje no se muestra correctamente
+//
 const scheduleSession = async (session) =>{
     await useFetch(`${runtimeConfig.public.apiBase}/student/session`,{
         method: 'POST',
