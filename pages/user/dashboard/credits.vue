@@ -1,9 +1,40 @@
 <template>
-    <div class="creditos">
-        <div class="row">
-            <div class="col-12 tituloPrincipal">
-                Créditos
+    <div class="relative grid gap-y-5">
+        <h3 class="text-xl font-medium ">Créditos</h3>
+        <div class="grid gap-2">
+            <div class="text-secondary flex justify-end mr-3 ">
+                <p class="text-sm mr-3">¿Qué significa cada crédito</p>
+                <Icon name="fa6-solid:circle-info" />
             </div>
+            <div class="bg-white flex  justify-between h-14 py-4 px-8 rounded-2xl border border-zinc-200"
+                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
+                <div>
+                    <h5 class="text-lg font-semibold">Tus créditos</h5>
+                </div>
+                <div>
+                    <div class="flex  space-x-4">
+                        <div class="flex items-center space-x-1">
+                            <img src="/plans/gold-medal.png" class="w-4 h-4" alt="">
+                            <span>{{ user.credits.gold }}</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <img src="/plans/silver-medal.png" class="w-4 h-4" alt="">
+                            <span>{{ user.credits.silver }}</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <img src="/plans/bronze-medal.png" class="w-4 h-4" alt="">
+                            <span>{{ user.credits.bronze }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- </div>
+    <div class="creditos">
+        <div class="grid ">
+            <h3 class="text-xl font-medium ">Créditos</h3>
             <div class="col-12" style="text-align: right;">
                 <a class="ayuda" href="#">¿Qué significa cada crédito? <svg xmlns="http://www.w3.org/2000/svg"
                         class="ionicon" viewBox="0 0 512 512">
@@ -85,91 +116,26 @@
             </table>
         </div>
 
-    </div>
+    </div> -->
 </template>
 
-<style scoped lang="scss">
-$color_enfasis: #0EB3E0;
-$color_principal: #505050;
-$color_secondary: #C3C3C3;
-$extra-color: #949494;
-$green: #B5CD13;
-$red: #FF3A3A;
+<script setup>
 
-$font_family_primary: 'Poppins', sans-serif;
-$font_family_Secondary: 'tellural', sans-serif;
+import { ref, onMounted } from 'vue';
 
-.creditos {
-    font-family: $font_family_primary;
-    background: linear-gradient(135deg, rgba(153, 208, 223, 0.10) 0%, rgba(255, 255, 255, 0.10) 0.01%, rgba(63, 136, 166, 0.10) 100%);
-    box-shadow: 0px -29px 89px 0px rgba(0, 0, 0, 0.10);
-}
+import { useUserStore } from '~/stores/UserStore';
 
-.ayuda {
-    font-size: 12px;
-    text-align: right;
-    display: inline;
-}
+const router = useRouter();
+const userStore = useUserStore();
 
-.ayuda {
-    color: $color_enfasis;
-    text-decoration: none;
 
-}
+const user = ref({})
 
-svg {
-    fill: $color_enfasis;
-    color: $color_enfasis;
-    height: 15px;
-    width: 15px;
-}
+onMounted(() => {
+    user.value = userStore.user;
+})
 
-.tituloPrincipal {
-    font-size: 25px;
-    color: black;
-    font-weight: 600;
 
-}
 
-img {
-    height: 30px;
-    width: 30px;
-}
 
-.cred {
-    align-items: end;
-    text-align: right;
-}
-
-.tusCreditos {
-    font-size: 24px;
-}
-
-.btn {
-    border: none;
-}
-
-.btn.btn-primary {
-    width: 150px;
-    background-color: #FFD976;
-}
-
-.btn.btn-secondary {
-    width: 150px;
-    background-color: #a9a9a9;
-}
-
-.btn.btn-danger {
-    width: 150px;
-    background-color: #FFB57A;
-}
-
-.btn.btn-success {
-    background-color: $green;
-    width: 150px;
-}
-
-.precio {
-    color: $color_enfasis;
-}
-</style>
+</script>
