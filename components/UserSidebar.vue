@@ -25,6 +25,13 @@
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Agendar sesión</span>
                     </router-link>
                 </li>
+                <li>
+                    <router-link @click="sidebarOpen = false" to="/user/dashboard/credits"
+                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
+                        <Icon name="fa6-solid:money-bill" class="w-5 h-5  group-hover:text-white" />
+                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Créditos</span>
+                    </router-link>
+                </li>
                 <!-- <li>
                     <router-link @click="sidebarOpen = false" to="/user/dashboard/recommendations"
                         class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
@@ -39,13 +46,7 @@
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Estadísticas</span>
                     </router-link>
                 </li>
-                <li>
-                    <router-link @click="sidebarOpen = false" to="/user/dashboard/credits"
-                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
-                        <Icon name="fa6-solid:money-bill" class="w-5 h-5 text-gray-500 group-hover:text-white" />
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Créditos</span>
-                    </router-link>
-                </li> -->
+                -->
             </ul>
         </div>
     </aside>
