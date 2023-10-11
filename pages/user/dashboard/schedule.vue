@@ -174,6 +174,11 @@ const getSessions = async () => {
     });
 }
 
+const responseData = ref({
+    success: false,
+    message: "",
+});
+
 const checkUserData = async () => {
     await useFetch ( `${runtimeConfig.public.apiBase}/student/info/${userStore.user.user_id}`, {
         method: "GET",
@@ -197,6 +202,9 @@ const checkUserData = async () => {
 //no se descuentan los creditos
 //mensaje no se muestra correctamente
 //
+
+
+
 const scheduleSession = async (session) => {
     await useFetch(`${runtimeConfig.public.apiBase}/student/session`,{
         method: 'POST',
@@ -209,9 +217,9 @@ const scheduleSession = async (session) => {
             session_id: session.session_id,
         }),
         onResponse({request,response,options}){
-            const responseData = response._data;
+            let responseData = response._data;
             console.log(responseData);
-            if(responseData.status == "success"){
+            if(responseData.success){
                 alert(responseData.message);
             } else {
                 alert(responseData.error);
