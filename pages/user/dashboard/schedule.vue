@@ -69,7 +69,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <button :disabled="!session.available" @click="checkUserData"
+                                    <button :disabled="!session.available" @click="checkUserData(session)"
                                         class="px-4 py-2 bg-primary text-white rounded-md font-medium disabled:bg-primary-100 disabled disabled:cursor-not-allowed">
                                         Agendar
                                     </button>
@@ -160,7 +160,6 @@ const getSessions = async () => {
 
     sessionsData.value.loading = true;
 
-
     await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/${userStore.user.user_id}/available`, {
         method: 'GET',
         headers: {
@@ -174,13 +173,8 @@ const getSessions = async () => {
     });
 }
 
-const responseData = ref({
-    success: false,
-    message: "",
-});
-
-const checkUserData = async () => {
-    await useFetch ( `${runtimeConfig.public.apiBase}/student/info/${userStore.user.user_id}`, {
+const checkUserData = async (session) => {
+    await useFetch(`${runtimeConfig.public.apiBase}/student/info/${userStore.user.user_id}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -188,8 +182,8 @@ const checkUserData = async () => {
         },
         onResponse({ request, response, options }) {
             let responseData = response._data;
-            if(responseData.success){
-                scheduleSession();
+            if (responseData.success) {
+                scheduleSession(session);
             }
             else {
                 router.push("/user/dashboard/aboutyou");
@@ -203,26 +197,24 @@ const checkUserData = async () => {
 //mensaje no se muestra correctamente
 //
 
-
-
 const scheduleSession = async (session) => {
-    await useFetch(`${runtimeConfig.public.apiBase}/student/session`,{
+    await useFetch(`${runtimeConfig.public.apiBase}/student/session`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token":userStore.getUserToken(),
+            "x-access-token": userStore.getUserToken(),
         },
         body: JSON.stringify({
             user_id: userStore.user.user_id,
             session_id: session.session_id,
         }),
-        onResponse({request,response,options}){
+        onResponse({ request, response, options }) {
             let responseData = response._data;
             console.log(responseData);
-            if(responseData.success){
+            if (responseData.success) {
                 alert(responseData.message);
             } else {
-                alert(responseData.error);
+                alert(responseData.message);
             }
         },
     });
