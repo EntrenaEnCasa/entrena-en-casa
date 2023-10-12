@@ -126,9 +126,8 @@ const register = async (values) => {
             loading.value = false;
 
             if (responseData.success) {
-                console.log("success");
                 authStore.signUp(responseData.user);
-                router.push('/user/dashboard/home');
+                router.push('/user/dashboard/aboutyou');
             }
             else {
                 registrationState.error = true;
