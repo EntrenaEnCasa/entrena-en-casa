@@ -1,7 +1,3 @@
-
-import type { CommonButton } from '#build/components';
-
-import type { log } from 'console';
 <template>
     <div>
         <Teleport to="body">
