@@ -30,6 +30,16 @@
                     <option>No especificado</option>
                 </select>
             </div>
+
+            <div class="grid w-3/4 content-center">
+                <label for="phone" class="form-label">Número de Teléfono</label>
+                <div class="flex items-center mb-3 gap-x-3">
+                    <input type="text" class="border rounded-md px-4 py-3 flex items-center space-x-4 w-3/4 outline-none "
+                        placeholder="+56 9 XXXX XXXX" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <span class="input-group-text" id="basic-addon2"></span>
+                </div>
+            </div>
+
             <div class="grid w-3/4 content-center">
                 <label for="inputNacimiento" class="form-label">Fecha de Nacimiento</label>
                 <input type="date"
