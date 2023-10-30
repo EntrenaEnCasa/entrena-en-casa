@@ -3,12 +3,16 @@
         <div v-if="isOpen"
             class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-screen max-h-full flex justify-center items-center backdrop-blur-sm bg-black/30"
             :class="{ 'modal-open': isOpen }" @click="closeModal">
-            <div class="min-w-3xl max-h-full relative shadow rounded-2xl" @click.stop>
+            <div class="min-w-4xl max-h-full relative shadow rounded-2xl" @click.stop>
                 <div class="w-full h-full bg-white p-4 flex flex-col justify-between">
                     <div>
                         <button type="button" class="bg-transparent hover:bg-gray-100 transition duration-75 rounded-lg p-1"
                             @click="closeModal">
-                            <Icon name="ic:round-close" class="text-5xl text-primary" />
+                            <div class="flex items-center gap-x-1 text-secondary">
+                                <Icon name="ic:round-close" class="text-3xl" />
+                                <p class="text-xl">Cerrar</p>
+                            </div>
+
                             <span class="sr-only">Cerrar modal</span>
                         </button>
                     </div>
