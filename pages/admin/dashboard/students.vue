@@ -49,18 +49,26 @@
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ student.email }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal flex space-x-1">
-                                    <div class="flex items-center gap-x-1">
-                                        <img :src="`/plans/gold-medal.png`" class="w-6 h-6" :alt="gold - medal">
-                                        {{ student.credits.gold }}
-                                    </div>
-                                    <div class="flex items-center gap-x-1">
-                                        <img :src="`/plans/silver-medal.png`" class="w-6 h-6" :alt="silver - medal">
-                                        {{ student.credits.silver }}
-                                    </div>
-                                    <div class="flex items-center gap-x-1">
-                                        <img :src="`/plans/bronze-medal.png`" class="w-6 h-6" :alt="Bronze - medal">
-                                        {{ student.credits.bronze }}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex gap-x-2 min-w-max">
+                                        <div class="flex items-center gap-x-1">
+                                            <img :src="`/plans/gold-medal.png`" class="w-6 h-6" :alt="gold - medal">
+                                            <p>
+                                                {{ student.credits.gold }}
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-x-1">
+                                            <img :src="`/plans/silver-medal.png`" class="w-6 h-6" :alt="silver - medal">
+                                            <p>
+                                                {{ student.credits.silver }}
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-x-1">
+                                            <img :src="`/plans/bronze-medal.png`" class="w-6 h-6" :alt="Bronze - medal">
+                                            <p>
+                                                {{ student.credits.bronze }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
