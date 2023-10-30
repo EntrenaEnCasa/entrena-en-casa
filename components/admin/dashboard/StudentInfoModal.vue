@@ -1,4 +1,6 @@
 
+import type { CommonButton } from '#build/components';
+
 import type { log } from 'console';
 <template>
     <div>
@@ -6,7 +8,7 @@ import type { log } from 'console';
             <CommonModal ref="modal">
                 <div class="w-full">
                     <div
-                        class="text-center lg:text-start grid grid-cols-1 place-items-center lg:place-items-start lg:grid-cols-3">
+                        class="text-center lg:text-start grid grid-cols-1 place-items-center lg:place-items-start lg:grid-cols-3 mb-8">
                         <div class="mb-5 space-y-2 lg:justify-self-start">
                             <h3 class="text-gray-500">Nombre</h3>
                             <p class="text-3xl font-medium text-gray-700">{{ student.first_name }} {{
@@ -18,6 +20,32 @@ import type { log } from 'console';
                         <div class="mb-5 space-y-2 lg:justify-self-end">
                             <h3 class="text-gray-500">Correo electrónico</h3>
                             <p class="text-3xl font-medium text-gray-700">{{ student.email }}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 place-items-center gap-y-6">
+                        <div class="flex gap-x-3">
+                            <img :src="`/plans/gold-medal.png`" class="w-6 h-6" :alt="gold - medal">
+                            <p>
+                                {{ student.credits.gold }}
+                            </p>
+                            <input type="text" class="w-8 border-b outline-none">
+                            <CommonButton class="px-2 py-1 rounded-lg" text="Agregar" />
+                        </div>
+                        <div class="flex gap-x-3">
+                            <img :src="`/plans/silver-medal.png`" class="w-6 h-6" :alt="gold - medal">
+                            <p>
+                                {{ student.credits.silver }}
+                            </p>
+                            <input type="text" class="w-8 border-b outline-none">
+                            <CommonButton class="px-2 py-1 rounded-lg" text="Agregar" />
+                        </div>
+                        <div class="flex gap-x-3">
+                            <img :src="`/plans/bronze-medal.png`" class="w-6 h-6" :alt="gold - medal">
+                            <p>
+                                {{ student.credits.bronze }}
+                            </p>
+                            <input type="text" class="w-8 border-b outline-none">
+                            <CommonButton class="px-2 py-1 rounded-lg" text="Agregar" />
                         </div>
                     </div>
                     <div class="mt-10 w-full lg:w-10/12 mx-auto">
@@ -115,7 +143,6 @@ import { ref } from 'vue';
 const modal = ref(null);
 
 const openModal = () => {
-    console.log("test");
     modal.value.openModal();
 }
 
