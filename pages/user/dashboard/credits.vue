@@ -1,5 +1,5 @@
 <template>
-    <div class="relative grid gap-y-5">
+    <div class="relative grid gap-y-10">
         <h3 class="text-xl font-medium ">Créditos</h3>
         <div class="grid gap-2">
             <div class="text-secondary flex justify-end mr-3 ">
@@ -12,23 +12,70 @@
                     <h5 class="text-lg font-semibold">Tus créditos</h5>
                 </div>
                 <div>
-                    <div class="flex  space-x-4">
+                    <div v-if="user.credits" class="flex  space-x-4">
                         <div class="flex items-center space-x-1">
                             <img src="/plans/gold-medal.png" class="w-4 h-4" alt="">
-                            <span>{{ user.credits.gold }}</span>
+                            <span> {{ user.credits.gold }}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <img src="/plans/silver-medal.png" class="w-4 h-4" alt="">
-                            <span>{{ user.credits.silver }}</span>
+                            <span> {{ user.credits.silver }}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <img src="/plans/bronze-medal.png" class="w-4 h-4" alt="">
-                            <span>{{ user.credits.bronze }}</span>
+                            <span> {{ user.credits.bronze }}</span>
                         </div>
                     </div>
                 </div>
 
             </div>
+        </div>
+        <div class="flex justify-center gap-4 text-center">
+            <div class="w-24 px-4 py-2 bg-yellow-500/80 rounded-lg text-white font-bold ">Oro</div>
+            <div class="px-4 w-24 py-2 bg-gray-500 rounded-lg text-white font-bold ">Plata</div>
+            <div class="px-4 w-24 py-2 bg-orange-700/60 rounded-lg text-white font-bold ">Bronce</div>
+        </div>
+        <div>
+            <!-- <table class="w-full table-auto text-sm text-left ">
+                <thead class=" text-xs text-gray-700 uppercase py-4">
+                    <tr>
+                        <th scope="col" class="">
+                            Descripción
+                        </th>
+                        <th scope="col" class="">
+                            Créditos
+                        </th>
+                        <th scope="col" class="">
+                            Valor
+                        </th>
+                        <th scope="col" class="">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap ">
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam dolores enim sunt repellendus
+                            molestias corporis asperiores ipsa perspiciatis.
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap flex items-center space-x-1">
+
+                            <img src="/plans/gold-medal.png" class="w-3 h-2" alt="">
+                            <span>2</span>
+
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap ">
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam dolores enim sunt repellendus
+                            molestias corporis asperiores ipsa perspiciatis.
+                        </td>
+                        <td class="px-6 py-4">
+                            <button class="px-4 py-2 bg-primary text-white rounded-md font-medium">
+                                Agendar
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> -->
         </div>
     </div>
     <!-- </div>
