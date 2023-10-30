@@ -13,6 +13,7 @@ body {
 
 body.modal-open {
   overflow: hidden;
+  overflow-y: auto;
 }
 
 .tellural {

@@ -4,13 +4,15 @@
             <div name="content">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-xl font-medium ">Alumnos</h3>
-                    <form novalidate>   
+                    <form novalidate>
                         <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <icon class="text-md text-slate-400" name="fa6-solid:magnifying-glass"></icon>
                             </div>
-                            <input type="search" id="search" class="w-full p-2 pl-10 text-sm border border-xl rounded-2xl border-slate-400 placeholder:text-slate-400 focus:ring-secondary-500 focus:border-secondary-500" placeholder="Buscar..." required>
+                            <input type="search" id="search"
+                                class="w-full p-2 pl-10 text-sm border border-xl rounded-2xl border-slate-400 placeholder:text-slate-400 focus:ring-secondary-500 focus:border-secondary-500"
+                                placeholder="Buscar..." required>
                         </div>
                     </form>
                 </div>
@@ -47,25 +49,31 @@
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ student.email }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal flex space-x-1">
-                                    <div class="flex items-center gap-x-1">
-                                        <img :src="`/plans/gold-medal.png`" class="w-6 h-6"
-                                            :alt="gold-medal">
-                                        {{ student.credits.gold }}
-                                    </div>
-                                    <div class="flex items-center gap-x-1">
-                                        <img :src="`/plans/silver-medal.png`" class="w-6 h-6"
-                                            :alt="silver-medal">
-                                        {{ student.credits.silver }}
-                                    </div>
-                                    <div class="flex items-center gap-x-1">
-                                        <img :src="`/plans/bronze-medal.png`" class="w-6 h-6"
-                                            :alt="Bronze-medal">
-                                        {{ student.credits.bronze }}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex gap-x-2 min-w-max">
+                                        <div class="flex items-center gap-x-1">
+                                            <img :src="`/plans/gold-medal.png`" class="w-6 h-6" :alt="gold - medal">
+                                            <p>
+                                                {{ student.credits.gold }}
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-x-1">
+                                            <img :src="`/plans/silver-medal.png`" class="w-6 h-6" :alt="silver - medal">
+                                            <p>
+                                                {{ student.credits.silver }}
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-x-1">
+                                            <img :src="`/plans/bronze-medal.png`" class="w-6 h-6" :alt="Bronze - medal">
+                                            <p>
+                                                {{ student.credits.bronze }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <button class="px-4 py-2 bg-primary text-white rounded-md font-medium">
+                                    <button @click="openModal(student)"
+                                        class="px-4 py-2 bg-primary text-white rounded-md font-medium">
                                         Ver Detalles
                                     </button>
                                 </td>
@@ -84,15 +92,19 @@
                 :class="{ 'hidden': !filterSidebarOpen }">
             </div>
         </div>
+        <AdminDashboardStudentInfoModal :student="currentStudent" ref="studentModal" />
     </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useUserStore } from "~/stores/UserStore";
-
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
+
+const studentModal = ref(null);
+const currentStudent = ref(null);
 
 const allStudents = ref({
     success: false,
@@ -101,22 +113,21 @@ const allStudents = ref({
     students: [],
 });
 
-onMounted(async () =>{
+onMounted(async () => {
     await getAllStudents();
-
 });
 
-const getAllStudents = async() => {
+const getAllStudents = async () => {
 
     allStudents.value.loading = true;
 
-    await useFetch(`${runtimeConfig.public.apiBase}/admin/students`,{
+    await useFetch(`${runtimeConfig.public.apiBase}/admin/students`, {
         method: 'GET',
-        headers:{
+        headers: {
             "Content-Type": "application/json",
             "x-access-token": userStore.getUserToken(),
         },
-        onResponse({request,response,options}){
+        onResponse({ request, response, options }) {
             allStudents.value = response._data;
             allStudents.value.loading = false;
         },
@@ -124,10 +135,9 @@ const getAllStudents = async() => {
 
 };
 
-
+const openModal = (student) => {
+    studentModal.value.openModal();
+    currentStudent.value = student;
+};
 
 </script>
-
-<style lang="scss">
-    
-</style>
