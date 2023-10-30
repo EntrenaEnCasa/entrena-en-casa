@@ -31,139 +31,51 @@
             </div>
         </div>
         <div class="flex justify-center gap-4 text-center">
-            <div class="w-24 px-4 py-2 bg-yellow-500/80 rounded-lg text-white font-bold ">Oro</div>
-            <div class="px-4 w-24 py-2 bg-gray-500 rounded-lg text-white font-bold ">Plata</div>
-            <div class="px-4 w-24 py-2 bg-orange-700/60 rounded-lg text-white font-bold ">Bronce</div>
+            <button @click="ChangeSelect('gold')"
+                class="w-24 px-4 py-2 bg-yellow-500/80 rounded-lg text-white font-bold ">Oro</button>
+            <button @click="ChangeSelect('silver')"
+                class="px-4 w-24 py-2 bg-gray-500 rounded-lg text-white font-bold ">Plata</button>
+            <button @click="ChangeSelect('bronze')"
+                class="px-4 w-24 py-2 bg-orange-700/60 rounded-lg text-white font-bold ">Bronce</button>
         </div>
-        <div>
-            <!-- <table class="w-full table-auto text-sm text-left ">
-                <thead class=" text-xs text-gray-700 uppercase py-4">
-                    <tr>
-                        <th scope="col" class="">
-                            Descripción
-                        </th>
-                        <th scope="col" class="">
-                            Créditos
-                        </th>
-                        <th scope="col" class="">
-                            Valor
-                        </th>
-                        <th scope="col" class="">
-                        </th>
+        <div class="mx-2 md:mx-6  bg-white border border-zinc-200  p-4"
+            style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
+            <table class=" table-fixed w-full text-sm text-left">
+                <thead class=" text-xs text-gray-700 uppercase ">
+                    <tr class="p-8">
+                        <th class=" w-1/3 md:w-2/3">Descripción</th>
+                        <th class="md:w-1/9">Créditos</th>
+                        <th class="md:w-1/9">Valor</th>
+                        <th class="md:w-1/9"></th>
                     </tr>
+
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap ">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam dolores enim sunt repellendus
-                            molestias corporis asperiores ipsa perspiciatis.
+                    <tr v-for="item in tableInformation.items" :key="item.id" class="">
+                        <td class="py-4 wrap pr-2 text-md">
+                            {{ item.description }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap flex items-center space-x-1">
+                        <td class=" py-4  flex items-center space-x-1">
 
-                            <img src="/plans/gold-medal.png" class="w-3 h-2" alt="">
-                            <span>2</span>
+                            <img :src="`/plans/${item.credit_type}-medal.png`" class="w-5 h-5" alt="">
+                            {{ item.quantity }}
 
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap ">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam dolores enim sunt repellendus
-                            molestias corporis asperiores ipsa perspiciatis.
+                        <td class=" py-4 flex-wrap font-bold">
+                            {{ item.price }}
                         </td>
-                        <td class="px-6 py-4">
-                            <button class="px-4 py-2 bg-primary text-white rounded-md font-medium">
+                        <td class=" py-4 ">
+                            <button class="px-4 py-2 bg-primary text-white rounded-md font-medium"
+                                @click="addCredits(item)">
                                 Agendar
                             </button>
                         </td>
                     </tr>
                 </tbody>
-            </table> -->
+            </table>
+
         </div>
     </div>
-    <!-- </div>
-    <div class="creditos">
-        <div class="grid ">
-            <h3 class="text-xl font-medium ">Créditos</h3>
-            <div class="col-12" style="text-align: right;">
-                <a class="ayuda" href="#">¿Qué significa cada crédito? <svg xmlns="http://www.w3.org/2000/svg"
-                        class="ionicon" viewBox="0 0 512 512">
-                        <path d="M248 64C146.39 64 64 146.39 64 248s82.39 184 184 184 184-82.39 184-184S349.61 64 248 64z"
-                            fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" />
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="32" d="M220 220h32v116" />
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
-                            stroke-width="32" d="M208 340h88" />
-                        <path d="M248 130a26 26 0 1026 26 26 26 0 00-26-26z" />
-                    </svg></a>
-            </div>
-            <div class="tusCreditos col-12 mb-5">
-                <div class="card creditosUser rounded-4 px-3">
-                    <div class="card-body row">
-                        <div class="col-lg-7 tituloCreditos"><b>Tus créditos</b></div>
-                        <div class="col-lg-5">
-                            <div class="row cantidadCreditos">
-                                <div class="col-sm-4">
-                                    <img src="/plans/gold-medal.png" alt="">
-                                    0
-                                </div>
-                                <div class="col-sm-4">
-                                    <img src="/plans/silver-medal.png" alt="">
-                                    1
-                                </div>
-                                <div class="col-sm-4">
-                                    <img src="/plans/bronze-medal.png" alt="">
-                                    2
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mb-5">
-                <div class="row justify-content-center text-center">
-                    <div class="col-sm-4 col-md-3 col-lg-2">
-                        <button class="btn btn-primary">Oro</button>
-                    </div>
-                    <div class="col-sm-4 col-md-3 col-lg-2">
-                        <button class="btn btn-secondary">Plata</button>
-                    </div>
-                    <div class="col-sm-4 col-md-3 col-lg-2">
-                        <button class="btn btn-danger">Bronce</button>
-                    </div>
-                </div>
-            </div>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col-lg-6">Descripción</th>
-                        <th scope="col-lg-2">Créditos</th>
-                        <th scope="col-lg-2">Valor</th>
-                        <th scope="col-lg-2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1 Sesión a domicilio</td>
-                        <td><img src="/plans/gold-medal.png" alt="">1</td>
-                        <td class="precio">$20.000</td>
-                        <td><button class="btn btn-success">Comprar</button></td>
-                    </tr>
-                    <tr>
-                        <td>Pack mensual, sesiones 1 vez a la semana</td>
-                        <td><img src="/plans/gold-medal.png" alt="">4</td>
-                        <td class="precio">$75.000</td>
-                        <td><button class="btn btn-success">Comprar</button></td>
-                    </tr>
-                    <tr>
-                        <td>Pack mensual, sesiones 2 veces a la semana</td>
-                        <td><img src="/plans/gold-medal.png" alt="">8</td>
-                        <td class="precio">$140.000</td>
-                        <td><button class="btn btn-success">Comprar</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-    </div> -->
 </template>
 
 <script setup>
@@ -171,18 +83,60 @@
 import { ref, onMounted } from 'vue';
 
 import { useUserStore } from '~/stores/UserStore';
-
+const runtimeConfig = useRuntimeConfig();
 const router = useRouter();
 const userStore = useUserStore();
 
 
 const user = ref({})
 
+const tableInformation = ref({
+    selected: "gold",
+    items: []
+});
+
+const ChangeSelect = (type) => {
+    tableInformation.value.selected = type;
+    fetchTableInformation()
+}
+
 onMounted(() => {
     user.value = userStore.user;
+    fetchTableInformation()
 })
 
+const fetchTableInformation = async () => {
+    await useFetch("/data.json", {
+        onResponse({ response }) {
+            console.log(response._data);
+            tableInformation.value.items = response._data[tableInformation.value.selected];
+        },
+    });
+};
 
+const addCredits = async (item) => {
+    await useFetch(`${runtimeConfig.public.apiBase}/student/credits`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken(),
+        },
+        body: JSON.stringify({
+            user_id: userStore.user.user_id,
+            credit_type: item.credit_type,
+            quantity: item.quantity,
+        }),
+        onResponse({ request, response, options }) {
+            let responseData = response._data;
+            console.log(responseData);
+            if (responseData.success) {
+                alert(responseData.message);
+            } else {
+                alert(responseData.message);
+            }
+        },
+    });
+}
 
 
 </script>
