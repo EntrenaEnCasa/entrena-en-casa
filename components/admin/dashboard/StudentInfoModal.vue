@@ -1,7 +1,3 @@
-
-import type { CommonButton } from '#build/components';
-
-import type { log } from 'console';
 <template>
     <div>
         <Teleport to="body">
@@ -98,10 +94,9 @@ import type { log } from 'console';
                                             5/10
                                         </td>
                                         <td class="px-6 py-4">
-                                            <button class="text-secondary flex items-center gap-x-1">
-                                                <p>Ver detalles</p>
-                                                <Icon name="fa6-solid:chevron-right" />
-                                            </button>
+                                            <p>Jorge</p>
+                                            <br />
+                                            <p>Entrenador Físico</p>
                                         </td>
                                     </tr>
                                     <tr class="border-b">
