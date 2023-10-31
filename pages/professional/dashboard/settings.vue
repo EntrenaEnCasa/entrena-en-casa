@@ -16,7 +16,7 @@
                 <div class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex justify-between items-center">
                         <p class="text-sm text-gray-500">Correo electrónico</p>
-                        <button class="px-8 py-1 rounded-lg bg-primary text-white">
+                        <button class="px-8 py-1 rounded-lg bg-primary text-white" @click="openModalEmail()">
                             Editar
                         </button>
                     </div>
@@ -35,7 +35,7 @@
                 <div class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex justify-between items-center">
                         <p class="text-sm text-gray-500">Contraseña</p>
-                        <button class="px-8 py-1 rounded-lg bg-primary text-white">
+                        <button class="px-8 py-1 rounded-lg bg-primary text-white" @click="openModalPassword()">
                             Editar
                         </button>
                     </div>
@@ -52,5 +52,189 @@
                 </button>
             </div>
         </div>
+        <Teleport to="body">
+            <CommonModal ref="modalEmail">
+                <Form class="w-full" @submit="changeEmail">
+                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+                        <CommonInput label="Email" v-model="email" name="email" type="email" id="email"
+                            icon="fa6-solid:lock" placeholder="1234@entrenaencasa.cl" :rules="validateEmail" />
+
+                        <CommonInput label="Confirmar email" name="email-repeat" type="email" id="email-repeat"
+                            icon="fa6-solid:lock" placeholder="1234@entrenaencasa.cl" :rules="validateEmailRepeat" />
+                    </div>
+                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" size="xl" :loading="loading" />
+                </Form>
+            </CommonModal>
+        </Teleport>
+        <Teleport to="body">
+            <CommonModal ref="modalPassword">
+                <Form class="w-full" @submit="changePassword">
+                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+                        <CommonInput label="Contraseña" v-model="password" name="password" type="password" id="password"
+                            icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePassword" />
+
+                        <CommonInput label="Confirmar contraseña" name="password-repeat" type="password" id="password-repeat"
+                            icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePasswordRepeat" />
+                    </div>
+                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" size="xl" :loading="loading" />
+                </Form>
+            </CommonModal>
+        </Teleport>
     </div>
 </template>
+
+<script setup>
+
+import { useUserStore } from '@/stores/UserStore';
+
+import { ref } from 'vue';
+
+const runtimeConfig = useRuntimeConfig();
+
+const userStore = useUserStore();
+const loading = ref(false);
+const modalPassword = ref(null);
+const modalEmail = ref(null);
+const password = ref('');
+const email = ref('');
+
+const openModalPassword = () => {
+    modalPassword.value.openModal();
+};
+
+const openModalEmail = () => {
+    modalEmail.value.openModal();
+};
+
+const validateEmail = (value) => {
+    // if the field is empty
+    if (!value) {
+        return 'El correo electrónico es requerido';
+    }
+    // if the field is not a valid email
+    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (!regex.test(value)) {
+        return 'El correo electrónico no es válido';
+    }
+    // All is good
+    return true;
+}
+
+const validateEmailRepeat = (emailRepeat) => {
+    if (!emailRepeat) {
+        return 'Debes repetir el correo electrónico';
+    }
+
+    if (emailRepeat !== email.value) {
+        return 'Los correos electrónicos no coinciden';
+    }
+
+    return true;
+};
+
+const validatePassword = (password) => {
+
+    if (!password) {
+        return 'La contraseña es requerida';
+    }
+
+    // Check if the password is at least 8 characters long
+    if (password.length < 8) {
+        return 'La contraseña debe tener al menos 8 caracteres';
+    }
+    // Check if the password contains at least one number
+    let hasNumber = false;
+    for (let char of password) {
+        if (char >= '0' && char <= '9') {
+            hasNumber = true;
+            break;
+        }
+    }
+    if (!hasNumber) {
+        return 'La contraseña debe tener al menos un número';
+    }
+    // Check if the password contains at least one capital letter
+    let hasCapital = false;
+    for (let char of password) {
+        if (char >= 'A' && char <= 'Z') {
+            hasCapital = true;
+            break;
+        }
+    }
+    if (!hasCapital) {
+        return 'La contraseña debe tener al menos una letra mayúscula';
+    }
+    // All good
+    return true;
+};
+
+const validatePasswordRepeat = (passRepeat) => {
+    if (!passRepeat) {
+        return 'Debes repetir la contraseña';
+    }
+
+    if (passRepeat !== password.value) {
+        return 'Las contraseñas no coinciden';
+    }
+
+    return true;
+};
+
+const changePassword = async() => {
+    loading.value = true;
+
+    await useFetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
+        method: 'PATCH',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken()
+        },
+        body: JSON.stringify({
+            user_id: userStore.user.user_id,
+            newPassword: password.value,
+        }),
+        onResponse({request,response,options}){
+
+            loading.value = false;
+            const responseData = response._data;
+
+            if (responseData.success) {
+                alert(responseData.message);
+            }
+            else {
+                alert(responseData.message);
+            }
+        }
+    });
+};
+
+
+const changeEmail = async() => {
+    loading.value = true;
+
+    await useFetch(`${runtimeConfig.public.apiBase}/user/update-email`, {
+        method: 'PATCH',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken()
+        },
+        body: JSON.stringify({
+            user_id: userStore.user.user_id,
+            newEmail: email.value,
+        }),
+        onResponse({request,response,options}){
+
+            loading.value = false;
+            const responseData = response._data;
+
+            if (responseData.success) {
+                alert(responseData.message);
+            }
+            else {
+                alert(responseData.message);
+            }
+        }
+    });
+};
+
+</script>
