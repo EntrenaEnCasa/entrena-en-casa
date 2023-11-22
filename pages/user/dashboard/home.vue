@@ -24,10 +24,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
-                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
-                        <div class="text-md  text-center"><b>No tienes ninguna sesión a futuro.</b></div>
-                    </div>
+                    <div class="  text-[#949494]">No tienes ninguna sesión a futuro.</div>
                 </div>
 
             </div>
@@ -53,10 +50,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
-                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
-                        <div class="text-md  text-center"><b>No has participado de ninguna sesión.</b></div>
-                    </div>
+                    <div class=" text-[#949494]">No has participado de ninguna sesión.</div>
                 </div>
             </div>
 
@@ -68,7 +62,7 @@
                     <h5 class="text-lg text-[#949494]">Estadísticas</h5>
                 </div>
                 <div class="mt-5">
-                    <p class="text-lg text-[#949494]">No hay estadísticas disponibles actualmente.</p>
+                    <p class=" text-[#949494]">No hay estadísticas disponibles actualmente.</p>
                 </div>
             </div>
         </div>
