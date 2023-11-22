@@ -35,6 +35,16 @@ export const useUserStore = defineStore('UserStore', {
         },
         getUserToken() {
             return localStorage.getItem('token');
+        },
+        updateUserFromLocalStorage(user) {
+            this.removeUserFromLocalStorage();
+            localStorage.setItem('user', JSON.stringify(user));
+            this.user = user;
+        },
+        updateCredits(credits) {
+            this.user.credits = credits;
+
+            this.updateUserFromLocalStorage(this.user);
         }
     }
 })

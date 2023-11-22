@@ -90,6 +90,13 @@ const userStore = useUserStore();
 
 const user = ref({})
 
+const newCredits = ref({
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+})
+
+
 const tableInformation = ref({
     selected: "gold",
     items: []
@@ -108,7 +115,7 @@ onMounted(() => {
 const fetchTableInformation = async () => {
     await useFetch("/data.json", {
         onResponse({ response }) {
-            console.log(response._data);
+
             tableInformation.value.items = response._data[tableInformation.value.selected];
         },
     });
@@ -128,8 +135,14 @@ const addCredits = async (item) => {
         }),
         onResponse({ request, response, options }) {
             let responseData = response._data;
-            console.log(responseData);
+            console.log(responseData)
             if (responseData.success) {
+                newCredits.value = {
+                    gold: responseData.credits.gold,
+                    silver: responseData.credits.silver,
+                    bronze: responseData.credits.bronze,
+                }
+                userStore.updateCredits(newCredits);
                 alert(responseData.message);
             } else {
                 alert(responseData.message);
