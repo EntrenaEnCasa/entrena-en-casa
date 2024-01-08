@@ -1,25 +1,34 @@
 <template>
     <div>
-        <div class="mb-4">
-            <div class="flex flex-col sm:flex-row items-center justify-between">
-                <h3 class="text-xl font-medium">Horario disponible</h3>
-                <div class="flex justify-center items-center gap-3">
-                    <span>
-                        Disponible
-                    </span>
-                    <div class="w-14 h-10 bg-primary rounded-md">
+        <div class="mt-4 mb-10">
+            <div class="w-full inline-flex flex-col items-center justify-between gap-5 md:flex-row">
+                <div class="flex items-center text-2xl">
+                    <p class="mr-2 font-medium">Enero <span class="text-gray-500">2024</span></p>
+                    <button disabled>
+                        <Icon class="text-gray-300" name="fa6-solid:chevron-left"></Icon>
+                    </button>
+                    <button>
+                        <Icon class="text-gray-800" name="fa6-solid:chevron-right"></Icon>
+                    </button>
+                </div>
+                <div>
+                    <div class="bg-gray-200 rounded-lg px-16 py-1">
+                        <p class="font-semibold">Semanal</p>
                     </div>
                 </div>
+                <div class="flex gap-2 items-center">
+                    <button class="bg-primary rounded text-white font-semibold px-4 py-1">Editar</button>
+                    <button class="bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
+                        <span>
+                            Nuevo
+                        </span>
+                        <Icon name="fa6-solid:chevron-down"></Icon>
+                    </button>
+                </div>
             </div>
-            <p class="mt-1 text-sm text-gray-500">Si haces click en una casilla vacía, puedes agregar una nueva hora
-                disponible
-            </p>
-        </div>
-        <div>
-
         </div>
         <div class="overflow-x-auto bg-white rounded-2xl border pr-10">
-            <CommonLoading v-if="loading" />
+            <CommonLoading v-if="loading" class="my-8" />
             <table v-else class="w-full table-fixed text-sm text-gray-500">
                 <thead>
                     <tr>
@@ -122,7 +131,6 @@ const loading = ref(false);
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
-// Simulated API response data (replace this with actual API call)
 const sessions = ref([])
 
 const openModal = () => {
