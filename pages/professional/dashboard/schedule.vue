@@ -58,6 +58,13 @@
                 </tbody>
             </table>
         </div>
+        <div class="mt-10 mb-4 flex justify-center items-center gap-3">
+            <div class="w-14 h-12 bg-primary rounded-md">
+            </div>
+            <span class="text-lg font-semibold">
+                Horario Disponible
+            </span>
+        </div>
         <Teleport to="body">
             <CommonModal ref="modal">
                 <form action="" class="w-full">
