@@ -6,4 +6,3 @@
     <HomeOurStudents />
     <HomeContact />
 </template>
-<style scoped></style>
