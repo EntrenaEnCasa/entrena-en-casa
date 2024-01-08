@@ -18,12 +18,12 @@
         <div>
 
         </div>
-        <div class="overflow-x-auto sm:rounded-lg">
+        <div class="overflow-x-auto bg-white rounded-2xl border pr-10">
             <CommonLoading v-if="loading" />
-            <table v-else class="bg-white w-full table-fixed text-sm text-gray-500 border">
+            <table v-else class="w-full table-fixed text-sm text-gray-500">
                 <thead>
                     <tr>
-                        <th scope="col" class="w-24"></th>
+                        <th scope="col" class="w-20"></th>
                         <th v-for="day, index in daysList" :key="index" scope="col"
                             class="px-6 pt-6 pb-3 text-center whitespace-nowrap font-semibold w-28">
                             {{ formatDate(day) }}
@@ -194,7 +194,7 @@ const getSessions = async () => {
                 sessions.value = responseData.sessions;
             }
             else {
-                alert(responseData.message);
+                console.log(responseData.message);
             }
 
         },
