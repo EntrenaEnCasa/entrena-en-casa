@@ -9,17 +9,17 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "@nuxtjs/tailwindcss": "^6.8.0",
-    "@types/node": "^18",
-    "nuxt": "^3.8.0",
-    "nuxt-icon": "^0.4.2",
-    "sass": "^1.63.6",
-    "sass-loader": "^13.3.2"
+    "@nuxt/devtools": "^1.0.6",
+    "@nuxtjs/tailwindcss": "^6.10.3",
+    "@types/node": "^20.10.7",
+    "nuxt": "^3.9.1",
+    "nuxt-icon": "^0.6.8",
+    "sass": "^1.69.7",
+    "sass-loader": "^13.3.3"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.4.11",
-    "@vee-validate/nuxt": "^4.11.1",
-    "pinia": "^2.1.4"
+    "@pinia/nuxt": "^0.5.1",
+    "@vee-validate/nuxt": "^4.12.4",
+    "pinia": "^2.1.7"
   }
 }
