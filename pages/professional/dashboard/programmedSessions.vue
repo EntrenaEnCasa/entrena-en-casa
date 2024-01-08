@@ -3,7 +3,7 @@
         <div>
             <h3 class="text-xl font-medium mb-5">Sesiones próximas</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div class="px-6 py-3 rounded-md shadow border space-y-4">
+                <div class="px-6 py-3 rounded-md shadow border space-y-4 bg-white">
                     <div class="flex justify-between text-gray-400 text-sm">
                         <p>25 de junio</p>
                         <p>16:00hrs</p>
@@ -17,7 +17,7 @@
                         <button class="px-2 py-1 rounded-md bg-primary text-white font-medium">Ver detalles</button>
                     </div>
                 </div>
-                <div class="px-6 py-3 rounded-md shadow border space-y-4">
+                <div class="px-6 py-3 rounded-md shadow border space-y-4 bg-white">
                     <div class="flex justify-between text-gray-400 text-sm">
                         <p>25 de junio</p>
                         <p>16:00hrs</p>
@@ -36,7 +36,7 @@
         <div>
             <h3 class="text-xl font-medium mb-5">Sesiones pasadas</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div class="px-6 py-3 rounded-md shadow border space-y-4 opacity-60">
+                <div class="px-6 py-3 rounded-md shadow border space-y-4 opacity-60 bg-white">
                     <div class="flex justify-between text-gray-400 text-sm">
                         <p>25 de junio</p>
                         <p>16:00hrs</p>
@@ -50,7 +50,7 @@
                         <button class="px-2 py-1 rounded-md bg-primary text-white font-medium">Ver detalles</button>
                     </div>
                 </div>
-                <div class="px-6 py-3 rounded-md shadow border space-y-4 opacity-60">
+                <div class="px-6 py-3 rounded-md shadow border space-y-4 opacity-60 bg-white">
                     <div class="flex justify-between text-gray-400 text-sm">
                         <p>25 de junio</p>
                         <p>16:00hrs</p>
