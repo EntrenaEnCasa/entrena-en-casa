@@ -18,12 +18,34 @@
                 </div>
                 <div class="flex gap-2 items-center">
                     <button class="bg-primary rounded text-white font-semibold px-4 py-1">Editar</button>
-                    <button class="bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
-                        <span>
-                            Nuevo
-                        </span>
-                        <Icon name="fa6-solid:chevron-down"></Icon>
-                    </button>
+                    <div class="relative">
+                        <button @click="toggleNewDropdown"
+                            class=" bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
+                            <span>
+                                Nuevo
+                            </span>
+                            <Icon name="fa6-solid:chevron-down"></Icon>
+                        </button>
+                        <div class=" min-w-max absolute top-6 border right-0 z-50 my-4 text-base list-none bg-primary text-white rounded shadow-md font-semibold"
+                            :class="{ hidden: !newDropdownOpen }">
+                            <ul class="divide-y divide-gray-200">
+                                <li>
+                                    <button @click="userMenuOpen = false"
+                                        class="w-full px-4 py-2 text-sm hover:bg-primary-600" role="menuitem">
+                                        Disponibilidad
+                                    </button>
+                                </li>
+                                <li>
+                                    <button @click="userMenuOpen = false" class="px-4 py-2 text-sm hover:bg-primary-600"
+                                        role="menuitem">
+                                        Evento Manual
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -143,6 +165,10 @@ const sessions = ref([])
 const openModal = () => {
     modal.value.openModal();
 };
+
+const newDropdownOpen = ref(false);
+const toggleNewDropdown = () => newDropdownOpen.value = !newDropdownOpen.value;
+
 
 const generateDaysList = () => {
     const today = new Date();
