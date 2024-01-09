@@ -62,7 +62,7 @@
             <div class="w-14 h-12 bg-primary rounded-md">
             </div>
             <span class="text-lg font-semibold">
-                Horario Disponible
+                Horario disponible
             </span>
         </div>
         <Teleport to="body">
