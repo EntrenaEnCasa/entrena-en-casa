@@ -91,57 +91,50 @@
             <CommonModal ref="modal">
                 <form action="" class="w-full">
                     <div class="grid gap-6 mb-6 md:grid-cols-2">
-                        <label class="flex flex-col">
+                        <!-- <label class="flex flex-col">
                             <span class="font-medium text-sm mb-2">Cantidad máxima de asistentes</span>
                             <input type="text"
                                 class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary"
                                 value="1">
-                        </label>
+                        </label> -->
                         <label class="flex flex-col">
                             <span class="font-medium text-sm mb-2">Formato</span>
-                            <select class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                            <select
+                                class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                 <option value="Individual">Individual</option>
                                 <option value="Grupal">Grupal</option>
                             </select>
                         </label>
                         <label class="flex flex-col">
                             <span class="font-medium text-sm mb-2">Modalidad</span>
-                            <select class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                            <select
+                                class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                 <option value="Online">Online</option>
                                 <option value="Presencial">Presencial</option>
                             </select>
                         </label>
-                        <label class="flex flex-col">
-                            <span class="font-medium text-sm mb-2">Link</span>
-                            <input type="text"
-                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary"
-                                placeholder="https://">
-                        </label>
-                        <label class="flex flex-col">
-                            <span class="font-medium text-sm mb-2">Tipo de crédito</span>
-                            <select
-                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 block outline-primary">
-                                <option value="Bronce">
-                                    Bronce
-                                </option>
-                                <option value="Plata">
-                                    Plata
-                                </option>
-                                <option value="Oro">
-                                    Oro
-                                </option>
-                            </select>
-                        </label>
-                        <label class="flex flex-col">
-                            <span class="font-medium text-sm mb-2">Cantidad créditos</span>
-                            <input type="text"
-                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary"
-                                value="1">
-                        </label>
+
+                        <div class="flex flex-col py-2">
+                            <span class="font-medium text-sm mb-2">Rango de tiempo</span>
+                            <div class="flex items-center gap-4">
+                                <select v-model="selectedStartTime"
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option v-for="time in timeOptions" :key="`start-${time}`" :value="time">{{ time }}
+                                    </option>
+                                </select>
+                                <span>-</span>
+                                <select v-model="selectedEndTime"
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <!-- Ensure 20:00 is always an option -->
+                                    <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">{{ time }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </form>
                 <div>
-                    <button class="px-4 py-2 rounded-md bg-primary text-white">Confirmar</button>
+                    <button @click="closeModal" class="px-4 py-2 rounded-md bg-primary text-white">Confirmar</button>
                 </div>
             </CommonModal>
         </Teleport>
@@ -166,9 +159,34 @@ const openModal = () => {
     modal.value.openModal();
 };
 
+const closeModal = () => {
+    modal.value.closeModal();
+};
+
 const newDropdownOpen = ref(false);
 const toggleNewDropdown = () => newDropdownOpen.value = !newDropdownOpen.value;
 
+const selectedStartTime = ref('09:00'); // Set initial start time
+
+// Generate times from 09:00 to 21:00
+const baseTimeOptions = [];
+for (let hour = 9; hour <= 21; hour++) {
+    baseTimeOptions.push(`${hour.toString().padStart(2, '0')}:00`);
+}
+
+const selectedEndTime = ref(baseTimeOptions[1]); // Initialize with the second time slot
+
+const timeOptions = computed(() => {
+    // Generate times from 09:00 to 19:00 for the start time options
+    return baseTimeOptions.slice(0, -1);
+});
+
+const endTimeOptions = computed(() => {
+    // Calculate end time options based on the selected start time
+    const startIndex = baseTimeOptions.indexOf(selectedStartTime.value) + 1;
+    // Always include 20:00 as an option for end time
+    return baseTimeOptions.slice(startIndex);
+});
 
 const generateDaysList = () => {
     const today = new Date();
