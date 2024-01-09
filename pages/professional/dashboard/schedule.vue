@@ -3,11 +3,12 @@
         <div class="mt-4 mb-10">
             <div class="w-full inline-flex flex-col items-center justify-between gap-5 md:flex-row">
                 <div class="flex items-center text-2xl">
-                    <p class="mr-2 font-medium">Enero <span class="text-gray-500">2024</span></p>
-                    <button disabled>
-                        <Icon class="text-gray-300" name="fa6-solid:chevron-left"></Icon>
+                    <p class="mr-2 font-medium">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span></p>
+                    <button @click="goToPreviousWeek" :disabled="!isCurrentWeekOrLater">
+                        <Icon :class="{ 'text-gray-300': !isCurrentWeekOrLater, 'text-gray-800': isCurrentWeekOrLater }"
+                            name="fa6-solid:chevron-left"></Icon>
                     </button>
-                    <button>
+                    <button @click="goToNextWeek">
                         <Icon class="text-gray-800" name="fa6-solid:chevron-right"></Icon>
                     </button>
                 </div>
@@ -50,7 +51,7 @@
             </div>
         </div>
         <div class="overflow-x-auto bg-white rounded-2xl border pr-10">
-            <CommonLoading v-if="loading" class="my-8" />
+            <CommonLoading v-if="sessionsLoading" class="my-8" />
             <table v-else class="w-full table-fixed text-sm text-gray-500">
                 <thead>
                     <tr>
@@ -91,12 +92,6 @@
             <CommonModal ref="modal">
                 <form action="" class="w-full">
                     <div class="grid gap-6 mb-6 md:grid-cols-2">
-                        <!-- <label class="flex flex-col">
-                            <span class="font-medium text-sm mb-2">Cantidad máxima de asistentes</span>
-                            <input type="text"
-                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary"
-                                value="1">
-                        </label> -->
                         <label class="flex flex-col">
                             <span class="font-medium text-sm mb-2">Formato</span>
                             <select
@@ -125,12 +120,12 @@
                                 <span>-</span>
                                 <select v-model="selectedEndTime"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <!-- Ensure 20:00 is always an option -->
                                     <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">{{ time }}
                                     </option>
                                 </select>
                             </div>
                         </div>
+
                     </div>
                 </form>
                 <div>
@@ -142,18 +137,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useUserStore } from '~/stores/UserStore';
-
-const daysList = ref([]);
-const timesList = ref([]);
-const modal = ref(null);
-const loading = ref(false);
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
-const sessions = ref([])
+const sessions = ref([]); // Array of sessions
+const sessionsLoading = ref(false); // Loading state of the sessions
+
+// Modal state
+const modal = ref(null);
 
 const openModal = () => {
     modal.value.openModal();
@@ -163,81 +157,157 @@ const closeModal = () => {
     modal.value.closeModal();
 };
 
+// Dropdown state
 const newDropdownOpen = ref(false);
 const toggleNewDropdown = () => newDropdownOpen.value = !newDropdownOpen.value;
 
-const selectedStartTime = ref('09:00'); // Set initial start time
+/* Schedule logic */
 
-// Generate times from 09:00 to 21:00
-const baseTimeOptions = [];
-for (let hour = 9; hour <= 21; hour++) {
-    baseTimeOptions.push(`${hour.toString().padStart(2, '0')}:00`);
-}
+// The starting point will be the current date
+const currentDate = ref(new Date());
 
-const selectedEndTime = ref(baseTimeOptions[1]); // Initialize with the second time slot
-
-const timeOptions = computed(() => {
-    // Generate times from 09:00 to 19:00 for the start time options
-    return baseTimeOptions.slice(0, -1);
+// returns the current month
+const currentMonth = computed(() => {
+    const months = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    return months[currentDate.value.getMonth()];
 });
 
-const endTimeOptions = computed(() => {
-    // Calculate end time options based on the selected start time
-    const startIndex = baseTimeOptions.indexOf(selectedStartTime.value) + 1;
-    // Always include 20:00 as an option for end time
-    return baseTimeOptions.slice(startIndex);
-});
-
-const generateDaysList = () => {
-    const today = new Date();
+// Returns current week days, starting from today to the same day of the next week
+const daysList = computed(() => {
+    const days = [];
     for (let i = 0; i < 7; i++) {
-        const newDate = new Date(today);
-        newDate.setDate(today.getDate() + i);
-        daysList.value.push(newDate);
+        const date = new Date(currentDate.value);
+        date.setDate(date.getDate() + i);
+        days.push(date);
     }
-};
+    return days;
+});
+
+// Business time a day is 09:00hrs to 20:00hrs
+const timesList = computed(() => {
+    const times = [];
+    for (let i = 9; i <= 20; i++) {
+        times.push(i);
+    }
+    return times;
+});
 
 const formatDate = (date) => {
-    const daysOfWeek = ["Lun", "Mar", "Mier", "Jue", "Vie", "Sab", "Dom"];
+    const daysOfWeek = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
     const dayOfWeek = daysOfWeek[date.getDay()];
     const dayOfMonth = date.getDate();
     return `${dayOfWeek} ${dayOfMonth}`;
 };
 
-const generateTimesList = () => {
-    const startTime = 9; // 9 AM
-    const endTime = 20; // 8 PM
-
-    for (let i = startTime; i <= endTime; i++) {
-        const formattedTime = `${i < 10 ? "0" : ""}${i}:00`;
-        timesList.value.push(formattedTime);
-    }
-};
-
 const formatTime = (time) => {
-    const [hour] = time.split(":");
-    return `${parseInt(hour)}:00`;
+    return `${time}:00`;
 };
 
-const timeTaken = (n, time) => {
-    // Check if the given time is taken based on the API response
-    const date = new Date(daysList.value[n - 1]);
-    // Split the time into hours and minutes
-    const [hour, minute] = time.split(":");
-
-    // Set the hours and minutes for the date
-    date.setHours(parseInt(hour), parseInt(minute), 0, 0);
+// Since railway stores dates in UTC, we need to convert the UTC time to local time
+const timeTaken = (day, time) => {
+    // Create a local date from daysList
+    const localDate = new Date(daysList.value[day - 1]);
+    localDate.setHours(time, 0, 0, 0);
 
     return sessions.value.some((session) => {
-        const sessionDate = new Date(session.date);
-        const sessionTime = session.time.split(":");
-        sessionDate.setHours(sessionTime[0], sessionTime[1]);
-        return sessionDate.getTime() === date.getTime();
+        // Extract year, month, and day from session.date
+        const [year, month, day] = session.date.split('-').map(num => parseInt(num));
+
+        // Create a date object in local time zone
+        const sessionDate = new Date(year, month - 1, day); // Month is 0-indexed
+
+        // Set the session time
+        const sessionTime = parseInt(session.time);
+        sessionDate.setHours(sessionTime, 0, 0, 0);
+
+        // Compare dates
+        return sessionDate.getTime() === localDate.getTime();
     });
 };
 
+// Returns the current year
+const currentYear = computed(() => currentDate.value.getFullYear());
+
+const goToNextWeek = () => {
+    // Create a new Date object with the updated date
+    const newDate = new Date(currentDate.value);
+    newDate.setDate(newDate.getDate() + 7);
+
+    // Update currentDate with the new Date object
+    currentDate.value = newDate;
+};
+
+const goToPreviousWeek = () => {
+    // Create a new Date object based on the current value of currentDate
+    const newDate = new Date(currentDate.value);
+    newDate.setDate(newDate.getDate() - 7);
+
+    // Update currentDate with the new Date object
+    currentDate.value = newDate;
+};
+
+// Check if the current week is the current week or later
+const isCurrentWeekOrLater = computed(() => {
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+
+    const currentYear = currentDate.value.getFullYear();
+    const currentMonth = currentDate.value.getMonth();
+    const currentDay = currentDate.value.getDate();
+
+    if (currentYear > todayYear) {
+        return true;
+    }
+
+    if (todayYear === currentYear) {
+        if (currentMonth > todayMonth) {
+            return true;
+        }
+        if (todayMonth === currentMonth) {
+
+            if (currentDay > todayDate) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+});
+
+/* Time range logic */
+
+// Initialize selectedStartTime with the first time from timesList
+const selectedStartTime = ref(formatTime(timesList.value[0]));
+
+// Reactive variable for selected end time
+const selectedEndTime = ref(formatTime(timesList.value[1]));
+
+// Computed property for time options
+const timeOptions = computed(() => timesList.value.slice(0, -1).map(formatTime));
+
+// Computed property for end time options
+const endTimeOptions = computed(() => {
+    const startIndex = timesList.value.findIndex(time => formatTime(time) === selectedStartTime.value);
+    return timesList.value.slice(startIndex + 1).map(formatTime);
+});
+
+// When StartTime changes, endTime will select the first available option
+watch(selectedStartTime, () => {
+    const startIndex = timesList.value.findIndex(time => formatTime(time) === selectedStartTime.value);
+    const selectedEndTimeIndex = timesList.value.findIndex(time => formatTime(time) === selectedEndTime.value);
+    if (startIndex >= selectedEndTimeIndex) {
+        selectedEndTime.value = formatTime(timesList.value[startIndex + 1]);
+    }
+});
+
+// API call to get sessions
 const getSessions = async () => {
-    loading.value = true;
+    sessionsLoading.value = true;
     await useFetch(`${runtimeConfig.public.apiBase}/professional/session/user/${userStore.user.user_id}`, {
         method: 'GET',
         headers: {
@@ -246,7 +316,7 @@ const getSessions = async () => {
         },
         onResponse({ request, response, options }) {
 
-            loading.value = false;
+            sessionsLoading.value = false;
             const responseData = response._data;
 
             if (responseData.success) {
@@ -261,8 +331,8 @@ const getSessions = async () => {
 }
 
 onMounted(() => {
+    // Get the sessions when the component is mounted
     getSessions();
-    generateDaysList();
-    generateTimesList();
 });
+
 </script>
