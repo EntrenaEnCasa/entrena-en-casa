@@ -4,7 +4,7 @@
             class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-screen max-h-full flex justify-center items-center backdrop-blur-sm bg-black/30"
             :class="{ 'modal-open': isOpen }" @click="closeModal">
             <div @click.stop
-                class=" bg-white rounded-xl p-4 flex flex-col justify-between max-w-[calc(100vw_-_50px)] max-h-[calc(100vh_-_80px)] relative overflow-y-auto ">
+                class="w-full md:w-auto bg-white rounded-xl p-4 flex flex-col justify-between max-w-[calc(100vw_-_50px)] max-h-[calc(100vh_-_80px)] relative overflow-y-auto">
                 <div>
                     <button type="button" class="bg-transparent hover:bg-gray-100 transition duration-75 rounded-lg p-1"
                         @click="closeModal">
@@ -15,8 +15,10 @@
                         <span class="sr-only">Cerrar modal</span>
                     </button>
                 </div>
-                <div class="flex flex-col items-center mx-auto">
-                    <slot></slot>
+                <div class="flex flex-col items-center mx-auto md:min-w-[40rem] w-full md:w-auto">
+                    <div class="w-full">
+                        <slot></slot>
+                    </div>
                 </div>
             </div>
         </div>
