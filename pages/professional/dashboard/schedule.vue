@@ -67,8 +67,8 @@
                         <td class="h-14 pr-6 text-right font-semibold whitespace-nowrap">
                             {{ formatTime(time) }}
                         </td>
-                        <td v-for="n in 7" :key="n" class="h-14 border">
-                            <div v-if="!timeTaken(n, time)" @click="openModal()"
+                        <td v-for="day in 7" :key="day" class="h-14 border">
+                            <div v-if="!timeTaken(day, time)" @click="onClickAddTimeModal(day)"
                                 class="w-full h-full flex items-center justify-center group cursor-pointer">
                                 <div class="hidden group-hover:flex">
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
@@ -89,8 +89,10 @@
             </span>
         </div>
         <Teleport to="body">
-            <CommonModal ref="modal">
-                <div class="p-4">
+            <CommonModal ref="addTimeModal">
+                <div class="px-6 py-4">
+                    <h3 class="mb-10 text-center font-semibold text-xl">Día {{ currentlySelectedDay }} de <span
+                            class="capitalize">{{ currentlySelectedMonth }}</span></h3>
                     <form action="">
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="flex flex-col">
@@ -131,8 +133,19 @@
                         </div>
 
                     </form>
-                    <div class="flex justify-center">
-                        <button @click="closeModal" class="px-4 py-2 rounded-md bg-primary text-white">Confirmar</button>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-4">* Para presencial se aplicarán los rangos de cobertura
+                            propuestos
+                            en el perfil
+                        </p>
+                        <div class="flex justify-between">
+                            <button @click="closeAddTimeModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
+                                Cancelar
+                            </button>
+                            <button @click="closeAddTimeModal" class="px-4 py-2 rounded-md bg-primary text-white">
+                                Confirmar cambios
+                            </button>
+                        </div>
                     </div>
                 </div>
             </CommonModal>
@@ -151,14 +164,18 @@ const sessions = ref([]); // Array of sessions
 const sessionsLoading = ref(false); // Loading state of the sessions
 
 // Modal state
-const modal = ref(null);
+const addTimeModal = ref(null);
+const currentlySelectedDay = ref(null);
+const currentlySelectedMonth = ref(null);
 
-const openModal = () => {
-    modal.value.openModal();
+const onClickAddTimeModal = (day) => {
+    currentlySelectedDay.value = daysList.value[day - 1].getDate();
+    currentlySelectedMonth.value = daysList.value[day - 1].toLocaleString('default', { month: 'long' });
+    addTimeModal.value.openModal();
 };
 
-const closeModal = () => {
-    modal.value.closeModal();
+const closeAddTimeModal = () => {
+    addTimeModal.value.closeModal();
 };
 
 // Dropdown state
