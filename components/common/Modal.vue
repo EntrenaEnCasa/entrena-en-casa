@@ -10,7 +10,7 @@
                         @click="closeModal">
                         <div class="flex items-center gap-x-1 text-primary">
                             <Icon name="ic:round-close" class="text-3xl" />
-                            <p class="text-xl">Cerrar</p>
+                            <p class="text-xl font-medium">Cerrar</p>
                         </div>
                         <span class="sr-only">Cerrar modal</span>
                     </button>
