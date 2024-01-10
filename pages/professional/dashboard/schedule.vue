@@ -90,46 +90,50 @@
         </div>
         <Teleport to="body">
             <CommonModal ref="modal">
-                <form action="" class="w-full">
-                    <div class="grid gap-6 mb-6 md:grid-cols-2">
-                        <label class="flex flex-col">
-                            <span class="font-medium text-sm mb-2">Formato</span>
-                            <select
-                                class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                <option value="Individual">Individual</option>
-                                <option value="Grupal">Grupal</option>
-                            </select>
-                        </label>
-                        <label class="flex flex-col">
-                            <span class="font-medium text-sm mb-2">Modalidad</span>
-                            <select
-                                class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                <option value="Online">Online</option>
-                                <option value="Presencial">Presencial</option>
-                            </select>
-                        </label>
+                <div class="p-4">
+                    <form action="">
+                        <div class="grid gap-6 mb-6 md:grid-cols-2">
+                            <label class="flex flex-col">
+                                <span class="font-medium text-sm mb-2">Formato</span>
+                                <select
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option value="Individual">Individual</option>
+                                    <option value="Grupal">Grupal</option>
+                                </select>
+                            </label>
+                            <label class="flex flex-col">
+                                <span class="font-medium text-sm mb-2">Modalidad</span>
+                                <select
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option value="Online">Online</option>
+                                    <option value="Presencial">Presencial</option>
+                                </select>
+                            </label>
 
-                        <div class="flex flex-col py-2">
-                            <span class="font-medium text-sm mb-2">Rango de tiempo</span>
-                            <div class="flex items-center gap-4">
-                                <select v-model="selectedStartTime"
-                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option v-for="time in timeOptions" :key="`start-${time}`" :value="time">{{ time }}
-                                    </option>
-                                </select>
-                                <span>-</span>
-                                <select v-model="selectedEndTime"
-                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">{{ time }}
-                                    </option>
-                                </select>
+                            <div class="flex flex-col py-2 min-w-max">
+                                <span class="font-medium text-sm mb-2">Rango de tiempo</span>
+                                <div class="flex items-center gap-4">
+                                    <select v-model="selectedStartTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="time in timeOptions" :key="`start-${time}`" :value="time">
+                                            {{ time }}
+                                        </option>
+                                    </select>
+                                    <span class="font-semibold">-</span>
+                                    <select v-model="selectedEndTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">{{ time }}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
+
                         </div>
 
+                    </form>
+                    <div class="flex justify-center">
+                        <button @click="closeModal" class="px-4 py-2 rounded-md bg-primary text-white">Confirmar</button>
                     </div>
-                </form>
-                <div>
-                    <button @click="closeModal" class="px-4 py-2 rounded-md bg-primary text-white">Confirmar</button>
                 </div>
             </CommonModal>
         </Teleport>
