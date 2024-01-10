@@ -3,7 +3,8 @@
         <div class="mt-4 mb-10">
             <div class="w-full inline-flex flex-col items-center justify-between gap-5 md:flex-row">
                 <div class="flex items-center text-2xl">
-                    <p class="mr-2 font-medium">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span></p>
+                    <p class="mr-2 font-medium">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span>
+                    </p>
                     <button @click="goToPreviousWeek" :disabled="!isCurrentWeekOrLater">
                         <Icon :class="{ 'text-gray-300': !isCurrentWeekOrLater, 'text-gray-800': isCurrentWeekOrLater }"
                             name="fa6-solid:chevron-left"></Icon>
@@ -79,9 +80,9 @@
                             {{ formatTime(time) }}
                         </td>
                         <td v-for="day in 7" :key="day" class="h-14 border">
-                            <div v-if="!timeTaken(day, time)" @click="onClickAddTimeModal(day)"
-                                class="w-full h-full flex items-center justify-center group cursor-pointer">
-                                <div class="hidden group-hover:flex">
+                            <div v-if="!timeTaken(day, time)" @click="!editMode && onClickAddTimeModal(day)"
+                                class="w-full h-full" :class="[editMode ? '' : editClass]">
+                                <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
                             </div>
