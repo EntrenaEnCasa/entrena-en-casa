@@ -18,8 +18,19 @@
                     </div>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <button class="bg-primary rounded text-white font-semibold px-4 py-1">Editar</button>
-                    <div class="relative">
+                    <button v-if="!editMode" @click="toggleEditState"
+                        class="bg-primary rounded text-white font-semibold px-4 py-1">
+                        Editar
+                    </button>
+                    <button v-else @click="toggleEditState" class="bg-secondary rounded text-white font-semibold px-4 py-1">
+                        <div class="flex items-center gap-x-1">
+                            <Icon name="fa6-solid:pen-to-square"></Icon>
+                            <p>
+                                Modo edición
+                            </p>
+                        </div>
+                    </button>
+                    <div v-if="!editMode" class="relative">
                         <button @click="toggleNewDropdown"
                             class=" bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
                             <span>
@@ -74,14 +85,17 @@
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
                             </div>
-                            <div v-else class="w-full h-full bg-primary">
+                            <div v-else class="w-full h-full bg-primary" :class="[editMode ? editClass : '']">
+                                <div :class="{ hidden: !editMode }">
+                                    <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
+                                </div>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="mt-10 mb-4 flex justify-center items-center gap-3">
+        <div class=" mt-10 mb-4 flex justify-center items-center gap-3">
             <div class="w-14 h-12 bg-primary rounded-md">
             </div>
             <span class="text-lg font-semibold">
@@ -91,8 +105,8 @@
         <Teleport to="body">
             <CommonModal ref="addTimeModal">
                 <div class="px-6 py-4">
-                    <h3 class="mb-10 text-center font-semibold text-xl">Día {{ currentlySelectedDay }} de <span
-                            class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                    <h3 class="mb-10 text-center font-semibold text-xl">Día {{ currentlySelectedDay
+                    }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
                     <form action="">
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="flex flex-col">
@@ -134,7 +148,8 @@
 
                     </form>
                     <div>
-                        <p class="text-sm text-gray-500 mb-4">* Para presencial se aplicarán los rangos de cobertura
+                        <p class="text-sm text-gray-500 mb-4">* Para presencial se aplicarán los
+                            rangos de cobertura
                             propuestos
                             en el perfil
                         </p>
@@ -162,6 +177,21 @@ const runtimeConfig = useRuntimeConfig();
 
 const sessions = ref([]); // Array of sessions
 const sessionsLoading = ref(false); // Loading state of the sessions
+
+/* Edit state */
+const editMode = ref(false); // Edit mode state
+
+const editClass = reactive({
+    'flex': true,
+    'items-center': true,
+    'justify-center': true,
+    'group': true,
+    'cursor-pointer': true,
+});
+
+const toggleEditState = () => {
+    editMode.value = !editMode.value;
+}
 
 // Modal state
 const addTimeModal = ref(null);
