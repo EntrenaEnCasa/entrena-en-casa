@@ -408,6 +408,144 @@ const toggleEditState = () => {
     editMode.value = !editMode.value;
 }
 
+/* Schedule logic */
+
+// The starting point will be the current date
+const currentDate = ref(new Date());
+
+// returns the current month
+const currentMonth = computed(() => {
+    const months = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    return months[currentDate.value.getMonth()];
+});
+
+// Returns the current year
+const currentYear = computed(() => currentDate.value.getFullYear());
+
+// Returns current week days, starting from today to the same day of the next week
+const daysList = computed(() => {
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(currentDate.value);
+        date.setDate(date.getDate() + i);
+        days.push(date);
+    }
+    return days;
+});
+
+// Business time a day is 09:00hrs to 20:00hrs
+const timesList = computed(() => {
+    const times = [];
+    for (let i = 9; i <= 20; i++) {
+        times.push(i);
+    }
+    return times;
+});
+
+const formatDate = (date) => {
+    const daysOfWeek = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    const dayOfMonth = date.getDate();
+    return `${dayOfWeek} ${dayOfMonth}`;
+};
+
+const formatTime = (time) => {
+    return `${time}:00`;
+};
+
+// Since railway stores dates in UTC, we need to convert the UTC time to local time
+const timeTaken = (day, time) => {
+    // Create a local date from daysList
+    const localDate = new Date(daysList.value[day - 1]);
+    localDate.setHours(time, 0, 0, 0);
+
+    return sessions.value.some((session) => {
+        // Extract year, month, and day from session.date
+        const [year, month, day] = session.date.split('-').map(num => parseInt(num));
+
+        // Create a date object in local time zone
+        const sessionDate = new Date(year, month - 1, day); // Month is 0-indexed
+
+        // Set the session time
+        const sessionTime = parseInt(session.time);
+        sessionDate.setHours(sessionTime, 0, 0, 0);
+
+        // Compare dates
+        return sessionDate.getTime() === localDate.getTime();
+    });
+};
+
+const goToNextWeek = () => {
+    // Create a new Date object with the updated date
+    const newDate = new Date(currentDate.value);
+    newDate.setDate(newDate.getDate() + 7);
+
+    // Update currentDate with the new Date object
+    currentDate.value = newDate;
+};
+
+const goToPreviousWeek = () => {
+    // Create a new Date object based on the current value of currentDate
+    const newDate = new Date(currentDate.value);
+    newDate.setDate(newDate.getDate() - 7);
+
+    // Update currentDate with the new Date object
+    currentDate.value = newDate;
+};
+
+// Check if the current week is the current week or later
+const isCurrentWeekOrLater = computed(() => {
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+
+    const currentYear = currentDate.value.getFullYear();
+    const currentMonth = currentDate.value.getMonth();
+    const currentDay = currentDate.value.getDate();
+
+    if (currentYear > todayYear) {
+        return true;
+    }
+
+    if (todayYear === currentYear) {
+        if (currentMonth > todayMonth) {
+            return true;
+        }
+        if (todayMonth === currentMonth) {
+
+            if (currentDay > todayDate) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+});
+
+/* Time range logic */
+
+// Initialize selectedStartTime with the first time from timesList
+const selectedStartTime = ref(formatTime(timesList.value[0]));
+
+// Computed property for time options
+const timeOptions = computed(() => timesList.value.map(formatTime));
+
+// Computed property for end time options
+
+//instead of multiple options, there will be only one option, the one right after the start time
+const selectedEndTime = computed(() => {
+    const startIndex = timesList.value.findIndex(time => formatTime(time) === selectedStartTime.value);
+    if (startIndex === timesList.value.length - 1) {
+        return '21:00';
+    } else {
+        return formatTime(timesList.value[startIndex + 1]);
+    }
+});
+
 /* Modals */
 
 const currentlySelectedDate = ref(null);
@@ -420,11 +558,7 @@ const currentlySelectedMonth = computed(() => {
     return currentlySelectedDate.value.toLocaleString('default', { month: 'long' });
 });
 
-const currentlySelectedYear = computed(() => {
-    return currentlySelectedDate.value.getFullYear();
-});
-
-// functionality to move around days. You can only move around days in the current week
+// isCurrentDay should check on the currentDate variable because that's where we keep track of the moving weeks.
 
 const isCurrentDay = computed(() => {
     const today = new Date();
@@ -477,7 +611,6 @@ const goToPreviousDay = () => {
     // Update currentDate with the new Date object
     currentlySelectedDate.value = newDate;
 };
-
 
 // Add new session modal
 const newEmptySessionModal = ref(null);
@@ -549,144 +682,6 @@ const newDropdown = reactive({
     active: false,
     toggle: () => newDropdown.active = !newDropdown.active,
     close: () => newDropdown.active = false,
-});
-
-/* Schedule logic */
-
-// The starting point will be the current date
-const currentDate = ref(new Date());
-
-// returns the current month
-const currentMonth = computed(() => {
-    const months = [
-        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-    ];
-    return months[currentDate.value.getMonth()];
-});
-
-// Returns current week days, starting from today to the same day of the next week
-const daysList = computed(() => {
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-        const date = new Date(currentDate.value);
-        date.setDate(date.getDate() + i);
-        days.push(date);
-    }
-    return days;
-});
-
-// Business time a day is 09:00hrs to 20:00hrs
-const timesList = computed(() => {
-    const times = [];
-    for (let i = 9; i <= 20; i++) {
-        times.push(i);
-    }
-    return times;
-});
-
-const formatDate = (date) => {
-    const daysOfWeek = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
-    const dayOfWeek = daysOfWeek[date.getDay()];
-    const dayOfMonth = date.getDate();
-    return `${dayOfWeek} ${dayOfMonth}`;
-};
-
-const formatTime = (time) => {
-    return `${time}:00`;
-};
-
-// Since railway stores dates in UTC, we need to convert the UTC time to local time
-const timeTaken = (day, time) => {
-    // Create a local date from daysList
-    const localDate = new Date(daysList.value[day - 1]);
-    localDate.setHours(time, 0, 0, 0);
-
-    return sessions.value.some((session) => {
-        // Extract year, month, and day from session.date
-        const [year, month, day] = session.date.split('-').map(num => parseInt(num));
-
-        // Create a date object in local time zone
-        const sessionDate = new Date(year, month - 1, day); // Month is 0-indexed
-
-        // Set the session time
-        const sessionTime = parseInt(session.time);
-        sessionDate.setHours(sessionTime, 0, 0, 0);
-
-        // Compare dates
-        return sessionDate.getTime() === localDate.getTime();
-    });
-};
-
-// Returns the current year
-const currentYear = computed(() => currentDate.value.getFullYear());
-
-const goToNextWeek = () => {
-    // Create a new Date object with the updated date
-    const newDate = new Date(currentDate.value);
-    newDate.setDate(newDate.getDate() + 7);
-
-    // Update currentDate with the new Date object
-    currentDate.value = newDate;
-};
-
-const goToPreviousWeek = () => {
-    // Create a new Date object based on the current value of currentDate
-    const newDate = new Date(currentDate.value);
-    newDate.setDate(newDate.getDate() - 7);
-
-    // Update currentDate with the new Date object
-    currentDate.value = newDate;
-};
-
-// Check if the current week is the current week or later
-const isCurrentWeekOrLater = computed(() => {
-    const today = new Date();
-    const todayYear = today.getFullYear();
-    const todayMonth = today.getMonth();
-    const todayDate = today.getDate();
-
-    const currentYear = currentDate.value.getFullYear();
-    const currentMonth = currentDate.value.getMonth();
-    const currentDay = currentDate.value.getDate();
-
-    if (currentYear > todayYear) {
-        return true;
-    }
-
-    if (todayYear === currentYear) {
-        if (currentMonth > todayMonth) {
-            return true;
-        }
-        if (todayMonth === currentMonth) {
-
-            if (currentDay > todayDate) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-});
-
-/* Time range logic */
-
-// Initialize selectedStartTime with the first time from timesList
-const selectedStartTime = ref(formatTime(timesList.value[0]));
-
-// Computed property for time options
-const timeOptions = computed(() => timesList.value.map(formatTime));
-
-// Computed property for end time options
-
-//instead of multiple options, there will be only one option, the one right after the start time
-const selectedEndTime = computed(() => {
-    const startIndex = timesList.value.findIndex(time => formatTime(time) === selectedStartTime.value);
-    if (startIndex === timesList.value.length - 1) {
-        return '21:00';
-    } else {
-        return formatTime(timesList.value[startIndex + 1]);
-    }
 });
 
 
