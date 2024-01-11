@@ -1,8 +1,10 @@
 <template>
     <div>
         <div class="mt-4 mb-10">
-            <div class="w-full inline-flex flex-col items-center justify-between gap-5 md:flex-row">
-                <div class="flex items-center text-2xl">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
+
+                <div class="flex items-center justify-self-center md:justify-self-start text-2xl">
                     <button @click="goToPreviousWeek" :disabled="!isCurrentWeekOrLater">
                         <Icon :class="{ 'text-gray-300': !isCurrentWeekOrLater, 'text-gray-800': isCurrentWeekOrLater }"
                             name="fa6-solid:chevron-left"></Icon>
@@ -13,12 +15,12 @@
                     <p class="ml-2 font-medium">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span>
                     </p>
                 </div>
-                <div>
-                    <div class="bg-gray-200 rounded-lg px-16 py-1">
-                        <p class="font-semibold">Semanal</p>
-                    </div>
+
+                <div class="justify-self-center bg-gray-200 rounded-lg px-16 py-1">
+                    <p class="font-semibold">Semanal</p>
                 </div>
-                <div class="flex gap-2 items-center">
+
+                <div class="flex gap-2 items-center justify-self-center md:justify-self-end">
                     <button v-if="!editMode" @click="toggleEditState"
                         class="bg-primary rounded text-white font-semibold px-4 py-1">
                         Editar
@@ -59,6 +61,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="overflow-x-auto bg-white rounded-2xl border pr-10">
