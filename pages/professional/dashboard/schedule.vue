@@ -110,8 +110,8 @@
             <CommonModal ref="newEmptySessionModal">
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-center gap-x-2 mb-6">
-                        <button @click="goToPreviousDay" :disabled="isCurrentDay">
-                            <Icon :class="{ 'text-gray-300': isCurrentDay, 'text-gray-800': !isCurrentDay }"
+                        <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
+                            <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
                         <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
@@ -178,8 +178,8 @@
             <CommonModal ref="newEmptySessionFromButtonModal">
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-center gap-x-2 mb-6">
-                        <button @click="goToPreviousDay" :disabled="isCurrentDay">
-                            <Icon :class="{ 'text-gray-300': isCurrentDay, 'text-gray-800': !isCurrentDay }"
+                        <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
+                            <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
                         <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
@@ -249,8 +249,8 @@
             <CommonModal ref="newEventModal">
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-center gap-x-2 mb-6">
-                        <button @click="goToPreviousDay" :disabled="isCurrentDay">
-                            <Icon :class="{ 'text-gray-300': isCurrentDay, 'text-gray-800': !isCurrentDay }"
+                        <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
+                            <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
                         <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
@@ -560,11 +560,12 @@ const currentlySelectedMonth = computed(() => {
 
 // isCurrentDay should check on the currentDate variable because that's where we keep track of the moving weeks.
 
-const isCurrentDay = computed(() => {
-    const today = new Date();
-    const todayYear = today.getFullYear();
-    const todayMonth = today.getMonth();
-    const todayDate = today.getDate();
+const isFirstDayOfWeek = computed(() => {
+    // currentDate tracks the first day of the current week
+    const firstDayOfWeek = currentDate.value;
+    const todayYear = firstDayOfWeek.getFullYear();
+    const todayMonth = firstDayOfWeek.getMonth();
+    const todayDate = firstDayOfWeek.getDate();
 
     const currentYear = currentlySelectedDate.value.getFullYear();
     const currentMonth = currentlySelectedDate.value.getMonth();
@@ -578,10 +579,11 @@ const isCurrentDay = computed(() => {
 });
 
 const isLastDayOfWeek = computed(() => {
-    const today = new Date();
-    const todayYear = today.getFullYear();
-    const todayMonth = today.getMonth();
-    const todayDate = today.getDate();
+    // currentDate tracks the first day of the current week
+    const firstDayOfWeek = currentDate.value;
+    const todayYear = firstDayOfWeek.getFullYear();
+    const todayMonth = firstDayOfWeek.getMonth();
+    const todayDate = firstDayOfWeek.getDate();
 
     const currentYear = currentlySelectedDate.value.getFullYear();
     const currentMonth = currentlySelectedDate.value.getMonth();
