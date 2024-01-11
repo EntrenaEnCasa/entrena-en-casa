@@ -3,8 +3,6 @@
         <div class="mt-4 mb-10">
             <div class="w-full inline-flex flex-col items-center justify-between gap-5 md:flex-row">
                 <div class="flex items-center text-2xl">
-                    <p class="mr-2 font-medium">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span>
-                    </p>
                     <button @click="goToPreviousWeek" :disabled="!isCurrentWeekOrLater">
                         <Icon :class="{ 'text-gray-300': !isCurrentWeekOrLater, 'text-gray-800': isCurrentWeekOrLater }"
                             name="fa6-solid:chevron-left"></Icon>
@@ -12,6 +10,8 @@
                     <button @click="goToNextWeek">
                         <Icon class="text-gray-800" name="fa6-solid:chevron-right"></Icon>
                     </button>
+                    <p class="ml-2 font-medium">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span>
+                    </p>
                 </div>
                 <div>
                     <div class="bg-gray-200 rounded-lg px-16 py-1">
@@ -111,15 +111,22 @@
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-center gap-x-2 mb-6">
                         <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
-                            <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
+                            <Icon class="text-xl"
+                                :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
-                        <h3 class="text-center font-semibold text-xl"><span class="capitalize">{{ currentlySelectedDayName
-                        }} </span> {{
-    currentlySelectedDayNumber
-}} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <h3 class="text-center font-semibold text-xl w-60">
+                            <span class="capitalize">
+                                {{ currentlySelectedDayName }}
+                            </span>
+                            {{ currentlySelectedDayNumber }} de
+                            <span class="capitalize">
+                                {{ currentlySelectedMonth }}
+                            </span>
+                        </h3>
                         <button @click="goToNextDay" :disabled="isLastDayOfWeek">
-                            <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
+                            <Icon class="text-xl"
+                                :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
                                 name="fa6-solid:chevron-right"></Icon>
                         </button>
                     </div>
@@ -181,15 +188,22 @@
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-center gap-x-2 mb-6">
                         <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
-                            <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
+                            <Icon class="text-xl"
+                                :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
-                        <h3 class="text-center font-semibold text-xl"><span class="capitalize">{{ currentlySelectedDayName
-                        }} </span> {{
-    currentlySelectedDayNumber
-}} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <h3 class="text-center font-semibold text-xl w-60">
+                            <span class="capitalize">
+                                {{ currentlySelectedDayName }}
+                            </span>
+                            {{ currentlySelectedDayNumber }} de
+                            <span class="capitalize">
+                                {{ currentlySelectedMonth }}
+                            </span>
+                        </h3>
                         <button @click="goToNextDay" :disabled="isLastDayOfWeek">
-                            <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
+                            <Icon class="text-xl"
+                                :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
                                 name="fa6-solid:chevron-right"></Icon>
                         </button>
                     </div>
@@ -254,15 +268,22 @@
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-center gap-x-2 mb-6">
                         <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
-                            <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
+                            <Icon class="text-xl"
+                                :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
-                        <h3 class="text-center font-semibold text-xl"> <span class="capitalize">{{ currentlySelectedDayName
-                        }} </span> {{
-    currentlySelectedDayNumber
-}} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <h3 class="text-center font-semibold text-xl w-60">
+                            <span class="capitalize">
+                                {{ currentlySelectedDayName }}
+                            </span>
+                            {{ currentlySelectedDayNumber }} de
+                            <span class="capitalize">
+                                {{ currentlySelectedMonth }}
+                            </span>
+                        </h3>
                         <button @click="goToNextDay" :disabled="isLastDayOfWeek">
-                            <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
+                            <Icon class="text-xl"
+                                :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
                                 name="fa6-solid:chevron-right"></Icon>
                         </button>
                     </div>
