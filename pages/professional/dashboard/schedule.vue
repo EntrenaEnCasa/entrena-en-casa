@@ -52,7 +52,7 @@
                                     </button>
                                 </li>
                                 <li>
-                                    <button @click="openNewEventModal"
+                                    <button @click="onClickNewEventModal"
                                         class="px-4 py-2 text-sm rounded-b bg-primary hover:bg-primary-600" role="menuitem">
                                         Evento Manual
                                     </button>
@@ -688,13 +688,11 @@ const closeNewEmptySessionFromButtonModal = () => {
 // Add new event modal
 const newEventModal = ref(null);
 const selectedEventType = ref("Nuevo entrenamiento");
-// const onClickAddEventModal = (day) => {
-//     currentlySelectedDay.value = daysList.value[day - 1].getDate();
-//     currentlySelectedMonth.value = daysList.value[day - 1].toLocaleString('default', { month: 'long' });
-//     addNewEventModal.value.openModal();
-// };
-const openNewEventModal = () => {
-    newEventModal.value.openModal();
+const onClickNewEventModal = () => {
+    currentlySelectedDate.value = new Date(currentDate.value);
+
+    selectedStartTime.value = formatTime(timesList.value[0]);
+    newEmptySessionModal.value.openModal();
 }
 
 const closeAddEventModal = () => {
