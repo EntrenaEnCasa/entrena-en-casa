@@ -114,8 +114,10 @@
                             <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
-                        <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
-                        }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <h3 class="text-center font-semibold text-xl"><span class="capitalize">{{ currentlySelectedDayName
+                        }} </span> {{
+    currentlySelectedDayNumber
+}} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
                         <button @click="goToNextDay" :disabled="isLastDayOfWeek">
                             <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
                                 name="fa6-solid:chevron-right"></Icon>
@@ -182,8 +184,10 @@
                             <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
-                        <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
-                        }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <h3 class="text-center font-semibold text-xl"><span class="capitalize">{{ currentlySelectedDayName
+                        }} </span> {{
+    currentlySelectedDayNumber
+}} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
                         <button @click="goToNextDay" :disabled="isLastDayOfWeek">
                             <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
                                 name="fa6-solid:chevron-right"></Icon>
@@ -253,8 +257,10 @@
                             <Icon :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
                                 name="fa6-solid:chevron-left"></Icon>
                         </button>
-                        <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
-                        }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <h3 class="text-center font-semibold text-xl"> <span class="capitalize">{{ currentlySelectedDayName
+                        }} </span> {{
+    currentlySelectedDayNumber
+}} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
                         <button @click="goToNextDay" :disabled="isLastDayOfWeek">
                             <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
                                 name="fa6-solid:chevron-right"></Icon>
@@ -337,8 +343,9 @@
         <Teleport to="body">
             <CommonModal ref="editEmptySessionModal">
                 <div class="px-6 py-4">
-                    <h3 class="mb-10 text-center font-semibold text-xl">Día {{ currentlySelectedDay
-                    }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                    <h3 class="mb-10 text-center font-semibold text-xl"> <span class="capitalize">{{
+                        currentlySelectedDayName }} </span> {{ currentlySelectedDayNumber
+    }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
                     <form action="">
                         <div class="flex flex-col py-2 max-w-max mx-auto mb-5">
                             <div class="flex items-center gap-4">
@@ -550,7 +557,11 @@ const selectedEndTime = computed(() => {
 
 const currentlySelectedDate = ref(null);
 
-const currentlySelectedDay = computed(() => {
+const currentlySelectedDayName = computed(() => {
+    return currentlySelectedDate.value.toLocaleString('default', { weekday: 'long' });
+});
+
+const currentlySelectedDayNumber = computed(() => {
     return currentlySelectedDate.value.getDate();
 });
 
