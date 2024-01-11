@@ -454,7 +454,9 @@ const timesList = computed(() => {
 
 const formatDate = (date) => {
     const daysOfWeek = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
-    const dayOfWeek = daysOfWeek[date.getDay()];
+    let day = date.getDay();
+    day = day === 0 ? 6 : day - 1;
+    const dayOfWeek = daysOfWeek[day];
     const dayOfMonth = date.getDate();
     return `${dayOfWeek} ${dayOfMonth}`;
 };
