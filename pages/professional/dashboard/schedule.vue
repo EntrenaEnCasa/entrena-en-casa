@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="overflow-x-auto bg-white rounded-2xl border pr-10">
-            <CommonLoading v-if="sessionsLoading" class="my-8" />
+            <CommonLoading v-if="fetchingEvents" class="my-8" />
             <table v-else class="w-full table-fixed text-sm text-gray-500">
                 <thead>
                     <tr>
@@ -421,8 +421,8 @@ import { useUserStore } from '~/stores/UserStore';
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
-const sessions = ref([]); // Array of sessions
-const sessionsLoading = ref(false); // Loading state of the sessions
+const events = ref([]); // Array of events
+const fetchingEvents = ref(false); // Loading state of the events
 
 /* Edit state */
 const editMode = ref(false); // Edit mode state
@@ -495,19 +495,19 @@ const timeTaken = (day, time) => {
     const localDate = new Date(daysList.value[day - 1]);
     localDate.setHours(time, 0, 0, 0);
 
-    return sessions.value.some((session) => {
-        // Extract year, month, and day from session.date
-        const [year, month, day] = session.date.split('-').map(num => parseInt(num));
+    return events.value.some((event) => {
+        // Extract year, month, and day from event.date and create a new Date object
+        const [year, month, day] = event.date.split('T')[0].split('-').map(Number);
+        const eventDate = new Date(year, month - 1, day);
 
-        // Create a date object in local time zone
-        const sessionDate = new Date(year, month - 1, day); // Month is 0-indexed
+        // Extract hours and minutes from event.start_time
+        const [hours, minutes] = event.start_time.split(':').map(num => parseInt(num));
 
-        // Set the session time
-        const sessionTime = parseInt(session.time);
-        sessionDate.setHours(sessionTime, 0, 0, 0);
+        // Set the event time
+        eventDate.setHours(hours, minutes, 0, 0);
 
         // Compare dates
-        return sessionDate.getTime() === localDate.getTime();
+        return eventDate.getTime() === localDate.getTime();
     });
 };
 
@@ -518,6 +518,7 @@ const goToNextWeek = () => {
 
     // Update currentDate with the new Date object
     currentDate.value = newDate;
+    getEvents();
 };
 
 const goToPreviousWeek = () => {
@@ -527,6 +528,7 @@ const goToPreviousWeek = () => {
 
     // Update currentDate with the new Date object
     currentDate.value = newDate;
+    getEvents();
 };
 
 // Check if the current week is the current week or later
@@ -724,34 +726,39 @@ const newDropdown = reactive({
 });
 
 
-// API call to get sessions
-const getSessions = async () => {
-    sessionsLoading.value = true;
-    await useFetch(`${runtimeConfig.public.apiBase}/professional/session/user/${userStore.user.user_id}`, {
-        method: 'GET',
+const getEvents = async () => {
+    fetchingEvents.value = true;
+
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
+        method: 'POST',
         headers: {
             "Content-Type": "application/json",
             "x-access-token": userStore.getUserToken()
         },
-        onResponse({ request, response, options }) {
-
-            sessionsLoading.value = false;
-            const responseData = response._data;
-
-            if (responseData.success) {
-                sessions.value = responseData.sessions;
-            }
-            else {
-                console.log(responseData.message);
-            }
-
-        },
+        body: {
+            "user_id": userStore.getUser().user_id,
+            "date": currentDate.value.toISOString().split('T')[0], // fecha en formato YYYY-MM-DD
+        }
     });
-}
+
+    if (error.value) {
+        console.log("Fetch error:", error.value);
+        fetchingEvents.value = false;
+        return;
+    }
+
+    fetchingEvents.value = false;
+    if (data.value.success) {
+        events.value = data.value.events;
+        console.log(events.value);
+    } else {
+        console.log(data.value.message);
+    }
+};
 
 onMounted(() => {
-    // Get the sessions when the component is mounted
-    getSessions();
+    // Get the events when the component is mounted
+    getEvents();
     document.addEventListener('click', newDropdown.close);
 });
 
