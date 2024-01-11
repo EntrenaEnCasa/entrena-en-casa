@@ -32,33 +32,32 @@
                         </div>
                     </button>
                     <div v-if="!editMode" class="relative">
-                        <button @click="toggleNewDropdown"
+                        <button @click.stop="newDropdown.toggle()"
                             class=" bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
                             <span>
                                 Nuevo
                             </span>
                             <Icon name="fa6-solid:chevron-down"></Icon>
                         </button>
-                        <div class=" min-w-max absolute top-6 border right-0 z-50 my-4 text-base list-none bg-primary text-white rounded shadow-md font-semibold"
-                            :class="{ hidden: !newDropdownOpen }">
+                        <div class="min-w-max absolute top-6 border right-0 z-50 my-4 text-base list-none text-white shadow-md font-semibold rounded"
+                            :class="{ hidden: !newDropdown.active }">
                             <ul class="divide-y divide-gray-200">
                                 <li>
-                                    <button @click="userMenuOpen = false"
-                                        class="w-full px-4 py-2 text-sm hover:bg-primary-600" role="menuitem">
+                                    <button @click="onClickNewEmptySessionFromButtonModal"
+                                        class="w-full px-4 py-2 rounded-t text-sm bg-primary hover:bg-primary-600"
+                                        role="menuitem">
                                         Disponibilidad
                                     </button>
                                 </li>
                                 <li>
-                                    <button @click="openNewEventModal(); toggleNewDropdown()"
-                                        class="px-4 py-2 text-sm hover:bg-primary-600" role="menuitem">
+                                    <button @click="openNewEventModal"
+                                        class="px-4 py-2 text-sm rounded-b bg-primary hover:bg-primary-600" role="menuitem">
                                         Evento Manual
                                     </button>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -80,13 +79,13 @@
                             {{ formatTime(time) }}
                         </td>
                         <td v-for=" day  in  7 " :key="day" class="h-14 border">
-                            <div v-if="!timeTaken(day, time)" @click="!editMode && onClickNewSessionModal(day)"
+                            <div v-if="!timeTaken(day, time)" @click="!editMode && onClickNewEmptySessionModal(day, time)"
                                 class="w-full h-full" :class="[editMode ? '' : editClass]">
                                 <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
                             </div>
-                            <div v-else @click="editMode && onClickNewSessionModal(day)" class="w-full h-full bg-primary"
+                            <div v-else @click="editMode && openEditModal(day, time)" class="w-full h-full bg-primary"
                                 :class="[editMode ? editClass : '']">
                                 <div :class="{ hidden: !editMode }">
                                     <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
@@ -106,13 +105,35 @@
         </div>
         <!-- Modals -->
 
-        <!-- addNewSession Modal -->
+        <!-- addNewEmptySession Modal -->
         <Teleport to="body">
-            <CommonModal ref="newSessionModal">
+            <CommonModal ref="newEmptySessionModal">
                 <div class="px-6 py-4">
-                    <h3 class="mb-10 text-center font-semibold text-xl">Día {{ currentlySelectedDay
-                    }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                    <div class="flex items-center justify-center gap-x-2 mb-6">
+                        <button @click="goToPreviousDay" :disabled="isCurrentDay">
+                            <Icon :class="{ 'text-gray-300': isCurrentDay, 'text-gray-800': !isCurrentDay }"
+                                name="fa6-solid:chevron-left"></Icon>
+                        </button>
+                        <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
+                        }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <button @click="goToNextDay" :disabled="isLastDayOfWeek">
+                            <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
+                                name="fa6-solid:chevron-right"></Icon>
+                        </button>
+                    </div>
                     <form action="">
+                        <div class="flex flex-col py-2 max-w-max mx-auto mb-5">
+                            <div class="flex items-center gap-4">
+                                <select v-model="selectedStartTime"
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option v-for=" time  in  timeOptions " :key="`start-${time}`" :value="time">
+                                        {{ time }}
+                                    </option>
+                                </select>
+                                <span class="font-semibold">-</span>
+                                <p>{{ selectedEndTime }}hrs</p>
+                            </div>
+                        </div>
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="flex flex-col">
                                 <span class="font-medium text-sm mb-2">Formato</span>
@@ -130,40 +151,90 @@
                                     <option value="Presencial">Presencial</option>
                                 </select>
                             </label>
-
-                            <div class="flex flex-col py-2 min-w-max">
-                                <span class="font-medium text-sm mb-2">Rango de tiempo</span>
-                                <div class="flex items-center gap-4">
-                                    <select v-model="selectedStartTime"
-                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                        <option v-for=" time  in  timeOptions " :key="`start-${time}`" :value="time">
-                                            {{ time }}
-                                        </option>
-                                    </select>
-                                    <span class="font-semibold">-</span>
-                                    <select v-model="selectedEndTime"
-                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                        <option v-for=" time  in  endTimeOptions " :key="`end-${time}`" :value="time">{{
-                                            time }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-
                         </div>
 
                     </form>
                     <div>
-                        <p class="text-sm text-gray-500 mb-4">* Para presencial se aplicarán los
+                        <p class="text-sm text-gray-500 mb-4 text-center">* Para presencial se aplicarán los
                             rangos de cobertura
                             propuestos
                             en el perfil
                         </p>
                         <div class="flex justify-between">
-                            <button @click="closeAddTimeModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
+                            <button @click="closeNewEmptySessionModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
                                 Cancelar
                             </button>
-                            <button @click="closeAddTimeModal" class="px-4 py-2 rounded-md bg-primary text-white">
+                            <button @click="closeNewEmptySessionModal" class="px-4 py-2 rounded-md bg-primary text-white">
+                                Confirmar cambios
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </CommonModal>
+        </Teleport>
+
+        <!-- addNewEmptySessionFromButtonModal -->
+        <Teleport to="body">
+            <CommonModal ref="newEmptySessionFromButtonModal">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-center gap-x-2 mb-6">
+                        <button @click="goToPreviousDay" :disabled="isCurrentDay">
+                            <Icon :class="{ 'text-gray-300': isCurrentDay, 'text-gray-800': !isCurrentDay }"
+                                name="fa6-solid:chevron-left"></Icon>
+                        </button>
+                        <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
+                        }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <button @click="goToNextDay" :disabled="isLastDayOfWeek">
+                            <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
+                                name="fa6-solid:chevron-right"></Icon>
+                        </button>
+                    </div>
+                    <form action="">
+                        <div class="flex flex-col py-2 max-w-max mx-auto mb-5">
+                            <div class="flex items-center gap-4">
+                                <select v-model="selectedStartTime"
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option v-for=" time  in  timeOptions " :key="`start-${time}`" :value="time">
+                                        {{ time }}
+                                    </option>
+                                </select>
+                                <span class="font-semibold">-</span>
+                                <p>{{ selectedEndTime }}hrs</p>
+                            </div>
+                        </div>
+                        <div class="grid gap-6 mb-6 md:grid-cols-2">
+                            <label class="flex flex-col">
+                                <span class="font-medium text-sm mb-2">Formato</span>
+                                <select
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option value="Individual">Individual</option>
+                                    <option value="Grupal">Grupal</option>
+                                </select>
+                            </label>
+                            <label class="flex flex-col">
+                                <span class="font-medium text-sm mb-2">Modalidad</span>
+                                <select
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option value="Online">Online</option>
+                                    <option value="Presencial">Presencial</option>
+                                </select>
+                            </label>
+                        </div>
+
+                    </form>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-4 text-center">* Para presencial se aplicarán los
+                            rangos de cobertura
+                            propuestos
+                            en el perfil
+                        </p>
+                        <div class="flex justify-between">
+                            <button @click="closeNewEmptySessionFromButtonModal"
+                                class="px-4 py-2 rounded-md bg-tertiary text-white">
+                                Cancelar
+                            </button>
+                            <button @click="closeNewEmptySessionFromButtonModal"
+                                class="px-4 py-2 rounded-md bg-primary text-white">
                                 Confirmar cambios
                             </button>
                         </div>
@@ -177,17 +248,42 @@
         <Teleport to="body">
             <CommonModal ref="newEventModal">
                 <div class="px-6 py-4">
-                    <!-- <h3 class="mb-10 text-center font-semibold text-xl">Día {{ currentlySelectedDay
-                    }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3> -->
+                    <div class="flex items-center justify-center gap-x-2 mb-6">
+                        <button @click="goToPreviousDay" :disabled="isCurrentDay">
+                            <Icon :class="{ 'text-gray-300': isCurrentDay, 'text-gray-800': !isCurrentDay }"
+                                name="fa6-solid:chevron-left"></Icon>
+                        </button>
+                        <h3 class="text-center font-semibold text-xl">Día {{ currentlySelectedDay
+                        }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                        <button @click="goToNextDay" :disabled="isLastDayOfWeek">
+                            <Icon :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
+                                name="fa6-solid:chevron-right"></Icon>
+                        </button>
+                    </div>
                     <form action="">
-                        <div class="grid gap-6 mb-6 md:grid-cols-2">
+                        <label class="w-full">
+                            <select
+                                class="mb-6 border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary"
+                                v-model="selectedEventType">
+                                <option value="Nuevo entrenamiento">Nuevo entrenamiento</option>
+                                <option value="Evento personal">Evento personal</option>
+                            </select>
+                        </label>
+                        <div v-if="selectedEventType == 'Evento personal'" class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="w-full flex flex-col col-span-2">
-                                <select
-                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option value="Individual">Nuevo entrenamiento</option>
-                                    <option value="Grupal">Grupal</option>
-                                </select>
+                                <span class="font-medium text-sm mb-2">Cliente (opcional)</span>
+                                <input type="text" placeholder="Ingresar correo o nombre del cliente"
+                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                             </label>
+                            <label class="w-full flex flex-col col-span-2">
+                                <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
+                                <textarea placeholder="Ingresar detalles del cliente"
+                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary"
+                                    rows="4"></textarea>
+                            </label>
+
+                        </div>
+                        <div v-else class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Cliente</span>
                                 <input type="text" placeholder="Ingresar correo o nombre del cliente"
@@ -215,19 +311,68 @@
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                             </label>
                         </div>
+
                         <div class="flex items-center my-10">
                             <input id="checkbox" type="checkbox" class="w-4 h-4 accent-primary-600 rounded">
-                            <label for="default-checkbox" class="ms-2 text-sm text-gray-500">Enviar
+                            <label for="checkbox" class="ms-2 text-sm text-gray-500">Enviar
                                 notificación del evento</label>
                         </div>
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <button @click="closeAddTimeModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
+                            <button @click="closeAddEventModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
                                 Cancelar
                             </button>
-                            <button @click="closeAddTimeModal" class="px-4 py-2 rounded-md bg-primary text-white">
+                            <button @click="closeAddEventModal" class="px-4 py-2 rounded-md bg-primary text-white">
                                 Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </CommonModal>
+        </Teleport>
+
+        <!-- editEmptySessionModal -->
+
+        <Teleport to="body">
+            <CommonModal ref="editEmptySessionModal">
+                <div class="px-6 py-4">
+                    <h3 class="mb-10 text-center font-semibold text-xl">Día {{ currentlySelectedDay
+                    }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                    <form action="">
+                        <div class="flex flex-col py-2 max-w-max mx-auto mb-5">
+                            <div class="flex items-center gap-4">
+                                <p> {{ selectedStartTime }}</p>
+                                <span class="font-semibold">-</span>
+                                <p>{{ selectedEndTime }}hrs</p>
+                            </div>
+                        </div>
+                        <div class="grid gap-6 mb-6">
+                            <label class="w-full flex flex-col">
+                                <span class="font-medium text-sm mb-2">Formato</span>
+                                <select
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option value="Individual">Individual</option>
+                                    <option value="Grupal">Grupal</option>
+                                </select>
+                            </label>
+                            <label class="w-full flex flex-col">
+                                <span class="font-medium text-sm mb-2">Modalidad</span>
+                                <select
+                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    <option value="Online">Online</option>
+                                    <option value="Presencial">Presencial</option>
+                                </select>
+                            </label>
+                        </div>
+                    </form>
+                    <div>
+                        <div class="flex justify-between">
+                            <button @click="closeEditModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
+                                Cancelar
+                            </button>
+                            <button @click="closeEditModal" class="px-4 py-2 rounded-md bg-primary text-white">
+                                Confirmar cambios
                             </button>
                         </div>
                     </div>
@@ -265,23 +410,110 @@ const toggleEditState = () => {
 
 /* Modals */
 
-// Add new session modal
-const newSessionModal = ref(null);
-const currentlySelectedDay = ref(null);
-const currentlySelectedMonth = ref(null);
+const currentlySelectedDate = ref(null);
 
-const onClickNewSessionModal = (day) => {
-    currentlySelectedDay.value = daysList.value[day - 1].getDate();
-    currentlySelectedMonth.value = daysList.value[day - 1].toLocaleString('default', { month: 'long' });
-    newSessionModal.value.openModal();
+const currentlySelectedDay = computed(() => {
+    return currentlySelectedDate.value.getDate();
+});
+
+const currentlySelectedMonth = computed(() => {
+    return currentlySelectedDate.value.toLocaleString('default', { month: 'long' });
+});
+
+const currentlySelectedYear = computed(() => {
+    return currentlySelectedDate.value.getFullYear();
+});
+
+// functionality to move around days. You can only move around days in the current week
+
+const isCurrentDay = computed(() => {
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+
+    const currentYear = currentlySelectedDate.value.getFullYear();
+    const currentMonth = currentlySelectedDate.value.getMonth();
+    const currentDay = currentlySelectedDate.value.getDate();
+
+    if (currentYear === todayYear && currentMonth === todayMonth && currentDay === todayDate) {
+        return true;
+    }
+
+    return false;
+});
+
+const isLastDayOfWeek = computed(() => {
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+
+    const currentYear = currentlySelectedDate.value.getFullYear();
+    const currentMonth = currentlySelectedDate.value.getMonth();
+    const currentDay = currentlySelectedDate.value.getDate();
+
+    if (currentYear === todayYear && currentMonth === todayMonth && currentDay === todayDate + 6) {
+        return true;
+    }
+
+    return false;
+});
+
+const goToNextDay = () => {
+    // Create a new Date object with the updated date
+    const newDate = new Date(currentlySelectedDate.value);
+    newDate.setDate(newDate.getDate() + 1);
+
+    // Update currentDate with the new Date object
+    currentlySelectedDate.value = newDate;
 };
 
-const closeAddTimeModal = () => {
-    newSessionModal.value.closeModal();
+const goToPreviousDay = () => {
+    // Create a new Date object based on the current value of currentDate
+    const newDate = new Date(currentlySelectedDate.value);
+    newDate.setDate(newDate.getDate() - 1);
+
+    // Update currentDate with the new Date object
+    currentlySelectedDate.value = newDate;
+};
+
+
+// Add new session modal
+const newEmptySessionModal = ref(null);
+
+const onClickNewEmptySessionModal = (day, time) => {
+
+    currentlySelectedDate.value = new Date(currentDate.value);
+    currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
+
+    selectedStartTime.value = formatTime(time);
+    newEmptySessionModal.value.openModal();
+};
+
+const closeNewEmptySessionModal = () => {
+    newEmptySessionModal.value.closeModal();
+};
+
+// Add new empty session from button modal
+
+const newEmptySessionFromButtonModal = ref(null);
+
+const onClickNewEmptySessionFromButtonModal = () => {
+
+    currentlySelectedDate.value = new Date(currentDate.value);
+
+    selectedStartTime.value = formatTime(timesList.value[0]);
+    newEmptySessionModal.value.openModal();
+};
+
+const closeNewEmptySessionFromButtonModal = () => {
+    newEmptySessionModal.value.closeModal();
 };
 
 // Add new event modal
 const newEventModal = ref(null);
+const selectedEventType = ref("Nuevo entrenamiento");
 // const onClickAddEventModal = (day) => {
 //     currentlySelectedDay.value = daysList.value[day - 1].getDate();
 //     currentlySelectedMonth.value = daysList.value[day - 1].toLocaleString('default', { month: 'long' });
@@ -295,9 +527,29 @@ const closeAddEventModal = () => {
     newEventModal.value.closeModal();
 };
 
+// editEmptySessionModal
+
+const editEmptySessionModal = ref(null);
+
+const openEditModal = (day, time) => {
+
+    currentlySelectedDate.value = new Date(currentDate.value);
+    currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
+
+    selectedStartTime.value = formatTime(time);
+    editEmptySessionModal.value.openModal();
+}
+
+const closeEditModal = () => {
+    editEmptySessionModal.value.closeModal();
+};
+
 // Dropdown state
-const newDropdownOpen = ref(false);
-const toggleNewDropdown = () => newDropdownOpen.value = !newDropdownOpen.value;
+const newDropdown = reactive({
+    active: false,
+    toggle: () => newDropdown.active = !newDropdown.active,
+    close: () => newDropdown.active = false,
+});
 
 /* Schedule logic */
 
@@ -422,26 +674,21 @@ const isCurrentWeekOrLater = computed(() => {
 // Initialize selectedStartTime with the first time from timesList
 const selectedStartTime = ref(formatTime(timesList.value[0]));
 
-// Reactive variable for selected end time
-const selectedEndTime = ref(formatTime(timesList.value[1]));
-
 // Computed property for time options
-const timeOptions = computed(() => timesList.value.slice(0, -1).map(formatTime));
+const timeOptions = computed(() => timesList.value.map(formatTime));
 
 // Computed property for end time options
-const endTimeOptions = computed(() => {
-    const startIndex = timesList.value.findIndex(time => formatTime(time) === selectedStartTime.value);
-    return timesList.value.slice(startIndex + 1).map(formatTime);
-});
 
-// When StartTime changes, endTime will select the first available option
-watch(selectedStartTime, () => {
+//instead of multiple options, there will be only one option, the one right after the start time
+const selectedEndTime = computed(() => {
     const startIndex = timesList.value.findIndex(time => formatTime(time) === selectedStartTime.value);
-    const selectedEndTimeIndex = timesList.value.findIndex(time => formatTime(time) === selectedEndTime.value);
-    if (startIndex >= selectedEndTimeIndex) {
-        selectedEndTime.value = formatTime(timesList.value[startIndex + 1]);
+    if (startIndex === timesList.value.length - 1) {
+        return '21:00';
+    } else {
+        return formatTime(timesList.value[startIndex + 1]);
     }
 });
+
 
 // API call to get sessions
 const getSessions = async () => {
@@ -471,6 +718,11 @@ const getSessions = async () => {
 onMounted(() => {
     // Get the sessions when the component is mounted
     getSessions();
+    document.addEventListener('click', newDropdown.close);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('click', newDropdown.close);
 });
 
 </script>
