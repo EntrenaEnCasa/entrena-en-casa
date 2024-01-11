@@ -692,7 +692,7 @@ const onClickNewEventModal = () => {
     currentlySelectedDate.value = new Date(currentDate.value);
 
     selectedStartTime.value = formatTime(timesList.value[0]);
-    newEmptySessionModal.value.openModal();
+    newEventModal.value.openModal();
 }
 
 const closeAddEventModal = () => {
