@@ -4,7 +4,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
 
-                <ProfessionalDashboardScheduleWeekNavigation :currentMonth="currentMonth" :currentYear="currentYear"
+                <ProfessionalDashboardCalendarWeekNavigation :currentMonth="currentMonth" :currentYear="currentYear"
                     :isCurrentWeekOrLater="isCurrentWeekOrLater" @go-to-previous-week="goToPreviousWeek"
                     @go-to-next-week="goToNextWeek" />
 
@@ -13,11 +13,12 @@
                 </div>
 
                 <div class="flex gap-2 items-center justify-self-center md:justify-self-end">
-                    <button v-if="!editMode" :disabled="events.length == 0" @click="toggleEditState"
+                    <button v-show="!editMode" :disabled="events.length == 0" @click="toggleEditState"
                         class="bg-primary rounded text-white font-semibold px-4 py-1 disabled:bg-primary-100 disabled:cursor-not-allowed">
                         Editar
                     </button>
-                    <button v-else @click="toggleEditState" class="bg-secondary rounded text-white font-semibold px-4 py-1">
+                    <button v-show="editMode" @click="toggleEditState"
+                        class="bg-secondary rounded text-white font-semibold px-4 py-1">
                         <div class="flex items-center gap-x-1">
                             <Icon name="fa6-solid:pen-to-square"></Icon>
                             <p>
@@ -25,7 +26,7 @@
                             </p>
                         </div>
                     </button>
-                    <div v-if="!editMode" class="relative">
+                    <div v-show="!editMode" class="relative">
                         <button @click.stop="newDropdown.toggle()"
                             class=" bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
                             <span>
@@ -306,7 +307,7 @@
                                 <option value="Evento personal">Evento personal</option>
                             </select>
                         </label>
-                        <div v-if="selectedEventType == 'Evento personal'" class="grid gap-6 mb-6 md:grid-cols-2">
+                        <div v-show="selectedEventType == 'Evento personal'" class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Cliente (opcional)</span>
                                 <input type="text" placeholder="Ingresar correo o nombre del cliente"
@@ -320,7 +321,7 @@
                             </label>
 
                         </div>
-                        <div v-else class="grid gap-6 mb-6 md:grid-cols-2">
+                        <div v-show="selectedEventType == 'Nuevo entrenamiento'" class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Cliente</span>
                                 <input type="text" placeholder="Ingresar correo o nombre del cliente"
@@ -450,7 +451,7 @@ const toggleEditState = () => {
     editMode.value = !editMode.value;
 }
 
-/* Schedule logic */
+/* Calendar logic */
 
 // The starting point will be the current date
 const currentDate = ref(new Date());
