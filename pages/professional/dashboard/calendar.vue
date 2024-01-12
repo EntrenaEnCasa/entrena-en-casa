@@ -4,9 +4,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
 
-                <ProfessionalDashboardCalendarWeekNavigation :currentMonth="currentMonth" :currentYear="currentYear"
-                    :isCurrentWeekOrLater="isCurrentWeekOrLater" @go-to-previous-week="goToPreviousWeek"
-                    @go-to-next-week="goToNextWeek" />
+                <ProfessionalDashboardCalendarWeekNavigation :currentMonth="currentMonth" :isFetchingData="fetchingEvents"
+                    :currentYear="currentYear" :isCurrentWeekOrLater="isCurrentWeekOrLater"
+                    @go-to-previous-week="goToPreviousWeek" @go-to-next-week="goToNextWeek" />
 
                 <div class="justify-self-center bg-gray-200 rounded-lg px-16 py-1">
                     <p class="font-semibold">Semanal</p>
