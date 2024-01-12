@@ -62,38 +62,40 @@
                 <thead>
                     <tr>
                         <th scope="col" class="w-20"></th>
-                        <th v-for=" day, index  in  daysList " :key="index" scope="col"
-                            class="px-6 pt-6 pb-3 text-center whitespace-nowrap font-semibold w-28">
-                            {{ formatDate(day) }}
+                        <th v-for="(day, index) in eventMatrix" :key="index" scope="col"
+                            class="px-6 pt-6 pb-3 text-center whitespace-nowrap font-semibold w-28 capitalize">
+                            {{ day[0].formattedDay }}
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for=" time, index  in   timesList  " :key="index">
+                    <tr v-for="(timeSlot, index) in eventMatrix[0]" :key="timeSlot.time">
                         <td class="h-14 pr-6 text-right font-semibold whitespace-nowrap">
-                            {{ formatTime(time) }}
+                            {{ timeSlot.formattedTime }}
                         </td>
-                        <td v-for="day in  7" :key="day" class="h-14 border">
-                            <div v-if="!timeTaken(day, time)" @click="!editMode && onClickNewEmptySessionModal(day, time)"
+                        <td v-for="(day, dayIndex) in eventMatrix" :key="dayIndex" class="h-14 border">
+                            <div v-if="!day[index].event"
+                                @click="!editMode && onClickNewEmptySessionModal(day[index].day, day[index].time)"
                                 class="w-full h-full" :class="[editMode ? '' : editClass]">
                                 <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
                             </div>
-                            <div v-else @click="editMode && openEditModal(day, time)" class="w-full h-full" :class="[
-                                editMode ? editClass : '',
-                                getEvent(day, time).type === 'personal'
-                                    ? 'bg-quaternary'
-                                    : getEvent(day, time).type === 'manual_session'
-                                        ? 'bg-secondary'
-                                        : getEvent(day, time).type === 'session' && getEvent(day, time).clients.length > 0
+                            <div v-else @click="editMode && openEditModal(day[index].day, day[index].time)"
+                                class="w-full h-full" :class="[
+                                    editMode ? editClass : '',
+                                    day[index].event.type === 'personal'
+                                        ? 'bg-quaternary'
+                                        : day[index].event.type === 'manual_session'
                                             ? 'bg-secondary'
-                                            : 'bg-primary']">
-                                <div v-if="getEvent(day, time).type === 'personal'"
+                                            : day[index].event.type === 'session' && day[index].event.clients.length > 0
+                                                ? 'bg-secondary'
+                                                : 'bg-primary']">
+                                <div v-if="day[index].event.type === 'personal'"
                                     class="w-full h-full flex flex-col justify-center items-center text-white">
                                     <h4 class="font-medium">Evento personal</h4>
-                                    <p class="text-xs">{{ getEvent(day, time).start_time }} - {{ getEvent(day,
-                                        time).end_time }}</p>
+                                    <p class="text-xs">{{ day[index].event.start_time }} - {{ day[index].event.end_time }}
+                                    </p>
                                 </div>
                                 <div :class="{ hidden: !editMode }">
                                     <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
@@ -429,6 +431,10 @@ const runtimeConfig = useRuntimeConfig();
 const events = ref([]); // Array of events
 const fetchingEvents = ref(false); // Loading state of the events
 
+const eventMatrix = ref([]); // Matrix of events
+const startHour = 9; // Starting hour of the day
+const endHour = 20; // Ending hour of the day
+
 /* Edit state */
 const editMode = ref(false); // Edit mode state
 
@@ -472,48 +478,32 @@ const daysList = computed(() => {
     return days;
 });
 
-// Business time a day is 09:00hrs to 20:00hrs
 const timesList = computed(() => {
     const times = [];
-    for (let i = 9; i <= 20; i++) {
+    for (let i = startHour; i <= endHour; i++) {
         times.push(i);
     }
     return times;
 });
 
 const formatDate = (date) => {
-    const daysOfWeek = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
-    let day = date.getDay();
-    day = day === 0 ? 6 : day - 1;
-    const dayOfWeek = daysOfWeek[day];
-    const dayOfMonth = date.getDate();
-    return `${dayOfWeek} ${dayOfMonth}`;
-};
-
-const formatTime = (time) => {
-    return `${time}:00`;
-};
-
-// Since railway stores dates in UTC, we need to convert the UTC time to local time
-const timeTaken = (day, time) => {
-    // Create a local date from daysList
-    const localDate = new Date(daysList.value[day - 1]);
-    localDate.setHours(time, 0, 0, 0);
-
-    return events.value.some((event) => {
-        // Extract year, month, and day from event.date and create a new Date object
-        const [year, month, day] = event.date.split('T')[0].split('-').map(Number);
-        const eventDate = new Date(year, month - 1, day);
-
-        // Extract hours and minutes from event.start_time
-        const [hours, minutes] = event.start_time.split(':').map(num => parseInt(num));
-
-        // Set the event time
-        eventDate.setHours(hours, minutes, 0, 0);
-
-        // Compare dates
-        return eventDate.getTime() === localDate.getTime();
+    const formatter = new Intl.DateTimeFormat('es-CL', {
+        weekday: 'short', // "short" for abbreviated days, "long" for full names.
+        day: 'numeric'
     });
+    return formatter.format(date).replace('.', ''); // Remove the period after the abbreviated day name if present.
+};
+
+const formatTime = (hour) => {
+    // Assuming 'hour' is an integer from 0 to 23
+    const date = new Date();
+    date.setHours(hour, 0, 0, 0);
+    const formatter = new Intl.DateTimeFormat('es-CL', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false // Set to true if you want 12-hour format with AM/PM
+    });
+    return formatter.format(date);
 };
 
 const goToNextWeek = () => {
@@ -624,16 +614,16 @@ const isFirstDayOfWeek = computed(() => {
 
 const isLastDayOfWeek = computed(() => {
     // currentDate tracks the first day of the current week
-    const firstDayOfWeek = currentDate.value;
-    const todayYear = firstDayOfWeek.getFullYear();
-    const todayMonth = firstDayOfWeek.getMonth();
-    const todayDate = firstDayOfWeek.getDate();
+    const firstDayOfWeek = new Date(currentDate.value);
+    // calculate the last day of the week
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6);
 
     const currentYear = currentlySelectedDate.value.getFullYear();
     const currentMonth = currentlySelectedDate.value.getMonth();
     const currentDay = currentlySelectedDate.value.getDate();
 
-    if (currentYear === todayYear && currentMonth === todayMonth && currentDay === todayDate + 6) {
+    if (currentYear === lastDayOfWeek.getFullYear() && currentMonth === lastDayOfWeek.getMonth() && currentDay === lastDayOfWeek.getDate()) {
         return true;
     }
 
@@ -662,6 +652,8 @@ const goToPreviousDay = () => {
 const newEmptySessionModal = ref(null);
 
 const onClickNewEmptySessionModal = (day, time) => {
+
+    console.log("day: ", day, "time: ", time);
 
     currentlySelectedDate.value = new Date(currentDate.value);
     currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
@@ -728,8 +720,30 @@ const newDropdown = reactive({
     close: () => newDropdown.active = false,
 });
 
+/* Matrix logic */
+
+const initializeEventMatrix = () => {
+    // Reset the matrix
+    eventMatrix.value = [];
+
+    // Populate the matrix with placeholders for each time slot
+    for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+        eventMatrix.value[dayIndex] = [];
+        for (let hour = startHour; hour <= endHour; hour++) {
+            let hourIndex = hour - startHour;
+            eventMatrix.value[dayIndex][hourIndex] = {
+                day: dayIndex + 1,
+                time: hour,
+                formattedDay: formatDate(daysList.value[dayIndex]), // Use your formatDate function
+                formattedTime: formatTime(hour), // Use your formatTime function
+                event: null
+            };
+        }
+    }
+};
 
 const getEvents = async () => {
+
     fetchingEvents.value = true;
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
@@ -750,41 +764,45 @@ const getEvents = async () => {
         return;
     }
 
-    fetchingEvents.value = false;
+    initializeEventMatrix(); // Reset the matrix before populating
+
     if (data.value.success) {
+        fetchingEvents.value = false;
+        populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
+        console.log(data.value.events);
         events.value = data.value.events;
-        console.log(events.value);
-    } else {
+    }
+    else {
+        fetchingEvents.value = false;
         events.value = [];
         console.log(data.value.message);
     }
 };
 
-const getEvent = (day, time) => {
-    // Create a local date from daysList
-    const localDate = new Date(daysList.value[day - 1]);
-    localDate.setHours(time, 0, 0, 0);
+const populateEventMatrix = (events) => {
+    events.forEach(event => {
+        const utcDate = new Date(`${event.date.split('T')[0]}T${event.start_time}:00Z`);
 
-    const event = events.value.find((event) => {
-        // Extract year, month, and day from event.date and create a new Date object
-        const [year, month, day] = event.date.split('T')[0].split('-').map(Number);
-        const eventDate = new Date(year, month - 1, day);
+        // Use getUTC... methods to get the date and time in UTC
+        const eventDayIndex = daysList.value.findIndex(day =>
+            day.getUTCFullYear() === utcDate.getUTCFullYear() &&
+            day.getUTCMonth() === utcDate.getUTCMonth() &&
+            day.getUTCDate() === utcDate.getUTCDate()
+        );
 
-        // Extract hours and minutes from event.start_time
-        const [hours, minutes] = event.start_time.split(':').map(num => parseInt(num));
+        const eventHour = utcDate.getUTCHours();
+        const eventHourIndex = eventHour - startHour;
 
-        // Set the event time
-        eventDate.setHours(hours, minutes, 0, 0);
-
-        // Compare dates
-        return eventDate.getTime() === localDate.getTime();
+        if (eventDayIndex >= 0 && eventHourIndex >= 0 && eventHourIndex < 12) {
+            // events can only happen 1 at a time, so there is no need to make an array but a single event
+            eventMatrix.value[eventDayIndex][eventHourIndex].event = event;
+        }
     });
-
-    return event;
 };
 
 onMounted(() => {
     // Get the events when the component is mounted
+    initializeEventMatrix();
     getEvents();
     document.addEventListener('click', newDropdown.close);
 });
