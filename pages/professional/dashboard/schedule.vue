@@ -4,25 +4,17 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
 
-                <div class="flex items-center justify-self-center md:justify-self-start text-2xl">
-                    <button @click="goToPreviousWeek" :disabled="!isCurrentWeekOrLater">
-                        <Icon :class="{ 'text-gray-300': !isCurrentWeekOrLater, 'text-gray-800': isCurrentWeekOrLater }"
-                            name="fa6-solid:chevron-left"></Icon>
-                    </button>
-                    <button @click="goToNextWeek">
-                        <Icon class="text-gray-800" name="fa6-solid:chevron-right"></Icon>
-                    </button>
-                    <p class="ml-2 font-medium">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span>
-                    </p>
-                </div>
+                <ProfessionalDashboardScheduleWeekNavigation :currentMonth="currentMonth" :currentYear="currentYear"
+                    :isCurrentWeekOrLater="isCurrentWeekOrLater" @go-to-previous-week="goToPreviousWeek"
+                    @go-to-next-week="goToNextWeek" />
 
                 <div class="justify-self-center bg-gray-200 rounded-lg px-16 py-1">
                     <p class="font-semibold">Semanal</p>
                 </div>
 
                 <div class="flex gap-2 items-center justify-self-center md:justify-self-end">
-                    <button v-if="!editMode" @click="toggleEditState"
-                        class="bg-primary rounded text-white font-semibold px-4 py-1">
+                    <button v-if="!editMode" :disabled="events.length == 0" @click="toggleEditState"
+                        class="bg-primary rounded text-white font-semibold px-4 py-1 disabled:bg-primary-100 disabled:cursor-not-allowed">
                         Editar
                     </button>
                     <button v-else @click="toggleEditState" class="bg-secondary rounded text-white font-semibold px-4 py-1">
@@ -77,19 +69,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for=" time, index  in  timesList " :key="index">
+                    <tr v-for=" time, index  in   timesList  " :key="index">
                         <td class="h-14 pr-6 text-right font-semibold whitespace-nowrap">
                             {{ formatTime(time) }}
                         </td>
-                        <td v-for=" day  in  7 " :key="day" class="h-14 border">
+                        <td v-for="day in  7" :key="day" class="h-14 border">
                             <div v-if="!timeTaken(day, time)" @click="!editMode && onClickNewEmptySessionModal(day, time)"
                                 class="w-full h-full" :class="[editMode ? '' : editClass]">
                                 <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
                             </div>
-                            <div v-else @click="editMode && openEditModal(day, time)" class="w-full h-full bg-primary"
-                                :class="[editMode ? editClass : '']">
+                            <div v-else @click="editMode && openEditModal(day, time)" class="w-full h-full" :class="[
+                                editMode ? editClass : '',
+                                getEvent(day, time).type === 'personal'
+                                    ? 'bg-quaternary'
+                                    : getEvent(day, time).type === 'manual_session'
+                                        ? 'bg-secondary'
+                                        : getEvent(day, time).type === 'session' && getEvent(day, time).clients.length > 0
+                                            ? 'bg-secondary'
+                                            : 'bg-primary']">
+                                <div v-if="getEvent(day, time).type === 'personal'"
+                                    class="w-full h-full flex flex-col justify-center items-center text-white">
+                                    <h4 class="font-medium">Evento personal</h4>
+                                    <p class="text-xs">{{ getEvent(day, time).start_time }} - {{ getEvent(day,
+                                        time).end_time }}</p>
+                                </div>
                                 <div :class="{ hidden: !editMode }">
                                     <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
                                 </div>
@@ -138,7 +143,7 @@
                             <div class="flex items-center gap-4">
                                 <select v-model="selectedStartTime"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option v-for=" time  in  timeOptions " :key="`start-${time}`" :value="time">
+                                    <option v-for="  time   in   timeOptions  " :key="`start-${time}`" :value="time">
                                         {{ time }}
                                     </option>
                                 </select>
@@ -215,7 +220,7 @@
                             <div class="flex items-center gap-4">
                                 <select v-model="selectedStartTime"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option v-for=" time  in  timeOptions " :key="`start-${time}`" :value="time">
+                                    <option v-for="  time   in   timeOptions  " :key="`start-${time}`" :value="time">
                                         {{ time }}
                                     </option>
                                 </select>
@@ -750,8 +755,32 @@ const getEvents = async () => {
         events.value = data.value.events;
         console.log(events.value);
     } else {
+        events.value = [];
         console.log(data.value.message);
     }
+};
+
+const getEvent = (day, time) => {
+    // Create a local date from daysList
+    const localDate = new Date(daysList.value[day - 1]);
+    localDate.setHours(time, 0, 0, 0);
+
+    const event = events.value.find((event) => {
+        // Extract year, month, and day from event.date and create a new Date object
+        const [year, month, day] = event.date.split('T')[0].split('-').map(Number);
+        const eventDate = new Date(year, month - 1, day);
+
+        // Extract hours and minutes from event.start_time
+        const [hours, minutes] = event.start_time.split(':').map(num => parseInt(num));
+
+        // Set the event time
+        eventDate.setHours(hours, minutes, 0, 0);
+
+        // Compare dates
+        return eventDate.getTime() === localDate.getTime();
+    });
+
+    return event;
 };
 
 onMounted(() => {
