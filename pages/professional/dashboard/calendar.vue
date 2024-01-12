@@ -58,8 +58,8 @@
             </div>
         </div>
         <div class="overflow-x-auto bg-white rounded-2xl border pr-10">
-            <CommonLoading v-if="fetchingEvents" class="my-8" />
-            <table v-else class="w-full table-fixed text-sm text-gray-500">
+            <CommonLoading v-show="fetchingEvents" class="my-8" />
+            <table v-show="!fetchingEvents" class="w-full table-fixed text-sm text-gray-500">
                 <thead>
                     <tr>
                         <th scope="col" class="w-20"></th>
@@ -76,7 +76,7 @@
                         </td>
                         <td v-for="(day, dayIndex) in eventMatrix" :key="dayIndex" class="h-14 border">
                             <div v-if="!day[index].event"
-                                @click="!editMode && onClickNewEmptySessionModal(day[index].day, day[index].time)"
+                                @click="!editMode && onClickEmptySlot(day[index].day, day[index].time)"
                                 class="w-full h-full" :class="[editMode ? '' : editClass]">
                                 <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
@@ -115,6 +115,25 @@
             </span>
         </div>
         <!-- Modals -->
+
+        <!-- addNewEmptySession Modal -->
+        <Teleport to="body">
+            <CommonModal ref="emptySlotModal">
+                <div class="flex flex-col gap-5 p-10">
+                    <button @click="addNewSession" class="px-10 py-4 bg-primary text-white rounded">
+                        <p class="font-semibold">
+                            Agregar bloque disponible para sesión
+                        </p>
+                    </button>
+                    <button @click="addNewEvent" class="px-10 py-4 bg-secondary text-white rounded">
+                        <p class="font-semibold">
+                            Agregar nuevo evento manualmente
+                        </p>
+                        <p class="text-sm italic">Evento personal - Entrenamiento</p>
+                    </button>
+                </div>
+            </CommonModal>
+        </Teleport>
 
         <!-- addNewEmptySession Modal -->
         <Teleport to="body">
@@ -579,6 +598,8 @@ const selectedEndTime = computed(() => {
 
 /* Modals */
 
+// Logic to handle moving around days when a modal is open
+
 const currentlySelectedDate = ref(null);
 
 const currentlySelectedDayName = computed(() => {
@@ -592,8 +613,6 @@ const currentlySelectedDayNumber = computed(() => {
 const currentlySelectedMonth = computed(() => {
     return currentlySelectedDate.value.toLocaleString('default', { month: 'long' });
 });
-
-// isCurrentDay should check on the currentDate variable because that's where we keep track of the moving weeks.
 
 const isFirstDayOfWeek = computed(() => {
     // currentDate tracks the first day of the current week
@@ -649,12 +668,32 @@ const goToPreviousDay = () => {
     currentlySelectedDate.value = newDate;
 };
 
+// Empty slot modal
+const emptySlotModal = ref(null);
+
+const onClickEmptySlot = (day, time) => {
+
+    currentlySelectedDate.value = new Date(currentDate.value);
+    currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
+
+    selectedStartTime.value = formatTime(time);
+    emptySlotModal.value.openModal();
+};
+
+const addNewSession = () => {
+    emptySlotModal.value.closeModal();
+    newEmptySessionModal.value.openModal();
+};
+
+const addNewEvent = () => {
+    emptySlotModal.value.closeModal();
+    newEventModal.value.openModal();
+};
+
 // Add new session modal
 const newEmptySessionModal = ref(null);
 
 const onClickNewEmptySessionModal = (day, time) => {
-
-    console.log("day: ", day, "time: ", time);
 
     currentlySelectedDate.value = new Date(currentDate.value);
     currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
