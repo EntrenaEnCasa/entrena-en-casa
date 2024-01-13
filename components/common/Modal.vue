@@ -1,6 +1,6 @@
 <template>
     <Transition name="modal">
-        <div v-if="isOpen"
+        <div v-show="isOpen"
             class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-screen max-h-full flex justify-center items-center backdrop-blur-sm bg-black/30"
             :class="{ 'modal-open': isOpen }" @click="closeModal">
             <div @click.stop
@@ -58,13 +58,34 @@ const openModal = () => {
     isOpen.value = true;
     const body = document.querySelector('body');
     body.classList.add('modal-open');
-}
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyDown);
+};
 
 const closeModal = () => {
     isOpen.value = false;
     const body = document.querySelector('body');
     body.classList.remove('modal-open');
-}
+
+    // Remove the event listener
+    window.removeEventListener('keydown', handleKeyDown);
+};
+
+const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+};
+
+onMounted(() => {
+    window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeyDown);
+});
+
 
 defineExpose({
     openModal,
