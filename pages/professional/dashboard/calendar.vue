@@ -78,7 +78,7 @@
                         <!-- Event slot cells -->
                         <div v-for="(day, dayIndex) in  eventMatrix " :key="`day-${dayIndex}-slot-${index}`"
                             class="h-14 border-r border-gray-200 rounded-sm min-w-[130px]"
-                            :class="{ 'border-b': isLastEventUnique(day, index) }">
+                            :class="{ 'border-b': !(day[index].event && day[index].event.type === 'personal') || isLastEventUnique(day, index) }">
                             <button v-if="!day[index].event" class="w-full h-full" :class="[editMode ? '' : editClass]"
                                 :disabled="editMode" @click="onClickEmptySlot(day[index].day, day[index].time)">
                                 <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
@@ -104,10 +104,6 @@
             </div>
         </div>
 
-
-
-
-
         <div class=" mt-10 mb-4 flex justify-center items-center gap-3">
             <div class="w-14 h-12 bg-primary rounded-md">
             </div>
@@ -117,7 +113,7 @@
         </div>
         <!-- Modals -->
 
-        <!-- addNewEmptySessionModal -->
+        <!-- emptySlotModal -->
         <Teleport to="body">
             <CommonModal ref="emptySlotModal">
                 <div class="flex flex-col gap-5 p-10">
@@ -138,7 +134,7 @@
 
         <!-- addNewEmptySessionModal -->
         <Teleport to="body">
-            <CommonModal ref="newEmptySessionModal">
+            <CommonModal ref="newEmptySessionModalRef">
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-center gap-x-2 mb-6">
                         <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
@@ -177,7 +173,7 @@
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="flex flex-col">
                                 <span class="font-medium text-sm mb-2">Formato</span>
-                                <select
+                                <select v-model="newEmptySessionModal.data.selectedFormat"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                     <option value="Individual">Individual</option>
                                     <option value="Grupal">Grupal</option>
@@ -185,7 +181,7 @@
                             </label>
                             <label class="flex flex-col">
                                 <span class="font-medium text-sm mb-2">Modalidad</span>
-                                <select
+                                <select v-model="newEmptySessionModal.data.selectedModality"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                     <option value="Online">Online</option>
                                     <option value="Presencial">Presencial</option>
@@ -201,12 +197,12 @@
                             en el perfil
                         </p>
                         <div class="flex justify-between">
-                            <button @click="closeNewEmptySessionModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
+                            <button @click="newEmptySessionModal.closeModal"
+                                class="px-4 py-2 rounded-md bg-tertiary text-white">
                                 Cancelar
                             </button>
-                            <button @click="closeNewEmptySessionModal" class="px-4 py-2 rounded-md bg-primary text-white">
-                                Confirmar cambios
-                            </button>
+                            <CommonButton text="Crear nueva sesión" @click="addNewEmptySession" class="px-4 py-2"
+                                :loading="newEmptySessionModal.loading" />
                         </div>
                     </div>
                 </div>
@@ -698,7 +694,7 @@ const onClickEmptySlot = (day, time) => {
 
 const addNewSession = () => {
     emptySlotModal.value.closeModal();
-    newEmptySessionModal.value.openModal();
+    newEmptySessionModal.openModal();
 };
 
 const addNewEvent = () => {
@@ -706,12 +702,27 @@ const addNewEvent = () => {
     newEventModal.value.openModal();
 };
 
-// Add new session modal
-const newEmptySessionModal = ref(null);
+// Add new empty session modal
 
-const closeNewEmptySessionModal = () => {
-    newEmptySessionModal.value.closeModal();
-};
+const newEmptySessionModalRef = ref(null);
+
+const newEmptySessionModal = reactive({
+    data: {
+        selectedFormat: 'Individual',
+        selectedModality: 'Online',
+    },
+    loading: false,
+    openModal: () => {
+        if (newEmptySessionModalRef.value) {
+            newEmptySessionModalRef.value.openModal();
+        }
+    },
+    closeModal: () => {
+        if (newEmptySessionModalRef.value) {
+            newEmptySessionModalRef.value.closeModal();
+        }
+    },
+});
 
 // Add new empty session from button modal
 
@@ -722,11 +733,11 @@ const onClickNewEmptySessionFromButtonModal = () => {
     currentlySelectedDate.value = new Date(currentDate.value);
 
     selectedStartTime.value = formatTime(timesList.value[0]);
-    newEmptySessionModal.value.openModal();
+    newEmptySessionModal.openModal();
 };
 
 const closeNewEmptySessionFromButtonModal = () => {
-    newEmptySessionModal.value.closeModal();
+    newEmptySessionModal.closeModal();
 };
 
 // Add new event modal
@@ -797,6 +808,7 @@ const getLocalDateString = (date) => {
     return `${year}-${month}-${day}`;
 };
 
+/* API calls */
 
 const getEvents = async () => {
 
@@ -874,12 +886,56 @@ function convertUtcDateToLocalDate(utcDate, timeZone) {
     return new Date(utcDate.toLocaleString('en-US', { timeZone }));
 }
 
+const addNewEmptySession = async () => {
+    const localDateString = getLocalDateString(currentlySelectedDate.value);
+    newEmptySessionModal.loading = true;
 
+    const body = {
+        "user_id": userStore.getUser().user_id,
+        "date": localDateString, // fecha en formato YYYY-MM-DD
+        "time": selectedStartTime.value,
+        "available": true, // will be removed later
+        "format": newEmptySessionModal.data.selectedFormat,
+        "modality": newEmptySessionModal.data.selectedModality,
+        "link": "https://www.maps.google.com", // placeholder for now
+        "credit_type": "gold", // placeholder for now
+    }
+
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken()
+        },
+        body: body
+    });
+
+    newEmptySessionModal.loading = false;
+    newEmptySessionModal.closeModal();
+
+    if (error.value) {
+        console.log("Fetch error:", error.value);
+        return;
+    }
+
+
+    if (data.value.success) {
+        console.log(data.value.message);
+        getEvents();
+    }
+    else {
+        console.log(data.value.message);
+    }
+
+}
+
+/* Lifecycle hooks */
 
 onMounted(() => {
     // Get the events when the component is mounted
     initializeEventMatrix();
     getEvents();
+    //allows for closing the dropdown when clicking outside of it
     document.addEventListener('click', newDropdown.close);
 });
 
