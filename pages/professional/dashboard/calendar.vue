@@ -38,7 +38,7 @@
                             :class="{ hidden: !newDropdown.active }">
                             <ul class="divide-y divide-gray-200">
                                 <li>
-                                    <button @click="onClickNewEmptySessionFromButtonModal"
+                                    <button @click="newEmptySessionModal.handleClickFromButton"
                                         class="w-full px-4 py-2 rounded-t text-sm bg-primary hover:bg-primary-600"
                                         role="menuitem">
                                         Disponibilidad
@@ -201,85 +201,6 @@
                                 class="px-4 py-2 bg-tertiary" />
                             <CommonButton text="Crear nueva sesión" @click="addNewEmptySession" class="px-4 py-2"
                                 :loading="newEmptySessionModal.loading" />
-                        </div>
-                    </div>
-                </div>
-            </CommonModal>
-        </Teleport>
-
-        <!-- addNewEmptySessionFromButtonModal -->
-        <Teleport to="body">
-            <CommonModal ref="newEmptySessionFromButtonModal">
-                <div class="px-6 py-4">
-                    <div class="flex items-center justify-center gap-x-2 mb-6">
-                        <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
-                            <Icon class="text-xl"
-                                :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
-                                name="fa6-solid:chevron-left"></Icon>
-                        </button>
-                        <h3 class="text-center font-semibold text-xl w-60">
-                            <span class="capitalize">
-                                {{ currentlySelectedDayName }}
-                            </span>
-                            {{ currentlySelectedDayNumber }} de
-                            <span class="capitalize">
-                                {{ currentlySelectedMonth }}
-                            </span>
-                        </h3>
-                        <button @click="goToNextDay" :disabled="isLastDayOfWeek">
-                            <Icon class="text-xl"
-                                :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
-                                name="fa6-solid:chevron-right"></Icon>
-                        </button>
-                    </div>
-                    <form action="">
-                        <div class="flex flex-col py-2 max-w-max mx-auto mb-5">
-                            <div class="flex items-center gap-4">
-                                <select v-model="selectedStartTime"
-                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option v-for="   time    in    timeOptions   " :key="`start-${time}`" :value="time">
-                                        {{ time }}
-                                    </option>
-                                </select>
-                                <span class="font-semibold">-</span>
-                                <p>{{ selectedEndTime }}hrs</p>
-                            </div>
-                        </div>
-                        <div class="grid gap-6 mb-6 md:grid-cols-2">
-                            <label class="flex flex-col">
-                                <span class="font-medium text-sm mb-2">Formato</span>
-                                <select
-                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option value="Individual">Individual</option>
-                                    <option value="Grupal">Grupal</option>
-                                </select>
-                            </label>
-                            <label class="flex flex-col">
-                                <span class="font-medium text-sm mb-2">Modalidad</span>
-                                <select
-                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option value="Online">Online</option>
-                                    <option value="Presencial">Presencial</option>
-                                </select>
-                            </label>
-                        </div>
-
-                    </form>
-                    <div>
-                        <p class="text-sm text-gray-500 mb-4 text-center">* Para presencial se aplicarán los
-                            rangos de cobertura
-                            propuestos
-                            en el perfil
-                        </p>
-                        <div class="flex justify-between">
-                            <button @click="closeNewEmptySessionFromButtonModal"
-                                class="px-4 py-2 rounded-md bg-tertiary text-white">
-                                Cancelar
-                            </button>
-                            <button @click="closeNewEmptySessionFromButtonModal"
-                                class="px-4 py-2 rounded-md bg-primary text-white">
-                                Confirmar cambios
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -729,26 +650,17 @@ const newEmptySessionModal = reactive({
             newEmptySessionModalRef.value.closeModal();
         }
     },
+    handleClickFromButton: () => {
+        currentlySelectedDate.value = new Date(currentDate.value);
+
+        selectedStartTime.value = formatTime(timesList.value[0]);
+        newEmptySessionModal.openModal();
+    },
 });
-
-// Add new empty session from button modal
-
-const newEmptySessionFromButtonModal = ref(null);
-
-const onClickNewEmptySessionFromButtonModal = () => {
-
-    currentlySelectedDate.value = new Date(currentDate.value);
-
-    selectedStartTime.value = formatTime(timesList.value[0]);
-    newEmptySessionModal.openModal();
-};
-
-const closeNewEmptySessionFromButtonModal = () => {
-    newEmptySessionModal.closeModal();
-};
 
 // Add new event modal
 const newEventModal = ref(null);
+
 const selectedEventType = ref("Nuevo entrenamiento");
 const onClickNewEventModal = () => {
     currentlySelectedDate.value = new Date(currentDate.value);
