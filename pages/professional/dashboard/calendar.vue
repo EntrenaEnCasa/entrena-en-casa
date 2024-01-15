@@ -85,8 +85,8 @@
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
                             </button>
-                            <button v-else @click="openEditModal(day[index].day, day[index].time)" :disabled="!editMode"
-                                class="w-full h-full" :class="eventClasses(day, index)">
+                            <button v-else @click="editEmptySessionModal.handleClick(day[index].day, day[index].time)"
+                                :disabled="!editMode" class="w-full h-full" :class="eventClasses(day, index)">
                                 <div v-if="day[index].event.type === 'personal' &&
                                     isFirstEventUnique(day, index) && !editMode"
                                     class="w-full h-full flex flex-col justify-center items-center text-white">
@@ -251,7 +251,8 @@
                             </label>
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
-                                <textarea placeholder="Ingresar detalles del cliente"
+                                <textarea v-model="newEventModal.data.aditionalInfo"
+                                    placeholder="Ingresar detalles del cliente"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary"
                                     rows="4"></textarea>
                             </label>
@@ -264,9 +265,27 @@
                                 <input type="text" placeholder="Ingresar correo o nombre del cliente"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                             </label>
+                            <div class="grid gap-6 md:grid-cols-2 col-span-2">
+                                <label class="flex flex-col">
+                                    <span class="font-medium text-sm mb-2">Formato</span>
+                                    <select v-model="newEventModal.data.selectedFormat"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option value="Individual">Individual</option>
+                                        <option value="Grupal">Grupal</option>
+                                    </select>
+                                </label>
+                                <label class="flex flex-col">
+                                    <span class="font-medium text-sm mb-2">Modalidad</span>
+                                    <select v-model="newEventModal.data.selectedModality"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option value="Online">Online</option>
+                                        <option value="Presencial">Presencial</option>
+                                    </select>
+                                </label>
+                            </div>
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Link</span>
-                                <input type="text" placeholder="https://"
+                                <input v-model="newEventModal.data.link" type="text" placeholder="https://"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                             </label>
                         </div>
@@ -294,7 +313,7 @@
         <!-- editEmptySessionModal -->
 
         <Teleport to="body">
-            <CommonModal ref="editEmptySessionModal">
+            <CommonModal ref="editEmptySessionModalRef">
                 <div class="px-6 py-4">
                     <h3 class="mb-10 text-center font-semibold text-xl"> <span class="capitalize">{{
                         currentlySelectedDayName }} </span> {{ currentlySelectedDayNumber
@@ -310,7 +329,7 @@
                         <div class="grid gap-6 mb-6">
                             <label class="w-full flex flex-col">
                                 <span class="font-medium text-sm mb-2">Formato</span>
-                                <select
+                                <select v-model="editEmptySessionModal.data.selectedFormat"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                     <option value="Individual">Individual</option>
                                     <option value="Grupal">Grupal</option>
@@ -318,7 +337,7 @@
                             </label>
                             <label class="w-full flex flex-col">
                                 <span class="font-medium text-sm mb-2">Modalidad</span>
-                                <select
+                                <select v-model="editEmptySessionModal.data.selectedModality"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                     <option value="Online">Online</option>
                                     <option value="Presencial">Presencial</option>
@@ -328,10 +347,12 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <button @click="closeEditModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
+                            <button @click="editEmptySessionModal.closeModal"
+                                class="px-4 py-2 rounded-md bg-tertiary text-white">
                                 Cancelar
                             </button>
-                            <button @click="closeEditModal" class="px-4 py-2 rounded-md bg-primary text-white">
+                            <button @click="editEmptySessionModal.closeModal"
+                                class="px-4 py-2 rounded-md bg-primary text-white">
                                 Confirmar cambios
                             </button>
                         </div>
@@ -662,11 +683,15 @@ const newEmptySessionModal = reactive({
 
 // Add new event modal
 const newEventModalRef = ref(null);
+
 const newEventModal = reactive({
     data: {
         selectedEventType: 'Nuevo entrenamiento',
+        clients: [],
         selectedFormat: 'Individual',
         selectedModality: 'Online',
+        link: '',
+        additionalInfo: '',
     },
     openModal: () => {
         if (newEventModalRef.value) {
@@ -688,22 +713,36 @@ const newEventModal = reactive({
 
 // editEmptySessionModal
 
-const editEmptySessionModal = ref(null);
+// Edit empty session modal
+const editEmptySessionModalRef = ref(null);
 
-const openEditModal = (day, time) => {
+const editEmptySessionModal = reactive({
+    data: {
+        selectedDay: null,
+        selectedTime: null,
+    },
+    openModal: (day, time) => {
+        if (editEmptySessionModalRef.value) {
+            editEmptySessionModalRef.value.openModal();
+        }
+    },
+    closeModal: () => {
+        if (editEmptySessionModalRef.value) {
+            editEmptySessionModalRef.value.closeModal();
+        }
+    },
+    handleClick: (day, time) => {
+        editEmptySessionModal.data.selectedDay = day;
+        editEmptySessionModal.data.selectedTime = time;
 
-    currentlySelectedDate.value = new Date(currentDate.value);
-    currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
+        currentlySelectedDate.value = new Date(currentDate.value);
+        currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
 
-    selectedStartTime.value = formatTime(time);
-    editEmptySessionModal.value.openModal();
-}
+        selectedStartTime.value = formatTime(time);
+        editEmptySessionModal.openModal();
+    }
+});
 
-const closeEditModal = () => {
-    editEmptySessionModal.value.closeModal();
-};
-
-// Dropdown state
 const newDropdown = reactive({
     active: false,
     toggle: () => newDropdown.active = !newDropdown.active,
