@@ -74,7 +74,7 @@
                         <td class="h-14 pr-6 text-right font-semibold whitespace-nowrap">
                             {{ timeSlot.formattedTime }}
                         </td>
-                        <td v-for="(day, dayIndex) in eventMatrix" :key="dayIndex" class="h-14 border">
+                        <td v-for="(day, dayIndex) in eventMatrix" :key="dayIndex" class="h-14 p-0 border">
                             <div v-if="!day[index].event"
                                 @click="!editMode && onClickEmptySlot(day[index].day, day[index].time)"
                                 class="w-full h-full" :class="[editMode ? '' : editClass]">
@@ -89,10 +89,12 @@
                                         ? 'bg-quaternary'
                                         : day[index].event.type === 'manual_session'
                                             ? 'bg-secondary'
-                                            : day[index].event.type === 'session' && day[index].event.clients.length > 0
+                                            : 0
                                                 ? 'bg-secondary'
                                                 : 'bg-primary']">
-                                <div v-if="day[index].event.type === 'personal'"
+                                <div v-if="day[index].event.type === 'personal' &&
+                                    (!day[index - 1] || !day[index - 1].event ||
+                                        day[index - 1].event.event_id !== day[index].event.event_id) && !editMode"
                                     class="w-full h-full flex flex-col justify-center items-center text-white">
                                     <h4 class="font-medium">Evento personal</h4>
                                     <p class="text-xs">{{ day[index].event.start_time }} - {{ day[index].event.end_time }}
@@ -116,7 +118,7 @@
         </div>
         <!-- Modals -->
 
-        <!-- addNewEmptySession Modal -->
+        <!-- addNewEmptySessionModal -->
         <Teleport to="body">
             <CommonModal ref="emptySlotModal">
                 <div class="flex flex-col gap-5 p-10">
@@ -135,7 +137,7 @@
             </CommonModal>
         </Teleport>
 
-        <!-- addNewEmptySession Modal -->
+        <!-- addNewEmptySessionModal -->
         <Teleport to="body">
             <CommonModal ref="newEmptySessionModal">
                 <div class="px-6 py-4">
@@ -346,22 +348,6 @@
                                 <input type="text" placeholder="Ingresar correo o nombre del cliente"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                             </label>
-                            <label class="w-full flex flex-col col-span-2 md:col-span-1">
-                                <span class="font-medium text-sm mb-2">Formato</span>
-                                <select
-                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option value="Individual">Individual</option>
-                                    <option value="Grupal">Grupal</option>
-                                </select>
-                            </label>
-                            <label class="w-full flex flex-col col-span-2 md:col-span-1">
-                                <span class="font-medium text-sm mb-2">Modalidad</span>
-                                <select
-                                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option value="Online">Online</option>
-                                    <option value="Presencial">Presencial</option>
-                                </select>
-                            </label>
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Link</span>
                                 <input type="text" placeholder="https://"
@@ -454,6 +440,9 @@ const fetchingEvents = ref(false); // Loading state of the events
 const eventMatrix = ref([]); // Matrix of events
 const startHour = 9; // Starting hour of the day
 const endHour = 20; // Ending hour of the day
+
+/* Calendar logic */
+
 
 /* Edit state */
 const editMode = ref(false); // Edit mode state
@@ -600,7 +589,7 @@ const selectedEndTime = computed(() => {
 
 // Logic to handle moving around days when a modal is open
 
-const currentlySelectedDate = ref(null);
+const currentlySelectedDate = ref(new Date());
 
 const currentlySelectedDayName = computed(() => {
     return currentlySelectedDate.value.toLocaleString('default', { weekday: 'long' });
@@ -693,15 +682,6 @@ const addNewEvent = () => {
 // Add new session modal
 const newEmptySessionModal = ref(null);
 
-const onClickNewEmptySessionModal = (day, time) => {
-
-    currentlySelectedDate.value = new Date(currentDate.value);
-    currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
-
-    selectedStartTime.value = formatTime(time);
-    newEmptySessionModal.value.openModal();
-};
-
 const closeNewEmptySessionModal = () => {
     newEmptySessionModal.value.closeModal();
 };
@@ -782,9 +762,20 @@ const initializeEventMatrix = () => {
     }
 };
 
+const getLocalDateString = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+};
+
+
 const getEvents = async () => {
 
     fetchingEvents.value = true;
+
+    const localDateString = getLocalDateString(currentDate.value);
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
         method: 'POST',
@@ -794,7 +785,7 @@ const getEvents = async () => {
         },
         body: {
             "user_id": userStore.getUser().user_id,
-            "date": currentDate.value.toISOString().split('T')[0], // fecha en formato YYYY-MM-DD
+            "date": localDateString, // fecha en formato YYYY-MM-DD
         }
     });
 
@@ -804,12 +795,12 @@ const getEvents = async () => {
         return;
     }
 
+    fetchingEvents.value = false;
     initializeEventMatrix(); // Reset the matrix before populating
 
     if (data.value.success) {
-        fetchingEvents.value = false;
-        populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
         console.log(data.value.events);
+        populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
         events.value = data.value.events;
     }
     else {
@@ -820,25 +811,43 @@ const getEvents = async () => {
 };
 
 const populateEventMatrix = (events) => {
+    const timeZone = "UTC"; // Change this to the target time zone
     events.forEach(event => {
-        const utcDate = new Date(`${event.date.split('T')[0]}T${event.start_time}:00Z`);
+        // Convert UTC date to the target time zone
+        const startDateTime = new Date(`${event.date.split('T')[0]}T${event.start_time}:00Z`);
+        const startDate = convertUtcDateToLocalDate(startDateTime, timeZone);
 
-        // Use getUTC... methods to get the date and time in UTC
-        const eventDayIndex = daysList.value.findIndex(day =>
-            day.getUTCFullYear() === utcDate.getUTCFullYear() &&
-            day.getUTCMonth() === utcDate.getUTCMonth() &&
-            day.getUTCDate() === utcDate.getUTCDate()
-        );
+        let durationHours = 1; // Default duration for events without an end time
 
-        const eventHour = utcDate.getUTCHours();
-        const eventHourIndex = eventHour - startHour;
+        if (event.type === 'personal' && event.end_time) {
+            const endDateTime = new Date(`${event.date.split('T')[0]}T${event.end_time}:00Z`);
+            const endDate = convertUtcDateToLocalDate(endDateTime, timeZone);
+            durationHours = (endDate - startDate) / (1000 * 60 * 60);
+        }
 
-        if (eventDayIndex >= 0 && eventHourIndex >= 0 && eventHourIndex < 12) {
-            // events can only happen 1 at a time, so there is no need to make an array but a single event
-            eventMatrix.value[eventDayIndex][eventHourIndex].event = event;
+        for (let i = 0; i < durationHours; i++) {
+            const eventHour = startDate.getHours() + i;
+            const eventHourIndex = eventHour - startHour;
+
+            const eventDayIndex = daysList.value.findIndex(day =>
+                day.getFullYear() === startDate.getFullYear() &&
+                day.getMonth() === startDate.getMonth() &&
+                day.getDate() === startDate.getDate()
+            );
+
+            if (eventDayIndex >= 0 && eventHourIndex >= 0 && eventHourIndex < 12) {
+                eventMatrix.value[eventDayIndex][eventHourIndex].event = event;
+            }
         }
     });
 };
+
+// Helper function to convert UTC date to a date in the target time zone
+function convertUtcDateToLocalDate(utcDate, timeZone) {
+    return new Date(utcDate.toLocaleString('en-US', { timeZone }));
+}
+
+
 
 onMounted(() => {
     // Get the events when the component is mounted
