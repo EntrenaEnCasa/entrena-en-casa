@@ -103,14 +103,33 @@
                 </div>
             </div>
         </div>
-
-        <div class=" mt-10 mb-4 flex justify-center items-center gap-3">
-            <div class="w-14 h-12 bg-primary rounded-md">
+        <div class="mt-10 mb-4 flex justify-center">
+            <div class="flex flex-col items-start lg:flex-row lg:justify-center gap-10 font-semibold">
+                <div class="flex justify-center items-center gap-3">
+                    <div class="w-14 h-12 bg-primary rounded-md">
+                    </div>
+                    <span>
+                        Bloque disponible para sesión
+                    </span>
+                </div>
+                <div class="flex justify-center items-center gap-3">
+                    <div class="w-14 h-12 bg-secondary rounded-md">
+                    </div>
+                    <span>
+                        Sesión con al menos 1 cliente
+                    </span>
+                </div>
+                <div class="flex justify-center items-center gap-3">
+                    <div class="w-14 h-12 bg-quaternary rounded-md">
+                    </div>
+                    <span>
+                        Evento personal
+                    </span>
+                </div>
             </div>
-            <span class="text-lg font-semibold">
-                Horario disponible
-            </span>
+
         </div>
+
         <!-- Modals -->
 
         <!-- emptySlotModal -->
