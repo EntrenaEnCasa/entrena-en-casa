@@ -45,7 +45,7 @@
                                     </button>
                                 </li>
                                 <li>
-                                    <button @click="onClickNewEventModal"
+                                    <button @click="newEventModal.handleClick"
                                         class="px-4 py-2 text-sm rounded-b bg-primary hover:bg-primary-600" role="menuitem">
                                         Evento Manual
                                     </button>
@@ -77,7 +77,7 @@
                         </div>
                         <!-- Event slot cells -->
                         <div v-for="(day, dayIndex) in  eventMatrix " :key="`day-${dayIndex}-slot-${index}`"
-                            class="h-14 border-r border-gray-200 rounded-sm min-w-[130px]"
+                            class="h-14 border-r border-gray-200 min-w-[130px]"
                             :class="{ 'border-b': !(day[index].event && day[index].event.type === 'personal') || isLastEventUnique(day, index) }">
                             <button v-if="!day[index].event" class="w-full h-full" :class="[editMode ? '' : editClass]"
                                 :disabled="editMode" @click="emptySlotModal.handleClick(day[index].day, day[index].time)">
@@ -210,7 +210,7 @@
         <!-- addNewEventModal -->
 
         <Teleport to="body">
-            <CommonModal ref="newEventModal">
+            <CommonModal ref="newEventModalRef">
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-center gap-x-2 mb-6">
                         <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
@@ -237,12 +237,13 @@
                         <label class="w-full">
                             <select
                                 class="mb-6 border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary"
-                                v-model="selectedEventType">
+                                v-model="newEventModal.data.selectedEventType">
                                 <option value="Nuevo entrenamiento">Nuevo entrenamiento</option>
                                 <option value="Evento personal">Evento personal</option>
                             </select>
                         </label>
-                        <div v-show="selectedEventType == 'Evento personal'" class="grid gap-6 mb-6 md:grid-cols-2">
+                        <div v-show="newEventModal.data.selectedEventType == 'Evento personal'"
+                            class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Cliente (opcional)</span>
                                 <input type="text" placeholder="Ingresar correo o nombre del cliente"
@@ -256,7 +257,8 @@
                             </label>
 
                         </div>
-                        <div v-show="selectedEventType == 'Nuevo entrenamiento'" class="grid gap-6 mb-6 md:grid-cols-2">
+                        <div v-show="newEventModal.data.selectedEventType == 'Nuevo entrenamiento'"
+                            class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Cliente</span>
                                 <input type="text" placeholder="Ingresar correo o nombre del cliente"
@@ -277,10 +279,10 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <button @click="closeAddEventModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
+                            <button @click="newEventModal.closeModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
                                 Cancelar
                             </button>
-                            <button @click="closeAddEventModal" class="px-4 py-2 rounded-md bg-primary text-white">
+                            <button @click="newEventModal.closeModal" class="px-4 py-2 rounded-md bg-primary text-white">
                                 Confirmar
                             </button>
                         </div>
@@ -626,7 +628,7 @@ const emptySlotModal = reactive({
     },
     addNewEvent: () => {
         emptySlotModalRef.value.closeModal();
-        newEventModal.value.openModal();
+        newEventModal.openModal();
     }
 });
 
@@ -659,19 +661,30 @@ const newEmptySessionModal = reactive({
 });
 
 // Add new event modal
-const newEventModal = ref(null);
+const newEventModalRef = ref(null);
+const newEventModal = reactive({
+    data: {
+        selectedEventType: 'Nuevo entrenamiento',
+        selectedFormat: 'Individual',
+        selectedModality: 'Online',
+    },
+    openModal: () => {
+        if (newEventModalRef.value) {
+            newEventModalRef.value.openModal();
+        }
+    },
+    closeModal: () => {
+        if (newEventModalRef.value) {
+            newEventModalRef.value.closeModal();
+        }
+    },
+    handleClick: () => {
+        currentlySelectedDate.value = new Date(currentDate.value);
 
-const selectedEventType = ref("Nuevo entrenamiento");
-const onClickNewEventModal = () => {
-    currentlySelectedDate.value = new Date(currentDate.value);
-
-    selectedStartTime.value = formatTime(timesList.value[0]);
-    newEventModal.value.openModal();
-}
-
-const closeAddEventModal = () => {
-    newEventModal.value.closeModal();
-};
+        selectedStartTime.value = formatTime(timesList.value[0]);
+        newEventModal.openModal();
+    },
+});
 
 // editEmptySessionModal
 
