@@ -57,44 +57,38 @@
 
             </div>
         </div>
-        <div class="overflow-x-auto bg-white rounded-2xl border pr-10">
+        <div class="overflow-x-auto bg-white rounded-2xl border py-7 px-9">
             <CommonLoading v-show="fetchingEvents" class="my-8" />
-            <table v-show="!fetchingEvents" class="w-full table-fixed text-sm text-gray-500">
-                <thead>
-                    <tr>
-                        <th scope="col" class="w-20"></th>
-                        <th v-for="(day, index) in eventMatrix" :key="index" scope="col"
-                            class="px-6 pt-6 pb-3 text-center whitespace-nowrap font-semibold w-28 capitalize">
-                            {{ day[0].formattedDay }}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(timeSlot, index) in eventMatrix[0]" :key="timeSlot.time">
-                        <td class="h-14 pr-6 text-right font-semibold whitespace-nowrap">
+            <div v-show="!fetchingEvents">
+                <!-- Apply a custom grid template columns style with specific min-width for the time column -->
+                <div class="grid" style="grid-template-columns: minmax(60px, max-content) repeat(7, minmax(130px, 1fr));">
+                    <!-- Time column with specific min-width -->
+                    <div class="text-sm font-semibold text-center border-gray-200">
+                    </div>
+                    <!-- Day columns with minimum width -->
+                    <div v-for="(day, index) in eventMatrix" :key="index"
+                        class="capitalize text-sm font-semibold text-center border-b border-gray-200 pb-4 min-w-[130px] text-gray-500">
+                        {{ day[0].formattedDay }}
+                    </div>
+                    <template v-for="(timeSlot, index) in  eventMatrix[0] " :key="timeSlot.time">
+                        <!-- Time slot label -->
+                        <div class="text-sm font-semibold text-center border-r border-gray-200 py-2 pr-4 text-gray-500">
                             {{ timeSlot.formattedTime }}
-                        </td>
-                        <td v-for="(day, dayIndex) in eventMatrix" :key="dayIndex" class="h-14 p-0 border">
-                            <div v-if="!day[index].event"
-                                @click="!editMode && onClickEmptySlot(day[index].day, day[index].time)"
-                                class="w-full h-full" :class="[editMode ? '' : editClass]">
+                        </div>
+                        <!-- Event slot cells -->
+                        <div v-for="(day, dayIndex) in  eventMatrix " :key="`day-${dayIndex}-slot-${index}`"
+                            class="h-14 border-r border-gray-200 rounded-sm min-w-[130px]"
+                            :class="{ 'border-b': isLastEventUnique(day, index) }">
+                            <button v-if="!day[index].event" class="w-full h-full" :class="[editMode ? '' : editClass]"
+                                :disabled="editMode" @click="onClickEmptySlot(day[index].day, day[index].time)">
                                 <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
-                            </div>
-                            <div v-else @click="editMode && openEditModal(day[index].day, day[index].time)"
-                                class="w-full h-full" :class="[
-                                    editMode ? editClass : '',
-                                    day[index].event.type === 'personal'
-                                        ? 'bg-quaternary'
-                                        : day[index].event.type === 'manual_session'
-                                            ? 'bg-secondary'
-                                            : 0
-                                                ? 'bg-secondary'
-                                                : 'bg-primary']">
+                            </button>
+                            <button v-else @click="openEditModal(day[index].day, day[index].time)" :disabled="!editMode"
+                                class="w-full h-full" :class="eventClasses(day, index)">
                                 <div v-if="day[index].event.type === 'personal' &&
-                                    (!day[index - 1] || !day[index - 1].event ||
-                                        day[index - 1].event.event_id !== day[index].event.event_id) && !editMode"
+                                    isFirstEventUnique(day, index) && !editMode"
                                     class="w-full h-full flex flex-col justify-center items-center text-white">
                                     <h4 class="font-medium">Evento personal</h4>
                                     <p class="text-xs">{{ day[index].event.start_time }} - {{ day[index].event.end_time }}
@@ -103,12 +97,17 @@
                                 <div :class="{ hidden: !editMode }">
                                     <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
         </div>
+
+
+
+
+
         <div class=" mt-10 mb-4 flex justify-center items-center gap-3">
             <div class="w-14 h-12 bg-primary rounded-md">
             </div>
@@ -167,7 +166,7 @@
                             <div class="flex items-center gap-4">
                                 <select v-model="selectedStartTime"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option v-for="  time   in   timeOptions  " :key="`start-${time}`" :value="time">
+                                    <option v-for="   time    in    timeOptions   " :key="`start-${time}`" :value="time">
                                         {{ time }}
                                     </option>
                                 </select>
@@ -244,7 +243,7 @@
                             <div class="flex items-center gap-4">
                                 <select v-model="selectedStartTime"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option v-for="  time   in   timeOptions  " :key="`start-${time}`" :value="time">
+                                    <option v-for="   time    in    timeOptions   " :key="`start-${time}`" :value="time">
                                         {{ time }}
                                     </option>
                                 </select>
@@ -441,18 +440,46 @@ const eventMatrix = ref([]); // Matrix of events
 const startHour = 9; // Starting hour of the day
 const endHour = 20; // Ending hour of the day
 
-/* Calendar logic */
+/* styling of cells */
 
+const eventClasses = (day, index) => {
+    let classes = [editMode ? editClass : '', 'bg-primary']; // Default class
 
-/* Edit state */
-const editMode = ref(false); // Edit mode state
+    if (day[index].event.type === 'personal') {
+        classes = [editMode ? editClass : '', 'bg-quaternary'];
+    } else if (day[index].event.type === 'manual_session') {
+        classes = [editMode ? editClass : '', 'bg-secondary'];
+    }
+
+    return classes;
+};
+
+const isFirstEventUnique = (day, index) => {
+    if (index == 0) return true;
+
+    const event = day[index].event;
+    const previousEvent = day[index - 1].event;
+
+    return !event || !previousEvent || previousEvent.event_id !== event.event_id;
+};
+
+const isLastEventUnique = (day, index) => {
+    if (index == day.length - 1) return true;
+
+    const event = day[index].event;
+    const nextEvent = day[index + 1].event;
+
+    return !event || !nextEvent || nextEvent.event_id !== event.event_id;
+};
+
+// Edit mode state
+const editMode = ref(false);
 
 const editClass = reactive({
     'flex': true,
     'items-center': true,
     'justify-center': true,
     'group': true,
-    'cursor-pointer': true,
 });
 
 const toggleEditState = () => {
