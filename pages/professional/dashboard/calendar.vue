@@ -80,7 +80,7 @@
                             class="h-14 border-r border-gray-200 rounded-sm min-w-[130px]"
                             :class="{ 'border-b': !(day[index].event && day[index].event.type === 'personal') || isLastEventUnique(day, index) }">
                             <button v-if="!day[index].event" class="w-full h-full" :class="[editMode ? '' : editClass]"
-                                :disabled="editMode" @click="onClickEmptySlot(day[index].day, day[index].time)">
+                                :disabled="editMode" @click="emptySlotModal.handleClick(day[index].day, day[index].time)">
                                 <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
@@ -115,14 +115,14 @@
 
         <!-- emptySlotModal -->
         <Teleport to="body">
-            <CommonModal ref="emptySlotModal">
+            <CommonModal ref="emptySlotModalRef">
                 <div class="flex flex-col gap-5 p-10">
-                    <button @click="addNewSession" class="px-10 py-4 bg-primary text-white rounded">
+                    <button @click="emptySlotModal.addNewSession" class="px-10 py-4 bg-primary text-white rounded">
                         <p class="font-semibold">
                             Agregar bloque disponible para sesión
                         </p>
                     </button>
-                    <button @click="addNewEvent" class="px-10 py-4 bg-secondary text-white rounded">
+                    <button @click="emptySlotModal.addNewEvent" class="px-10 py-4 bg-secondary text-white rounded">
                         <p class="font-semibold">
                             Agregar nuevo evento manualmente
                         </p>
@@ -197,10 +197,8 @@
                             en el perfil
                         </p>
                         <div class="flex justify-between">
-                            <button @click="newEmptySessionModal.closeModal"
-                                class="px-4 py-2 rounded-md bg-tertiary text-white">
-                                Cancelar
-                            </button>
+                            <CommonButton @click="newEmptySessionModal.closeModal" text="Cancelar"
+                                class="px-4 py-2 bg-tertiary" />
                             <CommonButton text="Crear nueva sesión" @click="addNewEmptySession" class="px-4 py-2"
                                 :loading="newEmptySessionModal.loading" />
                         </div>
@@ -681,26 +679,35 @@ const goToPreviousDay = () => {
 };
 
 // Empty slot modal
-const emptySlotModal = ref(null);
+const emptySlotModalRef = ref(null);
 
-const onClickEmptySlot = (day, time) => {
+const emptySlotModal = reactive({
+    openModal: () => {
+        if (emptySlotModalRef.value) {
+            emptySlotModalRef.value.openModal();
+        }
+    },
+    closeModal: () => {
+        if (emptySlotModalRef.value) {
+            emptySlotModalRef.value.closeModal();
+        }
+    },
+    handleClick: (day, time) => {
+        currentlySelectedDate.value = new Date(currentDate.value);
+        currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
 
-    currentlySelectedDate.value = new Date(currentDate.value);
-    currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
-
-    selectedStartTime.value = formatTime(time);
-    emptySlotModal.value.openModal();
-};
-
-const addNewSession = () => {
-    emptySlotModal.value.closeModal();
-    newEmptySessionModal.openModal();
-};
-
-const addNewEvent = () => {
-    emptySlotModal.value.closeModal();
-    newEventModal.value.openModal();
-};
+        selectedStartTime.value = formatTime(time);
+        emptySlotModalRef.value.openModal();
+    },
+    addNewSession: () => {
+        emptySlotModalRef.value.closeModal();
+        newEmptySessionModal.openModal();
+    },
+    addNewEvent: () => {
+        emptySlotModalRef.value.closeModal();
+        newEventModal.value.openModal();
+    }
+});
 
 // Add new empty session modal
 
