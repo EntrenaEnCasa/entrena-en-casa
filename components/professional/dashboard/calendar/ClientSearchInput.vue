@@ -4,7 +4,8 @@
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
             <div class="flex items-center flex-wrap gap-y-4 gap-x-2">
                 <input type="text" v-model="searchTerm" :placeholder="placeholder" class="outline-none w-full"
-                    @focus="inputFocused = true" @blur="inputFocused = false" @input="delayedFetchResults">
+                    @focus="inputFocused = true" @blur="inputFocused = false" @input="delayedFetchResults"
+                    @keydown="handleKeydown">
                 <div class="" v-for="(chip, index) in chips" :key="index">
                     <span
                         class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium bg-secondary text-white">
@@ -27,7 +28,8 @@
                         No se encontraron resultados
                     </li>
                     <li class="px-3 py-2 rounded hover:bg-gray-100" v-show="filteredResults.length > 0"
-                        v-for="result in filteredResults" :key="result.user_id" @mousedown="addChip(result)">
+                        v-for="(result, index) in filteredResults" :key="result.user_id" @mousedown="addChip(result)"
+                        :class="{ 'bg-gray-200': index === selectedResultIndex }">
                         <p class="font-medium">
                             {{ result.first_name || result.email }}
                         </p>
@@ -56,7 +58,15 @@ const results = ref([]);
 const isLoading = ref(false);
 const hasFetched = ref(false);
 const isSearchPending = ref(false);
+const selectedResultIndex = ref(-1);
 let timeoutId = null;
+
+const props = defineProps({
+    maxChips: {
+        type: Number,
+        default: Infinity
+    }
+});
 
 const fetchResults = async () => {
     if (searchTerm.value) {
@@ -103,8 +113,6 @@ const delayedFetchResults = () => {
     }, 500);
 };
 
-watch(searchTerm, delayedFetchResults);
-
 const filteredResults = computed(() => {
     if (!searchTerm.value && chips.value.length === 0) return results.value.slice(0, 5);
 
@@ -119,9 +127,36 @@ const filteredResults = computed(() => {
     ).slice(0, 5);
 });
 
+const handleKeydown = (event) => {
+    switch (event.key) {
+        case 'ArrowUp':
+            if (selectedResultIndex.value > 0) {
+                selectedResultIndex.value--;
+            }
+            break;
+        case 'ArrowDown':
+            if (selectedResultIndex.value < filteredResults.value.length - 1) {
+                selectedResultIndex.value++;
+            }
+            break;
+        case 'Enter':
+            if (selectedResultIndex.value >= 0) {
+                addChip(filteredResults.value[selectedResultIndex.value]);
+            }
+            break;
+    }
+};
+
+watch([searchTerm, filteredResults], () => {
+    selectedResultIndex.value = -1;
+});
+
 const addChip = (student) => {
-    chips.value.unshift(student.first_name || student.email);
-    searchTerm.value = '';
+    if (chips.value.length >= props.maxChips) alert("Las sesiones individuales solo admiten 1 estudiante");
+    if (chips.value.length < props.maxChips) {
+        chips.value.unshift(student.first_name || student.email);
+        searchTerm.value = '';
+    }
 };
 
 const removeChip = (index) => {
