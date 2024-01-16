@@ -85,8 +85,10 @@
                                     <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
                                 </div>
                             </button>
-                            <button v-else @click="editEmptySessionModal.handleClick(day[index].day, day[index].time)"
-                                :disabled="!editMode" class="w-full h-full" :class="eventClasses(day, index)">
+                            <button v-else
+                                @click="editEmptySessionModal.handleClick(day[index].day, day[index].time, day[index].event)"
+                                :disabled="!editMode || ((day[index].event && day[index].event.type === 'personal') && isLastEventUnique(day, index))"
+                                class="w-full h-full" :class="eventClasses(day, index)">
                                 <div v-if="day[index].event.type === 'personal' &&
                                     isFirstEventUnique(day, index) && !editMode"
                                     class="w-full h-full flex flex-col justify-center items-center text-white">
@@ -94,7 +96,8 @@
                                     <p class="text-xs">{{ day[index].event.start_time }} - {{ day[index].event.end_time }}
                                     </p>
                                 </div>
-                                <div :class="{ hidden: !editMode }">
+                                <div
+                                    :class="{ hidden: !editMode || ((day[index].event && day[index].event.type === 'personal') && isLastEventUnique(day, index)) }">
                                     <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
                                 </div>
                             </button>
@@ -254,8 +257,7 @@
                     </div>
                     <form action="">
                         <label class="w-full">
-                            <select
-                                class="mb-6 border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary"
+                            <select class="mb-6 border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5"
                                 v-model="newEventModal.data.selectedEventType">
                                 <option value="Nuevo entrenamiento">Nuevo entrenamiento</option>
                                 <option value="Evento personal">Evento personal</option>
@@ -264,25 +266,27 @@
                         <div v-show="newEventModal.data.selectedEventType == 'Evento personal'"
                             class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="w-full flex flex-col col-span-2">
-                                <span class="font-medium text-sm mb-2">Cliente (opcional)</span>
-                                <input type="text" placeholder="Ingresar correo o nombre del cliente"
-                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
+                                <label class="w-full flex flex-col col-span-2">
+                                    <span class="font-medium text-sm mb-2">Clientes</span>
+                                    <ProfessionalDashboardCalendarClientSearchInput :data="clients" />
+                                </label>
                             </label>
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
                                 <textarea v-model="newEventModal.data.aditionalInfo"
                                     placeholder="Ingresar detalles del cliente"
-                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary"
+                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary"
                                     rows="4"></textarea>
                             </label>
 
                         </div>
                         <div v-show="newEventModal.data.selectedEventType == 'Nuevo entrenamiento'"
                             class="grid gap-6 mb-6 md:grid-cols-2">
+                            <!-- Nuevo input con chips -->
                             <label class="w-full flex flex-col col-span-2">
-                                <span class="font-medium text-sm mb-2">Cliente</span>
-                                <input type="text" placeholder="Ingresar correo o nombre del cliente"
-                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                <span class="font-medium text-sm mb-2">Clientes</span>
+                                <ProfessionalDashboardCalendarClientSearchInput :data="clients" />
                             </label>
                             <div class="grid gap-6 md:grid-cols-2 col-span-2">
                                 <label class="flex flex-col">
@@ -305,7 +309,7 @@
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Link</span>
                                 <input v-model="newEventModal.data.link" type="text" placeholder="https://"
-                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
                             </label>
                         </div>
 
@@ -569,6 +573,10 @@ const selectedEndTime = computed(() => {
     }
 });
 
+const setSelectedStartTimeToFirstAvailableTime = () => {
+    selectedStartTime.value = formatTime(timesList.value[0]);
+};
+
 /* Modals */
 
 // Logic to handle moving around days when a modal is open
@@ -641,6 +649,17 @@ const goToPreviousDay = () => {
     currentlySelectedDate.value = newDate;
 };
 
+const updateCurrentlySelectedDate = (day, time) => {
+    goToFirstDay();
+    currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
+    selectedStartTime.value = formatTime(time);
+};
+
+// will update the currently selected date to the first day of the week
+const goToFirstDay = () => {
+    currentlySelectedDate.value = new Date(currentDate.value);
+};
+
 // Empty slot modal
 const emptySlotModalRef = ref(null);
 
@@ -656,10 +675,7 @@ const emptySlotModal = reactive({
         }
     },
     handleClick: (day, time) => {
-        currentlySelectedDate.value = new Date(currentDate.value);
-        currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
-
-        selectedStartTime.value = formatTime(time);
+        updateCurrentlySelectedDate(day, time);
         emptySlotModalRef.value.openModal();
     },
     addNewSession: () => {
@@ -693,9 +709,8 @@ const newEmptySessionModal = reactive({
         }
     },
     handleClickFromButton: () => {
-        currentlySelectedDate.value = new Date(currentDate.value);
-
-        selectedStartTime.value = formatTime(timesList.value[0]);
+        goToFirstDay();
+        setSelectedStartTimeToFirstAvailableTime();
         newEmptySessionModal.openModal();
     },
 });
@@ -723,9 +738,8 @@ const newEventModal = reactive({
         }
     },
     handleClick: () => {
-        currentlySelectedDate.value = new Date(currentDate.value);
-
-        selectedStartTime.value = formatTime(timesList.value[0]);
+        goToFirstDay();
+        setSelectedStartTimeToFirstAvailableTime();
         newEventModal.openModal();
     },
 });
@@ -737,8 +751,8 @@ const editEmptySessionModalRef = ref(null);
 
 const editEmptySessionModal = reactive({
     data: {
-        selectedDay: null,
-        selectedTime: null,
+        selectedFormat: null,
+        selectedModality: null
     },
     openModal: (day, time) => {
         if (editEmptySessionModalRef.value) {
@@ -750,14 +764,12 @@ const editEmptySessionModal = reactive({
             editEmptySessionModalRef.value.closeModal();
         }
     },
-    handleClick: (day, time) => {
-        editEmptySessionModal.data.selectedDay = day;
-        editEmptySessionModal.data.selectedTime = time;
+    handleClick: (day, time, event) => {
 
-        currentlySelectedDate.value = new Date(currentDate.value);
-        currentlySelectedDate.value.setDate(currentDate.value.getDate() + day - 1);
+        editEmptySessionModal.data.selectedFormat = event.session_info.format;
+        editEmptySessionModal.data.selectedModality = event.session_info.modality;
 
-        selectedStartTime.value = formatTime(time);
+        updateCurrentlySelectedDate(day, time);
         editEmptySessionModal.openModal();
     }
 });
@@ -828,7 +840,8 @@ const getEvents = async () => {
     initializeEventMatrix(); // Reset the matrix before populating
 
     if (data.value.success) {
-        console.log(data.value.events);
+        console.log("data value");
+        console.log(data.value);
         populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
         events.value = data.value.events;
     }
@@ -907,7 +920,6 @@ const addNewEmptySession = async () => {
         console.log("Fetch error:", error.value);
         return;
     }
-
 
     if (data.value.success) {
         console.log(data.value.message);
