@@ -152,11 +152,15 @@ watch([searchTerm, filteredResults], () => {
 });
 
 const addChip = (student) => {
-    if (chips.value.length >= props.maxChips) alert("Las sesiones individuales solo admiten 1 estudiante");
-    if (chips.value.length < props.maxChips) {
-        chips.value.unshift(student.first_name || student.email);
+    if (chips.value.length >= props.maxChips) {
+        alert("Las sesiones individuales solo admiten 1 estudiante");
         searchTerm.value = '';
+        results.value = [];
+        return;
     }
+    chips.value.unshift(student.first_name || student.email);
+    searchTerm.value = '';
+    results.value = [];
 };
 
 const removeChip = (index) => {
