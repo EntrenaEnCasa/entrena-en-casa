@@ -269,7 +269,8 @@
                                 <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
                                 <label class="w-full flex flex-col col-span-2">
                                     <span class="font-medium text-sm mb-2">Clientes</span>
-                                    <ProfessionalDashboardCalendarClientSearchInput :data="clients" />
+                                    <ProfessionalDashboardCalendarClientSearchInput
+                                        :max-chips="newEventModal.data.selectedFormat === 'Individual' ? 1 : Infinity" />
                                 </label>
                             </label>
                             <label class="w-full flex flex-col col-span-2">
@@ -286,7 +287,8 @@
                             <!-- Nuevo input con chips -->
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Clientes</span>
-                                <ProfessionalDashboardCalendarClientSearchInput :data="clients" />
+                                <ProfessionalDashboardCalendarClientSearchInput
+                                    :max-chips="newEventModal.data.selectedFormat === 'Individual' ? 1 : Infinity" />
                             </label>
                             <div class="grid gap-6 md:grid-cols-2 col-span-2">
                                 <label class="flex flex-col">
