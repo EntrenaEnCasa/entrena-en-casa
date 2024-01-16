@@ -184,7 +184,8 @@
                             <div class="flex items-center gap-4">
                                 <select v-model="selectedStartTime"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option v-for="   time    in    timeOptions   " :key="`start-${time}`" :value="time">
+                                    <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                        :value="time">
                                         {{ time }}
                                     </option>
                                 </select>
@@ -265,12 +266,31 @@
                         </label>
                         <div v-show="newEventModal.data.selectedEventType == 'Evento personal'"
                             class="grid gap-6 mb-6 md:grid-cols-2">
-                            <label class="w-full flex flex-col col-span-2">
+                            <label class="w-full flex flex-col">
                                 <label class="w-full flex flex-col col-span-2">
                                     <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
                                     <ProfessionalDashboardCalendarClientSearchInput
                                         :selectedFormat="newEventModal.data.selectedFormat" />
                                 </label>
+                            </label>
+                            <label class="flex flex-col">
+                                <span class="font-medium text-sm mb-2">Formato</span>
+                                <div class="flex max-w-max items-center gap-4">
+                                    <select v-model="selectedStartTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                            :value="time">
+                                            {{ time }}
+                                        </option>
+                                    </select>
+                                    <span class="font-semibold">-</span>
+                                    <select v-model="selectedEndTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">
+                                            {{ time }}
+                                        </option>
+                                    </select>
+                                </div>
                             </label>
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
@@ -283,11 +303,26 @@
                         </div>
                         <div v-show="newEventModal.data.selectedEventType == 'Nuevo entrenamiento'"
                             class="grid gap-6 mb-6 md:grid-cols-2">
+
                             <!-- Nuevo input con chips -->
-                            <label class="w-full flex flex-col col-span-2">
+                            <label class="w-full flex flex-col">
                                 <span class="font-medium text-sm mb-2">Clientes</span>
                                 <ProfessionalDashboardCalendarClientSearchInput
                                     :selectedFormat="newEventModal.data.selectedFormat" />
+                            </label>
+                            <label class="flex flex-col">
+                                <span class="font-medium text-sm mb-2">Formato</span>
+                                <div class="flex max-w-max items-center gap-4">
+                                    <select v-model="selectedStartTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                            :value="time">
+                                            {{ time }}
+                                        </option>
+                                    </select>
+                                    <span class="font-semibold">-</span>
+                                    <p>{{ selectedEndTime }}hrs</p>
+                                </div>
                             </label>
                             <div class="grid gap-6 md:grid-cols-2 col-span-2">
                                 <label class="flex flex-col">
@@ -559,10 +594,22 @@ const isCurrentWeekOrLater = computed(() => {
 // Initialize selectedStartTime with the first time from timesList
 const selectedStartTime = ref(formatTime(timesList.value[0]));
 
-// Computed property for time options
-const timeOptions = computed(() => timesList.value.map(formatTime));
+// Computed property for start time options
+const startTimeOptions = computed(() => timesList.value.map(formatTime));
 
 // Computed property for end time options
+// Computed property for end time options
+const endTimeOptions = computed(() => {
+    let options = [];
+    let start = parseInt(selectedStartTime.value);
+    // Start from one hour after the selected start time
+    let begin = start + 1;
+
+    for (let i = begin; i <= endHour + 1; i++) {
+        options.push(formatTime(i));
+    }
+    return options;
+});
 
 //instead of multiple options, there will be only one option, the one right after the start time
 const selectedEndTime = computed(() => {
@@ -573,6 +620,7 @@ const selectedEndTime = computed(() => {
         return formatTime(timesList.value[startIndex + 1]);
     }
 });
+
 
 const setSelectedStartTimeToFirstAvailableTime = () => {
     selectedStartTime.value = formatTime(timesList.value[0]);
