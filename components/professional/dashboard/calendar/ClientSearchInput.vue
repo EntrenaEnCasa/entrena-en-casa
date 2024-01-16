@@ -62,10 +62,14 @@ const selectedResultIndex = ref(-1);
 let timeoutId = null;
 
 const props = defineProps({
-    maxChips: {
-        type: Number,
-        default: Infinity
+    selectedFormat: {
+        type: String,
+        default: ''
     }
+});
+
+const maxChips = computed(() => {
+    return props.selectedFormat === 'Individual' ? 1 : Infinity;
 });
 
 const fetchResults = async () => {
@@ -151,8 +155,15 @@ watch([searchTerm, filteredResults], () => {
     selectedResultIndex.value = -1;
 });
 
+watch(() => props.selectedFormat, (newFormat) => {
+    if (newFormat === 'Individual' && chips.value.length > 1) {
+        alert("Algunos de los estudiantes añadidos serán eliminados");
+        chips.value = chips.value.slice(0, 1);
+    }
+});
+
 const addChip = (student) => {
-    if (chips.value.length >= props.maxChips) {
+    if (chips.value.length >= maxChips.value) {
         alert("Las sesiones individuales solo admiten 1 estudiante");
         searchTerm.value = '';
         results.value = [];
