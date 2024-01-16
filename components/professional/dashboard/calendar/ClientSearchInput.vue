@@ -6,12 +6,15 @@
                 <input type="text" v-model="searchTerm" :placeholder="placeholder" class="outline-none w-full"
                     @focus="inputFocused = true" @blur="inputFocused = false" @input="delayedFetchResults"
                     @keydown="handleKeydown">
-                <div class="" v-for="(chip, index) in chips" :key="index">
+                <div v-for="(chip, index) in chips" :key="chip.user_id">
                     <span
                         class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium bg-secondary text-white">
                         <Icon @click="removeChip(index)" class="text-lg mr-1" name="fa6-solid:circle-xmark" />
-                        <span>
-                            {{ chip }}
+                        <span v-if="chip.first_name">
+                            {{ chip.first_name }} {{ chip.last_name }}
+                        </span>
+                        <span v-else>
+                            {{ chip.email }}
                         </span>
                     </span>
                 </div>
@@ -30,8 +33,11 @@
                     <li class="px-3 py-2 rounded hover:bg-gray-100" v-show="filteredResults.length > 0"
                         v-for="(result, index) in filteredResults" :key="result.user_id" @mousedown="addChip(result)"
                         :class="{ 'bg-gray-200': index === selectedResultIndex }">
-                        <p class="font-medium">
-                            {{ result.first_name || result.email }}
+                        <p v-if="result.first_name" class="font-medium">
+                            {{ result.first_name }} {{ result.last_name }}
+                        </p>
+                        <p v-else class="font-medium">
+                            {{ result.email }}
                         </p>
                         <p class="text-xs">
                             {{ result.email }}
@@ -118,16 +124,18 @@ const delayedFetchResults = () => {
 };
 
 const filteredResults = computed(() => {
+    const chipIds = chips.value.map(chip => chip.user_id);
+
     if (!searchTerm.value && chips.value.length === 0) return results.value.slice(0, 5);
 
     if (!searchTerm.value && chips.value.length > 0) return results.value.filter(student =>
-        !chips.value.includes(student.first_name || student.email)
+        !chipIds.includes(student.user_id)
     );
 
     return results.value.filter(student =>
         ((student.first_name && student.first_name.toLowerCase().includes(searchTerm.value.toLowerCase())) ||
             student.email.toLowerCase().includes(searchTerm.value.toLowerCase())) &&
-        !chips.value.includes(student.first_name || student.email)
+        !chipIds.includes(student.user_id)
     ).slice(0, 5);
 });
 
@@ -169,7 +177,7 @@ const addChip = (student) => {
         results.value = [];
         return;
     }
-    chips.value.unshift(student.first_name || student.email);
+    chips.value.unshift(student);
     searchTerm.value = '';
     results.value = [];
 };
