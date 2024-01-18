@@ -485,10 +485,8 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <button @click="editManualSessionModal.closeModal"
-                                class="px-4 py-2 rounded-md bg-tertiary text-white">
-                                Cancelar
-                            </button>
+                            <CommonButton text="Eliminar sesión" @click="editManualSessionModal.removeSession"
+                                :loading="editManualSessionModal.data.loading" class="px-4 py-2 bg-tertiary" />
                             <button @click="editManualSessionModal.closeModal"
                                 class="px-4 py-2 rounded-md bg-primary text-white">
                                 Confirmar
@@ -1167,8 +1165,8 @@ const editManualSessionModal = reactive({
         selectedFormat: 'Individual',
         selectedModality: 'Online',
         link: '',
-        loading: false,
         event: null,
+        loading: false,
     },
     openModal: () => {
         if (editManualSessionModalRef.value) {
@@ -1186,9 +1184,36 @@ const editManualSessionModal = reactive({
         editManualSessionModal.data.selectedFormat = event.session_info.format;
         editManualSessionModal.data.selectedModality = event.session_info.modality;
         editManualSessionModal.data.link = event.session_info.link;
+        editManualSessionModal.data.event = event;
         updateCurrentlySelectedDate(day, time);
         editManualSessionModal.openModal();
-    }
+    },
+    removeSession: async () => {
+
+        editManualSessionModal.data.loading = true;
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editManualSessionModal.data.event.session_info.session_id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userStore.getUserToken()
+            },
+        });
+
+        editManualSessionModal.data.loading = false;
+
+        if (error.value) {
+            console.log("Fetch error:", error.value);
+            return;
+        }
+
+        if (data.value.success) {
+            editManualSessionModal.closeModal();
+            getEvents();
+        }
+        else {
+            console.log(data.value.message);
+        }
+    },
 });
 
 const editPersonalEventModalRef = ref(null);
