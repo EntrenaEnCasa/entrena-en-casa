@@ -56,9 +56,21 @@ import { useUserStore } from '~/stores/UserStore';
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
+const props = defineProps({
+    selectedFormat: {
+        type: String,
+        default: ''
+    },
+    modelValue: {
+        type: Array,
+        default: () => []
+    }
+});
+
+const chips = ref(props.modelValue);
+
 const placeholder = 'Ingresa el correo electrónico o nombre';
 const searchTerm = ref('');
-const chips = ref([]);
 const inputFocused = ref(false);
 const results = ref([]);
 const isLoading = ref(false);
@@ -67,12 +79,7 @@ const isSearchPending = ref(false);
 const selectedResultIndex = ref(-1);
 let timeoutId = null;
 
-const props = defineProps({
-    selectedFormat: {
-        type: String,
-        default: ''
-    }
-});
+const emit = defineEmits(['update:modelValue']);
 
 const maxChips = computed(() => {
     return props.selectedFormat === 'Individual' ? 1 : Infinity;
@@ -84,7 +91,7 @@ const fetchResults = async () => {
         isLoading.value = true;
         hasFetched.value = false;
         results.value = [];
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/students`, {
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/student/search`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -104,6 +111,7 @@ const fetchResults = async () => {
         }
 
         if (data.value.success) {
+            console.log(data.value);
             results.value = data.value.students;
         }
     }
@@ -159,17 +167,6 @@ const handleKeydown = (event) => {
     }
 };
 
-watch([searchTerm, filteredResults], () => {
-    selectedResultIndex.value = -1;
-});
-
-watch(() => props.selectedFormat, (newFormat) => {
-    if (newFormat === 'Individual' && chips.value.length > 1) {
-        alert("Algunos de los estudiantes añadidos serán eliminados");
-        chips.value = chips.value.slice(0, 1);
-    }
-});
-
 const addChip = (student) => {
     if (chips.value.length >= maxChips.value) {
         alert("Las sesiones individuales solo admiten 1 estudiante");
@@ -185,5 +182,24 @@ const addChip = (student) => {
 const removeChip = (index) => {
     chips.value.splice(index, 1);
 };
+
+watch([searchTerm, filteredResults], () => {
+    selectedResultIndex.value = -1;
+});
+
+watch(() => props.selectedFormat, (newFormat) => {
+    if (newFormat === 'Individual' && chips.value.length > 1) {
+        alert("Algunos de los estudiantes añadidos serán eliminados");
+        chips.value = chips.value.slice(0, 1);
+    }
+});
+
+watch(chips, (newChips) => {
+    emit('update:modelValue', newChips); // Emit the update:modelValue event when chips changes
+}, { deep: true });
+
+watch(() => props.modelValue, (newValue) => {
+    chips.value = newValue;
+}, { deep: true });
 
 </script>
