@@ -1,6 +1,6 @@
 <template>
     <div class="relative">
-        <div class="border text-gray-800 text-sm rounded-md px-5 py-3.5 max-w-3xl box-border"
+        <div class="border text-gray-800 text-sm rounded-md px-5 py-3.5 max-w-2xl box-border"
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
             <div class="flex items-center flex-wrap gap-y-4 gap-x-2">
                 <input type="text" v-model="searchTerm" :placeholder="placeholder" class="outline-none w-full"

@@ -266,16 +266,8 @@
                         </label>
                         <div v-show="newEventModal.data.selectedEventType == 'Evento personal'"
                             class="grid gap-6 mb-6 md:grid-cols-2">
-                            <label class="w-full flex flex-col">
-                                <label class="w-full flex flex-col col-span-2">
-                                    <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
-                                    <ProfessionalDashboardCalendarClientSearchInput
-                                        v-model:modelValue="newEventModal.data.personalEvent.clients"
-                                        :selectedFormat="newEventModal.data.personalEvent.selectedFormat" />
-                                </label>
-                            </label>
-                            <label class="flex flex-col">
-                                <span class="font-medium text-sm mb-2">Formato</span>
+                            <label class="flex flex-col items-center col-span-2">
+                                <span class="font-medium text-sm mb-2">Horario</span>
                                 <div class="flex max-w-max items-center gap-4">
                                     <select v-model="selectedStartTime"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
@@ -294,6 +286,15 @@
                                 </div>
                             </label>
                             <label class="w-full flex flex-col col-span-2">
+                                <label class="w-full flex flex-col">
+                                    <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
+                                    <ProfessionalDashboardCalendarClientSearchInput
+                                        v-model:modelValue="newEventModal.data.personalEvent.clients"
+                                        :selectedFormat="newEventModal.data.personalEvent.selectedFormat" />
+                                </label>
+                            </label>
+
+                            <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
                                 <textarea v-model="newEventModal.data.personalEvent.aditionalInfo"
                                     placeholder="Ingresar detalles del cliente"
@@ -304,30 +305,28 @@
                         </div>
                         <div v-show="newEventModal.data.selectedEventType == 'Nuevo entrenamiento'"
                             class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
+                            <label class="flex flex-col items-center col-span-2">
+                                <span class="font-medium text-sm mb-2">Horario</span>
+                                <div class="flex max-w-max items-center gap-4">
+                                    <select v-model="selectedStartTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                            :value="time">
+                                            {{ time }}
+                                        </option>
+                                    </select>
+                                    <span class="font-semibold">-</span>
+                                    <p>{{ automaticallySelectedEndTime }}hrs</p>
+                                </div>
+                            </label>
 
-                            <!-- Nuevo input con chips -->
-                            <div class="grid gap-6 md:grid-cols-2 col-span-2">
-                                <label class="w-full flex flex-col">
-                                    <span class="font-medium text-sm mb-2">Clientes</span>
-                                    <ProfessionalDashboardCalendarClientSearchInput
-                                        v-model:modelValue="newEventModal.data.manualSession.clients"
-                                        :selectedFormat="newEventModal.data.manualSession.selectedFormat" />
-                                </label>
-                                <label class="flex flex-col items-center">
-                                    <span class="font-medium text-sm mb-2">Horario</span>
-                                    <div class="flex max-w-max items-center gap-4">
-                                        <select v-model="selectedStartTime"
-                                            class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                            <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
-                                                :value="time">
-                                                {{ time }}
-                                            </option>
-                                        </select>
-                                        <span class="font-semibold">-</span>
-                                        <p>{{ automaticallySelectedEndTime }}hrs</p>
-                                    </div>
-                                </label>
-                            </div>
+                            <label class="w-full flex flex-col col-span-2">
+                                <span class="font-medium text-sm mb-2">Clientes</span>
+                                <ProfessionalDashboardCalendarClientSearchInput
+                                    v-model:modelValue="newEventModal.data.manualSession.clients"
+                                    :selectedFormat="newEventModal.data.manualSession.selectedFormat" />
+                            </label>
+
                             <div class="grid gap-6 md:grid-cols-2 col-span-2">
                                 <label class="flex flex-col">
                                     <span class="font-medium text-sm mb-2">Formato</span>
@@ -432,28 +431,29 @@
     }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
                     <form action="">
                         <div class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
-                            <div class="grid gap-6 md:grid-cols-2 col-span-2">
+                            <label class="flex flex-col items-center col-span-2">
+                                <span class="font-medium text-sm mb-2">Horario</span>
+                                <div class="flex max-w-max items-center gap-4">
+                                    <select v-model="selectedStartTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                            :value="time">
+                                            {{ time }}
+                                        </option>
+                                    </select>
+                                    <span class="font-semibold">-</span>
+                                    <p>{{ automaticallySelectedEndTime }}hrs</p>
+                                </div>
+                            </label>
+                            <div class="col-span-2">
                                 <label class="w-full flex flex-col">
                                     <span class="font-medium text-sm mb-2">Clientes</span>
                                     <ProfessionalDashboardCalendarClientSearchInput
                                         v-model:modelValue="editManualSessionModal.data.clients"
                                         :selectedFormat="editManualSessionModal.data.selectedFormat" />
                                 </label>
-                                <label class="flex flex-col items-center">
-                                    <span class="font-medium text-sm mb-2">Horario</span>
-                                    <div class="flex max-w-max items-center gap-4">
-                                        <select v-model="selectedStartTime"
-                                            class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                            <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
-                                                :value="time">
-                                                {{ time }}
-                                            </option>
-                                        </select>
-                                        <span class="font-semibold">-</span>
-                                        <p>{{ automaticallySelectedEndTime }}hrs</p>
-                                    </div>
-                                </label>
                             </div>
+
                             <div class="grid gap-6 md:grid-cols-2 col-span-2">
                                 <label class="flex flex-col">
                                     <span class="font-medium text-sm mb-2">Formato</span>
@@ -526,16 +526,8 @@
                     </div>
                     <form action="">
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
-                            <label class="w-full flex flex-col">
-                                <label class="w-full flex flex-col col-span-2">
-                                    <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
-                                    <ProfessionalDashboardCalendarClientSearchInput
-                                        v-model:modelValue="editPersonalEventModal.data.clients"
-                                        :selectedFormat="editPersonalEventModal.data.selectedFormat" />
-                                </label>
-                            </label>
-                            <label class="flex flex-col">
-                                <span class="font-medium text-sm mb-2">Formato</span>
+                            <label class="flex flex-col items-center col-span-2">
+                                <span class="font-medium text-sm mb-2">Horario</span>
                                 <div class="flex max-w-max items-center gap-4">
                                     <select v-model="selectedStartTime"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
@@ -553,6 +545,15 @@
                                     </select>
                                 </div>
                             </label>
+                            <label class="w-full flex flex-col col-span-2">
+                                <label class="w-full flex flex-col col-span-2">
+                                    <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
+                                    <ProfessionalDashboardCalendarClientSearchInput
+                                        v-model:modelValue="editPersonalEventModal.data.clients"
+                                        :selectedFormat="editPersonalEventModal.data.selectedFormat" />
+                                </label>
+                            </label>
+
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
                                 <textarea v-model="editPersonalEventModal.data.aditionalInfo"
