@@ -86,8 +86,8 @@
                                 </div>
                             </button>
                             <button v-else
-                                @click="editEmptySessionModal.handleClick(day[index].day, day[index].time, day[index].event)"
-                                :disabled="!editMode || ((day[index].event && day[index].event.type === 'personal') && isLastEventUnique(day, index))"
+                                @click="editEventHandler.handleClick(day[index].day, day[index].time, day[index].event)"
+                                :disabled="!editMode || ((day[index].event && day[index].event.type === 'personal') && !isFirstEventUnique(day, index))"
                                 class="w-full h-full" :class="eventClasses(day, index)">
                                 <div v-if="day[index].event.type === 'personal' &&
                                     isFirstEventUnique(day, index) && !editMode"
@@ -97,7 +97,7 @@
                                     </p>
                                 </div>
                                 <div
-                                    :class="{ hidden: !editMode || ((day[index].event && day[index].event.type === 'personal') && isLastEventUnique(day, index)) }">
+                                    :class="{ hidden: !editMode || ((day[index].event && day[index].event.type === 'personal') && !isFirstEventUnique(day, index)) }">
                                     <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
                                 </div>
                             </button>
@@ -190,7 +190,7 @@
                                     </option>
                                 </select>
                                 <span class="font-semibold">-</span>
-                                <p>{{ selectedEndTime }}hrs</p>
+                                <p>{{ automaticallySelectedEndTime }}hrs</p>
                             </div>
                         </div>
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
@@ -270,7 +270,8 @@
                                 <label class="w-full flex flex-col col-span-2">
                                     <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
                                     <ProfessionalDashboardCalendarClientSearchInput
-                                        :selectedFormat="newEventModal.data.selectedFormat" />
+                                        v-model:modelValue="newEventModal.data.personalEvent.clients"
+                                        :selectedFormat="newEventModal.data.personalEvent.selectedFormat" />
                                 </label>
                             </label>
                             <label class="flex flex-col">
@@ -284,7 +285,7 @@
                                         </option>
                                     </select>
                                     <span class="font-semibold">-</span>
-                                    <select v-model="selectedEndTime"
+                                    <select v-model="manuallySelectedEndTime"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                         <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">
                                             {{ time }}
@@ -294,7 +295,7 @@
                             </label>
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
-                                <textarea v-model="newEventModal.data.aditionalInfo"
+                                <textarea v-model="newEventModal.data.personalEvent.aditionalInfo"
                                     placeholder="Ingresar detalles del cliente"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary"
                                     rows="4"></textarea>
@@ -302,32 +303,35 @@
 
                         </div>
                         <div v-show="newEventModal.data.selectedEventType == 'Nuevo entrenamiento'"
-                            class="grid gap-6 mb-6 md:grid-cols-2">
+                            class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
 
                             <!-- Nuevo input con chips -->
-                            <label class="w-full flex flex-col">
-                                <span class="font-medium text-sm mb-2">Clientes</span>
-                                <ProfessionalDashboardCalendarClientSearchInput
-                                    :selectedFormat="newEventModal.data.selectedFormat" />
-                            </label>
-                            <label class="flex flex-col">
-                                <span class="font-medium text-sm mb-2">Formato</span>
-                                <div class="flex max-w-max items-center gap-4">
-                                    <select v-model="selectedStartTime"
-                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                        <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
-                                            :value="time">
-                                            {{ time }}
-                                        </option>
-                                    </select>
-                                    <span class="font-semibold">-</span>
-                                    <p>{{ selectedEndTime }}hrs</p>
-                                </div>
-                            </label>
+                            <div class="grid gap-6 md:grid-cols-2 col-span-2">
+                                <label class="w-full flex flex-col">
+                                    <span class="font-medium text-sm mb-2">Clientes</span>
+                                    <ProfessionalDashboardCalendarClientSearchInput
+                                        v-model:modelValue="newEventModal.data.manualSession.clients"
+                                        :selectedFormat="newEventModal.data.manualSession.selectedFormat" />
+                                </label>
+                                <label class="flex flex-col items-center">
+                                    <span class="font-medium text-sm mb-2">Horario</span>
+                                    <div class="flex max-w-max items-center gap-4">
+                                        <select v-model="selectedStartTime"
+                                            class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                            <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                                :value="time">
+                                                {{ time }}
+                                            </option>
+                                        </select>
+                                        <span class="font-semibold">-</span>
+                                        <p>{{ automaticallySelectedEndTime }}hrs</p>
+                                    </div>
+                                </label>
+                            </div>
                             <div class="grid gap-6 md:grid-cols-2 col-span-2">
                                 <label class="flex flex-col">
                                     <span class="font-medium text-sm mb-2">Formato</span>
-                                    <select v-model="newEventModal.data.selectedFormat"
+                                    <select v-model="newEventModal.data.manualSession.selectedFormat"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                         <option value="Individual">Individual</option>
                                         <option value="Grupal">Grupal</option>
@@ -335,7 +339,7 @@
                                 </label>
                                 <label class="flex flex-col">
                                     <span class="font-medium text-sm mb-2">Modalidad</span>
-                                    <select v-model="newEventModal.data.selectedModality"
+                                    <select v-model="newEventModal.data.manualSession.selectedModality"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                         <option value="Online">Online</option>
                                         <option value="Presencial">Presencial</option>
@@ -344,7 +348,7 @@
                             </div>
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Link</span>
-                                <input v-model="newEventModal.data.link" type="text" placeholder="https://"
+                                <input v-model="newEventModal.data.manualSession.link" type="text" placeholder="https://"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
                             </label>
                         </div>
@@ -357,12 +361,10 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <button @click="newEventModal.closeModal" class="px-4 py-2 rounded-md bg-tertiary text-white">
-                                Cancelar
-                            </button>
-                            <button @click="newEventModal.closeModal" class="px-4 py-2 rounded-md bg-primary text-white">
-                                Confirmar
-                            </button>
+                            <CommonButton @click="newEventModal.closeModal" text="Cancelar"
+                                class="px-4 py-2 bg-tertiary text-white" />
+                            <CommonButton text="Crear nuevo evento" @click="newEventModal.addNewEvent" class="px-4 py-2"
+                                :loading="newEventModal.data.loading" />
                         </div>
                     </div>
                 </div>
@@ -382,7 +384,7 @@
                             <div class="flex items-center gap-4">
                                 <p> {{ selectedStartTime }}</p>
                                 <span class="font-semibold">-</span>
-                                <p>{{ selectedEndTime }}hrs</p>
+                                <p>{{ automaticallySelectedEndTime }}hrs</p>
                             </div>
                         </div>
                         <div class="grid gap-6 mb-6">
@@ -406,9 +408,9 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <button @click="editEmptySessionModal.closeModal"
+                            <button @click="editEmptySessionModal.removeSession"
                                 class="px-4 py-2 rounded-md bg-tertiary text-white">
-                                Cancelar
+                                Eliminar sesión
                             </button>
                             <button @click="editEmptySessionModal.closeModal"
                                 class="px-4 py-2 rounded-md bg-primary text-white">
@@ -420,11 +422,163 @@
             </CommonModal>
         </Teleport>
 
+        <!-- Edit manual session modal -->
+
+        <Teleport to="body">
+            <CommonModal ref="editManualSessionModalRef">
+                <div class="px-6 py-4">
+                    <h3 class="mb-10 text-center font-semibold text-xl"> <span class="capitalize">{{
+                        currentlySelectedDayName }} </span> {{ currentlySelectedDayNumber
+    }} de <span class="capitalize">{{ currentlySelectedMonth }}</span></h3>
+                    <form action="">
+                        <div class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
+                            <div class="grid gap-6 md:grid-cols-2 col-span-2">
+                                <label class="w-full flex flex-col">
+                                    <span class="font-medium text-sm mb-2">Clientes</span>
+                                    <ProfessionalDashboardCalendarClientSearchInput
+                                        v-model:modelValue="editManualSessionModal.data.clients"
+                                        :selectedFormat="editManualSessionModal.data.selectedFormat" />
+                                </label>
+                                <label class="flex flex-col items-center">
+                                    <span class="font-medium text-sm mb-2">Horario</span>
+                                    <div class="flex max-w-max items-center gap-4">
+                                        <select v-model="selectedStartTime"
+                                            class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                            <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                                :value="time">
+                                                {{ time }}
+                                            </option>
+                                        </select>
+                                        <span class="font-semibold">-</span>
+                                        <p>{{ automaticallySelectedEndTime }}hrs</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="grid gap-6 md:grid-cols-2 col-span-2">
+                                <label class="flex flex-col">
+                                    <span class="font-medium text-sm mb-2">Formato</span>
+                                    <select v-model="editManualSessionModal.data.selectedFormat"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option value="Individual">Individual</option>
+                                        <option value="Grupal">Grupal</option>
+                                    </select>
+                                </label>
+                                <label class="flex flex-col">
+                                    <span class="font-medium text-sm mb-2">Modalidad</span>
+                                    <select v-model="editManualSessionModal.data.selectedModality"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option value="Online">Online</option>
+                                        <option value="Presencial">Presencial</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <label class="w-full flex flex-col col-span-2">
+                                <span class="font-medium text-sm mb-2">Link</span>
+                                <input v-model="editManualSessionModal.data.link" type="text" placeholder="https://"
+                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
+                            </label>
+                        </div>
+                        <div class="flex items-center my-10">
+                            <input id="checkbox" type="checkbox" class="w-4 h-4 accent-primary-600 rounded">
+                            <label for="checkbox" class="ms-2 text-sm text-gray-500">Enviar
+                                notificación del evento</label>
+                        </div>
+                    </form>
+                    <div>
+                        <div class="flex justify-between">
+                            <button @click="editManualSessionModal.closeModal"
+                                class="px-4 py-2 rounded-md bg-tertiary text-white">
+                                Cancelar
+                            </button>
+                            <button @click="editManualSessionModal.closeModal"
+                                class="px-4 py-2 rounded-md bg-primary text-white">
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </CommonModal>
+        </Teleport>
+
+        <Teleport to="body">
+            <CommonModal ref="editPersonalEventModalRef">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-center gap-x-2 mb-6">
+                        <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
+                            <Icon class="text-xl"
+                                :class="{ 'text-gray-300': isFirstDayOfWeek, 'text-gray-800': !isFirstDayOfWeek }"
+                                name="fa6-solid:chevron-left"></Icon>
+                        </button>
+                        <h3 class="text-center font-semibold text-xl w-60">
+                            <span class="capitalize">
+                                {{ currentlySelectedDayName }}
+                            </span>
+                            {{ currentlySelectedDayNumber }} de
+                            <span class="capitalize">
+                                {{ currentlySelectedMonth }}
+                            </span>
+                        </h3>
+                        <button @click="goToNextDay" :disabled="isLastDayOfWeek">
+                            <Icon class="text-xl"
+                                :class="{ 'text-gray-300': isLastDayOfWeek, 'text-gray-800': !isLastDayOfWeek }"
+                                name="fa6-solid:chevron-right"></Icon>
+                        </button>
+                    </div>
+                    <form action="">
+                        <div class="grid gap-6 mb-6 md:grid-cols-2">
+                            <label class="w-full flex flex-col">
+                                <label class="w-full flex flex-col col-span-2">
+                                    <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
+                                    <ProfessionalDashboardCalendarClientSearchInput
+                                        v-model:modelValue="editPersonalEventModal.data.clients"
+                                        :selectedFormat="editPersonalEventModal.data.selectedFormat" />
+                                </label>
+                            </label>
+                            <label class="flex flex-col">
+                                <span class="font-medium text-sm mb-2">Formato</span>
+                                <div class="flex max-w-max items-center gap-4">
+                                    <select v-model="selectedStartTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                            :value="time">
+                                            {{ time }}
+                                        </option>
+                                    </select>
+                                    <span class="font-semibold">-</span>
+                                    <select v-model="manuallySelectedEndTime"
+                                        class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                                        <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">
+                                            {{ time }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </label>
+                            <label class="w-full flex flex-col col-span-2">
+                                <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
+                                <textarea v-model="editPersonalEventModal.data.aditionalInfo"
+                                    placeholder="Ingresar detalles del cliente"
+                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary"
+                                    rows="4"></textarea>
+                            </label>
+                        </div>
+                    </form>
+                    <div>
+                        <div class="flex justify-between">
+                            <CommonButton @click="editPersonalEventModal.closeModal" text="Cancelar"
+                                class="px-4 py-2 bg-tertiary text-white" />
+                            <CommonButton text="Crear nuevo evento" @click="editPersonalEventModal.closeModal"
+                                class="px-4 py-2" :loading="editPersonalEventModal.data.loading" />
+                        </div>
+                    </div>
+                </div>
+            </CommonModal>
+        </Teleport>
+
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();
@@ -539,6 +693,11 @@ const formatTime = (hour) => {
     return formatter.format(date);
 };
 
+const parseTime = (timeString) => {
+    // 'timeString' is a string like '13:00'
+    return parseInt(timeString.split(':')[0]);
+};
+
 const goToNextWeek = () => {
     // Create a new Date object with the updated date
     const newDate = new Date(currentDate.value);
@@ -612,12 +771,37 @@ const endTimeOptions = computed(() => {
 });
 
 //instead of multiple options, there will be only one option, the one right after the start time
-const selectedEndTime = computed(() => {
+const automaticallySelectedEndTime = computed(() => {
     const startIndex = timesList.value.findIndex(time => formatTime(time) === selectedStartTime.value);
     if (startIndex === timesList.value.length - 1) {
         return '21:00';
     } else {
         return formatTime(timesList.value[startIndex + 1]);
+    }
+});
+
+
+const manuallySelectedEndTime = ref(formatTime(timesList.value[1]));
+
+// Watch for changes in selectedStartTime
+// Watch for changes in selectedStartTime
+watch(selectedStartTime, (newStartTime, oldStartTime) => {
+    // Convert the times to integers for comparison
+    const newStartTimeInt = parseTime(newStartTime);
+    const manuallySelectedEndTimeInt = parseTime(manuallySelectedEndTime.value);
+
+    // If the new start time is later than the currently selected end time
+    if (newStartTimeInt > manuallySelectedEndTimeInt) {
+        // Find the index of the new end time
+        const newEndTimeIndex = timesList.value.findIndex(time => time === newStartTimeInt) + 1;
+
+        // If the new end time index is out of range, set the end time to '21:00'
+        if (newEndTimeIndex >= timesList.value.length) {
+            manuallySelectedEndTime.value = '21:00';
+        } else {
+            // Otherwise, update the end time to be one hour after the new start time
+            manuallySelectedEndTime.value = formatTime(timesList.value[newEndTimeIndex]);
+        }
     }
 });
 
@@ -770,11 +954,18 @@ const newEventModalRef = ref(null);
 const newEventModal = reactive({
     data: {
         selectedEventType: 'Nuevo entrenamiento',
-        clients: [],
-        selectedFormat: 'Individual',
-        selectedModality: 'Online',
-        link: '',
-        additionalInfo: '',
+        loading: false,
+        manualSession: {
+            clients: [],
+            selectedFormat: 'Individual',
+            selectedModality: 'Online',
+            link: '',
+        },
+        personalEvent: {
+            clients: [],
+            selectedFormat: 'Grupal',
+            additionalInfo: '',
+        },
     },
     openModal: () => {
         if (newEventModalRef.value) {
@@ -791,9 +982,110 @@ const newEventModal = reactive({
         setSelectedStartTimeToFirstAvailableTime();
         newEventModal.openModal();
     },
+    addNewEvent: async () => {
+        newEventModal.data.loading = true;
+        const localDateString = getLocalDateString(currentlySelectedDate.value);
+
+        console.log(selectedStartTime.value);
+        console.log(manuallySelectedEndTime.value);
+
+        if (newEventModal.data.selectedEventType == 'Nuevo entrenamiento') {
+
+            const clientsIDs = newEventModal.data.manualSession.clients.map(client => client.user_id);
+
+            const body = {
+                "user_id": userStore.getUser().user_id,
+                "date": localDateString, // fecha en formato YYYY-MM-DD
+                "start_time": selectedStartTime.value, // hora en formato HH:MM
+                "end_time": automaticallySelectedEndTime.value, // hora en formato HH:MM
+                "format": newEventModal.data.manualSession.selectedFormat, // "Individual" o "Grupal"
+                "modality": newEventModal.data.manualSession.selectedModality, // "Online" o "Presencial"
+                "text": newEventModal.data.manualSession.link, // link de la sesión, se pasa como text
+                "clients": clientsIDs, // array de ids de clientes
+                "type": "manual_session", // "manual session en caso de Nuevo entrenamiento"
+            };
+
+            const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": userStore.getUserToken()
+                },
+                body: body
+            });
+
+            if (error.value) {
+                console.log("Fetch error:", error.value);
+                newEventModal.data.loading = false;
+                return;
+            }
+
+            newEventModal.data.loading = false;
+            newEventModal.closeModal();
+
+            if (data.value.success) {
+                getEvents();
+            }
+            else {
+                console.log(data.value.message);
+            }
+
+        }
+        else if (newEventModal.data.selectedEventType == 'Evento personal') {
+
+            const clientsIDs = newEventModal.data.personalEvent.clients.map(client => client.user_id);
+
+            const body = {
+                "user_id": userStore.getUser().user_id,
+                "date": localDateString, // fecha en formato YYYY-MM-DD
+                "start_time": selectedStartTime.value, // hora en formato HH:MM
+                "end_time": manuallySelectedEndTime.value, // hora en formato HH:MM
+                "text": newEventModal.data.personalEvent.additionalInfo, // información adicional
+                "clients": clientsIDs, // array de ids de clientes
+                "type": "personal", // "Nuevo entrenamiento" o "Evento personal"
+            };
+
+            const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": userStore.getUserToken()
+                },
+                body: body
+            });
+
+            if (error.value) {
+                console.log("Fetch error:", error.value);
+                newEventModal.data.loading = false;
+                return;
+            }
+
+            newEventModal.data.loading = false;
+            newEventModal.closeModal();
+
+            if (data.value.success) {
+                getEvents();
+            }
+            else {
+                console.log(data.value.message);
+            }
+        }
+    },
 });
 
-// editEmptySessionModal
+const editEventHandler = reactive({
+    handleClick: (day, time, event) => {
+        if (event.type === 'session') {
+            editEmptySessionModal.handleClick(day, time, event);
+        }
+        else if (event.type === 'manual_session') {
+            editManualSessionModal.handleClick(day, time, event);
+        }
+        else if (event.type === 'personal') {
+            editPersonalEventModal.handleClick(day, time, event);
+        }
+    }
+});
 
 // Edit empty session modal
 const editEmptySessionModalRef = ref(null);
@@ -801,7 +1093,8 @@ const editEmptySessionModalRef = ref(null);
 const editEmptySessionModal = reactive({
     data: {
         selectedFormat: null,
-        selectedModality: null
+        selectedModality: null,
+        event: null,
     },
     openModal: (day, time) => {
         if (editEmptySessionModalRef.value) {
@@ -814,12 +1107,77 @@ const editEmptySessionModal = reactive({
         }
     },
     handleClick: (day, time, event) => {
-
         editEmptySessionModal.data.selectedFormat = event.session_info.format;
         editEmptySessionModal.data.selectedModality = event.session_info.modality;
-
+        editEmptySessionModal.data.event = event;
         updateCurrentlySelectedDate(day, time);
         editEmptySessionModal.openModal();
+    },
+    removeSession: async () => {
+        editEmptySessionModalRef.value.closeModal();
+    },
+});
+
+const editManualSessionModalRef = ref(null);
+
+const editManualSessionModal = reactive({
+    data: {
+        selectedEventType: 'Nuevo entrenamiento',
+        clients: [],
+        selectedFormat: 'Individual',
+        selectedModality: 'Online',
+        link: '',
+        loading: false,
+        event: null,
+    },
+    openModal: () => {
+        if (editManualSessionModalRef.value) {
+            editManualSessionModalRef.value.openModal();
+        }
+    },
+    closeModal: () => {
+        if (editManualSessionModalRef.value) {
+            editManualSessionModalRef.value.closeModal();
+        }
+    },
+    handleClick: (day, time, event) => {
+        editManualSessionModal.data.selectedEventType = event.type;
+        editManualSessionModal.data.clients = [...event.clients]; // Create a new array
+        editManualSessionModal.data.selectedFormat = event.session_info.format;
+        editManualSessionModal.data.selectedModality = event.session_info.modality;
+        editManualSessionModal.data.link = event.session_info.link;
+        updateCurrentlySelectedDate(day, time);
+        editManualSessionModal.openModal();
+    }
+});
+
+const editPersonalEventModalRef = ref(null);
+
+const editPersonalEventModal = reactive({
+    data: {
+        clients: [],
+        selectedFormat: 'Grupal',
+        additionalInfo: '',
+        loading: false,
+        event: null,
+    },
+    openModal: () => {
+        if (editPersonalEventModalRef.value) {
+            editPersonalEventModalRef.value.openModal();
+        }
+    },
+    closeModal: () => {
+        if (editPersonalEventModalRef.value) {
+            editPersonalEventModalRef.value.closeModal();
+        }
+    },
+    handleClick: (day, time, event) => {
+        editPersonalEventModal.data.clients = [...event.clients]; // Create a new array
+        editPersonalEventModal.data.additionalInfo = event.text;
+        updateCurrentlySelectedDate(day, time);
+        console.log(event);
+        manuallySelectedEndTime.value = formatTime(parseTime(event.end_time));
+        editPersonalEventModal.openModal();
     }
 });
 
@@ -889,8 +1247,6 @@ const getEvents = async () => {
     initializeEventMatrix(); // Reset the matrix before populating
 
     if (data.value.success) {
-        console.log("data value");
-        console.log(data.value);
         populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
         events.value = data.value.events;
     }
