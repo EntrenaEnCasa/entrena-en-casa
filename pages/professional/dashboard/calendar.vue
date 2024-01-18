@@ -562,8 +562,8 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <CommonButton @click="editPersonalEventModal.closeModal" text="Cancelar"
-                                class="px-4 py-2 bg-tertiary text-white" />
+                            <CommonButton @click="editPersonalEventModal.removeSession" text="Eliminar evento"
+                                class="px-4 py-2 bg-tertiary" :loading="editPersonalEventModal.data.loading" />
                             <CommonButton text="Crear nuevo evento" @click="editPersonalEventModal.closeModal"
                                 class="px-4 py-2" :loading="editPersonalEventModal.data.loading" />
                         </div>
@@ -1239,11 +1239,37 @@ const editPersonalEventModal = reactive({
     handleClick: (day, time, event) => {
         editPersonalEventModal.data.clients = [...event.clients]; // Create a new array
         editPersonalEventModal.data.additionalInfo = event.text;
+        editPersonalEventModal.data.event = event;
         updateCurrentlySelectedDate(day, time);
-        console.log(event);
         manuallySelectedEndTime.value = formatTime(parseTime(event.end_time));
         editPersonalEventModal.openModal();
-    }
+    },
+    removeSession: async () => {
+
+        editPersonalEventModal.data.loading = true;
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editPersonalEventModal.data.event.event_id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userStore.getUserToken()
+            },
+        });
+
+        editPersonalEventModal.data.loading = false;
+
+        if (error.value) {
+            console.log("Fetch error:", error.value);
+            return;
+        }
+
+        if (data.value.success) {
+            editPersonalEventModal.closeModal();
+            getEvents();
+        }
+        else {
+            console.log(data.value.message);
+        }
+    },
 });
 
 const newDropdown = reactive({
