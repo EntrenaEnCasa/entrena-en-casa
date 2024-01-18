@@ -407,10 +407,9 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <button @click="editEmptySessionModal.removeSession"
-                                class="px-4 py-2 rounded-md bg-tertiary text-white">
-                                Eliminar sesión
-                            </button>
+                            <CommonButton text="Eliminar sesión" @click="editEmptySessionModal.removeSession"
+                                :loading="editEmptySessionModal.data.loading" class="px-4 py-2 bg-tertiary" />
+
                             <button @click="editEmptySessionModal.closeModal"
                                 class="px-4 py-2 rounded-md bg-primary text-white">
                                 Confirmar cambios
@@ -933,6 +932,7 @@ const newEmptySessionModal = reactive({
     },
     loading: false,
     openModal: () => {
+        newEmptySessionModal.resetModalData();
         if (newEmptySessionModalRef.value) {
             newEmptySessionModalRef.value.openModal();
         }
@@ -941,6 +941,10 @@ const newEmptySessionModal = reactive({
         if (newEmptySessionModalRef.value) {
             newEmptySessionModalRef.value.closeModal();
         }
+    },
+    resetModalData: () => {
+        newEmptySessionModal.data.selectedFormat = 'Individual';
+        newEmptySessionModal.data.selectedModality = 'Online';
     },
     handleClickFromButton: () => {
         goToFirstDay();
@@ -969,6 +973,7 @@ const newEventModal = reactive({
         },
     },
     openModal: () => {
+        newEventModal.resetModalData();
         if (newEventModalRef.value) {
             newEventModalRef.value.openModal();
         }
@@ -977,6 +982,16 @@ const newEventModal = reactive({
         if (newEventModalRef.value) {
             newEventModalRef.value.closeModal();
         }
+    },
+    resetModalData: () => {
+        newEventModal.data.selectedEventType = 'Nuevo entrenamiento';
+        newEventModal.data.manualSession.clients = [];
+        newEventModal.data.manualSession.selectedFormat = 'Individual';
+        newEventModal.data.manualSession.selectedModality = 'Online';
+        newEventModal.data.manualSession.link = '';
+        newEventModal.data.personalEvent.clients = [];
+        newEventModal.data.personalEvent.selectedFormat = 'Grupal';
+        newEventModal.data.personalEvent.additionalInfo = '';
     },
     handleClick: () => {
         goToFirstDay();
@@ -1096,6 +1111,7 @@ const editEmptySessionModal = reactive({
         selectedFormat: null,
         selectedModality: null,
         event: null,
+        loading: false,
     },
     openModal: (day, time) => {
         if (editEmptySessionModalRef.value) {
@@ -1115,7 +1131,30 @@ const editEmptySessionModal = reactive({
         editEmptySessionModal.openModal();
     },
     removeSession: async () => {
-        editEmptySessionModalRef.value.closeModal();
+
+        editEmptySessionModal.data.loading = true;
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userStore.getUserToken()
+            },
+        });
+
+        editEmptySessionModal.data.loading = false;
+
+        if (error.value) {
+            console.log("Fetch error:", error.value);
+            return;
+        }
+
+        if (data.value.success) {
+            editEmptySessionModal.closeModal();
+            getEvents();
+        }
+        else {
+            console.log(data.value.message);
+        }
     },
 });
 
