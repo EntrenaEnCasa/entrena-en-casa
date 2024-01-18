@@ -296,7 +296,7 @@
 
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
-                                <textarea v-model="newEventModal.data.personalEvent.aditionalInfo"
+                                <textarea v-model="newEventModal.data.personalEvent.additionalInfo"
                                     placeholder="Ingresar detalles del cliente"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary"
                                     rows="4"></textarea>
@@ -408,12 +408,10 @@
                     <div>
                         <div class="flex justify-between">
                             <CommonButton text="Eliminar sesión" @click="editEmptySessionModal.removeSession"
-                                :loading="editEmptySessionModal.data.loading" class="px-4 py-2 bg-tertiary" />
+                                :loading="editEmptySessionModal.data.removeSessionLoading" class="px-4 py-2 bg-tertiary" />
 
-                            <button @click="editEmptySessionModal.closeModal"
-                                class="px-4 py-2 rounded-md bg-primary text-white">
-                                Confirmar cambios
-                            </button>
+                            <CommonButton text="Confirmar cambios" @click="editEmptySessionModal.updateSession"
+                                :loading="editEmptySessionModal.data.updateSessionLoading" class="px-4 py-2" />
                         </div>
                     </div>
                 </div>
@@ -435,7 +433,7 @@
                                 <div class="flex max-w-max items-center gap-4">
                                     <select v-model="selectedStartTime"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                        <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                        <option v-for="    time     in     startTimeOptions    " :key="`start-${time}`"
                                             :value="time">
                                             {{ time }}
                                         </option>
@@ -486,11 +484,9 @@
                     <div>
                         <div class="flex justify-between">
                             <CommonButton text="Eliminar sesión" @click="editManualSessionModal.removeSession"
-                                :loading="editManualSessionModal.data.loading" class="px-4 py-2 bg-tertiary" />
-                            <button @click="editManualSessionModal.closeModal"
-                                class="px-4 py-2 rounded-md bg-primary text-white">
-                                Confirmar
-                            </button>
+                                :loading="editManualSessionModal.data.removeSessionLoading" class="px-4 py-2 bg-tertiary" />
+                            <CommonButton text="Confirmar cambios" @click="editManualSessionModal.updateSession"
+                                :loading="editManualSessionModal.data.updateSessionLoading" class="px-4 py-2" />
                         </div>
                     </div>
                 </div>
@@ -528,7 +524,7 @@
                                 <div class="flex max-w-max items-center gap-4">
                                     <select v-model="selectedStartTime"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                        <option v-for="   time    in    startTimeOptions   " :key="`start-${time}`"
+                                        <option v-for="    time     in     startTimeOptions    " :key="`start-${time}`"
                                             :value="time">
                                             {{ time }}
                                         </option>
@@ -536,7 +532,7 @@
                                     <span class="font-semibold">-</span>
                                     <select v-model="manuallySelectedEndTime"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                        <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">
+                                        <option v-for=" time  in  endTimeOptions " :key="`end-${time}`" :value="time">
                                             {{ time }}
                                         </option>
                                     </select>
@@ -553,7 +549,7 @@
 
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Información adicional (opcional)</span>
-                                <textarea v-model="editPersonalEventModal.data.aditionalInfo"
+                                <textarea v-model="editPersonalEventModal.data.additionalInfo"
                                     placeholder="Ingresar detalles del cliente"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary"
                                     rows="4"></textarea>
@@ -563,9 +559,9 @@
                     <div>
                         <div class="flex justify-between">
                             <CommonButton @click="editPersonalEventModal.removeSession" text="Eliminar evento"
-                                class="px-4 py-2 bg-tertiary" :loading="editPersonalEventModal.data.loading" />
-                            <CommonButton text="Crear nuevo evento" @click="editPersonalEventModal.closeModal"
-                                class="px-4 py-2" :loading="editPersonalEventModal.data.loading" />
+                                class="px-4 py-2 bg-tertiary" :loading="editPersonalEventModal.data.removeSessionLoading" />
+                            <CommonButton text="Confirmar cambios" @click="editPersonalEventModal.updateSession"
+                                class="px-4 py-2" :loading="editPersonalEventModal.data.updateSessionLoading" />
                         </div>
                     </div>
                 </div>
@@ -789,7 +785,7 @@ watch(selectedStartTime, (newStartTime, oldStartTime) => {
     const manuallySelectedEndTimeInt = parseTime(manuallySelectedEndTime.value);
 
     // If the new start time is later than the currently selected end time
-    if (newStartTimeInt > manuallySelectedEndTimeInt) {
+    if (newStartTimeInt >= manuallySelectedEndTimeInt) {
         // Find the index of the new end time
         const newEndTimeIndex = timesList.value.findIndex(time => time === newStartTimeInt) + 1;
 
@@ -1109,7 +1105,8 @@ const editEmptySessionModal = reactive({
         selectedFormat: null,
         selectedModality: null,
         event: null,
-        loading: false,
+        removeSessionLoading: false,
+        updateSessionLoading: false,
     },
     openModal: (day, time) => {
         if (editEmptySessionModalRef.value) {
@@ -1128,9 +1125,48 @@ const editEmptySessionModal = reactive({
         updateCurrentlySelectedDate(day, time);
         editEmptySessionModal.openModal();
     },
+    updateSession: async () => {
+
+        editEmptySessionModal.data.updateSessionLoading = true;
+        const event = editEmptySessionModal.data.event;
+        console.log(event);
+        const body = {
+            user_id: userStore.getUser().user_id,
+            session_id: event.session_info.session_id,
+            date: getLocalDateString(currentlySelectedDate.value),
+            time: selectedStartTime.value,
+            format: editEmptySessionModal.data.selectedFormat,
+            modality: editEmptySessionModal.data.selectedModality,
+            link: event.session_info.link,
+            clients: [],
+        }
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userStore.getUserToken()
+            },
+            body: body
+        });
+
+        editEmptySessionModal.data.updateSessionLoading = false;
+
+        if (error.value) {
+            console.log("Fetch error:", error.value);
+            return;
+        }
+
+        if (data.value.success) {
+            editEmptySessionModal.closeModal();
+            getEvents();
+        }
+        else {
+            console.log(data.value.message);
+        }
+    },
     removeSession: async () => {
 
-        editEmptySessionModal.data.loading = true;
+        editEmptySessionModal.data.removeSessionLoading = true;
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
             method: 'DELETE',
             headers: {
@@ -1139,7 +1175,7 @@ const editEmptySessionModal = reactive({
             },
         });
 
-        editEmptySessionModal.data.loading = false;
+        editEmptySessionModal.data.removeSessionLoading = false;
 
         if (error.value) {
             console.log("Fetch error:", error.value);
@@ -1147,6 +1183,7 @@ const editEmptySessionModal = reactive({
         }
 
         if (data.value.success) {
+            console.log(data.value.message);
             editEmptySessionModal.closeModal();
             getEvents();
         }
@@ -1166,7 +1203,8 @@ const editManualSessionModal = reactive({
         selectedModality: 'Online',
         link: '',
         event: null,
-        loading: false,
+        removeSessionLoading: false,
+        updateSessionLoading: false
     },
     openModal: () => {
         if (editManualSessionModalRef.value) {
@@ -1179,6 +1217,8 @@ const editManualSessionModal = reactive({
         }
     },
     handleClick: (day, time, event) => {
+        console.log("evento al abrir");
+        console.log(event);
         editManualSessionModal.data.selectedEventType = event.type;
         editManualSessionModal.data.clients = [...event.clients]; // Create a new array
         editManualSessionModal.data.selectedFormat = event.session_info.format;
@@ -1188,9 +1228,50 @@ const editManualSessionModal = reactive({
         updateCurrentlySelectedDate(day, time);
         editManualSessionModal.openModal();
     },
+    updateSession: async () => {
+
+        editManualSessionModal.data.updateSessionLoading = true;
+        const event = editManualSessionModal.data.event;
+        const body = {
+            user_id: userStore.getUser().user_id,
+            event_id: event.event_id,
+            session_id: event.session_info.session_id,
+            date: getLocalDateString(currentlySelectedDate.value),
+            start_time: selectedStartTime.value,
+            end_time: automaticallySelectedEndTime.value,
+            format: editManualSessionModal.data.selectedFormat,
+            modality: editManualSessionModal.data.selectedModality,
+            text: editManualSessionModal.data.link,
+            clients: editManualSessionModal.data.clients.map(client => client.user_id),
+        }
+        console.log(body);
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userStore.getUserToken()
+            },
+            body: body
+        });
+
+        editManualSessionModal.data.updateSessionLoading = false;
+
+        if (error.value) {
+            console.log("Fetch error:", error.value);
+            return;
+        }
+
+        if (data.value.success) {
+            editManualSessionModal.closeModal();
+            getEvents();
+        }
+        else {
+            console.log(data.value.message);
+        }
+    },
     removeSession: async () => {
 
-        editManualSessionModal.data.loading = true;
+        editManualSessionModal.data.removeSessionLoading = true;
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editManualSessionModal.data.event.session_info.session_id}`, {
             method: 'DELETE',
             headers: {
@@ -1199,7 +1280,7 @@ const editManualSessionModal = reactive({
             },
         });
 
-        editManualSessionModal.data.loading = false;
+        editManualSessionModal.data.removeSessionLoading = false;
 
         if (error.value) {
             console.log("Fetch error:", error.value);
@@ -1223,7 +1304,8 @@ const editPersonalEventModal = reactive({
         clients: [],
         selectedFormat: 'Grupal',
         additionalInfo: '',
-        loading: false,
+        removeSessionLoading: false,
+        updateSessionLoading: false,
         event: null,
     },
     openModal: () => {
@@ -1244,9 +1326,48 @@ const editPersonalEventModal = reactive({
         manuallySelectedEndTime.value = formatTime(parseTime(event.end_time));
         editPersonalEventModal.openModal();
     },
+    updateSession: async () => {
+
+        editPersonalEventModal.data.updateSessionLoading = true;
+        const event = editPersonalEventModal.data.event;
+        const body = {
+            user_id: userStore.getUser().user_id,
+            event_id: event.event_id,
+            date: getLocalDateString(currentlySelectedDate.value),
+            start_time: selectedStartTime.value,
+            end_time: manuallySelectedEndTime.value,
+            text: editPersonalEventModal.data.additionalInfo,
+            clients: editPersonalEventModal.data.clients.map(client => client.user_id),
+            type: "personal",
+        }
+
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userStore.getUserToken()
+            },
+            body: body
+        });
+
+        editPersonalEventModal.data.updateSessionLoading = false;
+
+        if (error.value) {
+            console.log("Fetch error:", error.value);
+            return;
+        }
+
+        if (data.value.success) {
+            editPersonalEventModal.closeModal();
+            getEvents();
+        }
+        else {
+            console.log(data.value.message);
+        }
+    },
     removeSession: async () => {
 
-        editPersonalEventModal.data.loading = true;
+        editPersonalEventModal.data.removeSessionLoading = true;
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editPersonalEventModal.data.event.event_id}`, {
             method: 'DELETE',
             headers: {
@@ -1255,7 +1376,7 @@ const editPersonalEventModal = reactive({
             },
         });
 
-        editPersonalEventModal.data.loading = false;
+        editPersonalEventModal.data.removeSessionLoading = false;
 
         if (error.value) {
             console.log("Fetch error:", error.value);
