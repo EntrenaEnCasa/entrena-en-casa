@@ -1,12 +1,10 @@
 <template>
     <Transition name="modal">
-        <div v-show="isOpen"
-            class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-screen max-h-full flex justify-center items-center backdrop-blur-sm bg-black/30"
-            :class="{ 'modal-open': isOpen }" @click="closeModal">
-            <div @click.stop
-                class="w-full md:w-auto bg-white rounded-xl p-4 flex flex-col justify-between max-w-[calc(100vw_-_50px)] max-h-[calc(100vh_-_80px)] relative overflow-y-auto">
+        <div v-show="isOpen" class="fixed grid place-items-center inset-0 z-50 p-4 bg-black/30 overflow-y-auto"
+            @click.self="closeModal">
+            <div @click.stop class="p-4 bg-white rounded-xl max-w-[calc(100vw_-_50px)] w-full lg:w-fit">
                 <div>
-                    <button type="button" class="bg-transparent hover:bg-gray-100 transition duration-75 rounded-lg p-1"
+                    <button type="button" class="p-1 transition duration-75 bg-transparent rounded-lg hover:bg-gray-100"
                         @click="closeModal">
                         <div class="flex items-center gap-x-1 text-primary">
                             <Icon name="ic:round-close" class="text-3xl" />
@@ -15,7 +13,7 @@
                         <span class="sr-only">Cerrar modal</span>
                     </button>
                 </div>
-                <div class="flex flex-col items-center mx-auto md:min-w-[40rem] w-full md:w-auto">
+                <div class="mx-auto md:min-w-[40rem] w-full md:w-auto">
                     <div class="w-full">
                         <slot></slot>
                     </div>
@@ -55,9 +53,8 @@ import { ref } from 'vue';
 const isOpen = ref(false);
 
 const openModal = () => {
+    // document.body.classList.add('overflow-hidden');
     isOpen.value = true;
-    const body = document.querySelector('body');
-    body.classList.add('modal-open');
 
     // Add the event listener
     window.addEventListener('keydown', handleKeyDown);
@@ -65,8 +62,7 @@ const openModal = () => {
 
 const closeModal = () => {
     isOpen.value = false;
-    const body = document.querySelector('body');
-    body.classList.remove('modal-open');
+    // document.body.classList.remove('overflow-hidden');
 
     // Remove the event listener
     window.removeEventListener('keydown', handleKeyDown);
