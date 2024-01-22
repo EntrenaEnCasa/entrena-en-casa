@@ -1,42 +1,73 @@
 <template>
     <div class="">
-        <div>
-            <input type="range" :min="inputMinValue" :max="inputMaxValue" v-model="inputRadius" />
-        </div>
-        <div class="relative">
-            <MapboxMap @load="onMapLoad" @move="onMapMove" @zoom="updateMapZoom" :map-id="mapID"
-                style="position: absolute; top: 0; bottom: 0; left: 250px; width: 500px; height: 500px;" :options="{
-                    style: 'mapbox://styles/mapbox/streets-v12',
-                    center: defaultCoordinates,
-                    zoom: 13,
-                }">
-                <MapboxSource source-id="circleSource" :source="{
-                    type: 'geojson',
-                    data: circleGeoJSON
-                }" />
-                <MapboxLayer v-if="circleEnabled" :layer="{
-                    id: 'circleLayer',
-                    type: 'fill', // or 'line' depending on how you want to style it
-                    source: 'circleSource',
-                    paint: {
-                        'fill-color': '#007cbf',
-                        'fill-opacity': circleOpacity
-                    }
-                }" />
-                <MapboxDefaultMarker @dragstart="onMarkerDragStart" :marker-id="markerID" :options="{ draggable: true }"
-                    :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
-                </MapboxDefaultMarker>
-                <MapboxGeocoder position="top-left" @result="(result) => flyToLocation(result)"
-                    :options="{ placeholder: 'Buscar', marker: false, language: 'es', countries: 'cl' }" />
-                <MapboxFullscreenControl />
-                <MapboxNavigationControl />
+        <CommonButton class="px-4 py-2" text="Abrir mapa" @click="openModal" />
+        <Teleport to="body">
+            <CommonModal ref="mapModal">
+                <div class="text-center mt-2 mb-10">
+                    <h2 class="text-2xl font-bold">Nuevo rango de cobertura</h2>
+                    <p class="text-sm text-gray-500">Selecciona tu ubicación para que los clientes puedan encontrarte
+                        más fácilmente.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 p-5">
+                    <div class="lg:pr-6 relative space-y-7">
+                        <label class="w-full flex flex-col">
+                            <span class="font-medium mb-2">Nombre del rango</span>
+                            <input type="text" placeholder="Escribe un nombre intuitivo..."
+                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
+                        </label>
+                        <label v-show="address != ''" class="w-full flex flex-col max-w-96">
+                            <span class="font-medium mb-2">Ubicación seleccionada</span>
+                            <div class="rounded border px-4 py-3">
+                                {{ address }}
+                            </div>
+                        </label>
+                        <label class="w-full flex flex-col">
+                            <span class="font-medium text">Radio de cobertura</span>
+                            <p class="text-sm text-gray-500 mb-3">Selecciona el radio de cobertura que deseas tener.</p>
+                            <ProfessionalDashboardProfileRangeInput :inputMinValue="inputMinValue"
+                                :inputMaxValue="inputMaxValue" v-model:sliderValue="inputRadius" />
+                        </label>
+                    </div>
+                    <div class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px]">
+                        <MapboxMap @load="onMapLoad" @move="onMapMove" @zoom="updateMapZoom" :map-id="mapID"
+                            class="w-full h-full rounded-xl" :options="{
+                                style: 'mapbox://styles/mapbox/streets-v12',
+                                center: defaultCoordinates,
+                                zoom: 13,
+                            }">
+                            <MapboxSource source-id="circleSource" :source="{
+                                type: 'geojson',
+                                data: circleGeoJSON
+                            }" />
+                            <MapboxLayer v-if="circleEnabled" :layer="{
+                                id: 'circleLayer',
+                                type: 'fill', // or 'line' depending on how you want to style it
+                                source: 'circleSource',
+                                paint: {
+                                    'fill-color': '#007cbf',
+                                    'fill-opacity': circleOpacity
+                                }
+                            }" />
+                            <MapboxDefaultMarker @dragstart="onMarkerDragStart" :marker-id="markerID"
+                                :options="{ draggable: true }" v-model:lnglat="markerCoordinates"
+                                @dragend="onMarkerDragEnd">
+                            </MapboxDefaultMarker>
+                            <MapboxGeocoder v-model="geocoderResult" position="top-left"
+                                @result="(result) => flyToLocation(result)"
+                                :options="{ placeholder: 'Buscar', marker: false, language: 'es', countries: 'cl' }" />
+                            <MapboxFullscreenControl />
+                            <MapboxNavigationControl />
 
-            </MapboxMap>
-        </div>
+                        </MapboxMap>
+                    </div>
+                </div>
+            </CommonModal>
+        </Teleport>
 
 
     </div>
 </template>
+
 <script setup>
 
 import * as turf from '@turf/turf';
@@ -47,9 +78,8 @@ const mapID = ref("map");
 // Refs
 const mapRef = useMapboxRef(mapID.value);
 const marker = useMapboxMarkerRef(markerID.value);
-
-// Marker
-// const showMarker = ref(true);
+const geocoderRef = ref(null);
+const geocoder = computed(() => geocoderRef.value?.geocoder);
 
 // Data
 const defaultCoordinates = ref([-71.593916, -33.040681]);
@@ -58,7 +88,7 @@ const mapZoom = ref(13); // Default zoom level
 
 // Radius Input
 const inputMinValue = ref(1);
-const inputMaxValue = ref(20);
+const inputMaxValue = ref(30);
 const inputRadius = ref(1); // Default radius in kilometers (km)
 
 // Radius circle
@@ -66,6 +96,19 @@ const circleCenter = ref([...defaultCoordinates.value]);
 const circleEnabled = ref(false);
 const markerCoordinates = ref([-71.593916, -33.040681]);
 const circleOpacity = ref(0.5);
+
+const address = ref("");
+const geocoderResult = ref("");
+
+const getReverseGeocodingData = async (coordinates) => {
+    const lng = coordinates[0];
+    const lat = coordinates[1];
+    const { data, error, fetch } = await useFetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=pk.eyJ1IjoiZ29uemFsby1icnVuYSIsImEiOiJjbHJqcGlkcDgwMWZiMmtwOWliMHJsOGkxIn0.waguLODGXsYqrv8Ol0lwoQ`);
+    address.value = data.value.features[0].place_name;
+    geocoderResult.value = data.value.features[0].place_name;
+    console.log(geocoderResult.value);
+};
+
 
 const createGeojsonCircle = (center, radiusInKm) => {
     if (!center || center.length !== 2 || !radiusInKm) {
@@ -89,11 +132,11 @@ const onMapLoad = () => {
 
 const zoomLevels = [
     { maxRadius: 1, zoom: 13 },
-    { maxRadius: 4, zoom: 12 },
-    { maxRadius: 7, zoom: 11 },
-    { maxRadius: 10, zoom: 10 },
-    { maxRadius: 15, zoom: 9 },
-    { maxRadius: Infinity, zoom: 8 } // For radius larger than 15
+    { maxRadius: 2, zoom: 12 },
+    { maxRadius: 5, zoom: 11 },
+    { maxRadius: 9, zoom: 10 },
+    { maxRadius: 19, zoom: 9 },
+    { maxRadius: Infinity, zoom: 8 }
 ];
 
 const calculateZoomLevel = (radiusInKm) => {
@@ -139,16 +182,16 @@ const easeInOutCubic = (t) => {
 const flyToLocation = (location) => {
     const arrayCoordinates = location.result.center;
     circleOpacity.value = 0;
+    getReverseGeocodingData(arrayCoordinates);
     mapRef.value?.flyTo({
         center: arrayCoordinates,
         zoom: calculateZoomLevel(inputRadius.value),
         duration: 4000,
     });
     const addMarker = () => {
-        marker.value.setLngLat(arrayCoordinates);
+        markerCoordinates.value = arrayCoordinates;
+        console.log(arrayCoordinates)
         updateCirclePosition(arrayCoordinates);
-
-        // Remove event listener after update
         mapRef.value.off('moveend', addMarker);
     };
 
@@ -157,20 +200,32 @@ const flyToLocation = (location) => {
 
 const onMarkerDragStart = () => {
     circleOpacity.value = 0;
-    console.log(marker.value.getLngLat().toArray());
 };
 
 const onMarkerDragEnd = () => {
-    console.log(marker.value.getLngLat().toArray());
     const newCoordinates = marker.value.getLngLat().toArray();
     updateCirclePosition(newCoordinates);
+    getReverseGeocodingData(newCoordinates);
 };
 
 const updateCirclePosition = (coordinates) => {
     circleOpacity.value = 0.5;
     circleCenter.value = coordinates;
-    circleGeoJSON.value = createGeojsonCircle(coordinates, inputRadius.value);
 }
+
+// Modal
+const mapModal = ref(null);
+
+const openModal = () => {
+    mapModal.value.openModal();
+    onModalOpened();
+};
+
+const onModalOpened = () => {
+    nextTick(() => {
+
+    });
+};
 
 onMounted(() => {
     if (mapRef.value) {
