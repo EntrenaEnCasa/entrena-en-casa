@@ -84,28 +84,28 @@
                     <div class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px]">
                         <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
                             style: 'mapbox://styles/mapbox/streets-v12',
-                            center: defaultCoordinates,
+                            center: DEFAULT_COORDINATES,
                             zoom: 13,
                         }">
                             <MapboxSource source-id="circleSource" :source="{
                                 type: 'geojson',
                                 data: circleGeoJSON
                             }" />
-                            <MapboxLayer v-if="circleEnabled" :layer="{
+                            <MapboxLayer v-if="circleData.enabled" :layer="{
                                 id: 'circleLayer',
                                 type: 'fill', // or 'line' depending on how you want to style it
                                 source: 'circleSource',
                                 paint: {
-                                    'fill-color': '#007cbf',
-                                    'fill-opacity': circleOpacity
+                                    'fill-color': circleData.fillColor,
+                                    'fill-opacity': circleData.opacity
                                 }
                             }" />
                             <MapboxDefaultMarker @dragstart="onMarkerDragStart" :marker-id="markerID"
-                                :options="{ draggable: true }" v-model:lnglat="markerCoordinates"
-                                @dragend="onMarkerDragEnd">
+                                :options="{ draggable: true }" :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
                             </MapboxDefaultMarker>
+
                             <MapboxGeocoder ref="geocoderRef" position="top-left"
-                                @result="(result) => flyToLocation(result)"
+                                @result="(location) => flyToLocation(location)"
                                 :options="{ placeholder: 'Buscar', marker: false, language: 'es', countries: 'cl' }" />
                             <MapboxFullscreenControl />
                             <MapboxNavigationControl />
@@ -130,6 +130,12 @@ import * as turf from '@turf/turf';
 import { useUserStore } from '~/stores/UserStore';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
+
+const DEFAULT_COORDINATES = [-71.593916, -33.040681];
+const DEFAULT_RADIUS = "1";
+const MIN_RADIUS = 1;
+const MAX_RADIUS = 30;
+const CIRCLE_OPACITY = 0.5;
 
 const editMode = ref(false);
 const editIndex = ref(-1);
@@ -205,39 +211,45 @@ const geocoderRef = ref(null);
 const geocoder = computed(() => geocoderRef.value?.geocoder);
 
 // Data
-const defaultCoordinates = ref([-71.593916, -33.040681]);
 const mapZoom = computed(() => {
     return mapRef.value?.getZoom();
 });
 
 // Radius Input
-const inputRadiusMinValue = ref(1);
-const inputRadiusMaxValue = ref(30);
-const inputRadius = ref("1"); // Default radius in kilometers (km)
+const inputRadiusMinValue = ref(MIN_RADIUS);
+const inputRadiusMaxValue = ref(MAX_RADIUS);
+const inputRadius = ref(DEFAULT_RADIUS); // Default radius in kilometers (km)
 
 // Radius circle
-const circleEnabled = ref(false);
-const circleOpacity = ref(0.5);
-const markerCoordinates = ref([-71.593916, -33.040681]);
-const circleCenter = computed(() => {
-    return markerCoordinates.value;
-})
+const markerCoordinates = ref(DEFAULT_COORDINATES);
+
+const circleData = reactive({
+    enabled: false,
+    opacity: 0.5,
+    fillColor: '#007cbf',
+    center: computed(() => {
+        console.log("marker coordinates changed");
+        return markerCoordinates.value;
+    })
+});
 
 // Composables
 const userStore = useUserStore();
-const { flyTo, prepareFlyTo, calculateZoomLevel } = useMapInteraction(mapRef, inputRadius);
+const { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference } = useMapInteraction(mapRef, inputRadius);
 const { address, getReverseGeocodingData } = useGeocoding();
+
+// Methods
 
 const createGeojsonCircle = (center, radiusInKm) => {
     if (!center || center.length !== 2 || !radiusInKm) {
-        console.error('Invalid inputs for creating a circle:', center, radiusInKm);
-        return null; // Handle this error appropriately
+        throw new Error('Invalid inputs for creating a circle:', center, radiusInKm);
     }
+    console.log("circleData changed");
     return turf.circle(center, radiusInKm, { steps: 80, units: 'kilometers' });
 };
 
 const circleGeoJSON = computed(() => {
-    return createGeojsonCircle(circleCenter.value, inputRadius.value);
+    return createGeojsonCircle(circleData.center, inputRadius.value);
 });
 
 watch(inputRadius, () => {
@@ -247,20 +259,15 @@ watch(inputRadius, () => {
 const flyToCenter = () => {
     const zoom = calculateZoomLevel(inputRadius.value);
     const currentZoom = mapZoom.value;
-    const zoomDifference = calculateZoomDifference(currentZoom, zoom);
-    const transitionSpeed = zoomDifference <= 1 ? 0.5 : 1.2;
+    const transitionSpeed = calculateTransitionSpeedBasedOnZoomDifference(currentZoom, zoom);
 
-    flyTo(circleCenter.value, zoom, {
+    flyTo(circleData.center, zoom, {
         speed: transitionSpeed
     });
 };
 
-const calculateZoomDifference = (currentZoom, newZoom) => {
-    return Math.abs(currentZoom - newZoom);
-};
-
 const flyToLocation = (location) => {
-    circleOpacity.value = 0;
+    setCircleOpacity(0);
     const newCoordinates = location.result.center;
     getReverseGeocodingData(newCoordinates);
 
@@ -271,7 +278,7 @@ const flyToLocation = (location) => {
 
     const addMarker = () => {
         setMarkerCoordinates(newCoordinates);
-        circleOpacity.value = 0.5;
+        setCircleOpacity(CIRCLE_OPACITY);
         mapRef.value.off('moveend', addMarker);
     };
 
@@ -284,7 +291,6 @@ const setMarkerCoordinates = (coordinates) => {
     markerCoordinates.value = coordinates;
     flyTo(coordinates, zoom, { duration });
     getReverseGeocodingData(coordinates);
-    updateInputValue();
 };
 
 //updates geocoder input value
@@ -293,16 +299,21 @@ const updateInputValue = async () => {
     geocoder.value._inputEl.value = address;
 };
 
-
 const onMarkerDragStart = () => {
-    circleOpacity.value = 0;
+    setCircleOpacity(0);
 };
 
 const onMarkerDragEnd = () => {
     const newCoordinates = marker.value.getLngLat().toArray();
-    circleOpacity.value = 0.5;
+    markerCoordinates.value = newCoordinates;
+    setCircleOpacity(CIRCLE_OPACITY);
     getReverseGeocodingData(newCoordinates);
     updateInputValue();
+};
+
+
+const setCircleOpacity = (opacity) => {
+    circleData.opacity = opacity;
 };
 
 // Modal
@@ -324,12 +335,12 @@ const setupMap = () => {
     if (mapRef.value) {
         // const initialZoom = calculateZoomLevel(inputRadius.value);
         // mapRef.value.setZoom(initialZoom);
-        circleEnabled.value = true;
+        circleData.enabled = true;
     }
 }
 
 onUpdated(() => {
-    circleEnabled.value = true;
+    circleData.enabled = true;
 });
 
 </script>
