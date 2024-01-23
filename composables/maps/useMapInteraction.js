@@ -46,10 +46,19 @@ export const useMapInteraction = (mapRef, inputRadius) => {
         mapRef.value?.flyTo(flyOptions);
     };
 
-    const calculateZoomLevel = (    radiusInKm) => {
+    const calculateZoomLevel = (radiusInKm) => {
         const level = zoomLevels.find((level) => radiusInKm <= level.maxRadius);
         return level ? level.zoom : zoomLevels[zoomLevels.length - 1].zoom;
     };
+
+    const calculateZoomDifference = (currentZoom, newZoom) => {
+        return Math.abs(currentZoom - newZoom);
+    };
+
+    const calculateTransitionSpeedBasedOnZoomDifference = (fromZoom, toZoom) => {
+        const zoomDifference = calculateZoomDifference(fromZoom, toZoom);
+        return zoomDifference <= 1 ? 0.5 : 1.2;
+    } 
 
     const calculateDurationBasedOnDistance = (distance) => {
         const minDistance = 0;
@@ -66,5 +75,5 @@ export const useMapInteraction = (mapRef, inputRadius) => {
         }
     };
 
-    return { flyTo, prepareFlyTo, calculateZoomLevel };
+    return { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference };
 }
