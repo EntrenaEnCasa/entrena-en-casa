@@ -1,7 +1,7 @@
 <template>
     <Transition name="modal">
         <div v-show="isOpen" class="fixed grid place-items-center inset-0 z-50 p-4 bg-black/30 overflow-y-auto"
-            @click.self="closeModal">
+            @mousedown.self="closeModal">
             <div @click.stop class="p-4 bg-white rounded-xl max-w-[calc(100vw_-_50px)] w-full lg:w-fit">
                 <div>
                     <button type="button" class="p-1 transition duration-75 bg-transparent rounded-lg hover:bg-gray-100"
