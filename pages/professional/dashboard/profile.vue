@@ -104,7 +104,7 @@
                                 :options="{ draggable: true }" v-model:lnglat="markerCoordinates"
                                 @dragend="onMarkerDragEnd">
                             </MapboxDefaultMarker>
-                            <MapboxGeocoder v-model="geocoderResult" position="top-left"
+                            <MapboxGeocoder ref="geocoderRef" position="top-left"
                                 @result="(result) => flyToLocation(result)"
                                 :options="{ placeholder: 'Buscar', marker: false, language: 'es', countries: 'cl' }" />
                             <MapboxFullscreenControl />
@@ -201,6 +201,8 @@ const mapID = ref("map");
 // Refs
 const mapRef = useMapboxRef(mapID.value);
 const marker = useMapboxMarkerRef(markerID.value);
+const geocoderRef = ref(null);
+const geocoder = computed(() => geocoderRef.value?.geocoder);
 
 // Data
 const defaultCoordinates = ref([-71.593916, -33.040681]);
@@ -225,9 +227,6 @@ const circleCenter = computed(() => {
 const userStore = useUserStore();
 const { flyTo, prepareFlyTo, calculateZoomLevel } = useMapInteraction(mapRef, inputRadius);
 const { address, getReverseGeocodingData } = useGeocoding();
-
-// Geocoder
-const geocoderResult = ref("");
 
 const createGeojsonCircle = (center, radiusInKm) => {
     if (!center || center.length !== 2 || !radiusInKm) {
@@ -285,6 +284,13 @@ const setMarkerCoordinates = (coordinates) => {
     markerCoordinates.value = coordinates;
     flyTo(coordinates, zoom, { duration });
     getReverseGeocodingData(coordinates);
+    updateInputValue();
+};
+
+//updates geocoder input value
+const updateInputValue = async () => {
+    const address = await getReverseGeocodingData(markerCoordinates.value);
+    geocoder.value._inputEl.value = address;
 };
 
 
@@ -296,6 +302,7 @@ const onMarkerDragEnd = () => {
     const newCoordinates = marker.value.getLngLat().toArray();
     circleOpacity.value = 0.5;
     getReverseGeocodingData(newCoordinates);
+    updateInputValue();
 };
 
 // Modal
