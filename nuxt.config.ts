@@ -3,7 +3,12 @@ export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: false },
   modules: [
-    '@pinia/nuxt', '@nuxtjs/tailwindcss', 'nuxt-icon', '@vee-validate/nuxt', 'nuxt-mapbox'
+    '@pinia/nuxt',
+    '@nuxtjs/tailwindcss',
+    'nuxt-icon',
+    '@vee-validate/nuxt',
+    'nuxt-mapbox',
+    "@nuxt/image"
   ],
   runtimeConfig: {
     public: {
