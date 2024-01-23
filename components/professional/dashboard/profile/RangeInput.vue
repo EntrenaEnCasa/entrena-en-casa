@@ -33,7 +33,7 @@ const props = defineProps({
 });
 
 const sliderValue = defineModel('sliderValue', {
-    type: Number,
+    type: String,
     defaultValue: 1
 });
 
