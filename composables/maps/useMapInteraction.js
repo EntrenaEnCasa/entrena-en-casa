@@ -6,8 +6,8 @@ export const useMapInteraction = (mapRef, inputRadius) => {
         { maxRadius: 1, zoom: 13 },
         { maxRadius: 2, zoom: 12 },
         { maxRadius: 5, zoom: 11 },
-        { maxRadius: 9, zoom: 10 },
-        { maxRadius: 19, zoom: 9 },
+        { maxRadius: 11, zoom: 10 },
+        { maxRadius: 21, zoom: 9 },
         { maxRadius: Infinity, zoom: 8 }
     ];
 
