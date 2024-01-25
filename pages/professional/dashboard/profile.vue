@@ -1,8 +1,8 @@
 <template>
-    <div class="">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div class="h-full">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 h-full">
             <div class="mt-16">
-                <div class="bg-white rounded-lg p-6 shadow-lg border flex flex-col items-center">
+                <div class="bg-white rounded-lg p-6 shadow-lg border flex flex-col items-center h-full">
                     <!-- Circle image container -->
                     <div class="w-36 h-36 rounded-full bg-blue-100 mb-4 -mt-20">
                         <NuxtImg src="/icons/woman.png" class="w-full h-full object-cover" />
@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-center gap-6">
+            <div class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-center gap-6 h-full">
                 <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
                 <div v-if="rangosCobertura.length == 0">
                     No hay rangos de cobertura actualmente
