@@ -214,7 +214,6 @@ const circleData = reactive({
     opacity: 0.5,
     fillColor: '#007cbf',
     center: computed(() => {
-        console.log("marker coordinates changed");
         return markerCoordinates.value;
     })
 });
@@ -230,7 +229,6 @@ const createGeojsonCircle = (center, radiusInKm) => {
     if (!center || center.length !== 2 || !radiusInKm) {
         throw new Error('Invalid inputs for creating a circle:', center, radiusInKm);
     }
-    console.log("circleData changed");
     return turf.circle(center, radiusInKm, { steps: 80, units: 'kilometers' });
 };
 
@@ -254,8 +252,6 @@ const flyToCenter = () => {
 
 const flyToLocation = (location) => {
 
-    // console.log("fly to location")
-    // console.log(location);
     setCircleOpacity(0);
     const newCoordinates = location.center;
     getReverseGeocodingData(newCoordinates);
