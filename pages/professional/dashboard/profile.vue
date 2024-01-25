@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-center gap-6 h-full">
+            <div class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
                 <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
                 <div v-if="rangosCobertura.length == 0">
                     No hay rangos de cobertura actualmente
