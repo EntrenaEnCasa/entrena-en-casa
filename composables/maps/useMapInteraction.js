@@ -67,8 +67,12 @@ export const useMapInteraction = (mapRef, inputRadius) => {
         const maxDuration = 10000;
 
         if (distance <= 1) {
-            return 700;
-        } else if (distance <= maxDistance) {
+            return 800;
+        }
+        else if(distance <= 2){
+            return 1000;
+        }
+        else if (distance <= maxDistance) {
             return minDuration + (distance - minDistance) / (maxDistance - minDistance) * (maxDuration - minDuration);
         } else {
             return maxDuration;
