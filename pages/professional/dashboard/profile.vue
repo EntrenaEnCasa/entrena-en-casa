@@ -65,15 +65,8 @@
                             <input v-model="rangeName" type="text" placeholder="Escribe un nombre intuitivo..."
                                 class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
                         </label>
-                        <label class="w-full flex flex-col max-w-96">
-                            <span class="font-medium mb-2">Ubicación seleccionada</span>
-                            <div v-show="address != ''" class="rounded border px-4 py-3 text-sm">
-                                {{ address }}
-                            </div>
-                            <div v-show="address == ''" class="rounded border px-4 py-3 text-sm">
-                                No hay ubicación seleccionada
-                            </div>
-                        </label>
+                        <ProfessionalDashboardProfileMapboxGeocoder ref="geocoderComponent"
+                            @locationSelected="flyToLocation" />
                         <label class="w-full flex flex-col">
                             <span class="font-medium text">Radio de cobertura</span>
                             <p class="text-sm text-gray-500 mb-3">Selecciona el radio de cobertura que deseas tener.</p>
@@ -103,13 +96,7 @@
                             <MapboxDefaultMarker @dragstart="onMarkerDragStart" :marker-id="markerID"
                                 :options="{ draggable: true }" :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
                             </MapboxDefaultMarker>
-
-                            <MapboxGeocoder ref="geocoderRef" position="top-left"
-                                @result="(location) => flyToLocation(location)"
-                                :options="{ placeholder: 'Buscar', marker: false, language: 'es', countries: 'cl' }" />
-                            <MapboxFullscreenControl />
                             <MapboxNavigationControl />
-
                         </MapboxMap>
                     </div>
                 </div>
@@ -207,8 +194,7 @@ const mapID = ref("map");
 // Refs
 const mapRef = useMapboxRef(mapID.value);
 const marker = useMapboxMarkerRef(markerID.value);
-const geocoderRef = ref(null);
-const geocoder = computed(() => geocoderRef.value?.geocoder);
+const geocoderComponent = ref(null);
 
 // Data
 const mapZoom = computed(() => {
@@ -267,8 +253,11 @@ const flyToCenter = () => {
 };
 
 const flyToLocation = (location) => {
+
+    // console.log("fly to location")
+    // console.log(location);
     setCircleOpacity(0);
-    const newCoordinates = location.result.center;
+    const newCoordinates = location.center;
     getReverseGeocodingData(newCoordinates);
 
     const currentLocation = mapRef.value?.getCenter().toArray();
@@ -293,12 +282,6 @@ const setMarkerCoordinates = (coordinates) => {
     getReverseGeocodingData(coordinates);
 };
 
-//updates geocoder input value
-const updateInputValue = async () => {
-    const address = await getReverseGeocodingData(markerCoordinates.value);
-    geocoder.value._inputEl.value = address;
-};
-
 const onMarkerDragStart = () => {
     setCircleOpacity(0);
 };
@@ -308,12 +291,18 @@ const onMarkerDragEnd = () => {
     markerCoordinates.value = newCoordinates;
     setCircleOpacity(CIRCLE_OPACITY);
     getReverseGeocodingData(newCoordinates);
+    flyToCenter();
     updateInputValue();
 };
 
-
 const setCircleOpacity = (opacity) => {
     circleData.opacity = opacity;
+};
+
+//updates geocoder input value
+const updateInputValue = async () => {
+    const address = await getReverseGeocodingData(markerCoordinates.value);
+    geocoderComponent.value.updateSearchTerm(address);
 };
 
 // Modal
@@ -333,8 +322,6 @@ onMounted(() => {
 
 const setupMap = () => {
     if (mapRef.value) {
-        // const initialZoom = calculateZoomLevel(inputRadius.value);
-        // mapRef.value.setZoom(initialZoom);
         circleData.enabled = true;
     }
 }
