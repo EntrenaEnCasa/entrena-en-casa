@@ -225,7 +225,7 @@ const circleData = reactive({
 // Composables
 const userStore = useUserStore();
 const { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference } = useMapInteraction(mapRef, inputRadius);
-const { address, getReverseGeocodingData } = useGeocoding();
+const { getReverseGeocodingData } = useGeocoding();
 
 // Methods
 

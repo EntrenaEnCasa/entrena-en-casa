@@ -1,5 +1,4 @@
 export const useGeocoding = () => {
-    const address = ref("");
     const accessToken = "pk.eyJ1IjoiZ29uemFsby1icnVuYSIsImEiOiJjbHJqcGlkcDgwMWZiMmtwOWliMHJsOGkxIn0.waguLODGXsYqrv8Ol0lwoQ";
 
     const getReverseGeocodingData = async (coordinates) => {
@@ -10,5 +9,5 @@ export const useGeocoding = () => {
         return data.value.features[0].place_name;
     };
 
-    return { address, getReverseGeocodingData };
+    return { getReverseGeocodingData };
 }
