@@ -100,10 +100,14 @@
                         </MapboxMap>
                     </div>
                 </div>
-                <div class="flex">
-                    <CommonButton v-show="editMode" @click="saveEditChanges" text="Confirmar cambios"
-                        class="px-5 py-2 mr-2" />
-                    <CommonButton v-show="!editMode" @click="addCoverage" text="Añadir rango" class="px-5 py-2" />
+                <div v-show="editMode" class="flex justify-between p-5 pb-2">
+                    <CommonButton @click="() => { editMode = false; closeModal() }" text="Cancelar"
+                        class="px-5 py-2 bg-tertiary" />
+                    <CommonButton @click="saveEditChanges" text="Confirmar cambios" class="px-5 py-2 mr-2" />
+                </div>
+                <div v-show="!editMode" class="flex justify-between p-5 pb-2">
+                    <CommonButton @click="closeModal" text="Cancelar" class="px-5 py-2 bg-tertiary" />
+                    <CommonButton @click="addCoverage" text="Añadir rango" class="px-5 py-2" />
                 </div>
             </CommonModal>
         </Teleport>
