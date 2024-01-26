@@ -38,14 +38,14 @@ const results = ref([]);
 const searchState = ref('idle'); // New state machine
 const selectedResultIndex = ref(-1);
 let timeoutId = null;
-const accessToken = "pk.eyJ1IjoiZ29uemFsby1icnVuYSIsImEiOiJjbHJqcGlkcDgwMWZiMmtwOWliMHJsOGkxIn0.waguLODGXsYqrv8Ol0lwoQ";
+const runtimeConfig = useRuntimeConfig()
 
 const fetchResults = async () => {
     if (searchTerm.value) {
         searchState.value = 'loading';
         results.value = [];
 
-        const { data } = await useFetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchTerm.value)}.json?language=ES&country=CL&access_token=${accessToken}`);
+        const { data } = await useFetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchTerm.value)}.json?language=ES&country=CL&access_token=${runtimeConfig.public.mapboxApiKey}`);
 
         searchState.value = data.value && data.value.features ? 'success' : 'failure';
 

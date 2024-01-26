@@ -12,10 +12,11 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiBase: 'https://entrena-en-casa-backend-production.up.railway.app'
+      apiBase: 'https://entrena-en-casa-backend-production.up.railway.app',
+      mapboxApiKey: process.env.MAPBOX_API_KEY,
     }
   },
   mapbox: {
-    accessToken: 'pk.eyJ1IjoiZ29uemFsby1icnVuYSIsImEiOiJjbHJqcGlkcDgwMWZiMmtwOWliMHJsOGkxIn0.waguLODGXsYqrv8Ol0lwoQ',
+    accessToken: process.env.MAPBOX_API_KEY,
   },
 })
