@@ -83,7 +83,7 @@
                     <div class="text-md  text-center"><b>{{ sessionsData.message }}</b></div>
                 </div>
             </div>
-            <div class="absolute top-0 left-0 w-full h-full min-h-[calc(100vh_-_4.5rem)] bg-black/10 backdrop-blur-[3px] transition-all"
+            <div class="absolute top-0 left-0 w-full h-full min-h-[calc(100vh_-_4.5rem)] bg-black/30 transition-all"
                 :class="{ 'hidden': !filterSidebarOpen }">
             </div>
         </div>
