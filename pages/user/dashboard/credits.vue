@@ -135,7 +135,6 @@ const addCredits = async (item) => {
         }),
         onResponse({ request, response, options }) {
             let responseData = response._data;
-            console.log(responseData)
             if (responseData.success) {
                 newCredits.value = {
                     gold: responseData.credits.gold,

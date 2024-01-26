@@ -996,9 +996,6 @@ const newEventModal = reactive({
         newEventModal.data.loading = true;
         const localDateString = getLocalDateString(currentlySelectedDate.value);
 
-        console.log(selectedStartTime.value);
-        console.log(manuallySelectedEndTime.value);
-
         if (newEventModal.data.selectedEventType == 'Nuevo entrenamiento') {
 
             const clientsIDs = newEventModal.data.manualSession.clients.map(client => client.user_id);
@@ -1129,7 +1126,7 @@ const editEmptySessionModal = reactive({
 
         editEmptySessionModal.data.updateSessionLoading = true;
         const event = editEmptySessionModal.data.event;
-        console.log(event);
+
         const body = {
             user_id: userStore.getUser().user_id,
             session_id: event.session_info.session_id,
@@ -1217,8 +1214,6 @@ const editManualSessionModal = reactive({
         }
     },
     handleClick: (day, time, event) => {
-        console.log("evento al abrir");
-        console.log(event);
         editManualSessionModal.data.selectedEventType = event.type;
         editManualSessionModal.data.clients = [...event.clients]; // Create a new array
         editManualSessionModal.data.selectedFormat = event.session_info.format;
@@ -1244,7 +1239,7 @@ const editManualSessionModal = reactive({
             text: editManualSessionModal.data.link,
             clients: editManualSessionModal.data.clients.map(client => client.user_id),
         }
-        console.log(body);
+
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
             method: 'PUT',
             headers: {
