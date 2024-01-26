@@ -258,8 +258,6 @@ const flyToLocation = (location) => {
 
     setCircleOpacity(0);
     const newCoordinates = location.center;
-    getReverseGeocodingData(newCoordinates);
-
     const currentLocation = mapRef.value?.getCenter().toArray();
     const { duration, zoom } = prepareFlyTo(currentLocation, newCoordinates);
 
@@ -279,7 +277,6 @@ const setMarkerCoordinates = (coordinates) => {
     const { duration, zoom } = prepareFlyTo(currentCoordinates, coordinates);
     markerCoordinates.value = coordinates;
     flyTo(coordinates, zoom, { duration });
-    getReverseGeocodingData(coordinates);
 };
 
 const onMarkerDragStart = () => {
@@ -290,7 +287,6 @@ const onMarkerDragEnd = () => {
     const newCoordinates = marker.value.getLngLat().toArray();
     markerCoordinates.value = newCoordinates;
     setCircleOpacity(CIRCLE_OPACITY);
-    getReverseGeocodingData(newCoordinates);
     flyToCenter();
     updateInputValue();
 };
