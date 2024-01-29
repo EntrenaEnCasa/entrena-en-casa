@@ -1,29 +1,34 @@
 <template>
     <div class="relative z-50">
-        <div class="border text-gray-800 text-sm rounded-md px-5 py-3.5 max-w-2xl box-border"
-            :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
-            <input type="text" v-model="searchTerm" :placeholder="placeholder" class="outline-none w-full"
-                @focus="inputFocused = true" @blur="inputFocused = false" @input="delayedFetchResults"
-                @keydown="handleKeydown">
-            <div class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3"
-                v-if="inputFocused && searchTerm">
-                <CommonLoading v-if="searchState === 'loading'" text="Buscando" />
-                <ul v-else>
-                    <li v-show="searchState === 'pending' && filteredResults.length === 0" class="px-3 py-2">
-                        Se buscará {{ searchTerm }}
-                    </li>
-                    <li class="px-3 py-2" v-if="filteredResults.length === 0 && searchState === 'success'">
-                        No se encontraron resultados
-                    </li>
-                    <li class="px-3 py-2 rounded hover:bg-gray-100" v-show="filteredResults.length > 0"
-                        v-for="(result, index) in filteredResults" :key="result.id" @mousedown="selectResult(result)"
-                        :class="{ 'bg-gray-200': index === selectedResultIndex }">
-                        <p class="font-medium">
-                            {{ result.place_name }}
-                        </p>
-                    </li>
-                </ul>
-            </div>
+        <input type="text" v-model="searchTerm" :placeholder="placeholder"
+            class="border text-gray-800 text-sm rounded-md py-3.5 max-w-2xl outline-none w-full px-12"
+            :class="{ 'ring-2 ring-primary ring-inset': inputFocused }" @focus="inputFocused = true"
+            @blur="inputFocused = false" @input="delayedFetchResults" @keydown="handleKeydown">
+        <div class="absolute top-1/2 left-3 transform -translate-y-1/2 rounded-full p-1 flex items-center justify-center">
+            <Icon name="heroicons:map-pin" class="text-2xl" />
+        </div>
+        <div
+            class="absolute top-1/2 right-3 transform -translate-y-1/2 rounded-full p-2 bg-gray-300 w-8 h-8 flex items-center justify-center">
+            <Icon name="fa6-solid:magnifying-glass" class="text-lg text-white" />
+        </div>
+        <div class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3 text-sm"
+            v-if="inputFocused && searchTerm">
+            <CommonLoading v-if="searchState === 'loading'" text="Buscando" />
+            <ul v-else>
+                <li v-show="searchState === 'pending' && filteredResults.length === 0" class="px-3 py-2">
+                    Se buscará {{ searchTerm }}
+                </li>
+                <li class="px-3 py-2" v-if="filteredResults.length === 0 && searchState === 'success'">
+                    No se encontraron resultados
+                </li>
+                <li class="px-3 py-2 rounded hover:bg-gray-100" v-show="filteredResults.length > 0"
+                    v-for="(result, index) in filteredResults" :key="result.id" @mousedown="selectResult(result)"
+                    :class="{ 'bg-gray-200': index === selectedResultIndex }">
+                    <p class="font-medium">
+                        {{ result.place_name }}
+                    </p>
+                </li>
+            </ul>
         </div>
     </div>
 </template>
