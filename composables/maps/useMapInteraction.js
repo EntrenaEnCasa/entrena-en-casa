@@ -1,6 +1,6 @@
 import * as turf from '@turf/turf';
 
-export const useMapInteraction = (mapRef, inputRadius) => {
+export const useMapInteraction = (mapRef) => {
 
     const zoomLevels = [
         { maxRadius: 1, zoom: 13 },
@@ -17,7 +17,7 @@ export const useMapInteraction = (mapRef, inputRadius) => {
             : 1 - Math.pow(-2 * t + 2, 3) / 2;
     };
 
-    const prepareFlyTo = (fromCoordinates, toCoordinates) => {
+    const prepareFlyTo = (fromCoordinates, toCoordinates, inputRadius) => {
         const distance = calculateDistance(fromCoordinates, toCoordinates);
         const newDuration = calculateDurationBasedOnDistance(distance);
         const newZoom = calculateZoomLevel(inputRadius.value);
@@ -33,7 +33,7 @@ export const useMapInteraction = (mapRef, inputRadius) => {
             essential: true,
             speed: 1,
             curve: 1,
-            easing: easeInOutCubic // Assuming easeInOutCubic is defined elsewhere
+            easing: easeInOutCubic
         };
 
         const flyOptions = {
