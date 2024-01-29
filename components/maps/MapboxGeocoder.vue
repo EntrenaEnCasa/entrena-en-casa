@@ -31,7 +31,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 
-const placeholder = 'Search for a place';
+const placeholder = 'Busca un lugar';
 const searchTerm = ref('');
 const inputFocused = ref(false);
 const results = ref([]);
