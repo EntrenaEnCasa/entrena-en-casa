@@ -18,8 +18,7 @@ export const useMapInteraction = (mapRef, inputRadius) => {
     };
 
     const prepareFlyTo = (fromCoordinates, toCoordinates) => {
-        const distance = turf.distance(fromCoordinates, toCoordinates);
-        const newDuration = calculateDurationBasedOnDistance(distance);
+        const newDuration = calculateDurationBasedOnDistance(fromCoordinates, toCoordinates);
         const newZoom = calculateZoomLevel(inputRadius.value);
 
         return {
@@ -60,7 +59,8 @@ export const useMapInteraction = (mapRef, inputRadius) => {
         return zoomDifference <= 1 ? 0.5 : 1.2;
     } 
 
-    const calculateDurationBasedOnDistance = (distance) => {
+    const calculateDurationBasedOnDistance = (fromCoordinates, toCoordinates) => {
+        const distance = turf.distance(fromCoordinates, toCoordinates);
         const minDistance = 0;
         const maxDistance = 2000;
         const minDuration = 2500;
