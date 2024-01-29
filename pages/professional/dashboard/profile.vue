@@ -63,10 +63,9 @@
                         <label class="w-full flex flex-col">
                             <span class="font-medium mb-2">Nombre del rango</span>
                             <input v-model="rangeName" type="text" placeholder="Escribe un nombre intuitivo..."
-                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
+                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary" />
                         </label>
-                        <ProfessionalDashboardProfileMapboxGeocoder ref="geocoderComponent"
-                            @locationSelected="flyToLocation" />
+                        <MapsMapboxGeocoder ref="geocoderComponent" @locationSelected="flyToLocation" />
                         <label class="w-full flex flex-col">
                             <span class="font-medium text">Radio de cobertura</span>
                             <p class="text-sm text-gray-500 mb-3">Selecciona el radio de cobertura que deseas tener.</p>
@@ -101,8 +100,7 @@
                     </div>
                 </div>
                 <div v-show="editMode" class="flex justify-between p-5 pb-2">
-                    <CommonButton @click="() => { editMode = false; closeModal() }" text="Cancelar"
-                        class="px-5 py-2 bg-tertiary" />
+                    <CommonButton @click="deleteCoverage" text="Eliminar" class="px-5 py-2 bg-tertiary" />
                     <CommonButton @click="saveEditChanges" text="Confirmar cambios" class="px-5 py-2 mr-2" />
                 </div>
                 <div v-show="!editMode" class="flex justify-between p-5 pb-2">
@@ -129,67 +127,10 @@ const MAX_RADIUS = 30;
 const CIRCLE_OPACITY = 0.5;
 
 const editMode = ref(false);
-const editIndex = ref(-1);
+const editIndex = ref(null);
 
-const rangosCobertura = ref([
-    {
-        name: "Valparaíso centro",
-        radius: "5",
-        lng: -71.593916,
-        lat: -33.040681
-    },
-    {
-        name: "Santiago centro",
-        radius: "5",
-        lng: -70.650449,
-        lat: -33.437830
-    }
-]);
-
+const rangosCobertura = ref([]);
 const rangeName = ref("");
-
-const getCoverage = (index) => rangosCobertura.value[index];
-
-const setCoverage = (index, coverage) => {
-    rangosCobertura.value = [
-        ...rangosCobertura.value.slice(0, index),
-        coverage,
-        ...rangosCobertura.value.slice(index + 1),
-    ];
-};
-
-const addCoverage = () => {
-    rangosCobertura.value.push({
-        name: rangeName.value,
-        radius: inputRadius.value,
-        lng: markerCoordinates.value[0],
-        lat: markerCoordinates.value[1]
-    });
-    closeModal();
-};
-
-const openEditModal = (index) => {
-    rangeName.value = rangosCobertura.value[index].name;
-    inputRadius.value = rangosCobertura.value[index].radius;
-    setMarkerCoordinates([rangosCobertura.value[index].lng, rangosCobertura.value[index].lat]);
-    editIndex.value = index;
-    editMode.value = true;
-    openModal();
-}
-
-const saveEditChanges = () => {
-    const index = editIndex.value;
-    const newCoverage = {
-        ...getCoverage(index),
-        name: rangeName.value,
-        radius: inputRadius.value,
-        lng: markerCoordinates.value[0],
-        lat: markerCoordinates.value[1],
-    };
-    setCoverage(index, newCoverage);
-    editMode.value = false;
-    closeModal();
-};
 
 // IDs
 const markerID = ref("draggableMarker");
@@ -224,10 +165,156 @@ const circleData = reactive({
 
 // Composables
 const userStore = useUserStore();
+const runtimeConfig = useRuntimeConfig()
 const { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference } = useMapInteraction(mapRef, inputRadius);
 const { getReverseGeocodingData } = useGeocoding();
 
 // Methods
+
+const getCoverageRanges = async () => {
+    const user_id = userStore.getUser().user_id;
+
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/${user_id}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "x-access-token": userStore.getUserToken()
+            },
+        });
+
+
+    if (error.value) {
+        console.error('An error occurred:', error.value);
+        return;
+    }
+
+    if (data.value.success) {
+        console.log(data.value.message);
+        console.log(data.value);
+    }
+    else {
+        console.log(data.value.message);
+    }
+};
+
+const addCoverage = async () => {
+    const geoData = await getReverseGeocodingData(markerCoordinates.value);
+    const short_code = geoData.context[3].short_code;
+
+    const body = {
+        user_id: userStore.getUser().user_id,
+        range_name: rangeName.value,
+        radius: inputRadius.value,
+        lng: markerCoordinates.value[0],
+        lat: markerCoordinates.value[1],
+        short_code: short_code
+    };
+
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "x-access-token": userStore.getUserToken()
+            },
+            body: body
+        });
+
+    if (error.value) {
+        console.error('An error occurred:', error.value);
+        return;
+    }
+
+    if (data.value.success) {
+        console.log(data.value.message);
+        console.log(data.value);
+    }
+    else {
+        console.log(data.value.message);
+    }
+
+    closeModal();
+};
+
+const saveEditChanges = async () => {
+
+    const rangeID = rangosCobertura.value[editIndex.value].range_id;
+
+    // Prepare the request body
+    const body = {
+        range_id: rangeID,
+        updatedColumns: {
+            range_name: rangeName.value,
+            radius: inputRadius.value
+        }
+    };
+
+    // Use useFetch for the update API call
+    const { data, error } = useFetch(`${runtimeConfig.public.apiBase}/professional/range`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            "x-access-token": userStore.getUserToken()
+        },
+        body: body
+    });
+
+    editMode.value = false;
+
+    if (error.value) {
+        console.error('An error occurred:', error.value);
+        return;
+    }
+
+    if (data.value.success) {
+        console.log(data.value.message);
+        console.log(data.value);
+    }
+    else {
+        console.log(data.value.message);
+    }
+
+    closeModal();
+};
+
+const deleteCoverage = async () => {
+    const rangeID = rangosCobertura.value[editIndex.value].range_id;
+
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/${rangeID}`,
+        {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "x-access-token": userStore.getUserToken()
+            },
+        });
+
+    if (error.value) {
+        console.error('An error occurred:', error.value);
+        return;
+    }
+
+    if (data.value.success) {
+        console.log(data.value.message);
+        console.log(data.value);
+    }
+    else {
+        console.log(data.value.message);
+    }
+
+    closeModal();
+};
+
+const openEditModal = (index) => {
+    rangeName.value = rangosCobertura.value[index].name;
+    inputRadius.value = rangosCobertura.value[index].radius;
+    const coordinates = [rangosCobertura.value[index].lng, rangosCobertura.value[index].lat];
+    setMarkerCoordinates(coordinates);
+    editIndex.value = index;
+    editMode.value = true;
+    openModal();
+}
 
 const createGeojsonCircle = (center, radiusInKm) => {
     if (!center || center.length !== 2 || !radiusInKm) {
@@ -259,7 +346,7 @@ const flyToLocation = (location) => {
     setCircleOpacity(0);
     const newCoordinates = location.center;
     const currentLocation = mapRef.value?.getCenter().toArray();
-    const { duration, zoom } = prepareFlyTo(currentLocation, newCoordinates);
+    const { duration, zoom } = prepareFlyTo(currentLocation, newCoordinates, inputRadius.value);
 
     flyTo(newCoordinates, zoom, { duration });
 
@@ -274,7 +361,7 @@ const flyToLocation = (location) => {
 
 const setMarkerCoordinates = (coordinates) => {
     const currentCoordinates = marker.value.getLngLat().toArray();
-    const { duration, zoom } = prepareFlyTo(currentCoordinates, coordinates);
+    const { duration, zoom } = prepareFlyTo(currentCoordinates, coordinates, inputRadius.value);
     markerCoordinates.value = coordinates;
     flyTo(coordinates, zoom, { duration });
 };
@@ -297,7 +384,8 @@ const setCircleOpacity = (opacity) => {
 
 //updates geocoder input value
 const updateInputValue = async () => {
-    const address = await getReverseGeocodingData(markerCoordinates.value);
+    const geocodingData = await getReverseGeocodingData(markerCoordinates.value);
+    const address = geocodingData.place_name
     geocoderComponent.value.updateSearchTerm(address);
 };
 
@@ -320,6 +408,7 @@ const setupMap = () => {
     if (mapRef.value) {
         circleData.enabled = true;
     }
+    updateInputValue();
 }
 
 onUpdated(() => {
