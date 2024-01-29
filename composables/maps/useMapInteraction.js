@@ -79,5 +79,5 @@ export const useMapInteraction = (mapRef, inputRadius) => {
         }
     };
 
-    return { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference };
+    return { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference, calculateDurationBasedOnDistance };
 }
