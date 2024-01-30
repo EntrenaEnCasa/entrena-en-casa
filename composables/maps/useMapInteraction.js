@@ -20,7 +20,7 @@ export const useMapInteraction = (mapRef) => {
     const prepareFlyTo = (fromCoordinates, toCoordinates, inputRadius) => {
         const distance = calculateDistance(fromCoordinates, toCoordinates);
         const newDuration = calculateDurationBasedOnDistance(distance);
-        const newZoom = calculateZoomLevel(inputRadius.value);
+        const newZoom = calculateZoomLevel(inputRadius);
 
         return {
             duration: newDuration,
