@@ -46,6 +46,26 @@ export const useMapInteraction = (mapRef) => {
         mapRef.value?.flyTo(flyOptions);
     };
 
+    const debounce = (func, wait, immediate) => {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            const later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            const callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
+    
+
+    const debounceFlyTo = debounce((center, zoom, options) => {
+        flyTo(center, zoom, options);
+    }, 250); // Adjust debounce time as needed    
+
     const calculateZoomLevel = (radiusInKm) => {
         const level = zoomLevels.find((level) => radiusInKm <= level.maxRadius);
         return level ? level.zoom : zoomLevels[zoomLevels.length - 1].zoom;
@@ -64,7 +84,7 @@ export const useMapInteraction = (mapRef) => {
         const minDistance = 0;
         const maxDistance = 2000;
         const minDuration = 2500;
-        const maxDuration = 10000;
+        const maxDuration = 8000;
 
         if (distance <= 1) {
             return 800;
@@ -83,5 +103,5 @@ export const useMapInteraction = (mapRef) => {
         return turf.distance(fromCoordinates, toCoordinates);
     }
 
-    return { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference, calculateDurationBasedOnDistance, calculateDistance };
+    return { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference, calculateDurationBasedOnDistance, calculateDistance, debounceFlyTo };
 }
