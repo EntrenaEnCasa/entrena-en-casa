@@ -31,20 +31,23 @@
             </div>
             <div class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
                 <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
-                <div v-if="rangosCobertura.length == 0">
-                    No hay rangos de cobertura actualmente
-                </div>
-                <div v-else class="flex flex-col gap-y-2">
-                    <div v-for="rangoCobertura, index in rangosCobertura"
-                        class="flex items-center gap-x-2 rounded-full bg-gray-200 px-5 py-1">
-                        <p class="font-semibold">{{ rangoCobertura.name }}</p>
-                        <p>{{ rangoCobertura.radius }} km</p>
-                        <button @click="openEditModal(index)">
-                            <Icon name="fa6-solid:pen-to-square" />
-                        </button>
+                <CommonLoading v-show="getCoverageRangesLoading" text="cargando rangos de cobertura" />
+                <div v-show="!getCoverageRangesLoading">
+                    <div v-if="coverageRanges.length == 0">
+                        No hay rangos de cobertura actualmente
+                    </div>
+                    <div v-else class="flex flex-col items-center gap-y-2">
+                        <div v-for="range, index in coverageRanges"
+                            class="inline-flex items-center gap-x-2 rounded-full bg-gray-100 px-6 py-1.5">
+                            <p class="font-semibold">{{ range.range_name }}</p>
+                            <p class="font-light">{{ range.radius }} km</p>
+                            <button @click="openEditModal(index)">
+                                <Icon name="fa6-solid:pen-to-square" class="text-primary" />
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <CommonButton text="+ Crear nuevo" class="px-5 py-2 bg-secondary" @click="openModal" />
+                <CommonButton text="+ Crear nuevo" class="px-5 py-2 bg-secondary" @click="resetModal(); openModal()" />
             </div>
         </div>
         <Teleport to="body">
@@ -100,12 +103,15 @@
                     </div>
                 </div>
                 <div v-show="editMode" class="flex justify-between p-5 pb-2">
-                    <CommonButton @click="deleteCoverage" text="Eliminar" class="px-5 py-2 bg-tertiary" />
-                    <CommonButton @click="saveEditChanges" text="Confirmar cambios" class="px-5 py-2 mr-2" />
+                    <CommonButton @click="deleteCoverage" text="Eliminar" class="px-5 py-2 bg-tertiary"
+                        :loading="deleteCoverageRangeLoading" />
+                    <CommonButton @click="saveEditChanges" text="Confirmar cambios" class="px-5 py-2 mr-2"
+                        :loading="updateCoverageRangeLoading" />
                 </div>
                 <div v-show="!editMode" class="flex justify-between p-5 pb-2">
                     <CommonButton @click="closeModal" text="Cancelar" class="px-5 py-2 bg-tertiary" />
-                    <CommonButton @click="addCoverage" text="Añadir rango" class="px-5 py-2" />
+                    <CommonButton @click="addCoverage" text="Añadir rango" class="px-5 py-2"
+                        :loading="addCoverageRangeLoading" />
                 </div>
             </CommonModal>
         </Teleport>
@@ -129,7 +135,11 @@ const CIRCLE_OPACITY = 0.5;
 const editMode = ref(false);
 const editIndex = ref(null);
 
-const rangosCobertura = ref([]);
+const coverageRanges = ref([]);
+const getCoverageRangesLoading = ref(false);
+const addCoverageRangeLoading = ref(false);
+const updateCoverageRangeLoading = ref(false);
+const deleteCoverageRangeLoading = ref(false);
 const rangeName = ref("");
 
 // IDs
@@ -166,15 +176,16 @@ const circleData = reactive({
 // Composables
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig()
-const { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference } = useMapInteraction(mapRef, inputRadius);
+const { prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference, debounceFlyTo } = useMapInteraction(mapRef);
 const { getReverseGeocodingData } = useGeocoding();
 
 // Methods
 
 const getCoverageRanges = async () => {
+    getCoverageRangesLoading.value = true;
     const user_id = userStore.getUser().user_id;
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/${user_id}`,
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/user/${user_id}`,
         {
             method: 'GET',
             headers: {
@@ -183,6 +194,7 @@ const getCoverageRanges = async () => {
             },
         });
 
+    getCoverageRangesLoading.value = false;
 
     if (error.value) {
         console.error('An error occurred:', error.value);
@@ -191,7 +203,7 @@ const getCoverageRanges = async () => {
 
     if (data.value.success) {
         console.log(data.value.message);
-        console.log(data.value);
+        coverageRanges.value = data.value.data;
     }
     else {
         console.log(data.value.message);
@@ -199,6 +211,7 @@ const getCoverageRanges = async () => {
 };
 
 const addCoverage = async () => {
+    addCoverageRangeLoading.value = true;
     const geoData = await getReverseGeocodingData(markerCoordinates.value);
     const short_code = geoData.context[3].short_code;
 
@@ -221,6 +234,8 @@ const addCoverage = async () => {
             body: body
         });
 
+    addCoverageRangeLoading.value = false;
+
     if (error.value) {
         console.error('An error occurred:', error.value);
         return;
@@ -228,7 +243,7 @@ const addCoverage = async () => {
 
     if (data.value.success) {
         console.log(data.value.message);
-        console.log(data.value);
+        getCoverageRanges();
     }
     else {
         console.log(data.value.message);
@@ -239,7 +254,8 @@ const addCoverage = async () => {
 
 const saveEditChanges = async () => {
 
-    const rangeID = rangosCobertura.value[editIndex.value].range_id;
+    updateCoverageRangeLoading.value = true;
+    const rangeID = coverageRanges.value[editIndex.value].range_id;
 
     // Prepare the request body
     const body = {
@@ -250,8 +266,7 @@ const saveEditChanges = async () => {
         }
     };
 
-    // Use useFetch for the update API call
-    const { data, error } = useFetch(`${runtimeConfig.public.apiBase}/professional/range`, {
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -260,28 +275,33 @@ const saveEditChanges = async () => {
         body: body
     });
 
-    editMode.value = false;
+    updateCoverageRangeLoading.value = false;
 
     if (error.value) {
         console.error('An error occurred:', error.value);
+        editMode.value = false;
+        closeModal();
         return;
     }
 
-    if (data.value.success) {
+    if (data.value) {
         console.log(data.value.message);
-        console.log(data.value);
+        getCoverageRanges();
     }
     else {
         console.log(data.value.message);
     }
 
     closeModal();
+    editMode.value = false;
 };
 
 const deleteCoverage = async () => {
-    const rangeID = rangosCobertura.value[editIndex.value].range_id;
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/${rangeID}`,
+    deleteCoverageRangeLoading.value = true;
+    const rangeID = coverageRanges.value[editIndex.value].range_id;
+
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-range/${rangeID}`,
         {
             method: 'DELETE',
             headers: {
@@ -290,6 +310,8 @@ const deleteCoverage = async () => {
             },
         });
 
+    deleteCoverageRangeLoading.value = false;
+
     if (error.value) {
         console.error('An error occurred:', error.value);
         return;
@@ -297,7 +319,7 @@ const deleteCoverage = async () => {
 
     if (data.value.success) {
         console.log(data.value.message);
-        console.log(data.value);
+        getCoverageRanges();
     }
     else {
         console.log(data.value.message);
@@ -306,10 +328,16 @@ const deleteCoverage = async () => {
     closeModal();
 };
 
+const resetModal = () => {
+    rangeName.value = "";
+    inputRadius.value = DEFAULT_RADIUS;
+    setMarkerCoordinates(DEFAULT_COORDINATES);
+};
+
 const openEditModal = (index) => {
-    rangeName.value = rangosCobertura.value[index].name;
-    inputRadius.value = rangosCobertura.value[index].radius;
-    const coordinates = [rangosCobertura.value[index].lng, rangosCobertura.value[index].lat];
+    rangeName.value = coverageRanges.value[index].range_name;
+    inputRadius.value = coverageRanges.value[index].radius;
+    const coordinates = [coverageRanges.value[index].lng, coverageRanges.value[index].lat];
     setMarkerCoordinates(coordinates);
     editIndex.value = index;
     editMode.value = true;
@@ -327,43 +355,42 @@ const circleGeoJSON = computed(() => {
     return createGeojsonCircle(circleData.center, inputRadius.value);
 });
 
-watch(inputRadius, () => {
-    flyToCenter();
-});
-
 const flyToCenter = () => {
     const zoom = calculateZoomLevel(inputRadius.value);
     const currentZoom = mapZoom.value;
     const transitionSpeed = calculateTransitionSpeedBasedOnZoomDifference(currentZoom, zoom);
 
-    flyTo(circleData.center, zoom, {
+    debounceFlyTo(circleData.center, zoom, {
         speed: transitionSpeed
     });
 };
 
-const flyToLocation = (location) => {
+watch(inputRadius, () => {
+    flyToCenter();
+}, { immediate: true });
 
+const flyToLocation = (location) => {
     setCircleOpacity(0);
     const newCoordinates = location.center;
     const currentLocation = mapRef.value?.getCenter().toArray();
     const { duration, zoom } = prepareFlyTo(currentLocation, newCoordinates, inputRadius.value);
 
-    flyTo(newCoordinates, zoom, { duration });
+    debounceFlyTo(newCoordinates, zoom, { duration });
 
-    const addMarker = () => {
+    mapRef.value.once('moveend', () => {
         setMarkerCoordinates(newCoordinates);
         setCircleOpacity(CIRCLE_OPACITY);
         mapRef.value.off('moveend', addMarker);
-    };
-
-    mapRef.value.on('moveend', addMarker);
+    });
 };
+
 
 const setMarkerCoordinates = (coordinates) => {
     const currentCoordinates = marker.value.getLngLat().toArray();
     const { duration, zoom } = prepareFlyTo(currentCoordinates, coordinates, inputRadius.value);
     markerCoordinates.value = coordinates;
-    flyTo(coordinates, zoom, { duration });
+    updateInputValue();
+    debounceFlyTo(coordinates, zoom, { duration });
 };
 
 const onMarkerDragStart = () => {
@@ -402,6 +429,7 @@ const closeModal = () => {
 
 onMounted(() => {
     setupMap();
+    getCoverageRanges();
 });
 
 const setupMap = () => {
