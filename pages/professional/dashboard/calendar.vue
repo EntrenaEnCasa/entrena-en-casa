@@ -207,7 +207,8 @@
                                 <select v-model="newEmptySessionModal.data.selectedModality"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                     <option value="Online">Online</option>
-                                    <option value="Presencial">Presencial</option>
+                                    <option v-if="newEmptySessionModal.data.selectedFormat !== 'Grupal'" value="Presencial">
+                                        Presencial</option>
                                 </select>
                             </label>
                         </div>
@@ -945,6 +946,12 @@ const newEmptySessionModal = reactive({
         setSelectedStartTimeToFirstAvailableTime();
         newEmptySessionModal.openModal();
     },
+});
+
+watch(() => newEmptySessionModal.data.selectedFormat, (newVal) => {
+    if (newVal === 'Grupal') {
+        newEmptySessionModal.data.selectedModality = 'Online';
+    }
 });
 
 // Add new event modal
