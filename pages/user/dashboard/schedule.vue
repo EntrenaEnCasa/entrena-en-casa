@@ -4,17 +4,16 @@
             <div class="flex flex-col lg:flex-row justify-between items-center mb-4 gap-5">
                 <h3 class="text-xl font-medium">Agendar sesión</h3>
                 <div class="flex flex-col items-center">
-                    <button @click="openLocationModal"
-                        class="place-self-center rounded-md px-4 py-2 flex bg-gray-200 text-gray-500 gap-x-2"
+                    <button @click="openLocationModal" class="rounded-md px-4 py-2 flex bg-gray-200 text-gray-500 gap-x-2"
                         :class="{ 'invisible': isOnline }">
-                        <Icon name="heroicons:map-pin" class="text-2xl" />
-                        <div class="flex-grow max-w-xs">
+                        <Icon name="heroicons:map-pin" class="text-2xl flex-shrink-0" />
+                        <div class="max-w-xs">
                             <p v-show="!selectedLocation">Ubicación</p>
-                            <p v-show="selectedLocation" class="truncate overflow-hidden whitespace-nowrap">{{
-                                selectedLocation?.place_name
-                            }}</p>
+                            <p v-show="selectedLocation" class="line-clamp-1">{{
+                                selectedLocation?.place_name }}</p>
                         </div>
                     </button>
+
                     <div class="flex items-center gap-x-1 text-secondary mt-2" :class="{ 'invisible': isOnline }">
                         <p class="text-sm font-semibold">¿Por qué necesitan mi ubicación?</p>
                         <Icon name="ion:information-circle-outline" class="text-xl" />
@@ -39,7 +38,7 @@
                         name="heroicons:chevron-left-20-solid" />
                 </button>
                 <div v-show="!sessionsLoading"
-                    class="flex gap-2 overflow-x-auto flex-nowrap md:overflow-visible md:flex-wrap">
+                    class="py-2 flex gap-2 overflow-x-auto flex-nowrap md:overflow-visible md:flex-wrap">
                     <span v-for="(day, index) in weekDays" @click="selectDate(day)" :key="index"
                         class="rounded-md py-2 px-4 flex flex-col items-center text-gray-700 min-w-32 outline cursor-pointer"
                         :class="{
@@ -85,15 +84,15 @@
                         Prueba otra fecha o prueba otra ubicación.
                     </p>
                 </div>
-                <div v-else class="grid grid-cols-2">
+                <div v-else class="grid grid-cols-1 lg:grid-cols-2">
                     <div v-for="professional, index in filteredProfessionals" :key="index"
-                        class="border rounded-xl bg-white py-12 px-8 grid grid-cols-3 place-items-center">
+                        class="border rounded-xl bg-white py-12 px-8 grid grid-cols-2 xl:grid-cols-3 place-items-center">
                         <div class="col-span-1 text-center">
                             <h3 class="text-2xl font-semibold">{{ professional.first_name + ' ' + professional.last_name }}
                             </h3>
                             <p class="text-sm">{{ professional.title }}</p>
                         </div>
-                        <div class="col-span-2">
+                        <div class="col-span-1 xl:col-span-2">
                             <div class="flex flex-wrap gap-2 justify-center items-center">
                                 <div v-for="session in professional.sessions"
                                     class="border rounded-full px-4 py-1.5 bg-secondary text-white">
@@ -142,40 +141,6 @@
                 </div>
             </CommonModal>
         </Teleport>
-        <!-- <Teleport to="body">
-            <CommonModal ref="confirmationModal">
-                <div class="px-2 py-4">
-                    <h2 class="text-xl font-semibold text-center mb-6">Ingresa tu dirección</h2>
-                    <MapsMapboxGeocoder ref="geocoderComponent" @locationSelected="flyToLocation" />
-                    <div>
-                        <div class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px] mt-5">
-                            <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
-                                style: 'mapbox://styles/mapbox/streets-v12',
-                                center: DEFAULT_COORDINATES,
-                                zoom: DEFAULT_ZOOM,
-                            }">
-                                <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
-                                    :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
-                                </MapboxDefaultMarker>
-                                <MapboxNavigationControl />
-                            </MapboxMap>
-                        </div>
-                    </div>
-                    <div v-show="!isDraggable" class="flex flex-col items-center text-secondary mt-3">
-                        <p>¿El pin no coincide con la ubicación?</p>
-                        <button class="underline font-medium" @click="isDraggable = true">Ajustar</button>
-                    </div>
-                    <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
-                        <button class="underline font-medium" @click="isDraggable = false">Dejar de ajustar</button>
-
-                    </div>
-                    <div class="flex justify-between mt-5">
-                        <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
-                        <CommonButton text="Confirmar ubicación" @click="confirmLocation" class="px-5 py-2 bg-primary" />
-                    </div>
-                </div>
-            </CommonModal>
-        </Teleport> -->
     </div>
 </template>
 
