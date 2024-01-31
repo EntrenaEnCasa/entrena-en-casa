@@ -1439,8 +1439,8 @@ const getEvents = async () => {
             "x-access-token": userStore.getUserToken()
         },
         body: {
-            "user_id": userStore.getUser().user_id,
-            "date": localDateString, // fecha en formato YYYY-MM-DD
+            user_id: userStore.getUser().user_id,
+            start_date: localDateString, // fecha en formato YYYY-MM-DD
         }
     });
 
