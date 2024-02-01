@@ -172,7 +172,8 @@
                     </div>
                     <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
                         <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
-                        <CommonButton text="Confirmar ubicación" @click="confirmSession" class="px-5 py-2 bg-primary" />
+                        <CommonButton text="Confirmar ubicación" @click="confirmSession" class="px-5 py-2 bg-primary"
+                            :loading="confirmSessionLoading" />
                     </div>
                 </div>
             </CommonModal>
@@ -222,10 +223,6 @@ const getSessions = () => {
         getInPersonSessions();
     }
 }
-
-watch(isOnline, () => {
-    getSessions();
-});
 
 const filteredProfessionals = computed(() => {
     const selectedDateString = selectedDate.value.toISOString().split('T')[0];
@@ -336,6 +333,7 @@ const confirmLocation = async () => {
 
 const confirmationModal = ref(null);
 const selectedSession = ref(null);
+const confirmSessionLoading = ref(false);
 
 const openConfirmationModal = (professionalData, sessionData) => {
     const newSession = {
@@ -351,13 +349,13 @@ const openConfirmationModal = (professionalData, sessionData) => {
             location: !isOnline.value ? selectedLocation.value.place_name : null,
         }
     }
-    console.log(newSession);
-    console.log(selectedLocation.value);
     selectedSession.value = newSession;
     confirmationModal.value.openModal();
 };
 
 const confirmSession = async () => {
+
+    confirmSessionLoading.value = true;
     const body = {
         session_id: selectedSession.value.session.id,
         user_id: userStore.getUser().user_id,
@@ -371,6 +369,8 @@ const confirmSession = async () => {
         },
         body: body
     });
+
+    confirmSessionLoading.value = false;
 
     if (error.value) {
         console.log("Fetch error:", error.value);
@@ -402,6 +402,7 @@ const getInPersonSessions = async () => {
         lat: markerCoordinates.value[1],
         short_code: selectedLocation.value.context[3].short_code,
         start_date: startOfWeek.value.toISOString().split('T')[0],
+        user_id: userStore.getUser().user_id,
     }
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/in-person`, {
@@ -435,6 +436,7 @@ const getOnlineSessions = async () => {
 
     const body = {
         start_date: startOfWeek.value.toISOString().split('T')[0],
+        user_id: userStore.getUser().user_id,
     }
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/online`, {
@@ -462,18 +464,17 @@ const getOnlineSessions = async () => {
     }
 }
 
-onMounted(() => {
-    updateInputValue();
-    if (isOnline.value) {
-        getOnlineSessions();
-    }
-    else {
-        getInPersonSessions();
-    }
+watch(isOnline, () => {
+    getSessions();
 });
 
-const filter = () => {
-    toggleFilterSidebar();
-}
+watch(startOfWeek, () => {
+    getSessions();
+});
+
+onMounted(() => {
+    updateInputValue();
+    getSessions();
+});
 
 </script>
