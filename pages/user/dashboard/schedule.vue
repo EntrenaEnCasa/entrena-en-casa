@@ -59,7 +59,7 @@
                     <Icon class="text-5xl text-secondary" name="heroicons:chevron-right-20-solid" />
                 </button>
             </div>
-            <div class="my-10">
+            <div v-show="!sessionsLoading" class="my-10">
                 <div v-if="!selectedLocation && !isOnline"
                     class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
                     <h2 class="text-3xl font-semibold text-primary mb-5">No se ha ingresado ubicación</h2>
@@ -76,11 +76,12 @@
                         como opción si no deseas que sea presencial.
                     </p>
                 </div>
-                <div v-if="selectedLocation && !isOnline && filteredProfessionals.length == 0"
+                <div v-if="((selectedLocation && !isOnline) || (isOnline)) && filteredProfessionals.length == 0"
                     class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
                     <h2 class="text-3xl font-semibold text-primary mb-5">No hay profesionales</h2>
                     <p class="max-w-2xl mx-auto text-gray-700">
-                        No encontramos ninguna hora con nuestros profesionales para la ubicación y fecha ingresada.
+                        No encontramos ninguna hora con nuestros profesionales para la ubicación (si es presencial) y fecha
+                        ingresada.
                         Prueba otra fecha o prueba otra ubicación.
                     </p>
                 </div>
@@ -177,6 +178,15 @@ const router = useRouter();
 
 const isOnline = ref(false);
 const professionals = ref([]);
+
+watch(isOnline, () => {
+    if (isOnline.value) {
+        getOnlineSessions();
+    }
+    else {
+        getInPersonSessions();
+    }
+});
 
 const filteredProfessionals = computed(() => {
     const selectedDateString = selectedDate.value.toISOString().split('T')[0];
@@ -322,7 +332,39 @@ const getInPersonSessions = async () => {
 
     if (data.value.success) {
         professionals.value = data.value.professionals;
-        // console.log(professionals.value);
+    }
+    else {
+        professionals.value = [];
+        console.log(data.value.message);
+    }
+}
+
+const getOnlineSessions = async () => {
+
+    sessionsLoading.value = true;
+
+    const body = {
+        start_date: startOfWeek.value.toISOString().split('T')[0],
+    }
+
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/online`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken()
+        },
+        body: body
+    });
+
+    sessionsLoading.value = false;
+
+    if (error.value) {
+        console.log("Fetch error:", error.value);
+        return;
+    }
+
+    if (data.value.success) {
+        professionals.value = data.value.professionals;
     }
     else {
         professionals.value = [];
@@ -332,7 +374,12 @@ const getInPersonSessions = async () => {
 
 onMounted(() => {
     updateInputValue();
-    getInPersonSessions();
+    if (isOnline.value) {
+        getOnlineSessions();
+    }
+    else {
+        getInPersonSessions();
+    }
 });
 
 const filter = () => {
