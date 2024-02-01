@@ -172,7 +172,7 @@
                     </div>
                     <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
                         <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
-                        <CommonButton text="Confirmar ubicación" @click="confirmLocation" class="px-5 py-2 bg-primary" />
+                        <CommonButton text="Confirmar ubicación" @click="confirmSession" class="px-5 py-2 bg-primary" />
                     </div>
                 </div>
             </CommonModal>
@@ -214,13 +214,17 @@ const router = useRouter();
 const isOnline = ref(false);
 const professionals = ref([]);
 
-watch(isOnline, () => {
+const getSessions = () => {
     if (isOnline.value) {
         getOnlineSessions();
     }
     else {
         getInPersonSessions();
     }
+}
+
+watch(isOnline, () => {
+    getSessions();
 });
 
 const filteredProfessionals = computed(() => {
@@ -352,6 +356,37 @@ const openConfirmationModal = (professionalData, sessionData) => {
     selectedSession.value = newSession;
     confirmationModal.value.openModal();
 };
+
+const confirmSession = async () => {
+    const body = {
+        session_id: selectedSession.value.session.id,
+        user_id: userStore.getUser().user_id,
+    }
+
+    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/session`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken()
+        },
+        body: body
+    });
+
+    if (error.value) {
+        console.log("Fetch error:", error.value);
+        return;
+    }
+
+    if (data.value.success) {
+        console.log(data.value.message);
+        getSessions();
+    }
+    else {
+        console.log(data.value.message);
+    }
+
+    confirmationModal.value.closeModal();
+}
 
 const getInPersonSessions = async () => {
 
