@@ -258,9 +258,6 @@ const updateInputValue = async () => {
     geocoderComponent.value.updateSearchTerm(address);
 };
 
-// const filterSidebarOpen = ref(false);
-// const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
-
 const selectedDate = ref(weekDays.value[0]);
 const startOfWeek = computed(() => weekDays.value[0]);
 
