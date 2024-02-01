@@ -43,8 +43,8 @@
                         class="rounded-md py-2 px-4 flex flex-col items-center text-gray-700 min-w-32 outline cursor-pointer"
                         :class="{
                             'bg-secondary text-white outline-secondary opacity-100': day.toISOString() === selectedDate.toISOString(),
-                            'outline-gray-500 outline-dashed bg-gray-200 opacity-50': !hasSessionsOnDay(day) && selectedLocation !== null,
-                            'outline-transparent bg-gray-200': hasSessionsOnDay(day) || selectedLocation === null,
+                            'outline-gray-500 outline-dashed bg-gray-200 opacity-50': !hasSessionsOnDay(day) && ((!isOnline && selectedLocation !== null) || isOnline),
+                            'outline-transparent bg-gray-200': hasSessionsOnDay(day) || isOnline || selectedLocation === null,
                         }">
                         <span class="text-2xl font-semibold">{{ formatDate(day).day + ' ' }}</span>
                         <span class="capitalize">{{ formatDate(day).month }}</span>
@@ -76,16 +76,25 @@
                         como opción si no deseas que sea presencial.
                     </p>
                 </div>
-                <div v-if="((selectedLocation && !isOnline) || (isOnline)) && filteredProfessionals.length == 0"
+                <div v-show="(selectedLocation && !isOnline) && filteredProfessionals.length == 0"
                     class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
                     <h2 class="text-3xl font-semibold text-primary mb-5">No hay profesionales</h2>
                     <p class="max-w-2xl mx-auto text-gray-700">
-                        No encontramos ninguna hora con nuestros profesionales para la ubicación (si es presencial) y fecha
+                        No encontramos ninguna hora con nuestros profesionales para la ubicación y fecha
                         ingresada.
                         Prueba otra fecha o prueba otra ubicación.
                     </p>
                 </div>
-                <div v-else class="grid grid-cols-1 lg:grid-cols-2">
+                <div v-show="isOnline && filteredProfessionals.length == 0"
+                    class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
+                    <h2 class="text-3xl font-semibold text-primary mb-5">No hay profesionales</h2>
+                    <p class="max-w-2xl mx-auto text-gray-700">
+                        No encontramos ninguna hora con nuestros profesionales para la fecha
+                        ingresada.
+                        Prueba otra fecha.
+                    </p>
+                </div>
+                <div v-show="filteredProfessionals.length > 0" class="grid grid-cols-1 lg:grid-cols-2">
                     <div v-for="professional, index in filteredProfessionals" :key="index"
                         class="border rounded-xl bg-white py-12 px-8 grid grid-cols-2 xl:grid-cols-3 place-items-center">
                         <div class="col-span-1 text-center">
@@ -95,12 +104,13 @@
                         </div>
                         <div class="col-span-1 xl:col-span-2">
                             <div class="flex flex-wrap gap-2 justify-center items-center">
-                                <div v-for="session in professional.sessions"
+                                <button v-for="session in professional.sessions"
+                                    @click="openConfirmationModal(professional, session)"
                                     class="border rounded-full px-4 py-1.5 bg-secondary text-white">
                                     <p class="text">
                                         {{ session.start_time }}hrs
                                     </p>
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -136,6 +146,31 @@
 
                     </div>
                     <div class="flex justify-between mt-5">
+                        <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
+                        <CommonButton text="Confirmar ubicación" @click="confirmLocation" class="px-5 py-2 bg-primary" />
+                    </div>
+                </div>
+            </CommonModal>
+        </Teleport>
+        <Teleport to="body">
+            <CommonModal ref="confirmationModal">
+                <div class="px-2 py-4">
+                    <h3 class="text-center text-2xl font-semibold mb-10">Confirmación de datos</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <p class="justify-self-end">Profesional: </p>
+                        <p class="font-semibold">{{ selectedSession?.professional.name }}</p>
+                        <p class="justify-self-end">Hora:</p>
+                        <p class="font-semibold">{{ selectedSession?.session.start_time }}</p>
+                        <p class="justify-self-end">Modalidad:</p>
+                        <p class="font-semibold">
+                            {{ selectedSession?.session.modality }}
+                        </p>
+                        <p class="justify-self-end" v-if="selectedSession?.session.location">Ubicación de la
+                            sesión:</p>
+                        <p v-if="selectedSession?.session.location" class="font-semibold max-w-60">{{
+                            selectedSession?.session.location }}</p>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
                         <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
                         <CommonButton text="Confirmar ubicación" @click="confirmLocation" class="px-5 py-2 bg-primary" />
                     </div>
@@ -294,6 +329,29 @@ const confirmLocation = async () => {
     closeLocationModal();
     getInPersonSessions();
 }
+
+const confirmationModal = ref(null);
+const selectedSession = ref(null);
+
+const openConfirmationModal = (professionalData, sessionData) => {
+    const newSession = {
+        professional: {
+            name: professionalData.first_name + ' ' + professionalData.last_name,
+            title: professionalData.title,
+        },
+        session: {
+            id: sessionData.session_info.session_id,
+            date: sessionData.date,
+            start_time: sessionData.start_time,
+            modality: sessionData.session_info.modality,
+            location: !isOnline.value ? selectedLocation.value.place_name : null,
+        }
+    }
+    console.log(newSession);
+    console.log(selectedLocation.value);
+    selectedSession.value = newSession;
+    confirmationModal.value.openModal();
+};
 
 const getInPersonSessions = async () => {
 
