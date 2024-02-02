@@ -46,7 +46,8 @@
                             'outline-gray-500 outline-dashed bg-gray-200 opacity-50': !hasSessionsOnDay(day) && ((!isOnline && selectedLocation !== null) || isOnline),
                             'outline-transparent bg-gray-200': ((!isOnline && selectedLocation != null && hasSessionsOnDay(day)) || (isOnline && hasSessionsOnDay(day))),
                         }">
-                        <span class="text-2xl font-semibold">{{ formatDate(day).day + ' ' }}</span>
+                        <span class="text-2xl font-semibold">{{ formatDate(day).day }}</span>
+                        <br />
                         <span class="capitalize">{{ formatDate(day).month }}</span>
                     </span>
                 </div>
