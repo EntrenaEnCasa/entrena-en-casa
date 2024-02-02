@@ -44,7 +44,7 @@
                         :class="{
                             'bg-secondary text-white outline-secondary opacity-100': day.toISOString() === selectedDate.toISOString(),
                             'outline-gray-500 outline-dashed bg-gray-200 opacity-50': !hasSessionsOnDay(day) && ((!isOnline && selectedLocation !== null) || isOnline),
-                            'outline-transparent bg-gray-200': hasSessionsOnDay(day) || isOnline || selectedLocation === null,
+                            'outline-transparent bg-gray-200': ((!isOnline && selectedLocation != null && hasSessionsOnDay(day)) || (isOnline && hasSessionsOnDay(day))),
                         }">
                         <span class="text-2xl font-semibold">{{ formatDate(day).day + ' ' }}</span>
                         <span class="capitalize">{{ formatDate(day).month }}</span>
