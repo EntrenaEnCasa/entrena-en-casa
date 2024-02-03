@@ -8,42 +8,41 @@
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
                 <div class="text-md text-center"><b>No hay sesiones registradas</b></div>
             </div>
-            <div>
-                <h3 class="text-xl font-medium">Sesiones próximas</h3>
-            </div>
-            <CommonLoading v-if="futureSessions.loading" />
-            <div v-else-if="futureSessions.success">
+            <h3 class="text-xl font-medium">Sesiones próximas</h3>
+            <CommonLoading v-show="futureSessions.loading" />
+            <div v-show="!futureSessions.loading && futureSessions.success">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div v-for="session in futureSessions.sessions" :key="session.session_id"
-                        class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-5"
-                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
-                        <div class="px-3">
-                            <div class="grid grid-cols-2 gap-1">
-                                <div class="text-[#949494] text-sm">
-                                    <p>{{ session.date }}</p>
+                        class="bg-secondary rounded-2xl items-center shadow-lg">
+                        <div class="bg-white rounded-2xl px-6 py-4">
+                            <div class="flex justify-between gap-1">
+                                <div class="text-gray-400">
+                                    <p>{{ formatDate(session.date) }}</p>
                                 </div>
-                                <div class="text-[#949494] text-sm text-right">
+                                <div class="text-gray-400 text-right">
                                     <p>{{ session.time }}hrs</p>
                                 </div>
                             </div>
-                            <div class="flex flex-col items-center gap-y-2">
-                                <b class="text-[#000000] text-lg font-medium ">{{ session.format + ' - ' +
-                                    session.modality }}</b>
-                                <a :href="session.link" target="_blank"
+                            <div class="flex flex-col items-center gap-2 py-2">
+                                <h3 class="text-2xl font-semibold">{{ session.professional.first_name + ' ' +
+                                    session.professional.last_name }}</h3>
+                                <p class="font-light text-gray-700">{{ session.professional.title }}</p>
+                                <a v-if="session.modality === 'Online'" :href="session.link || ''" target="_blank"
                                     class="text-xl font-medium underline text-secondary decoration-secondary underline-offset-2">Link</a>
-                                <p class="text-[#949494]">{{ session.professional.first_name + ' ' +
-                                    session.professional.last_name + ' - ' + session.professional.title }}</p>
                             </div>
-                            <div class=" text-center"></div>
-                            <div class=" text-center"></div>
-                            <div>
-
-                            </div>
+                        </div>
+                        <div class="py-2 px-5 text-white flex justify-between items-center">
+                            <button class="">
+                                Editar/eliminar
+                            </button>
+                            <button>
+                                Confirmar asistencia
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-else>
+            <div v-show="!futureSessions.loading && !futureSessions.success">
                 <div class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
                     style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
                     <div class="text-md  text-center"><b>{{ futureSessions.message }}</b></div>
@@ -56,13 +55,14 @@
             <CommonLoading v-if="pastSessions.loading" />
             <div v-else-if="pastSessions.success">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div v-for="session in pastSessions.sessions" :key="session.session_id"
+                    <div v-for="session in                   pastSessions.sessions                  "
+                        :key="session.session_id"
                         class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3 opacity-60 hover:opacity-100 transition-opacity"
                         style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
                         <div class="px-3">
                             <div class="grid grid-cols-2 gap-1">
                                 <div class="text-[#949494] text-sm text-left">
-                                    <p>{{ session.date }}</p>
+                                    <p>{{ formatDate(session.date) }}</p>
                                 </div>
                                 <div class="text-[#949494] text-sm text-right">
                                     <p>{{ session.time }}hrs</p>
@@ -71,8 +71,8 @@
                             <div class="flex flex-col items-center gap-y-2">
                                 <b class="text-[#000000] text-lg font-medium ">{{ session.format + ' - ' +
                                     session.modality }}</b>
-                                <a :href="session.link" target="_blank"
-                                    class="text-xl font-medium underline text-secondary decoration-secondary underline-offset-2">Link</a>
+                                <a :href="session.link || ''" target="_blank"
+                                    ss="text-xl font-medium underline text-secondary decoration-secondary underline-offset-2">Link</a>
                                 <p class="text-[#949494]">{{ session.professional.first_name + ' ' +
                                     session.professional.last_name + ' - ' + session.professional.title }}</p>
                             </div>
@@ -88,6 +88,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- <div class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3 opacity-60"
                         style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
                         <div class="px-3">
@@ -125,63 +126,78 @@
         </div>
     </div>
 </template>
-<script setup>
-import { reactive, onMounted } from "vue";
+<script setup lang="ts">
+import { reactive, onMounted, ref } from "vue";
 import { useUserStore } from '~/stores/UserStore'
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
 const futureSessions = ref({
-    success: false,
-    loading: false,
-    message: '',
-    sessions: [],
+    success: false as boolean,
+    loading: false as boolean,
+    message: '' as string,
+    sessions: [] as Session[],
 });
 
 const pastSessions = ref({
-    success: false,
-    loading: false,
-    message: '',
-    sessions: [],
+    success: false as boolean,
+    loading: false as boolean,
+    message: '' as string,
+    sessions: [] as Session[],
 });
 
-onMounted(async () => {
-    await getFutureSessions();
-    await getPastSessions();
-});
+const formatDate = (date: string): string => {
+    const d = new Date(date);
+    return d.toLocaleString('es-ES', { day: '2-digit', month: 'long' });
+}
 
 const getFutureSessions = async () => {
 
     futureSessions.value.loading = true;
+    const token = userStore.getUserToken();
+    if (!token) return console.error('No token');
 
     await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/future`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": token,
         },
-        onResponse({ request, response, options }) {
-            futureSessions.value = response._data;
+        onResponse({ response }) {
+            const data = response._data as { success: boolean, message: string, sessions: Session[] };
+            futureSessions.value.success = data.success;
+            futureSessions.value.message = data.message;
+            futureSessions.value.sessions = data.sessions;
             futureSessions.value.loading = false;
-        },
+        }
     });
 }
 
 const getPastSessions = async () => {
 
     pastSessions.value.loading = true;
+    const token = userStore.getUserToken();
+    if (!token) return console.error('No token');
 
     await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/past`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": token,
         },
-        onResponse({ request, response, options }) {
-            pastSessions.value = response._data;
+        onResponse({ response }) {
+            const data = response._data as { success: boolean, message: string, sessions: Session[] };
+            pastSessions.value.success = data.success;
+            pastSessions.value.message = data.message;
+            pastSessions.value.sessions = data.sessions;
             pastSessions.value.loading = false;
         },
     });
 }
+
+onMounted(() => {
+    getFutureSessions();
+    getPastSessions();
+});
 </script>
