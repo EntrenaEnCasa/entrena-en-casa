@@ -8,9 +8,9 @@
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
                 <div class="text-md text-center"><b>No hay sesiones registradas</b></div>
             </div>
-            <h3 class="text-xl font-medium">Sesiones próximas</h3>
-            <CommonLoading v-show="futureSessions.loading" />
-            <div v-show="!futureSessions.loading && futureSessions.success">
+            <h3 class="text-xl font-medium">Sesiones reservadas</h3>
+            <CommonLoading v-if="futureSessionsLoading" />
+            <div v-else-if="futureSessions?.success">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div v-for="session in futureSessions.sessions" :key="session.session_id"
                         class="bg-secondary rounded-2xl items-center shadow-lg">
@@ -28,11 +28,21 @@
                                     session.professional.last_name }}</h3>
                                 <p class="font-light text-gray-700">{{ session.professional.title }}</p>
                                 <a v-if="session.modality === 'Online'" :href="session.link || ''" target="_blank"
-                                    class="text-xl font-medium underline text-secondary decoration-secondary underline-offset-2">Link</a>
+                                    class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline-offset-2">
+                                    <Icon name="icon-park-outline:new-computer" />
+                                    <p>
+                                        Online
+                                    </p>
+                                </a>
+                                <a v-else :href="session.link || ''" target="_blank"
+                                    class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline-offset-2">
+                                    <Icon name="heroicons:map-pin" />
+                                    <p>Lugar</p>
+                                </a>
                             </div>
                         </div>
                         <div class="py-2 px-5 text-white flex justify-between items-center">
-                            <button class="">
+                            <button class="" @click="viewSessionDetails(session)">
                                 Editar/eliminar
                             </button>
                             <button>
@@ -42,21 +52,19 @@
                     </div>
                 </div>
             </div>
-            <div v-show="!futureSessions.loading && !futureSessions.success">
+            <div v-show="!futureSessionsLoading && !futureSessions?.success">
                 <div class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
                     style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
-                    <div class="text-md  text-center"><b>{{ futureSessions.message }}</b></div>
+                    <div class="text-md  text-center"><b>{{ futureSessions?.message }}</b></div>
                 </div>
             </div>
-
             <div>
                 <h3 class="text-xl font-medium">Sesiones pasadas</h3>
             </div>
-            <CommonLoading v-if="pastSessions.loading" />
-            <div v-else-if="pastSessions.success">
+            <CommonLoading v-if="pastSessionsLoading" />
+            <div v-else-if="pastSessions?.success">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div v-for="session in                   pastSessions.sessions                  "
-                        :key="session.session_id"
+                    <div v-for="session in pastSessions.sessions                  " :key="session.session_id"
                         class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3 opacity-60 hover:opacity-100 transition-opacity"
                         style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
                         <div class="px-3">
@@ -120,84 +128,71 @@
             <div v-else>
                 <div class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
                     style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
-                    <div class="text-md  text-center"><b>{{ pastSessions.message }}</b></div>
+                    <div class="text-md  text-center"><b>{{ pastSessions?.message }}</b></div>
                 </div>
             </div>
         </div>
+        <Teleport to="body">
+            <CommonModal ref="detailsModal">
+                test
+            </CommonModal>
+        </Teleport>
     </div>
 </template>
 <script setup lang="ts">
-import { reactive, onMounted, ref } from "vue";
-import { useUserStore } from '~/stores/UserStore'
+import { onMounted } from 'vue';
+import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
-const futureSessions = ref({
-    success: false as boolean,
-    loading: false as boolean,
-    message: '' as string,
-    sessions: [] as Session[],
-});
+interface APIResponseType {
+    success: boolean;
+    message: string;
+    sessions: Session[];
+}
 
-const pastSessions = ref({
-    success: false as boolean,
-    loading: false as boolean,
-    message: '' as string,
-    sessions: [] as Session[],
-});
-
+// Utility function to format date
 const formatDate = (date: string): string => {
     const d = new Date(date);
     return d.toLocaleString('es-ES', { day: '2-digit', month: 'long' });
 }
 
-const getFutureSessions = async () => {
+const detailsModal = ref<Modal | null>(null);
 
-    futureSessions.value.loading = true;
-    const token = userStore.getUserToken();
-    if (!token) return console.error('No token');
+// Function to handle session details view
+const viewSessionDetails = (session: Session) => {
+    console.log(session);
+    detailsModal.value?.openModal();
 
-    await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/future`, {
-        method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": token,
-        },
-        onResponse({ response }) {
-            const data = response._data as { success: boolean, message: string, sessions: Session[] };
-            futureSessions.value.success = data.success;
-            futureSessions.value.message = data.message;
-            futureSessions.value.sessions = data.sessions;
-            futureSessions.value.loading = false;
-        }
-    });
 }
 
-const getPastSessions = async () => {
-
-    pastSessions.value.loading = true;
-    const token = userStore.getUserToken();
-    if (!token) return console.error('No token');
-
-    await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/past`, {
-        method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": token,
-        },
-        onResponse({ response }) {
-            const data = response._data as { success: boolean, message: string, sessions: Session[] };
-            pastSessions.value.success = data.success;
-            pastSessions.value.message = data.message;
-            pastSessions.value.sessions = data.sessions;
-            pastSessions.value.loading = false;
-        },
-    });
+// Fetch future sessions
+const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFutureSessions, error: futureSessionsError } = useFetch<APIResponseType>(
+    `${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/future`, {
+    method: 'GET',
+    headers: {
+        "Content-Type": "application/json",
+        "x-access-token": userStore.getUserToken() || '',
+    },
 }
+);
 
-onMounted(() => {
-    getFutureSessions();
-    getPastSessions();
+// Fetch past sessions
+const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSessions, error: pastSessionsError } = useFetch<APIResponseType>(
+    `${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/past`, {
+    method: 'GET',
+    headers: {
+        "Content-Type": "application/json",
+        "x-access-token": userStore.getUserToken() || '',
+    },
+}
+);
+
+const route = useRoute();
+watchEffect(() => {
+    route.path;
+    refreshFutureSessions();
 });
+
 </script>
