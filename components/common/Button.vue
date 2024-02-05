@@ -1,6 +1,12 @@
 <template>
-    <button class="rounded-md bg-primary text-white disabled:bg-primary-100 disabled:cursor-not-allowed"
-        :class="'text-' + size" :disabled="disabled || loading">
+    <button :class="[
+        'rounded-md',
+        `bg-${color}`,
+        'text-white',
+        `disabled:bg-${color}-100`,
+        'disabled:cursor-not-allowed',
+        `text-${size}`
+    ]" :disabled="disabled || loading">
         <span v-if="!loading">
             {{ text }}
         </span>
@@ -12,8 +18,8 @@
         </div>
     </button>
 </template>
-<script setup>
 
+<script setup>
 const props = defineProps({
     text: {
         type: String,
@@ -34,7 +40,10 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false
+    },
+    color: {
+        type: String,
+        default: 'primary'
     }
 });
-
 </script>
