@@ -22,5 +22,10 @@ declare global {
     actual_assistant: number;
     professional: Professional;
   }
+
+  interface Modal {
+    openModal: () => void;
+    closeModal: () => void;
+  }
   
 }
