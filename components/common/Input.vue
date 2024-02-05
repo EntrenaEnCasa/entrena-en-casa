@@ -8,13 +8,30 @@
             </div>
             <Field :name="name" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
                 class="w-full outline-none" :type="type" :id="id" :placeholder="placeholder" :rules="rules" />
+            <div v-if="rightText">
+                <p>{{ rightText }}</p>
+            </div>
         </div>
         <ErrorMessage class="block mt-1 rounded-lg text-red-500" :name="name" />
     </div>
 </template>
+<style>
+/* Removes arrows for number input types */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+</style>
 <script setup>
 
-defineProps(['modelValue', 'rules', 'placeholder', 'name', 'label', 'type', 'icon', 'id', 'rules']);
+defineProps(['modelValue', 'rules', 'placeholder', 'name', 'label', 'type', 'icon', 'id', 'rightText']);
 defineEmits(['update:modelValue']);
 
 </script>
