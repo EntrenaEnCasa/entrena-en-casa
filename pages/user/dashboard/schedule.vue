@@ -188,6 +188,7 @@ import { useTimeNavigation } from '~/composables/time/useTimeNavigation';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
 import { ref, onMounted } from "vue";
+import { convertToObject } from 'typescript';
 
 const DEFAULT_COORDINATES = [-70.6506, -33.4372];
 const DEFAULT_ZOOM = 13;
@@ -325,10 +326,21 @@ const closeLocationModal = () => {
 }
 
 const confirmLocation = async () => {
-    const location = await getReverseGeocodingData(getMarkerCoordinates());
-    selectedLocation.value = location;
+    updateSelectedLocationToCurrentLocation();
+    saveLocation();
     closeLocationModal();
     getInPersonSessions();
+}
+
+const saveLocation = async () => {
+    const user = userStore.user;
+    const newUser = {
+        ...user, location: {
+            lng: markerCoordinates.value[0],
+            lat: markerCoordinates.value[1],
+        }
+    };
+    userStore.setUser(newUser);
 }
 
 const confirmationModal = ref(null);
@@ -358,14 +370,14 @@ const confirmSession = async () => {
     confirmSessionLoading.value = true;
     const body = {
         session_id: selectedSession.value.session.id,
-        user_id: userStore.getUser().user_id,
+        user_id: userStore.user.user_id,
     }
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/session`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken()
+            "x-access-token": userStore.userToken || ''
         },
         body: body
     });
@@ -402,14 +414,14 @@ const getInPersonSessions = async () => {
         lat: markerCoordinates.value[1],
         short_code: selectedLocation.value.context[3].short_code,
         start_date: startOfWeek.value.toISOString().split('T')[0],
-        user_id: userStore.getUser().user_id,
+        user_id: userStore.user.user_id,
     }
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/in-person`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken()
+            "x-access-token": userStore.userToken || ''
         },
         body: body
     });
@@ -436,14 +448,14 @@ const getOnlineSessions = async () => {
 
     const body = {
         start_date: startOfWeek.value.toISOString().split('T')[0],
-        user_id: userStore.getUser().user_id,
+        user_id: userStore.user.user_id,
     }
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/online`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken()
+            "x-access-token": userStore.userToken || ''
         },
         body: body
     });
@@ -472,9 +484,19 @@ watch(startOfWeek, () => {
     getSessions();
 });
 
-onMounted(() => {
+onMounted(async () => {
+    if (userStore.user.location != undefined) {
+        const location = userStore.user.location;
+        setMarkerCoordinates([location.lng, location.lat]);
+        await updateSelectedLocationToCurrentLocation();
+    }
     updateInputValue();
     getSessions();
 });
+
+const updateSelectedLocationToCurrentLocation = async () => {
+    const location = await getReverseGeocodingData(getMarkerCoordinates());
+    selectedLocation.value = location;
+}
 
 </script>
