@@ -1,11 +1,11 @@
 <template>
     <button :class="[
         'rounded-md',
-        `bg-${color}`,
-        'text-white',
-        `disabled:bg-${color}-100`,
+        `bg-${bgColor}`,
+        `text-${textColor}`,
+        `disabled:bg-${bgColor}-100`,
         'disabled:cursor-not-allowed',
-        `text-${size}`
+        `text-${textSize}`
     ]" :disabled="disabled || loading">
         <span v-if="!loading">
             {{ text }}
@@ -13,7 +13,12 @@
         <div v-else>
             <span>{{ loadingText }}</span>
             <span>
-                <Icon :class="'text-' + size" class="animate-spin text-2xl text-white ml-2" name="fa6-solid:circle-notch" />
+                <Icon :class="[
+                    'animate-spin',
+                    'ml-2',
+                    `text-${textColor}`,
+                    `text-${iconSize}`
+                ]" name="fa6-solid:circle-notch" />
             </span>
         </div>
     </button>
@@ -33,7 +38,7 @@ const props = defineProps({
         type: String,
         default: 'Cargando'
     },
-    size: {
+    textSize: {
         type: String,
         default: 'base'
     },
@@ -41,9 +46,17 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    color: {
+    bgColor: {
         type: String,
         default: 'primary'
+    },
+    textColor: {
+        type: String,
+        default: 'white'
+    },
+    iconSize: {
+        type: String,
+        default: '2xl'
     }
 });
 </script>
