@@ -10,9 +10,9 @@
                 <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
                 <label class="text-gray-500" for="remember">Recuérdame</label>
             </div>
-            
+
         </div>
-        <CommonButton text="Iniciar sesión" class="py-2 w-full font-medium" size="xl" :loading="loading"
+        <CommonButton text="Iniciar sesión" class="py-2 w-full font-medium" text-size="xl" :loading="loading"
             :disabled="!meta.valid" />
     </Form>
 </template>

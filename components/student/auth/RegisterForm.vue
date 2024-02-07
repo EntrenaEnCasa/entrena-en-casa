@@ -15,7 +15,7 @@
             <label class="text-gray-500" for="remember">Acepto los <span class="underline">términos y
                     condiciones</span></label>
         </div>
-        <CommonButton text="Registrarse" class="py-2 w-full font-medium" size="xl" :disabled="!meta.valid"
+        <CommonButton text="Registrarse" class="py-2 w-full font-medium" text-size="xl" :disabled="!meta.valid"
             :loading="loading" />
     </Form>
 </template>
