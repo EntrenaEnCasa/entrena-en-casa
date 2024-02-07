@@ -6,8 +6,8 @@
             <div v-if="icon">
                 <Icon :name="icon" class="text-secondary text-lg" />
             </div>
-            <Field :id="id" :name="name" :modelValue="modelValue" @input="$emit('update:modelValue', $event)" as="select"
-                class="w-full outline-none" :rules="rules">
+            <Field :id="id" :name="name" :modelValue="modelValue" @input="$emit('update:modelValue', $event.target.value)"
+                as="select" class="w-full outline-none" :rules="rules">
                 <option disabled value="">{{ placeholder }}</option>
                 <option v-for="option in options" :key="option.value" :value="option.value">
                     {{ option.text }}
