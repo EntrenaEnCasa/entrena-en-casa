@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Email:</h4>
-                                    <p class="font-semibold">{{ user.email }}</p>
+                                    <p class="font-semibold">{{ user?.email }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Teléfono:</h4>
@@ -238,7 +238,7 @@ const runtimeConfig = useRuntimeConfig();
 const route = useRoute();
 const router = useRouter();
 
-const user = userStore.getUser();
+const user: null | User | Student = userStore.getUser;
 
 interface APIResponseType {
     success: boolean;
@@ -268,11 +268,11 @@ const detailsModalData = reactive({
     session: null as Session | null,
 });
 
-const { data: userData } = useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user.user_id}`, {
+const { data: userData } = useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`, {
     method: 'GET',
     headers: {
         "Content-Type": "application/json",
-        "x-access-token": userStore.getUserToken() || '',
+        "x-access-token": userStore.userToken || '',
     },
     lazy: true,
 });
@@ -310,21 +310,21 @@ const calculateAge = (dob: string): number => {
 
 // Fetch future sessions
 const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFutureSessions, error: futureSessionsError } = useFetch<APISessionResponseType>(
-    `${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/future`, {
+    `${runtimeConfig.public.apiBase}/student/${userStore.user?.user_id}/sessions/future`, {
     method: 'GET',
     headers: {
         "Content-Type": "application/json",
-        "x-access-token": userStore.getUserToken() || '',
+        "x-access-token": userStore.userToken || '',
     },
 });
 
 // Fetch past sessions
 const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSessions, error: pastSessionsError } = useFetch<APISessionResponseType>(
-    `${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/past`, {
+    `${runtimeConfig.public.apiBase}/student/${userStore.user?.user_id}/sessions/past`, {
     method: 'GET',
     headers: {
         "Content-Type": "application/json",
-        "x-access-token": userStore.getUserToken() || '',
+        "x-access-token": userStore.getUserToken || '',
     },
 });
 
@@ -333,7 +333,7 @@ const confirmSession = async () => {
     confirmAttendanceLoading.value = true;
 
     const body = {
-        user_id: user.user_id,
+        user_id: user?.user_id,
         session_id: detailsModalData.session?.session_id,
     }
 
@@ -343,7 +343,7 @@ const confirmSession = async () => {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken() || '',
+            "x-access-token": userStore.userToken || '' || '',
         },
         body: body,
     });
