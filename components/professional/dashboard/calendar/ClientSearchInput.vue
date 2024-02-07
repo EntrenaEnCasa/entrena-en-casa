@@ -95,7 +95,7 @@ const fetchResults = async () => {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "x-access-token": userStore.getUserToken()
+                "x-access-token": userStore.userToken
             },
             body: {
                 searchTerm: searchTerm.value

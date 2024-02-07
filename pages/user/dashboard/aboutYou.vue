@@ -70,7 +70,7 @@
 
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
-const user = userStore.getUser();
+const user = userStore.user;
 
 const formData = reactive({
     firstName: "",
@@ -198,12 +198,16 @@ const saveUserData = async () => {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken() || '',
+            "x-access-token": userStore.userToken || '' || '',
         },
         body: body
     });
 
     if (data.success) {
+        const user = userStore.user;
+        const newUser = { ...user, info: { ...body } };
+        console.log(newUser);
+        userStore.setUser(newUser);
         goToHome();
     } else {
         console.log(data.message);

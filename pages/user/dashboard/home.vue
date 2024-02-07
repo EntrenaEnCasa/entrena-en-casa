@@ -98,7 +98,7 @@ const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFu
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": userStore.userToken || '',
         },
         onResponse() {
             loadingStates.futureSessions = false;
@@ -116,7 +116,7 @@ const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSe
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": userStore.userToken || '',
         },
         onResponse() {
             loadingStates.pastSessions = false;

@@ -188,7 +188,7 @@ const changePassword = async () => {
         method: 'PATCH',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken()
+            "x-access-token": userStore.userToken || ''
         },
         body: JSON.stringify({
             user_id: userStore.user.user_id,
@@ -217,7 +217,7 @@ const changeEmail = async () => {
         method: 'PATCH',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken()
+            "x-access-token": userStore.userToken || ''
         },
         body: JSON.stringify({
             user_id: userStore.user.user_id,

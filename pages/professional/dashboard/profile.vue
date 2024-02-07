@@ -9,22 +9,22 @@
                     </div>
                     <!-- Content container -->
                     <div class="text-center flex flex-col gap-4">
-                        <div v-if="userStore.getUser().first_name">
+                        <div v-if="userStore.user.first_name">
                             <p class="text-sm text-gray-500">Nombre profesional</p>
-                            <p class="font-semibold text-2xl">{{ userStore.getUser().first_name }} {{
-                                userStore.getUser().last_name }}</p>
+                            <p class="font-semibold text-2xl">{{ userStore.user.first_name }} {{
+                                userStore.user.last_name }}</p>
                         </div>
-                        <div v-if="userStore.getUser().title">
+                        <div v-if="userStore.user.title">
                             <p class="text-sm text-gray-500">Título</p>
-                            <p class="text-lg font-medium">{{ userStore.getUser().title }}</p>
+                            <p class="text-lg font-medium">{{ userStore.user.title }}</p>
                         </div>
-                        <div v-if="userStore.getUser().email">
+                        <div v-if="userStore.user.email">
                             <p class="text-sm text-gray-500">Correo contacto</p>
-                            <p class="text-lg font-medium">{{ userStore.getUser().email }}</p>
+                            <p class="text-lg font-medium">{{ userStore.user.email }}</p>
                         </div>
-                        <div v-if="userStore.getUser().phone">
+                        <div v-if="userStore.user.phone">
                             <p class="text-sm text-gray-500">Número de teléfono de contacto</p>
-                            <p class="text-lg font-medium">{{ userStore.getUser().phone }}</p>
+                            <p class="text-lg font-medium">{{ userStore.user.phone }}</p>
                         </div>
                     </div>
                 </div>
@@ -183,14 +183,14 @@ const { getReverseGeocodingData } = useGeocoding();
 
 const getCoverageRanges = async () => {
     getCoverageRangesLoading.value = true;
-    const user_id = userStore.getUser().user_id;
+    const user_id = userStore.user.user_id;
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/user/${user_id}`,
         {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "x-access-token": userStore.getUserToken()
+                "x-access-token": userStore.userToken || ''
             },
         });
 
@@ -216,7 +216,7 @@ const addCoverage = async () => {
     const short_code = geoData.context[3].short_code;
 
     const body = {
-        user_id: userStore.getUser().user_id,
+        user_id: userStore.user.user_id,
         range_name: rangeName.value,
         radius: inputRadius.value,
         lng: markerCoordinates.value[0],
@@ -229,7 +229,7 @@ const addCoverage = async () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "x-access-token": userStore.getUserToken()
+                "x-access-token": userStore.userToken || ''
             },
             body: body
         });
@@ -270,7 +270,7 @@ const saveEditChanges = async () => {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            "x-access-token": userStore.getUserToken()
+            "x-access-token": userStore.userToken || ''
         },
         body: body
     });
@@ -306,7 +306,7 @@ const deleteCoverage = async () => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                "x-access-token": userStore.getUserToken()
+                "x-access-token": userStore.userToken || ''
             },
         });
 
