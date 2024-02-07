@@ -1,93 +1,64 @@
 <template>
-    <div class="background  my-1/5 h-screen grid gap-x-2">
-        <div class="flex flex-col items-center pt-5 mx-3">
+    <div class="min-h-screen">
+        <div class="flex flex-col items-center pt-5 mx-3 mb-10">
             <nuxt-link to="/">
-                <img class="img-fluid mx-auto d-block" width="120" src="/logo.png" alt="">
+                <NuxtImg class="mx-auto w-28 h-28" src="/logo.png" alt="logo" />
             </nuxt-link>
             <p class="text-secondary text-lg font-semibold ">Cuéntanos un poco sobre ti</p>
         </div>
 
-        <form class=" w-8/14 grid sm:grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-3 justify-items-center">
-
-            <div class="grid w-3/4 content-center">
-                <label for="inputNombre" class="form-label">¿Cuál es tu Nombre?</label>
-                <input type="text" class="border rounded-md px-4 py-3 flex items-center space-x-4 w-full outline-none"
-                    id="inputNombre" placeholder="Jorge">
-            </div>
-            <div class="grid w-3/4 content-center">
-                <label for="inputApellido" class="form-label">¿Cuál es tu Apellido?</label>
-                <input type="text" class="border rounded-md px-4 py-3 flex items-center space-x-4 w-full outline-none"
-                    id="inputApellido" placeholder="Sierra">
-            </div>
-            <div class="grid w-3/4 content-center ">
-                <label for="inputGenero" class="form-label">¿Cuál es tu género?</label>
-                <select id="inputGenero"
-                    class="border rounded-md px-4 py-3 flex items-center space-x-4 w-full outline-none text-gray-500 ">
-                    <option selected>Selecciona tu género</option>
-                    <option>Masculino</option>
-                    <option>Femenino</option>
-                    <option>Otro</option>
-                    <option>No especificado</option>
-                </select>
+        <Form v-slot="{ meta }" @submit="saveUserData">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center lg:px-10">
+                <CommonInput label="¿Cual es tu nombre?" v-model="formData.firstName" name="firstName" type="firstName"
+                    id="firstName" placeholder="Ingresa tu nombre" :rules="validateFirstName" class="w-full" />
+                <CommonInput label="¿Cual es tu apellido?" v-model="formData.lastName" name="lastName" type="lastName"
+                    id="lastName" placeholder="Ingresa tu apellido" :rules="validateLastName" class="w-full" />
+                <CommonInput label="¿Cual es tu fecha de nacimiento?" v-model="formData.birthDate" name="birthDate"
+                    type="date" id="birthDate" placeholder="Ingresa tu fecha de nacimiento" :rules="validateBirthDate"
+                    class="w-full" />
+                <CommonSelect label="¿Cuál es tu género?" v-model="formData.gender" name="gender" id="gender"
+                    placeholder="Ingresa tu género" :rules="validateGender" :options="genderOptions" class="w-full" />
+                <CommonInput label="¿Cual es tu peso actual?" v-model="formData.weight" name="weight" type="number"
+                    id="weight" placeholder="Ingresa tu peso actual" :rules="validateWeight" right-text="KG"
+                    class="w-full" />
+                <CommonInput label="¿Cual es tu estatura actual?" v-model="formData.height" name="height" type="number"
+                    id="height" placeholder="Ingresa tu estatura actual" :rules="validateHeight" right-text="CM"
+                    class="w-full" />
+                <CommonInput label="¿Cual es tu número de teléfono?" v-model="formData.phoneNumber" name="phoneNumber"
+                    type="number" id="phoneNumber" placeholder="9 XXXX XXXX" :rules="validatePhoneNumber" class="w-full" />
             </div>
 
-            <div class="grid w-3/4 content-center">
-                <label for="phone" class="form-label">Número de Teléfono</label>
-                <div class="flex items-center mb-3 gap-x-3">
-                    <input type="text" class="border rounded-md px-4 py-3 flex items-center space-x-4 w-3/4 outline-none "
-                        placeholder="+56 9 XXXX XXXX" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <span class="input-group-text" id="basic-addon2"></span>
-                </div>
-            </div>
-
-            <div class="grid w-3/4 content-center">
-                <label for="inputNacimiento" class="form-label">Fecha de Nacimiento</label>
-                <input type="date"
-                    class="border rounded-md p-3 flex items-center space-x-4 w-full outline-none text-gray-500">
-            </div>
-            <div class="grid w-3/4 content-center">
-                <label for="inputPeso" class="form-label">¿Cuál es tu peso actual?</label>
-                <div class="flex items-center mb-3 gap-x-3">
-                    <input type="text" class="border rounded-md px-4 py-3 flex items-center space-x-4 w-3/4 outline-none "
-                        placeholder="80" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <span class="input-group-text" id="basic-addon2">Kg</span>
-                </div>
-            </div>
-            <div class="grid w-3/4 content-center">
-                <label for="inputPeso" class="form-label">¿Cuál es tu estatura?</label>
-                <div class="flex items-center">
-                    <input type="text" class="border rounded-md px-4 py-3 flex items-center space-x-4 w-3/4 outline-none "
-                        placeholder="170" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <span class="input-group-text" id="basic-addon2">cm</span>
-                </div>
-            </div>
-
-        </form>
-        <div class="mx-5">
-            <div>
-                <div class="form-label extra text-center">Estos datos son necesarios para informar al profesor durante la
+            <div class="mt-10">
+                <p class="text-center mb-3">Estos datos son necesarios para informar al profesor
+                    durante la
                     sesión
-                    agendada e ir midiendo tu avance.</div>
+                    agendada e ir midiendo tu avance.
+                </p>
+                <div class="flex flex-col lg:flex-row lg:justify-center gap-4 px-5">
+                    <CommonButton type="button" text="Recordarmelo más tarde" class="px-4 py-2" bg-color="secondary"
+                        @click="openModal()" />
+                    <CommonButton type="submit" :loading="saveUserDataLoading" :disabled="!meta.valid" text="Confirmar"
+                        class="px-4 py-2">
+                    </CommonButton>
+                </div>
             </div>
-
-            <div class="flex justify-between px-5">
-                <button class="text-secondary" to="/user/dashboard/home" @click="openModal()">
-                    <p class="link-info">Recordarmelo más tarde </p>
-                </button>
-                <CommonButton text="Confirmar" class="px-4 py-2 rounded-lg" to="/user/dashboard/home">
-                </CommonButton>
-            </div>
-        </div>
+        </Form>
         <Teleport to="body">
             <CommonModal ref="modal">
-                <h3 class="text-xl">¿Estás seguro? Si no rellenas estos datos, no podrás agendar ninguna sesión.</h3>
-                <div class="flex space-x-4">
-                    <div>
-                        <button class="px-4 py-2 rounded-md bg-primary text-white"
-                            @click="router.push('/user/dashboard/home');">Confirmar</button>
+                <div class="p-4 text-center">
+                    <div class="mb-4">
+                        <h3 class="font-semibold text-2xl mb-2">¿Estar seguro/a?</h3>
+                        <p class="text-lg max-w-2xl">
+                            Si no rellenas estos datos, no podrás agendar ninguna sesión.
+                        </p>
                     </div>
-                    <div>
-                        <button class="px-4 py-2 rounded-md bg-red-500 text-white" @click="closeModal()">Cancelar</button>
+                    <div class="flex flex-col lg:flex-row lg:justify-center gap-4">
+                        <div>
+                            <CommonButton text="Cancelar" bg-color="tertiary" class="px-4 py-2" @click="" />
+                        </div>
+                        <div>
+                            <CommonButton text="Confirmar" class="px-4 py-2" @click="goToHome" />
+                        </div>
                     </div>
                 </div>
             </CommonModal>
@@ -96,6 +67,106 @@
 </template>
 
 <script setup>
+
+const runtimeConfig = useRuntimeConfig();
+const userStore = useUserStore();
+const user = userStore.getUser();
+
+const formData = reactive({
+    firstName: "",
+    lastName: "",
+    birthDate: "",
+    gender: "",
+    weight: "",
+    height: "",
+    phoneNumber: "",
+});
+
+const saveUserDataLoading = ref(false);
+
+const genderOptions = [
+    { value: 'Masculino', text: 'Masculino' },
+    { value: 'Femenino', text: 'Femenino' },
+    { value: 'Otro', text: 'Otro' }
+];
+
+const validateFirstName = () => {
+    if (!formData.firstName) {
+        return 'El nombre es requerido';
+    }
+    else if (formData.firstName.length < 3) {
+        return 'El nombre debe tener al menos 3 caracteres';
+    }
+    return true;
+};
+
+const validateLastName = () => {
+    if (!formData.lastName) {
+        return 'El apellido es requerido';
+    }
+    else if (formData.lastName.length < 3) {
+        return 'El apellido debe tener al menos 3 caracteres';
+    }
+    return true;
+};
+
+const validateBirthDate = () => {
+    if (!formData.birthDate) {
+        return 'La fecha de nacimiento es requerida';
+    }
+
+    const date = new Date(formData.birthDate);
+    const currentDate = new Date();
+    const yearDifference = currentDate.getFullYear() - date.getFullYear();
+    if (yearDifference > 80 || yearDifference < 10 || date >= currentDate) {
+        return 'Debes ingresar una fecha correcta';
+    }
+
+    return true;
+};
+
+const validateGender = () => {
+    if (!formData.gender) {
+        return 'El género es requerido';
+    }
+
+    return true;
+}
+
+const validateWeight = () => {
+    if (!formData.weight) {
+        return 'El peso es requerido';
+    }
+    else if (formData.weight < 30 || formData.weight > 200) {
+        return 'El peso debe estar entre 30 y 200 kg';
+    }
+    return true;
+};
+
+const validateHeight = () => {
+    if (!formData.height) {
+        return 'La estatura es requerida';
+    }
+    else if (formData.height < 100 || formData.height > 250) {
+        return 'La estatura debe estar entre 100 y 250 cm';
+    }
+    return true;
+};
+
+const validatePhoneNumber = () => {
+    if (!formData.phoneNumber) {
+        return 'El número de teléfono es requerido';
+    }
+    else if (formData.phoneNumber.length != 9) {
+        return 'El número de teléfono debe tener 9 dígitos';
+    }
+    return true;
+};
+
+const goToHome = () => {
+    closeModal();
+    router.push("/user/dashboard/home");
+};
 
 const modal = ref(null);
 const openModal = () => {
@@ -107,6 +178,37 @@ const closeModal = () => {
 };
 
 const router = useRouter();
+
+const saveUserData = async () => {
+
+    saveUserDataLoading.value = true;
+
+    const body = {
+        user_id: user.user_id,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        birth_date: formData.birthDate,
+        gender: formData.gender,
+        weight: formData.weight,
+        height: formData.height,
+        phone: formData.phoneNumber,
+    }
+
+    const data = await $fetch(`${runtimeConfig.public.apiBase}/student/info`, {
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userStore.getUserToken() || '',
+        },
+        body: body
+    });
+
+    if (data.success) {
+        goToHome();
+    } else {
+        console.log(data.message);
+    }
+};
 
 definePageMeta({
     layout: "auth",
