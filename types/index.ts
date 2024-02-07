@@ -30,6 +30,19 @@ declare global {
     user_type: 1 | 2 | 3;
   }
 
+  interface Student extends User {
+    credits: {
+      bronze: number;
+      silver: number;
+      gold: number;
+    };
+    location?: {
+      lat: number;
+      lng: number;
+    };
+    info: StudentInfo;
+  }
+
   interface StudentInfo {
     user_id: number;
     first_name: string;
@@ -39,7 +52,7 @@ declare global {
     weight: string;
     height: number;
     phone: string;
-}
+  }
 
   interface Modal {
     openModal: () => void;
