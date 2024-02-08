@@ -188,7 +188,6 @@ import { useTimeNavigation } from '~/composables/time/useTimeNavigation';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
 import { ref, onMounted } from "vue";
-import { convertToObject } from 'typescript';
 
 const DEFAULT_COORDINATES = [-70.6506, -33.4372];
 const DEFAULT_ZOOM = 13;
@@ -211,19 +210,9 @@ const { weekDays, isStartWeek, goToPreviousWeek, goToNextWeek, formatDate } = us
 const { flyTo, calculateDurationBasedOnDistance, calculateDistance } = useMapInteraction(mapRef);
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
-const router = useRouter();
 
 const isOnline = ref(false);
 const professionals = ref([]);
-
-const getSessions = () => {
-    if (isOnline.value) {
-        getOnlineSessions();
-    }
-    else {
-        getInPersonSessions();
-    }
-}
 
 const filteredProfessionals = computed(() => {
     const selectedDateString = selectedDate.value.toISOString().split('T')[0];
@@ -476,6 +465,15 @@ const getOnlineSessions = async () => {
     }
 }
 
+const getSessions = () => {
+    if (isOnline.value) {
+        getOnlineSessions();
+    }
+    else {
+        getInPersonSessions();
+    }
+}
+
 watch(isOnline, () => {
     getSessions();
 });
@@ -486,6 +484,7 @@ watch(startOfWeek, () => {
 
 onMounted(async () => {
     if (userStore.user.location != undefined) {
+        sessionsLoading.value = true;
         const location = userStore.user.location;
         setMarkerCoordinates([location.lng, location.lat]);
         await updateSelectedLocationToCurrentLocation();
