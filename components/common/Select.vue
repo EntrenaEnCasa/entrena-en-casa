@@ -19,7 +19,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
 import { Field, ErrorMessage } from 'vee-validate';
 
 defineProps(['modelValue', 'placeholder', 'name', 'label', 'type', 'icon', 'id', 'options', 'rules']);
