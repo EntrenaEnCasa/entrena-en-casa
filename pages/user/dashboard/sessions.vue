@@ -238,7 +238,7 @@ const runtimeConfig = useRuntimeConfig();
 const route = useRoute();
 const router = useRouter();
 
-const user: null | User | Student = userStore.getUser;
+const user: null | User | Student = userStore.user;
 
 interface APIResponseType {
     success: boolean;
@@ -324,7 +324,7 @@ const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSe
     method: 'GET',
     headers: {
         "Content-Type": "application/json",
-        "x-access-token": userStore.getUserToken || '',
+        "x-access-token": userStore.userToken || '',
     },
 });
 
@@ -336,8 +336,6 @@ const confirmSession = async () => {
         user_id: user?.user_id,
         session_id: detailsModalData.session?.session_id,
     }
-
-    console.log(body);
 
     const response = await $fetch<APIResponseType>(`${runtimeConfig.public.apiBase}/student/session/confirm`, {
         method: 'PUT',
