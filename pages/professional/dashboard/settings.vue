@@ -88,8 +88,6 @@
 
 import { useUserStore } from '@/stores/UserStore';
 
-import { ref } from 'vue';
-
 const runtimeConfig = useRuntimeConfig();
 
 const userStore = useUserStore();

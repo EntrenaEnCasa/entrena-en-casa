@@ -17,8 +17,6 @@
 
 <script setup>
 
-import { ref } from "vue";
-
 const header = ref(null);
 
 const sidebar = ref(null);

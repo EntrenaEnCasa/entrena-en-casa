@@ -97,7 +97,6 @@
 
 <script setup>
 
-import { ref } from 'vue';
 import { useAuthStore } from '~/stores/AuthStore';
 import { useUserStore } from '~/stores/UserStore';
 

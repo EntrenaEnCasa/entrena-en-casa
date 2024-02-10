@@ -97,7 +97,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+
 import { useUserStore } from "~/stores/UserStore";
 
 const userStore = useUserStore();

@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+
 import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();

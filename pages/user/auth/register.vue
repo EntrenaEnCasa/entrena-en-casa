@@ -28,8 +28,6 @@
 </template>
 <script setup>
 
-import { ref } from 'vue';
-
 const form = ref(null);
 
 definePageMeta({

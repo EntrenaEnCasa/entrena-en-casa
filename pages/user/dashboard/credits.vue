@@ -80,8 +80,6 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue';
-
 import { useUserStore } from '~/stores/UserStore';
 const runtimeConfig = useRuntimeConfig();
 const router = useRouter();

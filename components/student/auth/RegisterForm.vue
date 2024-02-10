@@ -23,8 +23,6 @@
 
 import { useAuthStore } from '~/stores/AuthStore'
 
-import { ref } from 'vue';
-
 const authStore = useAuthStore();
 const router = useRouter();
 const runtimeConfig = useRuntimeConfig();

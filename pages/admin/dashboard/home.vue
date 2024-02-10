@@ -202,8 +202,6 @@
 
 <script setup>
 
-import { ref } from "vue";
-
 const filterSidebarOpen = ref(false);
 const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
 
