@@ -82,7 +82,6 @@ onUnmounted(() => {
     window.removeEventListener('keydown', handleKeyDown);
 });
 
-
 defineExpose({
     openModal,
     closeModal

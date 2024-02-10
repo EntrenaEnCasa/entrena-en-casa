@@ -77,7 +77,7 @@
 </style>
 
 <script setup>
-import { reactive, onMounted, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();

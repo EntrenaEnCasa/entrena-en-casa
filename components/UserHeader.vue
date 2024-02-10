@@ -97,7 +97,7 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useAuthStore } from '~/stores/AuthStore';
 import { useUserStore } from '~/stores/UserStore';
 
