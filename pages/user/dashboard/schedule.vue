@@ -187,7 +187,6 @@ import { useUserStore } from '~/stores/UserStore';
 import { useTimeNavigation } from '~/composables/time/useTimeNavigation';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
-import { ref, onMounted } from "vue";
 
 const DEFAULT_COORDINATES = [-70.6506, -33.4372];
 const DEFAULT_ZOOM = 13;
@@ -357,6 +356,7 @@ const openConfirmationModal = (professionalData, sessionData) => {
 const confirmSession = async () => {
 
     confirmSessionLoading.value = true;
+
     const body = {
         session_id: selectedSession.value.session.id,
         user_id: userStore.user.user_id,
