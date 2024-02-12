@@ -207,7 +207,8 @@
                                 <select v-model="newEmptySessionModal.data.selectedModality"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                     <option value="Online">Online</option>
-                                    <option value="Presencial">Presencial</option>
+                                    <option v-if="newEmptySessionModal.data.selectedFormat !== 'Grupal'" value="Presencial">
+                                        Presencial</option>
                                 </select>
                             </label>
                         </div>
@@ -465,7 +466,9 @@
                                     <select v-model="editManualSessionModal.data.selectedModality"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                         <option value="Online">Online</option>
-                                        <option value="Presencial">Presencial</option>
+                                        <option v-if="editManualSessionModal.data.selectedFormat !== 'Grupal'"
+                                            value="Presencial">
+                                            Presencial</option>
                                     </select>
                                 </label>
                             </div>
@@ -778,7 +781,6 @@ const automaticallySelectedEndTime = computed(() => {
 const manuallySelectedEndTime = ref(formatTime(timesList.value[1]));
 
 // Watch for changes in selectedStartTime
-// Watch for changes in selectedStartTime
 watch(selectedStartTime, (newStartTime, oldStartTime) => {
     // Convert the times to integers for comparison
     const newStartTimeInt = parseTime(newStartTime);
@@ -947,6 +949,12 @@ const newEmptySessionModal = reactive({
     },
 });
 
+watch(() => newEmptySessionModal.data.selectedFormat, (newVal) => {
+    if (newVal === 'Grupal') {
+        newEmptySessionModal.data.selectedModality = 'Online';
+    }
+});
+
 // Add new event modal
 const newEventModalRef = ref(null);
 
@@ -995,9 +1003,6 @@ const newEventModal = reactive({
     addNewEvent: async () => {
         newEventModal.data.loading = true;
         const localDateString = getLocalDateString(currentlySelectedDate.value);
-
-        console.log(selectedStartTime.value);
-        console.log(manuallySelectedEndTime.value);
 
         if (newEventModal.data.selectedEventType == 'Nuevo entrenamiento') {
 
@@ -1129,7 +1134,7 @@ const editEmptySessionModal = reactive({
 
         editEmptySessionModal.data.updateSessionLoading = true;
         const event = editEmptySessionModal.data.event;
-        console.log(event);
+
         const body = {
             user_id: userStore.getUser().user_id,
             session_id: event.session_info.session_id,
@@ -1193,6 +1198,12 @@ const editEmptySessionModal = reactive({
     },
 });
 
+watch(() => editEmptySessionModal.data.selectedFormat, (newVal) => {
+    if (newVal === 'Grupal') {
+        editEmptySessionModal.data.selectedModality = 'Online';
+    }
+});
+
 const editManualSessionModalRef = ref(null);
 
 const editManualSessionModal = reactive({
@@ -1217,8 +1228,6 @@ const editManualSessionModal = reactive({
         }
     },
     handleClick: (day, time, event) => {
-        console.log("evento al abrir");
-        console.log(event);
         editManualSessionModal.data.selectedEventType = event.type;
         editManualSessionModal.data.clients = [...event.clients]; // Create a new array
         editManualSessionModal.data.selectedFormat = event.session_info.format;
@@ -1244,7 +1253,7 @@ const editManualSessionModal = reactive({
             text: editManualSessionModal.data.link,
             clients: editManualSessionModal.data.clients.map(client => client.user_id),
         }
-        console.log(body);
+
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
             method: 'PUT',
             headers: {
@@ -1444,8 +1453,8 @@ const getEvents = async () => {
             "x-access-token": userStore.getUserToken()
         },
         body: {
-            "user_id": userStore.getUser().user_id,
-            "date": localDateString, // fecha en formato YYYY-MM-DD
+            user_id: userStore.getUser().user_id,
+            start_date: localDateString, // fecha en formato YYYY-MM-DD
         }
     });
 

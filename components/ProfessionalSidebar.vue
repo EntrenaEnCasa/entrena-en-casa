@@ -27,6 +27,13 @@
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Calendario</span>
                     </router-link>
                 </li>
+                <li>
+                    <router-link @click="sidebarOpen = false" to="/professional/dashboard/profile"
+                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
+                        <Icon name="fa6-solid:user" class="w-5 h-5  group-hover:text-white" />
+                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Mi perfil</span>
+                    </router-link>
+                </li>
                 <!-- <li>
                     <router-link @click="sidebarOpen = false" to="/user/dashboard/recommendations"
                         class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
