@@ -62,7 +62,7 @@
                         <CommonInput label="Confirmar email" name="email-repeat" type="email" id="email-repeat"
                             icon="fa6-solid:lock" placeholder="1234@entrenaencasa.cl" :rules="validateEmailRepeat" />
                     </div>
-                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" size="xl" :loading="loading" />
+                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" text-size="xl" :loading="loading" />
                 </Form>
             </CommonModal>
         </Teleport>
@@ -73,10 +73,11 @@
                         <CommonInput label="Contraseña" v-model="password" name="password" type="password" id="password"
                             icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePassword" />
 
-                        <CommonInput label="Confirmar contraseña" name="password-repeat" type="password" id="password-repeat"
-                            icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePasswordRepeat" />
+                        <CommonInput label="Confirmar contraseña" name="password-repeat" type="password"
+                            id="password-repeat" icon="fa6-solid:lock" placeholder="* * * * * * * *"
+                            :rules="validatePasswordRepeat" />
                     </div>
-                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" size="xl" :loading="loading" />
+                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" text-size="xl" :loading="loading" />
                 </Form>
             </CommonModal>
         </Teleport>
@@ -86,8 +87,6 @@
 <script setup>
 
 import { useUserStore } from '@/stores/UserStore';
-
-import { ref } from 'vue';
 
 const runtimeConfig = useRuntimeConfig();
 
@@ -180,20 +179,20 @@ const validatePasswordRepeat = (passRepeat) => {
     return true;
 };
 
-const changePassword = async() => {
+const changePassword = async () => {
     loading.value = true;
 
     await useFetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
         method: 'PATCH',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken()
+            "x-access-token": userStore.userToken || ''
         },
         body: JSON.stringify({
             user_id: userStore.user.user_id,
             newPassword: password.value,
         }),
-        onResponse({request,response,options}){
+        onResponse({ request, response, options }) {
 
             loading.value = false;
             const responseData = response._data;
@@ -209,20 +208,20 @@ const changePassword = async() => {
 };
 
 
-const changeEmail = async() => {
+const changeEmail = async () => {
     loading.value = true;
 
     await useFetch(`${runtimeConfig.public.apiBase}/user/update-email`, {
         method: 'PATCH',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken()
+            "x-access-token": userStore.userToken || ''
         },
         body: JSON.stringify({
             user_id: userStore.user.user_id,
             newEmail: email.value,
         }),
-        onResponse({request,response,options}){
+        onResponse({ request, response, options }) {
 
             loading.value = false;
             const responseData = response._data;

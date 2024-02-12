@@ -19,8 +19,6 @@
 
 <script setup>
 
-import { ref } from "vue";
-
 const sidebar = ref(null);
 const toggleSidebar = () => sidebar.value.toggleSidebar();
 

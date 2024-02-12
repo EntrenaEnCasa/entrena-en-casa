@@ -80,8 +80,6 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue';
-
 import { useUserStore } from '~/stores/UserStore';
 const runtimeConfig = useRuntimeConfig();
 const router = useRouter();
@@ -126,7 +124,7 @@ const addCredits = async (item) => {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": userStore.userToken || '',
         },
         body: JSON.stringify({
             user_id: userStore.user.user_id,

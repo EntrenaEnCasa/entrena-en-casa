@@ -92,8 +92,6 @@
 </style>
 <script setup>
 
-import { ref } from 'vue'
-
 const menuOpen = ref(false);
 
 const toggleMenu = () => {

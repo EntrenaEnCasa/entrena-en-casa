@@ -9,7 +9,7 @@
                     <h5 class="text-lg text-[#949494]">Últimas sesiones</h5>
                     <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
-                <CommonLoading v-if="futureSessions.loading" />
+                <CommonLoading v-if="futureSessionsLoading" />
                 <div v-else-if="futureSessions.success">
                     <div v-for="session in futureSessions.sessions" :key="session.session_id">
                         <hr class="my-5">
@@ -35,7 +35,7 @@
                     <h5 class="text-lg text-[#949494]">Próximas sesiones</h5>
                     <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
-                <CommonLoading v-if="pastSessions.loading" />
+                <CommonLoading v-if="pastSessionsLoading" />
                 <div v-else-if="pastSessions.success">
                     <div v-for="session in pastSessions.sessions" :key="session.session_id">
                         <hr class="my-5">
@@ -77,62 +77,59 @@
 </style>
 
 <script setup>
-import { reactive, onMounted } from "vue";
-import { useUserStore } from '~/stores/UserStore'
+import { reactive, ref } from 'vue';
+import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
-const futureSessions = ref({
-    success: false,
-    loading: false,
-    message: '',
-    sessions: [],
+const userId = ref(userStore.user.user_id); // Make user ID reactive
+
+// Reactive object to manage loading states
+const loadingStates = reactive({
+    futureSessions: false,
+    pastSessions: false,
 });
 
-const pastSessions = ref({
-    success: false,
-    loading: false,
-    message: '',
-    sessions: [],
-});
-
-onMounted(async () => {
-    await getFutureSessions();
-    await getPastSessions();
-});
-
-const getFutureSessions = async () => {
-
-    futureSessions.value.loading = true;
-
-    await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/soon`, {
+// Fetch future sessions
+const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFutureSessions } = useFetch(
+    `${runtimeConfig.public.apiBase}/student/${userId.value}/sessions/soon`,
+    {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": userStore.userToken || '',
         },
-        onResponse({ request, response, options }) {
-            futureSessions.value = response._data;
-            futureSessions.value.loading = false;
+        onResponse() {
+            loadingStates.futureSessions = false;
         },
-    });
-}
+        onFetchError() {
+            loadingStates.futureSessions = false;
+        },
+    }
+);
 
-const getPastSessions = async () => {
-
-    pastSessions.value.loading = true;
-
-    await useFetch(`${runtimeConfig.public.apiBase}/student/${userStore.user.user_id}/sessions/last`, {
+// Fetch past sessions
+const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSessions } = useFetch(
+    `${runtimeConfig.public.apiBase}/student/${userId.value}/sessions/last`,
+    {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": userStore.userToken || '',
         },
-        onResponse({ request, response, options }) {
-            pastSessions.value = response._data;
-            pastSessions.value.loading = false;
+        onResponse() {
+            loadingStates.pastSessions = false;
         },
-    });
-}
+        onFetchError() {
+            loadingStates.pastSessions = false;
+        },
+    }
+);
+
+// Example of how to manually trigger a refresh
+onMounted(() => {
+    refreshFutureSessions();
+    refreshPastSessions();
+});
 </script>

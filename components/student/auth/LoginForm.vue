@@ -12,7 +12,7 @@
             </div>
             <p class="text-secondary text-right">Olvidé mi contraseña</p>
         </div>
-        <CommonButton text="Iniciar sesión" class="py-2 w-full font-medium" size="xl" :loading="loading"
+        <CommonButton text="Iniciar sesión" class="py-2 w-full font-medium" text-size="xl" :loading="loading"
             :disabled="!meta.valid" />
     </Form>
 </template>

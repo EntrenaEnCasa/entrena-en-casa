@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+
 import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();
@@ -95,7 +95,7 @@ const fetchResults = async () => {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "x-access-token": userStore.getUserToken()
+                "x-access-token": userStore.userToken
             },
             body: {
                 searchTerm: searchTerm.value

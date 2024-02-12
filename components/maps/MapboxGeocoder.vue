@@ -34,7 +34,6 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
 
 const placeholder = 'Busca un lugar';
 const searchTerm = ref('');

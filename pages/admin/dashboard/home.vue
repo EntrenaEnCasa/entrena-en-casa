@@ -202,8 +202,6 @@
 
 <script setup>
 
-import { ref, onMounted } from "vue";
-
 const filterSidebarOpen = ref(false);
 const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
 
@@ -232,7 +230,7 @@ const getFutureSessions = async () => {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": userStore.userToken,
         },
         onResponse({ request, response, options }) {
             futureSessions.value = response._data;
@@ -249,6 +247,4 @@ const filter = () => {
 </script>
 
 
-<style lang="scss">
-    
-</style>
+<style lang="scss"></style>

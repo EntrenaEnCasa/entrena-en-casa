@@ -48,8 +48,6 @@
 
 <script setup>
 
-import { ref } from 'vue';
-
 const isOpen = ref(false);
 
 const openModal = () => {
@@ -81,7 +79,6 @@ onMounted(() => {
 onUnmounted(() => {
     window.removeEventListener('keydown', handleKeyDown);
 });
-
 
 defineExpose({
     openModal,

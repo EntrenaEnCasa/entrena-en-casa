@@ -133,8 +133,6 @@
 
 <script setup>
 
-import { ref } from 'vue';
-
 const modal = ref(null);
 
 const openModal = () => {

@@ -97,7 +97,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+
 import { useUserStore } from "~/stores/UserStore";
 
 const userStore = useUserStore();
@@ -125,7 +125,7 @@ const getAllStudents = async () => {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
-            "x-access-token": userStore.getUserToken(),
+            "x-access-token": userStore.userToken,
         },
         onResponse({ request, response, options }) {
             allStudents.value = response._data;
