@@ -1,6 +1,6 @@
 <template>
-    <button class="bg-primary text-white rounded-sm disabled:bg-primary-100 disabled:cursor-not-allowed"
-        :class="'text-' + size" :disabled="disabled">
+    <button class="rounded-md bg-primary text-white disabled:bg-primary-100 disabled:cursor-not-allowed"
+        :class="'text-' + size" :disabled="disabled || loading">
         <span v-if="!loading">
             {{ text }}
         </span>

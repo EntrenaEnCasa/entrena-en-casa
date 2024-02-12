@@ -24,6 +24,9 @@ export const useUserStore = defineStore('UserStore', {
             this.user = null;
             this.removeUserFromLocalStorage();
         },
+        getUser() {
+            return this.user;
+        },
         storeUserInLocalStorage(user) {
             localStorage.setItem('user', JSON.stringify(user));
         },
