@@ -31,11 +31,6 @@ declare global {
   }
 
   interface Student extends User {
-    credits: {
-      bronze: number;
-      silver: number;
-      gold: number;
-    };
     location?: {
       lat: number;
       lng: number;

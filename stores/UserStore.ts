@@ -42,11 +42,5 @@ export const useUserStore = defineStore('UserStore', {
             localStorage.setItem('user', JSON.stringify(this.user));
             this.user = newUser;
         },
-        updateCredits(credits: any) {
-            if(this.user != null && 'credits' in this.user){
-                (this.user as Student).credits = credits;
-                this.updateUserFromLocalStorage(this.user);
-            }
-        },
     },
 })

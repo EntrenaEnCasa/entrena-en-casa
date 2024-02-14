@@ -139,7 +139,6 @@ const addCredits = async (item) => {
                     silver: responseData.credits.silver,
                     bronze: responseData.credits.bronze,
                 }
-                userStore.updateCredits(newCredits);
                 alert(responseData.message);
             } else {
                 alert(responseData.message);
