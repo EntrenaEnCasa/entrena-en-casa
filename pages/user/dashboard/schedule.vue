@@ -184,7 +184,7 @@
 <script setup>
 
 import { useUserStore } from '~/stores/UserStore';
-import { useTimeNavigation } from '~/composables/time/useTimeNavigation';
+import { useWeekNavigation } from '~/composables/time/useWeekNavigation';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
 
@@ -205,7 +205,7 @@ const markerCoordinates = ref(DEFAULT_COORDINATES);
 const getMarkerCoordinates = () => markerCoordinates.value;
 
 const { getReverseGeocodingData } = useGeocoding();
-const { weekDays, isStartWeek, goToPreviousWeek, goToNextWeek, formatDate } = useTimeNavigation();
+const { weekDays, isStartWeek, goToPreviousWeek, goToNextWeek, formatDate } = useWeekNavigation();
 const { flyTo, calculateDurationBasedOnDistance, calculateDistance } = useMapInteraction(mapRef);
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
