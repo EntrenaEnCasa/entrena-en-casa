@@ -311,6 +311,7 @@ const newEmptySessionModal = reactive({
     data: {
         selectedFormat: 'Individual',
         selectedModality: 'Online',
+        link: '',
     },
     loading: false,
     openModal: () => {
@@ -344,7 +345,7 @@ const newEmptySessionModal = reactive({
             "available": true, // will be removed later
             "format": newEmptySessionModal.data.selectedFormat,
             "modality": newEmptySessionModal.data.selectedModality,
-            "link": "https://www.maps.google.com", // placeholder for now
+            "link": newEmptySessionModal.data.link, // placeholder for now
             "credit_type": "gold", // placeholder for now
         }
 
@@ -486,8 +487,6 @@ const newEventModal = reactive({
                 "type": "personal", // "Nuevo entrenamiento" o "Evento personal"
             };
 
-            console.log(body);
-
             const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
                 method: 'POST',
                 headers: {
@@ -507,7 +506,7 @@ const newEventModal = reactive({
             newEventModal.closeModal();
 
             if (data.value.success) {
-                console.log("success: ", data.value.message);
+                console.log(data.value.message);
                 getEvents();
             }
             else {
@@ -519,40 +518,25 @@ const newEventModal = reactive({
 
 const editEventHandler = reactive({
     handleClick: (day, time, event) => {
-        console.log("happens");
         if (event.type === 'session') {
-            console.log("session");
             editEmptySessionModal.handleClick(day, time, event);
         }
         else if (event.type === 'manual_session') {
             editManualSessionModal.handleClick(day, time, event);
         }
         else if (event.type === 'personal') {
-            console.log("es personal");
             editPersonalEventModal.handleClick(day, time, event);
         }
-        // if (event.type === 'session' && event.clients.length === 0) {
-        //     editEmptySessionModal.handleClick(day, time, event);
-        // }
-        // else if (event.type === 'session' && event.clients.length > 0) {
-        //     editManualSessionModal.handleClick(day, time, event);
-        // }
-        // else if (event.type === 'manual_session') {
-        //     editManualSessionModal.handleClick(day, time, event);
-        // }
-        // else if (event.type === 'personal') {
-        //     editPersonalEventModal.handleClick(day, time, event);
-        // }
     }
 });
 
 // Edit empty session modal
-
-
 const editEmptySessionModal = reactive({
     data: {
         selectedFormat: null,
         selectedModality: null,
+        link: null,
+        clients: [],
         event: null,
         removeSessionLoading: false,
         updateSessionLoading: false,
@@ -560,7 +544,6 @@ const editEmptySessionModal = reactive({
     openModal: () => {
         if (editEmptySessionModalRef.value) {
             editEmptySessionModalRef.value.openModal();
-            console.log("open modal");
         }
     },
     closeModal: () => {
@@ -571,7 +554,9 @@ const editEmptySessionModal = reactive({
     handleClick: (day, time, event) => {
         editEmptySessionModal.data.selectedFormat = event.session_info.format;
         editEmptySessionModal.data.selectedModality = event.session_info.modality;
+        editEmptySessionModal.data.link = event.session_info.link;
         editEmptySessionModal.data.event = event;
+        editEmptySessionModal.data.clients = [...event.clients];
         updateCurrentlySelectedDate(day, time);
         editEmptySessionModal.openModal();
     },
@@ -579,6 +564,7 @@ const editEmptySessionModal = reactive({
 
         editEmptySessionModal.data.updateSessionLoading = true;
         const event = editEmptySessionModal.data.event;
+        const clientsIDs = editEmptySessionModal.data.clients.map(client => client.user_id);
 
         const body = {
             user_id: userStore.user.user_id,
@@ -587,9 +573,12 @@ const editEmptySessionModal = reactive({
             time: selectedStartTime.value,
             format: editEmptySessionModal.data.selectedFormat,
             modality: editEmptySessionModal.data.selectedModality,
-            link: event.session_info.link,
-            clients: [],
+            link: editEmptySessionModal.data.link,
+            clients: clientsIDs,
         }
+
+        console.log(body);
+
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
             method: 'PUT',
             headers: {
@@ -759,9 +748,7 @@ const editPersonalEventModal = reactive({
         event: null,
     },
     openModal: () => {
-        console.log("entra a openModal");
         if (editPersonalEventModalRef.value) {
-            console.log("entra al if");
             editPersonalEventModalRef.value.openModal();
         }
     },
@@ -771,7 +758,6 @@ const editPersonalEventModal = reactive({
         }
     },
     handleClick: (day, time, event) => {
-        console.log("handle click");
         editPersonalEventModal.data.clients = [...event.clients]; // Create a new array
         editPersonalEventModal.data.additionalInfo = event.text;
         editPersonalEventModal.data.event = event;
