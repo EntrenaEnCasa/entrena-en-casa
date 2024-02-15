@@ -139,10 +139,11 @@
                     </div>
                     <div v-show="!isDraggable" class="flex flex-col items-center text-secondary mt-3">
                         <p>¿El pin no coincide con la ubicación?</p>
-                        <button class="underline font-medium" @click="isDraggable = true">Ajustar</button>
+                        <button class="underline font-medium" @click="isDraggable = true">Ajustar ubicación</button>
                     </div>
                     <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
-                        <button class="underline font-medium" @click="isDraggable = false">Dejar de ajustar</button>
+                        <button class="underline font-medium" @click="isDraggable = false">Dejar de ajustar
+                            ubicación</button>
 
                     </div>
                     <div class="flex justify-between mt-5">
