@@ -21,8 +21,7 @@
                             <label class="w-full flex flex-col col-span-2">
                                 <label class="w-full flex flex-col">
                                     <span class="font-medium text-sm mb-2">Clientes (opcional)</span>
-                                    <ProfessionalDashboardCalendarClientSearchInput
-                                        v-model:modelValue="modal.data.personalEvent.clients"
+                                    <ProfessionalDashboardCalendarClientSearchInput v-model:clients="modal.data.clients"
                                         :selectedFormat="modal.data.personalEvent.selectedFormat" />
                                 </label>
                             </label>
@@ -45,8 +44,7 @@
 
                             <label class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Clientes</span>
-                                <ProfessionalDashboardCalendarClientSearchInput
-                                    v-model:modelValue="modal.data.manualSession.clients"
+                                <ProfessionalDashboardCalendarClientSearchInput v-model:clients="modal.data.clients"
                                     :selectedFormat="modal.data.manualSession.selectedFormat" />
                             </label>
 

@@ -13,7 +13,7 @@
                             <div class="col-span-2">
                                 <label class="w-full flex flex-col">
                                     <span class="font-medium text-sm mb-2">Clientes</span>
-                                    <ProfessionalDashboardCalendarClientSearchInput v-model:modelValue="modal.data.clients"
+                                    <ProfessionalDashboardCalendarClientSearchInput v-model:clients="modal.data.clients"
                                         :selectedFormat="modal.data.selectedFormat" />
                                 </label>
                             </div>
