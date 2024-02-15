@@ -290,13 +290,13 @@ const startOfWeek = computed(() => weekDays.value[0]);
 const goToNextWeekAndUpdateSelectedDate = () => {
     goToNextWeek();
     selectDate(weekDays.value[0]);
-    getInPersonSessions();
+    getSessions();
 };
 
 const goToPreviousWeekAndUpdateSelectedDate = () => {
     goToPreviousWeek();
     selectDate(weekDays.value[0]);
-    getInPersonSessions();
+    getSessions();
 };
 
 const selectDate = (day) => {
@@ -315,10 +315,10 @@ const closeLocationModal = () => {
 }
 
 const confirmLocation = async () => {
-    updateSelectedLocationToCurrentLocation();
+    await updateSelectedLocationToCurrentLocation();
     saveLocation();
     closeLocationModal();
-    getInPersonSessions();
+    getSessions();
 }
 
 const saveLocation = async () => {
