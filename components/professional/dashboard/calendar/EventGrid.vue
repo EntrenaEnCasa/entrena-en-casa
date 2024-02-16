@@ -9,14 +9,14 @@
                     class="capitalize text-sm font-semibold text-center border-b border-gray-200 pb-4 min-w-[130px] text-gray-500">
                     {{ day[0].formattedDay }}
                 </div>
-                <template v-for="(timeSlot, index) in  eventMatrix[0] " :key="timeSlot.time">
+                <template v-for="(timeSlot, index) in  eventMatrix[0]" :key="timeSlot.time">
                     <div class="text-sm font-semibold text-center border-r border-gray-200 py-2 pr-4 text-gray-500">
                         {{ timeSlot.formattedTime }}
                     </div>
                     <div v-for="(day, dayIndex) in  eventMatrix " :key="`day-${dayIndex}-slot-${index}`"
                         class="h-14 border-r border-gray-200 min-w-[130px]"
-                        :class="{ 'border-b': !(day[index].event && day[index].event.type === 'personal') || isLastEventUnique(day, index) }">
-                        <button v-if="!day[index].event" class="w-full h-full" :class="[editMode ? '' : editClass]"
+                        :class="{ 'border-b': shouldShowBorder(day, index) }">
+                        <button v-if="!day[index].event" class="w-full h-full" :class="{ editClass: !editMode }"
                             :disabled="editMode" @click="emptySlotModal.handleClick(day[index].day, day[index].time)">
                             <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                 <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
@@ -24,17 +24,15 @@
                         </button>
                         <button v-else
                             @click="editEventHandler.handleClick(day[index].day, day[index].time, day[index].event)"
-                            :disabled="!editMode || ((day[index].event && day[index].event.type === 'personal') && !isFirstEventUnique(day, index))"
-                            class="w-full h-full" :class="eventClasses(day, index)">
-                            <div v-if="day[index].event.type === 'personal' &&
-                                isFirstEventUnique(day, index) && !editMode"
+                            :disabled="isButtonDisabled(day, index)" class="w-full h-full"
+                            :class="eventClasses(day, index)">
+                            <div v-if="shouldShowEventDetails(day, index)"
                                 class="w-full h-full flex flex-col justify-center items-center text-white">
                                 <h4 class="font-medium">Evento personal</h4>
                                 <p class="text-xs">{{ day[index].event.start_time }} - {{ day[index].event.end_time }}
                                 </p>
                             </div>
-                            <div
-                                :class="{ hidden: !editMode || ((day[index].event && day[index].event.type === 'personal') && !isFirstEventUnique(day, index)) }">
+                            <div :class="{ hidden: !shouldShowEditIcon(day, index) }">
                                 <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
                             </div>
                         </button>
@@ -73,6 +71,22 @@ const editClass = reactive({
     'justify-center': true,
     'group': true,
 });
+
+const shouldShowBorder = (day, index) => {
+    return !(day[index].event && day[index].event.type === 'personal') || isLastEventUnique(day, index);
+};
+
+const isButtonDisabled = (day, index) => {
+    return !props.editMode || ((day[index].event && day[index].event.type === 'personal') && !isFirstEventUnique(day, index));
+};
+
+const shouldShowEventDetails = (day, index) => {
+    return day[index].event.type === 'personal' && isFirstEventUnique(day, index) && !props.editMode;
+};
+
+const shouldShowEditIcon = (day, index) => {
+    return props.editMode || ((day[index].event && day[index].event.type === 'personal') && !isFirstEventUnique(day, index));
+};
 
 const isFirstEventUnique = (day, index) => {
     if (index == 0) return true;
