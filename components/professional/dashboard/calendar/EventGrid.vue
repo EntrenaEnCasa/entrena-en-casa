@@ -50,6 +50,13 @@
                                         }}
                                     </p>
                                 </template>
+                                <template v-else-if="day[index].event.type === 'manual_session'">
+                                    <h4 class="font-medium text-sm">Sesión manual</h4>
+                                    <p class="text-xs">
+                                        {{ day[index].event.start_time }} - {{ calculateEndTime(day[index].event.start_time)
+                                        }}
+                                    </p>
+                                </template>
                             </div>
                             <div :class="{ hidden: !shouldShowEditIcon(day, index) }">
                                 <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
