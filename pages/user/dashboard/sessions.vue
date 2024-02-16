@@ -212,28 +212,38 @@
         </Teleport>
         <Teleport to="body">
             <CommonModal ref="fillUserDataModal">
-                <div class="p-4">
-                    <div class="max-w-2xl text-center">
-                        <h3 class=" text-2xl font-semibold mb-3">Aún no has rellenados tus datos de estudiante
+                <div class="p-4 max-w-3xl">
+                    <div class="text-center">
+                        <h3 class=" text-2xl font-semibold mb-4 text-primary">Aún no has rellenados tus datos de estudiante
                         </h3>
-                        <p>Para poder
-                            agendar una
-                            sesión, es recomendable que rellenes tus datos de estudiante. De esta manera, el profesional
-                            podrá
-                            contactarte en caso de ser necesario, y podrá conocer datos que serán necesarios para realizar
-                            los entrenamientos.
+                        <p>
+                            Para poder agendar una sesión, es recomendable que rellenes tus datos de estudiante. De esta
+                            manera, el profesional podrá contactarte en caso de ser necesario, y podrá conocer datos que
+                            serán necesarios para realizar los entrenamientos.
                         </p>
-                        <p class="font-medium mt-2">
+                        <p class="font-medium mt-4">
                             Si así lo prefieres, puedes dejar que el profesional rellene
                             tus datos por ti.
                         </p>
                     </div>
-                    <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
-                        <CommonButton text="Cancelar" class="px-4 py-2" bg-color="tertiary"
-                            @click="fillUserDataModal?.closeModal()" />
-                        <CommonButton text="Prefiero que lo rellene el profesional" class="px-4 py-2" bg-color="secondary"
-                            @click="handleProfessionalWillFillUserData" />
-                        <CommonButton text="Ir a rellenar mis datos" class="px-4 py-2" @click="goToFillUserData" />
+                    <div class="mt-6 flex flex-col items-center gap-5 lg:flex-row">
+                        <div class="text-center w-full">
+                            <CommonButton text="Rellenar cuando se realice mi sesión" class="w-full px-5 py-2"
+                                bg-color="secondary" @click="handleProfessionalWillFillUserData" />
+                            <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
+                                El profesional se encargará de rellenar tus datos al momento de
+                                realizar la
+                                sesión
+                            </p>
+                        </div>
+                        <div class="text-center w-full">
+                            <CommonButton text="Ir a rellenar mis datos" class="w-full px-5 py-2"
+                                @click="goToFillUserData" />
+                            <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
+                                Te llevaremos a la sección de rellenar datos de estudiante
+                            </p>
+                        </div>
+
                     </div>
                 </div>
             </CommonModal>
@@ -272,7 +282,8 @@ const detailsModalSession = ref<Session | null>(null);
 
 // Utility function to format date
 const formatDate = (date: string): string => {
-    const d = new Date(date);
+    const [year, month, day] = date.split('-').map(Number);
+    const d = new Date(year, month - 1, day);
     return d.toLocaleString('es-ES', { day: '2-digit', month: 'long' });
 }
 
