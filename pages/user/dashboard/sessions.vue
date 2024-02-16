@@ -187,6 +187,9 @@
                                     <p class="font-semibold">{{ userData.info.phone }}</p>
                                 </div>
                             </div>
+                            <div v-else-if="userData && !userData.success && professionalWillFillUserData">
+                                <p class="text-center">Aún no has rellenado tus datos de estudiante</p>
+                            </div>
                         </div>
                     </div>
                     <div class="mt-4">
@@ -210,18 +213,26 @@
         <Teleport to="body">
             <CommonModal ref="fillUserDataModal">
                 <div class="p-4">
-                    <div class="max-w-2xl">
-                        <h3 class="text-center text-2xl font-semibold mb-3">Aún no has rellenados tus datos de estudiante
+                    <div class="max-w-2xl text-center">
+                        <h3 class=" text-2xl font-semibold mb-3">Aún no has rellenados tus datos de estudiante
                         </h3>
-                        <p class="text-center">Para poder
+                        <p>Para poder
                             agendar una
-                            sesión, es necesario que rellenes tus datos de estudiante. De esta manera, el profesional podrá
+                            sesión, es recomendable que rellenes tus datos de estudiante. De esta manera, el profesional
+                            podrá
                             contactarte en caso de ser necesario, y podrá conocer datos que serán necesarios para realizar
-                            los entrenamientos.</p>
+                            los entrenamientos.
+                        </p>
+                        <p class="font-medium mt-2">
+                            Si así lo prefieres, puedes dejar que el profesional rellene
+                            tus datos por ti.
+                        </p>
                     </div>
                     <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
-                        <CommonButton text="Cancelar" class="px-4 py-2 bg-tertiary"
+                        <CommonButton text="Cancelar" class="px-4 py-2" bg-color="tertiary"
                             @click="fillUserDataModal?.closeModal()" />
+                        <CommonButton text="Prefiero que lo rellene el profesional" class="px-4 py-2" bg-color="secondary"
+                            @click="handleProfessionalWillFillUserData" />
                         <CommonButton text="Ir a rellenar mis datos" class="px-4 py-2" @click="goToFillUserData" />
                     </div>
                 </div>
@@ -254,6 +265,7 @@ interface APIUserResponseType extends APIResponseType {
 }
 
 const confirmAttendanceLoading = ref(false);
+const professionalWillFillUserData = ref(false);
 const detailsModal = ref<Modal | null>(null);
 const fillUserDataModal = ref<Modal | null>(null);
 const detailsModalSession = ref<Session | null>(null);
@@ -274,15 +286,19 @@ const { data: userData, pending: userDataLoading } = useFetch<APIUserResponseTyp
 });
 
 const viewSessionDetails = (session: Session) => {
-
-    if (!userData.value?.success) {
-        fillUserDataModal.value?.openModal();
-    }
-    else {
-        detailsModalSession.value = session;
+    detailsModalSession.value = session;
+    if (userData.value?.success || professionalWillFillUserData.value) {
         detailsModal.value?.openModal();
     }
+    else {
+        fillUserDataModal.value?.openModal();
+    }
+}
 
+const handleProfessionalWillFillUserData = () => {
+    professionalWillFillUserData.value = true;
+    fillUserDataModal.value?.closeModal();
+    detailsModal.value?.openModal();
 }
 
 const goToFillUserData = () => {
