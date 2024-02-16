@@ -137,45 +137,45 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2">
                         <div>
                             <h3 class="text-xl font-semibold text-center mb-4">Detalles de la sesión</h3>
-                            <div class="space-y-2">
+                            <div class="space-y-2" v-if="detailsModalSession != null">
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Profesional:</h4>
-                                    <p class="font-semibold">{{ detailsModalData.session?.professional.first_name + ' ' +
-                                        detailsModalData.session?.professional.last_name }}</p>
+                                    <p class="font-semibold">{{ detailsModalSession.professional.first_name + ' ' +
+                                        detailsModalSession.professional.last_name }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Hora:</h4>
-                                    <p class="font-semibold">{{ detailsModalData.session?.time }}</p>
+                                    <p class="font-semibold">{{ detailsModalSession.time }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Fecha:</h4>
-                                    <p class="font-semibold">{{ detailsModalData.session?.date }}</p>
+                                    <p class="font-semibold">{{ detailsModalSession.date }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Modalidad:</h4>
-                                    <p class="font-semibold">{{ detailsModalData.session?.modality }}</p>
+                                    <p class="font-semibold">{{ detailsModalSession.modality }}</p>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-center mb-3">Sobre ti</h3>
-                            <div class="space-y-2">
+                            <div class="space-y-2" v-if="!userDataLoading && userData && userData.info && userData.success">
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Alumno:</h4>
                                     <p class="font-semibold">
-                                        {{ userData?.info.first_name + ' ' + userData?.info.last_name }}
+                                        {{ userData.info.first_name + ' ' + userData.info.last_name }}
                                     </p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Edad:</h4>
                                     <p class="font-semibold">
-                                        {{ calculateAge(userData?.info.birth_date ?? '') }}
+                                        {{ calculateAge(userData.info.birth_date ?? '') }}
                                     </p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Genero:</h4>
                                     <p class="font-semibold">
-                                        {{ userData?.info.gender }}
+                                        {{ userData.info.gender }}
                                     </p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
@@ -184,7 +184,7 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Teléfono:</h4>
-                                    <p class="font-semibold">{{ userData?.info.phone }}</p>
+                                    <p class="font-semibold">{{ userData.info.phone }}</p>
                                 </div>
                             </div>
                         </div>
@@ -246,14 +246,17 @@ interface APIResponseType {
 }
 
 interface APISessionResponseType extends APIResponseType {
-    sessions: Session[];
+    sessions?: Session[];
 }
 
 interface APIUserResponseType extends APIResponseType {
-    info: StudentInfo;
+    info?: StudentInfo;
 }
 
 const confirmAttendanceLoading = ref(false);
+const detailsModal = ref<Modal | null>(null);
+const fillUserDataModal = ref<Modal | null>(null);
+const detailsModalSession = ref<Session | null>(null);
 
 // Utility function to format date
 const formatDate = (date: string): string => {
@@ -261,14 +264,7 @@ const formatDate = (date: string): string => {
     return d.toLocaleString('es-ES', { day: '2-digit', month: 'long' });
 }
 
-const detailsModal = ref<Modal | null>(null);
-
-const fillUserDataModal = ref<Modal | null>(null);
-const detailsModalData = reactive({
-    session: null as Session | null,
-});
-
-const { data: userData } = useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`, {
+const { data: userData, pending: userDataLoading } = useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`, {
     method: 'GET',
     headers: {
         "Content-Type": "application/json",
@@ -277,13 +273,13 @@ const { data: userData } = useFetch<APIUserResponseType>(`${runtimeConfig.public
     lazy: true,
 });
 
-const viewSessionDetails = async (session: Session) => {
+const viewSessionDetails = (session: Session) => {
 
     if (!userData.value?.success) {
         fillUserDataModal.value?.openModal();
     }
     else {
-        detailsModalData.session = session;
+        detailsModalSession.value = session;
         detailsModal.value?.openModal();
     }
 
@@ -334,7 +330,7 @@ const confirmSession = async () => {
 
     const body = {
         user_id: user?.user_id,
-        session_id: detailsModalData.session?.session_id,
+        session_id: detailsModalSession.value?.session_id,
     }
 
     const response = await $fetch<APIResponseType>(`${runtimeConfig.public.apiBase}/student/session/confirm`, {
