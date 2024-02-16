@@ -28,9 +28,28 @@
                             :class="eventClasses(day, index)">
                             <div v-if="shouldShowEventDetails(day, index)"
                                 class="w-full h-full flex flex-col justify-center items-center text-white">
-                                <h4 class="font-medium">Evento personal</h4>
-                                <p class="text-xs">{{ day[index].event.start_time }} - {{ day[index].event.end_time }}
-                                </p>
+                                <template v-if="day[index].event.type === 'personal'">
+                                    <h4 class="font-medium text-sm">Evento personal</h4>
+                                    <p class="text-xs">
+                                        {{ day[index].event.start_time }} - {{ day[index].event.end_time }}
+                                    </p>
+                                </template>
+                                <template
+                                    v-else-if="day[index].event.type === 'session' && day[index].event.clients.length == 0">
+                                    <h4 class="font-medium text-sm">Disponible</h4>
+                                    <p class="text-xs">
+                                        {{ day[index].event.start_time }} - {{ calculateEndTime(day[index].event.start_time)
+                                        }}
+                                    </p>
+                                </template>
+                                <template
+                                    v-else-if="day[index].event.type === 'session' && day[index].event.clients.length > 0">
+                                    <h4 class="font-medium text-sm">Hora agendada</h4>
+                                    <p class="text-xs">
+                                        {{ day[index].event.start_time }} - {{ calculateEndTime(day[index].event.start_time)
+                                        }}
+                                    </p>
+                                </template>
                             </div>
                             <div :class="{ hidden: !shouldShowEditIcon(day, index) }">
                                 <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
@@ -81,7 +100,7 @@ const isButtonDisabled = (day, index) => {
 };
 
 const shouldShowEventDetails = (day, index) => {
-    return day[index].event.type === 'personal' && isFirstEventUnique(day, index) && !props.editMode;
+    return isFirstEventUnique(day, index) && !props.editMode;
 };
 
 const shouldShowEditIcon = (day, index) => {
@@ -105,5 +124,23 @@ const isLastEventUnique = (day, index) => {
 
     return !event || !nextEvent || nextEvent.event_id !== event.event_id;
 };
+
+const calculateEndTime = (startTime) => {
+    // Create a new Date object
+    const time = new Date();
+
+    // Split the startTime string into hours and minutes
+    const [hours, minutes] = startTime.split(':');
+
+    // Set the hours and minutes of the Date object
+    time.setHours(parseInt(hours, 10));
+    time.setMinutes(parseInt(minutes, 10));
+
+    // Add 1 hour to the time
+    time.setHours(time.getHours() + 1);
+
+    // Return the new time as a string in the format HH:MM
+    return time.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+}
 
 </script>
