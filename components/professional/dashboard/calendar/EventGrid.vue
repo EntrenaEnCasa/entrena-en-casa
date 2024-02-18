@@ -9,14 +9,14 @@
                     class="capitalize text-sm font-semibold text-center border-b border-gray-200 pb-4 min-w-[130px] text-gray-500">
                     {{ day[0].formattedDay }}
                 </div>
-                <template v-for="(timeSlot, index) in  eventMatrix[0]" :key="timeSlot.time">
+                <template v-for="(timeSlot, index) in   eventMatrix[0]" :key="timeSlot.time">
                     <div class="text-sm font-semibold text-center border-r border-gray-200 py-2 pr-4 text-gray-500">
                         {{ timeSlot.formattedTime }}
                     </div>
-                    <div v-for="(day, dayIndex) in  eventMatrix " :key="`day-${dayIndex}-slot-${index}`"
+                    <div v-for="(day, dayIndex) in   eventMatrix  " :key="`day-${dayIndex}-slot-${index}`"
                         class="h-14 border-r border-gray-200 min-w-[130px]"
                         :class="{ 'border-b': shouldShowBorder(day, index) }">
-                        <button v-if="!day[index].event" class="w-full h-full" :class="{ editClass: !editMode }"
+                        <button v-if="!day[index].event" class="w-full h-full" :class="[editMode ? '' : editClass]"
                             :disabled="editMode" @click="emptySlotModal.handleClick(day[index].day, day[index].time)">
                             <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                                 <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
@@ -81,14 +81,16 @@ const props = defineProps({
 /* styling of cells */
 
 const eventClasses = (day, index) => {
-    if (day[index].event.type === 'personal') {
-        return [props.editMode ? editClass : '', 'bg-quaternary'];
-    } else if (day[index].event.clients.length > 0) {
-        return [props.editMode ? editClass : '', 'bg-secondary'];
+    const event = day[index].event;
+    let baseClass;
+    if (event.type === 'personal') {
+        baseClass = 'bg-quaternary';
+    } else if (event.clients.length > 0) {
+        baseClass = 'bg-secondary';
+    } else {
+        baseClass = 'bg-primary';
     }
-    else {
-        return [props.editMode ? editClass : '', 'bg-primary'];
-    }
+    return [baseClass];
 }
 
 const editClass = reactive({
@@ -111,7 +113,8 @@ const shouldShowEventDetails = (day, index) => {
 };
 
 const shouldShowEditIcon = (day, index) => {
-    return props.editMode || ((day[index].event && day[index].event.type === 'personal') && !isFirstEventUnique(day, index));
+    const isPersonalEvent = day[index].event && day[index].event.type === 'personal';
+    return props.editMode && !(isPersonalEvent && !isFirstEventUnique(day, index));
 };
 
 const isFirstEventUnique = (day, index) => {
