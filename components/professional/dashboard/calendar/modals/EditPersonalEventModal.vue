@@ -28,10 +28,14 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <CommonButton @click="modal.removeSession" text="Eliminar evento" class="px-4 py-2 bg-tertiary"
-                                :loading="modal.data.removeSessionLoading" />
-                            <CommonButton text="Confirmar cambios" @click="modal.updateSession" class="px-4 py-2"
-                                :loading="modal.data.updateSessionLoading" />
+                            <CommonButton @click="modal.removeSession" class="px-4 py-2 bg-tertiary"
+                                :loading="modal.data.removeSessionLoading">
+                                Eliminar sesión
+                            </CommonButton>
+                            <CommonButton @click="modal.updateSession" class="px-4 py-2"
+                                :loading="modal.data.updateSessionLoading">
+                                Guardar cambios
+                            </CommonButton>
                         </div>
                     </div>
                 </div>

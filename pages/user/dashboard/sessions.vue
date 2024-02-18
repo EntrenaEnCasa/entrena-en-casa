@@ -203,9 +203,12 @@
                         </p>
                     </div>
                     <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
-                        <CommonButton text="Cancelar" class="px-4 py-2 bg-tertiary" @click="detailsModal?.closeModal()" />
-                        <CommonButton text="Confirmar asistencia" class="px-4 py-2" @click="confirmSession"
-                            :loading="confirmAttendanceLoading" />
+                        <CommonButton class="px-4 py-2 bg-tertiary" @click="detailsModal?.closeModal()">
+                            Cancelar
+                        </CommonButton>
+                        <CommonButton class="px-4 py-2" @click="confirmSession" :loading="confirmAttendanceLoading">
+                            Confirmar asistencia
+                        </CommonButton>
                     </div>
                 </div>
             </CommonModal>
@@ -228,8 +231,10 @@
                     </div>
                     <div class="mt-6 flex flex-col items-center gap-5 lg:flex-row">
                         <div class="text-center w-full">
-                            <CommonButton text="Rellenar cuando se realice mi sesión" class="w-full px-5 py-2"
-                                bg-color="secondary" @click="handleProfessionalWillFillUserData" />
+                            <CommonButton class="w-full px-5 py-2" bg-color="secondary"
+                                @click="handleProfessionalWillFillUserData">
+                                Dejar que el profesional rellene mis datos
+                            </CommonButton>
                             <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
                                 El profesional se encargará de rellenar tus datos al momento de
                                 realizar la
@@ -237,8 +242,9 @@
                             </p>
                         </div>
                         <div class="text-center w-full">
-                            <CommonButton text="Ir a rellenar mis datos" class="w-full px-5 py-2"
-                                @click="goToFillUserData" />
+                            <CommonButton class="w-full px-5 py-2" @click="goToFillUserData">
+                                Rellenar mis datos
+                            </CommonButton>
                             <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
                                 Te llevaremos a la sección de rellenar datos de estudiante
                             </p>

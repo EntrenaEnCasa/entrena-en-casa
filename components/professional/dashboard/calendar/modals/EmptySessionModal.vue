@@ -39,9 +39,12 @@
                             en la sección "Mi perfil"
                         </p>
                         <div class="flex justify-between">
-                            <CommonButton @click="modal.closeModal" text="Cancelar" class="px-4 py-2 bg-tertiary" />
-                            <CommonButton text="Crear nueva sesión" @click="modal.addNewEmptySession" class="px-4 py-2"
-                                :loading="modal.loading" />
+                            <CommonButton @click="modal.closeModal" class="px-4 py-2 bg-tertiary">
+                                Cancelar
+                            </CommonButton>
+                            <CommonButton @click="modal.addNewEmptySession" class="px-4 py-2" :loading="modal.loading">
+                                Crear sesión
+                            </CommonButton>
                         </div>
                     </div>
                 </div>

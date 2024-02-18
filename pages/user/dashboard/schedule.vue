@@ -147,8 +147,12 @@
 
                     </div>
                     <div class="flex justify-between mt-5">
-                        <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
-                        <CommonButton text="Confirmar ubicación" @click="confirmLocation" class="px-5 py-2 bg-primary" />
+                        <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
+                            Cancelar
+                        </CommonButton>
+                        <CommonButton @click="confirmLocation" class="px-5 py-2 bg-primary">
+                            Confirmar ubicación
+                        </CommonButton>
                     </div>
                 </div>
             </CommonModal>
@@ -172,9 +176,12 @@
                             selectedSession?.session.location }}</p>
                     </div>
                     <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
-                        <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
-                        <CommonButton text="Confirmar ubicación" @click="confirmSession" class="px-5 py-2 bg-primary"
-                            :loading="confirmSessionLoading" />
+                        <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
+                            Cancelar
+                        </CommonButton>
+                        <CommonButton @click="confirmSession" class="px-5 py-2 bg-primary" :loading="confirmSessionLoading">
+                            Confirmar sesión
+                        </CommonButton>
                     </div>
                 </div>
             </CommonModal>

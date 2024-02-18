@@ -83,10 +83,12 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <CommonButton @click="modal.closeModal" text="Cancelar"
-                                class="px-4 py-2 bg-tertiary text-white" />
-                            <CommonButton text="Crear nuevo evento" @click="modal.addNewEvent" class="px-4 py-2"
-                                :loading="modal?.data.loading" />
+                            <CommonButton @click="modal.closeModal" class="px-4 py-2 bg-tertiary text-white">
+                                Cancelar
+                            </CommonButton>
+                            <CommonButton @click="modal.addNewEvent" class="px-4 py-2" :loading="modal?.data.loading">
+                                Crear evento
+                            </CommonButton>
                         </div>
                     </div>
                 </div>

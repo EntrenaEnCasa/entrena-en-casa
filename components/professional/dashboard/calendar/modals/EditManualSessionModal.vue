@@ -51,10 +51,14 @@
                     </form>
                     <div>
                         <div class="flex justify-between">
-                            <CommonButton text="Eliminar sesión" @click="modal.removeSession"
-                                :loading="modal.data.removeSessionLoading" class="px-4 py-2 bg-tertiary" />
-                            <CommonButton text="Confirmar cambios" @click="modal.updateSession"
-                                :loading="modal.data.updateSessionLoading" class="px-4 py-2" />
+                            <CommonButton @click="modal.removeSession" :loading="modal.data.removeSessionLoading"
+                                class="px-4 py-2 bg-tertiary">
+                                Eliminar sesión
+                            </CommonButton>
+                            <CommonButton @click="modal.updateSession" :loading="modal.data.updateSessionLoading"
+                                class="px-4 py-2">
+                                Guardar cambios
+                            </CommonButton>
                         </div>
                     </div>
                 </div>

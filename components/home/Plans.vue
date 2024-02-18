@@ -14,7 +14,9 @@
                         <div class="flex flex-col items-center md:flex-row md:justify-between">
                             <p class="italic text-center md:text-left text-secondary mb-3">Apto para todo tipo de personas
                             </p>
-                            <CommonButton class="tellural py-1 px-3 rounded-md" text="Contratar" />
+                            <CommonButton class="tellural py-1 px-3 rounded-md">
+                                Contratar
+                            </CommonButton>
                         </div>
                         <div class="flex justify-center mt-4 md:mt-0 md:absolute md:-top-4 md:-right-8">
                             <span class="text-white text-3xl font-semibold py-2 px-4 tellural rounded-lg bg-secondary">
@@ -32,7 +34,9 @@
                             modalidad <span class="text-secondary">online</span>
                         </p>
                         <div class="flex justify-center md:justify-end text-secondary">
-                            <CommonButton class="tellural py-1 px-3 rounded-md" text="Contratar" />
+                            <CommonButton class="tellural py-1 px-3 rounded-md">
+                                Contratar
+                            </CommonButton>
                         </div>
                         <div class="flex justify-center mt-4 md:mt-0 md:absolute md:-top-4 md:-right-8">
                             <span class="text-white text-3xl font-semibold py-2 px-4 tellural rounded-lg bg-secondary">
@@ -56,7 +60,9 @@
                             Modalidad <span class="text-secondary">presencial</span>
                         </p>
                         <div class="flex justify-center md:justify-end text-secondary">
-                            <CommonButton class="tellural py-1 px-3 rounded-md" text="Contratar" />
+                            <CommonButton class="tellural py-1 px-3 rounded-md">
+                                Contratar
+                            </CommonButton>
                         </div>
                         <div class="flex justify-center mt-4 md:mt-0 md:absolute md:-top-4 md:-right-8">
                             <span class="text-white text-3xl font-semibold py-2 px-4 tellural rounded-lg bg-secondary">
