@@ -200,6 +200,10 @@ const getEvents = async () => {
     fetchingEvents.value = true;
 
     const localDateString = getLocalDateString(currentDate.value);
+    const body = {
+        user_id: userStore.user.user_id,
+        start_date: localDateString, // fecha en formato YYYY-MM-DD
+    }
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
         method: 'POST',
@@ -207,10 +211,7 @@ const getEvents = async () => {
             "Content-Type": "application/json",
             "x-access-token": userStore.userToken || ''
         },
-        body: {
-            user_id: userStore.user.user_id,
-            start_date: localDateString, // fecha en formato YYYY-MM-DD
-        }
+        body: body
     });
 
     if (error.value) {
@@ -312,6 +313,7 @@ const newEmptySessionModal = reactive({
         selectedFormat: 'Individual',
         selectedModality: 'Online',
         link: '',
+        lngLat: [],
     },
     loading: false,
     openModal: () => {
@@ -577,8 +579,6 @@ const editEmptySessionModal = reactive({
             clients: clientsIDs,
         }
 
-        console.log(body);
-
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
             method: 'PUT',
             headers: {
@@ -604,6 +604,9 @@ const editEmptySessionModal = reactive({
         }
     },
     removeSession: async () => {
+
+        console.log("remove empty session called");
+        console.log(editEmptySessionModal.data.event.session_info.session_id);
 
         editEmptySessionModal.data.removeSessionLoading = true;
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
@@ -711,9 +714,8 @@ const editManualSessionModal = reactive({
         }
     },
     removeSession: async () => {
-
         editManualSessionModal.data.removeSessionLoading = true;
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editManualSessionModal.data.event.session_info.session_id}`, {
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editManualSessionModal.data.event.session_info.session_id}`, {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json",
