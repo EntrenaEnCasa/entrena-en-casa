@@ -122,7 +122,7 @@
             <CommonModal ref="locationModal">
                 <div class="px-2 py-4">
                     <h2 class="text-xl font-semibold text-center mb-6">Ingresa tu dirección</h2>
-                    <MapsMapboxGeocoder ref="geocoderComponent" @locationSelected="flyToLocation" />
+                    <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
                     <div>
                         <div class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px] mt-5">
                             <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
@@ -144,7 +144,6 @@
                     <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
                         <button class="underline font-medium" @click="isDraggable = false">Dejar de ajustar
                             ubicación</button>
-
                     </div>
                     <div class="flex justify-between mt-5">
                         <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
@@ -208,7 +207,7 @@ const isDraggable = ref(false);
 
 const currentZoom = computed(() => mapRef.value?.getZoom());
 
-const geocoderComponent = ref(null);
+const geocoderRef = ref(null);
 const markerCoordinates = ref(DEFAULT_COORDINATES);
 const getMarkerCoordinates = () => markerCoordinates.value;
 
@@ -288,7 +287,7 @@ const setMarkerCoordinates = (coordinates) => {
 const updateInputValue = async () => {
     const geocodingData = await getReverseGeocodingData(getMarkerCoordinates());
     const address = geocodingData.place_name;
-    geocoderComponent.value.updateSearchTerm(address);
+    geocoderRef.value.updateSearchTerm(address);
 };
 
 const selectedDate = ref(weekDays.value[0]);
