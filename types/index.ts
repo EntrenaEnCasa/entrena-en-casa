@@ -61,6 +61,8 @@ declare global {
   interface Modal {
     openModal: () => void;
     closeModal: () => void;
+    scrollToTop: () => void;
+    scrollToBottom: () => void;
   }
 
 }
