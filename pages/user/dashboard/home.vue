@@ -10,7 +10,7 @@
                     <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
                 <CommonLoading v-if="futureSessionsLoading" />
-                <div v-else-if="futureSessions.success">
+                <div v-else-if="futureSessions && futureSessions.success">
                     <div v-for="session in futureSessions.sessions" :key="session.session_id">
                         <hr class="my-5">
                         <div class="grid grid-cols-3 items-center">
@@ -75,11 +75,11 @@ import { useUserStore } from '~/stores/UserStore';
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
-const userId = ref(userStore.user.user_id); // Make user ID reactive
+const userId = userStore.user.user_id;
 
 // Fetch future sessions
-const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFutureSessions } = useFetch(
-    `${runtimeConfig.public.apiBase}/student/${userId.value}/sessions/soon`,
+const { data: futureSessions, pending: futureSessionsLoading } = useFetch(
+    `${runtimeConfig.public.apiBase}/student/${userId}/sessions/soon`,
     {
         method: 'GET',
         headers: {
@@ -90,8 +90,8 @@ const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFu
 );
 
 // Fetch past sessions
-const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSessions } = useFetch(
-    `${runtimeConfig.public.apiBase}/student/${userId.value}/sessions/last`,
+const { data: pastSessions, pending: pastSessionsLoading } = useFetch(
+    `${runtimeConfig.public.apiBase}/student/${userId}/sessions/last`,
     {
         method: 'GET',
         headers: {
@@ -101,9 +101,4 @@ const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSe
     }
 );
 
-// Example of how to manually trigger a refresh
-onMounted(() => {
-    refreshFutureSessions();
-    refreshPastSessions();
-});
 </script>
