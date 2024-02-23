@@ -20,6 +20,7 @@ export const useAuthStore = defineStore('AuthStore', {
             localStorage.removeItem('token');
             userStore.removeUserData();
             this.loggedIn = false;
+            reloadNuxtApp({ path: '/' });
         },
         checkIfUserIsLoggedIn() {
             const userStore = useUserStore();

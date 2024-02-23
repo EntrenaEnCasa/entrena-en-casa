@@ -99,7 +99,6 @@ const toggleUserMenu = () => userMenuOpen.value = !userMenuOpen.value;
 
 const logout = () => {
     authStore.logOut();
-    router.push('/');
 }
 
 const emit = defineEmits(['toggleSidebar'])
