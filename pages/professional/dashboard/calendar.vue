@@ -550,6 +550,7 @@ const editEmptySessionModal = reactive({
         link: null,
         clients: [],
         event: null,
+        locationCoordinates: [],
         removeSessionLoading: false,
         updateSessionLoading: false,
     },
