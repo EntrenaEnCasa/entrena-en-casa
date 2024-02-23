@@ -85,6 +85,21 @@
 import { useGeocoding } from '~/composables/maps/useGeocoding';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 
+interface ModalData {
+    data: {
+        selectedModality: string;
+        selectedFormat: string;
+        link: string;
+        locationCoordinates: number[];
+    };
+    loading: boolean;
+    openModal: () => void;
+    closeModal: () => void;
+    addNewEmptySession: () => void;
+    resetModalData: () => void;
+    handleClickFromButton: () => void;
+}
+
 interface CustomGeocoder {
     updateSearchTerm: (term: string) => void;
 }
@@ -149,12 +164,9 @@ const flyToLocation = (location: any) => {
     setMarkerCoordinates(newCoordinates);
 };
 
-const props = defineProps({
-    modal: {
-        type: Object,
-        required: true,
-    },
-})
+const props = defineProps<{
+    modal: ModalData;
+}>();
 
 watch(
     [() => props.modal.data.selectedModality, () => props.modal.data.selectedFormat],
