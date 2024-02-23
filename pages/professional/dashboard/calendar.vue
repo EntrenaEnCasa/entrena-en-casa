@@ -645,12 +645,6 @@ const editEmptySessionModal = reactive({
     },
 });
 
-// watch(() => editEmptySessionModal.data.selectedFormat, (newVal) => {
-//     if (newVal === 'Grupal') {
-//         editEmptySessionModal.data.selectedModality = 'Online';
-//     }
-// });
-
 const editManualSessionModal = reactive({
     data: {
         selectedEventType: 'Nuevo entrenamiento',
