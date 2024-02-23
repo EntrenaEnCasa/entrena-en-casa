@@ -67,6 +67,33 @@
                   notificación del evento</label>
               </div>
             </div>
+            <div v-show="modal.data.selectedFormat === 'Grupal' && modal.data.selectedModality === 'Presencial'"
+              class="flex flex-col col-span-full">
+              <span class="font-medium text-sm mb-2">Ubicación</span>
+              <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
+              <div class="relative flex justify-center w-full h-full min-h-[250px] lg:min-w-[400px] mt-5">
+                <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
+                  style: 'mapbox://styles/mapbox/streets-v12',
+                  center: DEFAULT_COORDINATES,
+                  zoom: DEFAULT_ZOOM,
+                }">
+                  <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
+                    :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
+                  </MapboxDefaultMarker>
+                  <MapboxNavigationControl />
+                </MapboxMap>
+              </div>
+              <div v-show="!isDraggable" class="flex flex-col items-center text-secondary mt-3">
+                <p>¿El pin no coincide con la ubicación?</p>
+                <button class="underline font-medium" @click.prevent="isDraggable = true">Ajustar
+                  ubicación</button>
+              </div>
+              <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
+                <button class="underline font-medium" @click.prevent="isDraggable = false">Dejar de
+                  ajustar
+                  ubicación</button>
+              </div>
+            </div>
           </form>
           <div>
             <div class="flex justify-between">
@@ -88,14 +115,88 @@
 
 <script lang="ts" setup>
 
-const modalRef = ref<Modal | null>(null);
+import { useGeocoding } from '~/composables/maps/useGeocoding';
+import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 
-defineProps({
+interface CustomGeocoder {
+  updateSearchTerm: (term: string) => void;
+}
+
+const DEFAULT_COORDINATES = [-70.6506, -33.4372];
+const DEFAULT_ZOOM = 13;
+
+const markerCoordinates = ref(DEFAULT_COORDINATES);
+const isDraggable = ref(false);
+
+const mapID = "editEmptySessionMap";
+const mapRef = useMapboxRef(mapID);
+
+const markerID = "editEmptySessionMarker"
+const markerRef = useMapboxMarkerRef(markerID);
+
+const currentZoom = computed(() => mapRef.value?.getZoom());
+const getMarkerCoordinates = () => markerCoordinates.value;
+
+const modalRef = ref<Modal | null>(null);
+const geocoderRef = ref<CustomGeocoder | null>(null);
+
+const { getReverseGeocodingData } = useGeocoding();
+const { flyTo, calculateDistance, calculateDurationBasedOnDistance } = useMapInteraction(mapRef);
+
+const onMarkerDragEnd = () => {
+  const coordinates = markerRef.value.getLngLat().toArray();
+  setMarkerCoordinates(coordinates);
+  flyToCenter();
+  updateInputValue();
+};
+
+const setMarkerCoordinates = (coordinates: number[]) => {
+  markerCoordinates.value = coordinates;
+  props.modal.data.locationCoordinates = coordinates;
+};
+
+const flyToCenter = () => {
+  const zoom = currentZoom.value;
+  const coordinates = getMarkerCoordinates();
+  flyTo(coordinates, zoom, {
+    speed: 0.5
+  });
+};
+
+const updateInputValue = async () => {
+  const geocodingData = await getReverseGeocodingData(getMarkerCoordinates());
+  const address = geocodingData.place_name;
+  geocoderRef.value?.updateSearchTerm(address);
+};
+
+const flyToLocation = (location: any) => {
+
+  const newCoordinates = location.center;
+  const currentLocation = mapRef.value?.getCenter().toArray();
+  const distance = calculateDistance(currentLocation, newCoordinates);
+  const duration = calculateDurationBasedOnDistance(distance);
+  const zoom = DEFAULT_ZOOM;
+
+  flyTo(newCoordinates, zoom, { duration });
+
+  setMarkerCoordinates(newCoordinates);
+};
+
+const props = defineProps({
   modal: {
     type: Object,
     required: true,
   },
 })
+
+watch(
+  [() => props.modal.data.selectedModality, () => props.modal.data.selectedFormat],
+  ([newModality, newFormat]) => {
+    if (newModality === 'Presencial' && newFormat === 'Grupal') {
+      modalRef.value?.scrollToBottom();
+    }
+  }
+);
 
 const handleOpenModal = () => {
   modalRef.value?.openModal();
