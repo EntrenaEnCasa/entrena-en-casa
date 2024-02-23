@@ -21,6 +21,12 @@
                     Registrarse
                 </router-link>
             </p>
+            <p class="mt-2 text-gray-500">
+                ¿Eres profesional?
+                <router-link to="/professional/auth/login" class="text-secondary">
+                    Inicia sesión como profesional
+                </router-link>
+            </p>
         </div>
     </div>
 </template>
