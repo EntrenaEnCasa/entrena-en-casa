@@ -313,7 +313,7 @@ const newEmptySessionModal = reactive({
         selectedFormat: 'Individual',
         selectedModality: 'Online',
         link: '',
-        lngLat: [],
+        locationCoordinates: [],
     },
     loading: false,
     openModal: () => {
@@ -340,14 +340,26 @@ const newEmptySessionModal = reactive({
         const localDateString = getLocalDateString(selectedDate.value);
         newEmptySessionModal.loading = true;
 
+        let link;
+
+        if (newEmptySessionModal.data.selectedFormat === 'Grupal' && newEmptySessionModal.data.selectedModality === 'Presencial') {
+            link = createGoogleMapsLink(newEmptySessionModal.data.locationCoordinates);
+        }
+        else if (newEmptySessionModal.data.selectedFormat === 'Individual' && newEmptySessionModal.data.selectedModality === 'Presencial') {
+            link = '';
+        }
+        else {
+            link = newEmptySessionModal.data.link;
+        }
+
         const body = {
             "user_id": userStore.user.user_id,
             "date": localDateString, // fecha en formato YYYY-MM-DD
             "time": selectedStartTime.value,
-            "available": true, // will be removed later
+            "available": true,
             "format": newEmptySessionModal.data.selectedFormat,
             "modality": newEmptySessionModal.data.selectedModality,
-            "link": newEmptySessionModal.data.link, // placeholder for now
+            "link": link,
             "credit_type": "gold", // placeholder for now
         }
 
@@ -379,13 +391,11 @@ const newEmptySessionModal = reactive({
     }
 });
 
-// watch(() => newEmptySessionModal.data.selectedFormat, (newVal) => {
-//     if (newVal === 'Grupal') {
-//         newEmptySessionModal.data.selectedModality = 'Online';
-//     }
-// });
+const createGoogleMapsLink = (coordinates) => {
+    const [lng, lat] = coordinates;
+    return `https://www.google.com/maps?q=${lat},${lng}`;
+}
 
-// Add new event modal
 
 const newEventModal = reactive({
     data: {
