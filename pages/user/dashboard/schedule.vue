@@ -94,23 +94,49 @@
                         Prueba otra fecha.
                     </p>
                 </div>
-                <div v-show="filteredProfessionals.length > 0" class="grid grid-cols-1 lg:grid-cols-2">
+                <div v-show="filteredProfessionals.length > 0" class="grid grid-cols-1 xl:grid-cols-2">
                     <div v-for="professional, index in filteredProfessionals" :key="index"
-                        class="border rounded-xl bg-white py-12 px-8 grid grid-cols-2 xl:grid-cols-3 place-items-center">
+                        class="border rounded-xl bg-white py-10 px-8 grid grid-cols-1 xl:grid-cols-3 gap-4 place-items-center">
                         <div class="col-span-1 text-center">
                             <h3 class="text-2xl font-semibold">{{ professional.first_name + ' ' + professional.last_name }}
                             </h3>
                             <p class="text-sm">{{ professional.title }}</p>
                         </div>
-                        <div class="col-span-1 xl:col-span-2">
-                            <div class="flex flex-wrap gap-2 justify-center items-center">
-                                <button v-for="session in professional.sessions"
-                                    @click="openConfirmationModal(professional, session)"
-                                    class="border rounded-full px-4 py-1.5 bg-secondary text-white">
-                                    <p class="text">
-                                        {{ session.start_time }}hrs
-                                    </p>
-                                </button>
+                        <div class="col-span-1 xl:col-span-2 px-5 text-center xl:text-left">
+                            <div class="space-y-5">
+                                <div v-if="professional.individualSessions.length > 0">
+                                    <h3 class="font-medium mb-2">Personalizada</h3>
+                                    <div class="flex flex-wrap justify-center xl:justify-start gap-2 items-center">
+                                        <div v-for="session in professional.individualSessions"
+                                            :key="session.session_info.session_id"
+                                            @click="openConfirmationModal(professional, session)"
+                                            class="border rounded-full px-4 py-1.5 bg-secondary text-white">
+                                            <p class="text">
+                                                {{ session.start_time }}hrs
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="professional.groupSessions.length > 0">
+                                    <h3 class="font-medium mb-2">Grupal</h3>
+                                    <div class="flex flex-wrap justify-center xl:justify-start items-center"
+                                        :class="[isOnline ? 'gap-2' : 'gap-4']">
+                                        <div class="flex flex-col gap-2" v-for="session in professional.groupSessions">
+                                            <a v-if="!isOnline" target="__blank" :href="session.session_info.link"
+                                                class="text-secondary">
+                                                <Icon name="fa6-solid:location-dot" class="text-xl mr-1" />
+                                                <span class="text-sm font-medium underline underline-offset-4">Ver
+                                                    ubicación</span>
+                                            </a>
+                                            <div @click="openConfirmationModal(professional, session)"
+                                                class="border rounded-full px-4 py-1.5 bg-secondary text-white text-center">
+                                                <p class="text">
+                                                    {{ session.start_time }}hrs
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -223,16 +249,18 @@ const professionals = ref([]);
 const filteredProfessionals = computed(() => {
     const selectedDateString = selectedDate.value.toISOString().split('T')[0];
 
-    return professionals.value.map(professional => {
-        // Filter the sessions array to only include the sessions on the selected date
+    const filteredData = professionals.value.map(professional => {
         const filteredSessions = professional.sessions.filter(session => {
-            // Assuming session.date is a string in the format 'yyyy-mm-ddT...'
             return session.date.startsWith(selectedDateString);
         });
 
-        // Return a new professional object with the filtered sessions array
-        return { ...professional, sessions: filteredSessions };
-    }).filter(professional => professional.sessions.length > 0); // Remove professionals with no sessions on the selected date
+        const individualSessions = filteredSessions.filter(session => session.session_info.format === 'Individual');
+        const groupSessions = filteredSessions.filter(session => session.session_info.format === 'Grupal');
+
+        return { ...professional, individualSessions, groupSessions };
+    }).filter(professional => professional.individualSessions.length > 0 || professional.groupSessions.length > 0);
+
+    return filteredData;
 });
 
 const hasSessionsOnDay = (day) => {
