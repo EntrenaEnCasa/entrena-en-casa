@@ -195,10 +195,20 @@
                         <p class="font-semibold">
                             {{ selectedSession?.session.modality }}
                         </p>
-                        <p class="justify-self-end" v-if="selectedSession?.session.location">Ubicación de la
-                            sesión:</p>
-                        <p v-if="selectedSession?.session.location" class="font-semibold max-w-60">{{
-                            selectedSession?.session.location }}</p>
+                        <template v-if="selectedSession?.session.location">
+                            <p class="justify-self-end">
+                                Ubicación de la
+                                sesión:
+                            </p>
+                            <p v-if="!selectedSession?.isGroup" class="font-semibold max-w-60">
+                                {{ selectedSession?.session.location }}
+                            </p>
+                            <a v-else :href="selectedSession?.session.location" target="__blank"
+                                class="font-medium max-w-60 text-secondary flex items-center">
+                                <Icon name="fa6-solid:location-dot" class="text-xl mr-1" />
+                                <span class="underline underline-offset-4">Ver ubicación</span>
+                            </a>
+                        </template>
                     </div>
                     <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
                         <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
@@ -371,6 +381,17 @@ const selectedSession = ref(null);
 const confirmSessionLoading = ref(false);
 
 const openConfirmationModal = (professionalData, sessionData) => {
+    let location;
+    if (!isOnline.value && sessionData.session_info.format === 'Individual') {
+        location = selectedLocation.value.place_name;
+    }
+    else if (!isOnline.value && sessionData.session_info.format === 'Grupal') {
+        location = sessionData.session_info.link;
+    }
+    else {
+        location = null;
+    }
+
     const newSession = {
         professional: {
             name: professionalData.first_name + ' ' + professionalData.last_name,
@@ -381,8 +402,9 @@ const openConfirmationModal = (professionalData, sessionData) => {
             date: sessionData.date,
             start_time: sessionData.start_time,
             modality: sessionData.session_info.modality,
-            location: !isOnline.value ? selectedLocation.value.place_name : null,
-        }
+            location: location,
+        },
+        isGroup: sessionData.session_info.format === 'Grupal'
     }
     selectedSession.value = newSession;
     confirmationModal.value.openModal();
