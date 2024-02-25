@@ -107,14 +107,14 @@
                                 <div v-if="professional.individualSessions.length > 0">
                                     <h3 class="font-medium mb-2">Personalizada</h3>
                                     <div class="flex flex-wrap justify-center xl:justify-start gap-2 items-center">
-                                        <div v-for="session in professional.individualSessions"
+                                        <button v-for="session in professional.individualSessions"
                                             :key="session.session_info.session_id"
                                             @click="openConfirmationModal(professional, session)"
                                             class="border rounded-full px-4 py-1.5 bg-secondary text-white">
                                             <p class="text">
                                                 {{ session.start_time }}hrs
                                             </p>
-                                        </div>
+                                        </button>
                                     </div>
                                 </div>
                                 <div v-if="professional.groupSessions.length > 0">
@@ -128,12 +128,12 @@
                                                 <span class="text-sm font-medium underline underline-offset-4">Ver
                                                     ubicación</span>
                                             </a>
-                                            <div @click="openConfirmationModal(professional, session)"
+                                            <button @click="openConfirmationModal(professional, session)"
                                                 class="border rounded-full px-4 py-1.5 bg-secondary text-white text-center">
                                                 <p class="text">
                                                     {{ session.start_time }}hrs
                                                 </p>
-                                            </div>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
