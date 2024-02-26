@@ -109,7 +109,8 @@ const isButtonDisabled = (day, index) => {
 };
 
 const shouldShowEventDetails = (day, index) => {
-    return isFirstEventUnique(day, index) && !props.editMode;
+    const isPersonalEvent = day[index].event && day[index].event.type === 'personal';
+    return !props.editMode && !(isPersonalEvent && !isFirstEventUnique(day, index));
 };
 
 const shouldShowEditIcon = (day, index) => {
