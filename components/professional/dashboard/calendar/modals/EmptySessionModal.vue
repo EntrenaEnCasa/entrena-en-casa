@@ -134,7 +134,6 @@ const onMarkerDragEnd = () => {
 
 const setMarkerCoordinates = (coordinates: number[]) => {
     markerCoordinates.value = coordinates;
-    props.modal.data.locationCoordinates = coordinates;
 };
 
 const flyToCenter = () => {
@@ -177,6 +176,10 @@ watch(
     }
 );
 
+watch(markerCoordinates, (newCoordinates) => {
+    props.modal.data.locationCoordinates = newCoordinates;
+});
+
 const handleOpenModal = () => {
     modalRef.value?.openModal();
 }
@@ -192,6 +195,7 @@ defineExpose({
 
 onMounted(() => {
     updateInputValue();
+    props.modal.data.locationCoordinates = markerCoordinates.value;
 });
 
 </script>
