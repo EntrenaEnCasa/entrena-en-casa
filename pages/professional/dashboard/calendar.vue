@@ -108,11 +108,13 @@ import { useDayNavigationStore } from '~/stores/professional/dashboard/calendar/
 import { useTimeRangeStore } from '~/stores/professional/dashboard/calendar/TimeRangeStore'
 import { useFormatter } from '~/composables/time/useFormatter';
 import { useWeekNavigation } from '~/composables/time/useWeekNavigation';
+import { useGeocoding } from '~/composables/maps/useGeocoding';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const { formatDateToWeekdayAndDay, formatHourToTimeString } = useFormatter();
 const { isStartWeek, goToPreviousWeek, goToNextWeek, currentYear, currentMonth, currentDate } = useWeekNavigation();
+const { getReverseGeocodingData } = useGeocoding();
 
 const dayNavigationStore = useDayNavigationStore();
 const { updateSelectedDate, goToStartOfWeek } = dayNavigationStore;
@@ -226,6 +228,7 @@ const getEvents = async () => {
     if (data.value.success) {
         populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
         events.value = data.value.events;
+        console.log(data.value.message);
     }
     else {
         fetchingEvents.value = false;
@@ -341,15 +344,19 @@ const newEmptySessionModal = reactive({
         newEmptySessionModal.loading = true;
 
         let link;
+        let coordinates;
 
         if (newEmptySessionModal.data.selectedFormat === 'Grupal' && newEmptySessionModal.data.selectedModality === 'Presencial') {
-            link = createGoogleMapsLink(newEmptySessionModal.data.locationCoordinates);
+            link = await createGoogleMapsLink(newEmptySessionModal.data.locationCoordinates);
+            coordinates = JSON.stringify(newEmptySessionModal.data.locationCoordinates);
         }
         else if (newEmptySessionModal.data.selectedFormat === 'Individual' && newEmptySessionModal.data.selectedModality === 'Presencial') {
             link = '';
+            coordinates = null;
         }
         else {
             link = newEmptySessionModal.data.link;
+            coordinates = null;
         }
 
         const body = {
@@ -360,7 +367,7 @@ const newEmptySessionModal = reactive({
             "format": newEmptySessionModal.data.selectedFormat,
             "modality": newEmptySessionModal.data.selectedModality,
             "link": link,
-            "credit_type": "gold", // placeholder for now
+            "coordinates": coordinates,
         }
 
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
@@ -391,9 +398,16 @@ const newEmptySessionModal = reactive({
     }
 });
 
-const createGoogleMapsLink = (coordinates) => {
-    const [lng, lat] = coordinates;
-    return `https://www.google.com/maps?q=${lat},${lng}`;
+const createGoogleMapsLink = async (coordinates) => {
+    const address = await getReverseGeocodingData(coordinates);
+    if (address) {
+        const encodedAddress = encodeURIComponent(address.place_name);
+        return `https://www.google.com/maps?q=${encodedAddress}`
+    }
+    else {
+        const [lng, lat] = coordinates;
+        return `https://www.google.com/maps?q=${lat},${lng}`;
+    }
 }
 
 
@@ -406,12 +420,13 @@ const newEventModal = reactive({
             selectedFormat: 'Individual',
             selectedModality: 'Online',
             link: '',
+            locationCoordinates: [],
         },
         personalEvent: {
             clients: [],
             selectedFormat: 'Grupal',
             additionalInfo: '',
-        },
+        }
     },
     openModal: () => {
         newEventModal.resetModalData();
@@ -447,6 +462,22 @@ const newEventModal = reactive({
 
             const clientsIDs = newEventModal.data.manualSession.clients.map(client => client.user_id);
 
+            let link;
+            let coordinates;
+
+            if (newEventModal.data.manualSession.selectedFormat === 'Grupal' && newEventModal.data.manualSession.selectedModality === 'Presencial') {
+                link = await createGoogleMapsLink(newEventModal.data.manualSession.locationCoordinates);
+                coordinates = JSON.stringify(newEventModal.data.manualSession.locationCoordinates);
+            }
+            else if (newEventModal.data.manualSession.selectedFormat === 'Individual' && newEventModal.data.manualSession.selectedModality === 'Presencial') {
+                link = '';
+                coordinates = null;
+            }
+            else {
+                link = newEventModal.data.manualSession.link;
+                coordinates = null;
+            }
+
             const body = {
                 "user_id": userStore.user.user_id,
                 "date": localDateString, // fecha en formato YYYY-MM-DD
@@ -454,9 +485,10 @@ const newEventModal = reactive({
                 "end_time": automaticallySelectedEndTime.value, // hora en formato HH:MM
                 "format": newEventModal.data.manualSession.selectedFormat, // "Individual" o "Grupal"
                 "modality": newEventModal.data.manualSession.selectedModality, // "Online" o "Presencial"
-                "text": newEventModal.data.manualSession.link, // link de la sesión, se pasa como text
+                "text": link, // link de la sesión, se pasa como text
                 "clients": clientsIDs, // array de ids de clientes
                 "type": "manual_session", // "manual session en caso de Nuevo entrenamiento"
+                "coordinates": coordinates,
             };
 
             const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
@@ -479,6 +511,7 @@ const newEventModal = reactive({
 
             if (data.value.success) {
                 getEvents();
+                console.log(data.value.message);
             }
             else {
                 console.log(data.value.message);
@@ -494,7 +527,7 @@ const newEventModal = reactive({
                 "date": localDateString, // fecha en formato YYYY-MM-DD
                 "start_time": selectedStartTime.value, // hora en formato HH:MM
                 "end_time": selectedEndTime.value, // hora en formato HH:MM
-                "text": newEventModal.data.personalEvent.additionalInfo, // información adicional
+                "info": newEventModal.data.personalEvent.additionalInfo, // información adicional
                 "clients": clientsIDs, // array de ids de clientes
                 "type": "personal", // "Nuevo entrenamiento" o "Evento personal"
             };
@@ -579,6 +612,22 @@ const editEmptySessionModal = reactive({
         const event = editEmptySessionModal.data.event;
         const clientsIDs = editEmptySessionModal.data.clients.map(client => client.user_id);
 
+        let link;
+        let coordinates;
+
+        if (editEmptySessionModal.data.selectedFormat === 'Grupal' && editEmptySessionModal.data.selectedModality === 'Presencial') {
+            link = await createGoogleMapsLink(editEmptySessionModal.data.locationCoordinates);
+            coordinates = JSON.stringify(editEmptySessionModal.data.locationCoordinates);
+        }
+        else if (editEmptySessionModal.data.selectedFormat === 'Individual' && editEmptySessionModal.data.selectedModality === 'Presencial') {
+            link = '';
+            coordinates = null;
+        }
+        else {
+            link = newEmptySessionModal.data.link;
+            coordinates = null;
+        }
+
         const body = {
             user_id: userStore.user.user_id,
             session_id: event.session_info.session_id,
@@ -586,8 +635,9 @@ const editEmptySessionModal = reactive({
             time: selectedStartTime.value,
             format: editEmptySessionModal.data.selectedFormat,
             modality: editEmptySessionModal.data.selectedModality,
-            link: editEmptySessionModal.data.link,
             clients: clientsIDs,
+            link: link,
+            coordinates: coordinates,
         }
 
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
@@ -615,9 +665,6 @@ const editEmptySessionModal = reactive({
         }
     },
     removeSession: async () => {
-
-        console.log("remove empty session called");
-        console.log(editEmptySessionModal.data.event.session_info.session_id);
 
         editEmptySessionModal.data.removeSessionLoading = true;
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
@@ -654,6 +701,7 @@ const editManualSessionModal = reactive({
         selectedModality: 'Online',
         link: '',
         event: null,
+        locationCoordinates: [],
         removeSessionLoading: false,
         updateSessionLoading: false
     },
@@ -719,8 +767,9 @@ const editManualSessionModal = reactive({
         }
     },
     removeSession: async () => {
+
         editManualSessionModal.data.removeSessionLoading = true;
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editManualSessionModal.data.event.session_info.session_id}`, {
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editManualSessionModal.data.event.event_id}`, {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json",
@@ -736,6 +785,7 @@ const editManualSessionModal = reactive({
         }
 
         if (data.value.success) {
+            console.log(data.value.message);
             editManualSessionModal.closeModal();
             getEvents();
         }
@@ -840,7 +890,8 @@ const editPersonalEventModal = reactive({
 });
 
 const updateCurrentlySelectedDate = (day, time) => {
-    const newDate = new Date();
+
+    const newDate = new Date(currentDate.value);
     newDate.setDate(newDate.getDate() + day - 1);
     updateSelectedDate(newDate);
     updateSelectedStartTimeFromNumber(time);
