@@ -68,18 +68,46 @@
                                     </select>
                                 </label>
                             </div>
-                            <label class="w-full flex flex-col col-span-2">
+                            <label v-show="modal.data.manualSession.selectedModality === 'Online'"
+                                class="w-full flex flex-col col-span-2">
                                 <span class="font-medium text-sm mb-2">Link</span>
                                 <input v-model="modal.data.manualSession.link" type="text" placeholder="https://"
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
                             </label>
+                            <div v-show="modal.data.manualSession.selectedModality === 'Presencial'"
+                                class="flex flex-col col-span-full">
+                                <span class="font-medium text-sm mb-2">Ubicación</span>
+                                <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
+                                <div class="relative flex justify-center w-full h-full min-h-[250px] lg:min-w-[400px] mt-5">
+                                    <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
+                                        style: 'mapbox://styles/mapbox/streets-v12',
+                                        center: DEFAULT_COORDINATES,
+                                        zoom: DEFAULT_ZOOM,
+                                    }">
+                                        <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
+                                            :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
+                                        </MapboxDefaultMarker>
+                                        <MapboxNavigationControl />
+                                    </MapboxMap>
+                                </div>
+                                <div v-show="!isDraggable" class="flex flex-col items-center text-secondary mt-3">
+                                    <p>¿El pin no coincide con la ubicación?</p>
+                                    <button class="underline font-medium" @click.prevent="isDraggable = true">Ajustar
+                                        ubicación</button>
+                                </div>
+                                <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
+                                    <button class="underline font-medium" @click.prevent="isDraggable = false">Dejar de
+                                        ajustar
+                                        ubicación</button>
+                                </div>
+                            </div>
                         </div>
-
+                        <!-- 
                         <div class="flex items-center my-10">
                             <input id="checkbox" type="checkbox" class="w-4 h-4 accent-primary-600 rounded">
                             <label for="checkbox" class="ms-2 text-sm text-gray-500">Enviar
                                 notificación del evento</label>
-                        </div>
+                        </div> -->
                     </form>
                     <div>
                         <div class="flex justify-between">
@@ -99,14 +127,112 @@
 
 <script setup lang="ts">
 
-const modalRef = ref<Modal | null>(null);
+import { useGeocoding } from '~/composables/maps/useGeocoding';
+import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 
-defineProps({
-    modal: {
-        type: Object,
-        required: true,
-    },
-})
+interface ModalData {
+    data: {
+        selectedEventType: string;
+        loading: boolean;
+        manualSession: {
+            clients: any[];
+            selectedFormat: 'Individual' | 'Grupal';
+            selectedModality: 'Online' | 'Presencial';
+            link: string;
+            locationCoordinates: number[];
+        },
+        personalEvent: {
+            clients: any[];
+            selectedFormat: 'Individual' | 'Grupal';
+            additionalInfo: string;
+        },
+    }
+    openModal: () => void;
+    closeModal: () => void;
+    resetModalData: () => void;
+    handleClick: () => void;
+    addNewEvent: () => void;
+}
+
+interface CustomGeocoder {
+    updateSearchTerm: (term: string) => void;
+}
+
+const DEFAULT_COORDINATES = [-70.6506, -33.4372];
+const DEFAULT_ZOOM = 13;
+
+const markerCoordinates = ref(DEFAULT_COORDINATES);
+const isDraggable = ref(false);
+
+const mapID = "newEventMap";
+const mapRef = useMapboxRef(mapID);
+
+const markerID = "newEventMarker"
+const markerRef = useMapboxMarkerRef(markerID);
+
+const currentZoom = computed(() => mapRef.value?.getZoom());
+const getMarkerCoordinates = () => markerCoordinates.value;
+
+const modalRef = ref<Modal | null>(null);
+const geocoderRef = ref<CustomGeocoder | null>(null);
+
+const { getReverseGeocodingData } = useGeocoding();
+const { flyTo, calculateDistance, calculateDurationBasedOnDistance } = useMapInteraction(mapRef);
+
+const onMarkerDragEnd = () => {
+    const coordinates = markerRef.value.getLngLat().toArray();
+    setMarkerCoordinates(coordinates);
+    flyToCenter();
+    updateInputValue();
+};
+
+const setMarkerCoordinates = (coordinates: number[]) => {
+    markerCoordinates.value = coordinates;
+};
+
+const flyToCenter = () => {
+    const zoom = currentZoom.value;
+    const coordinates = getMarkerCoordinates();
+    flyTo(coordinates, zoom, {
+        speed: 0.5
+    });
+};
+
+const updateInputValue = async () => {
+    const geocodingData = await getReverseGeocodingData(getMarkerCoordinates());
+    const address = geocodingData.place_name;
+    geocoderRef.value?.updateSearchTerm(address);
+};
+
+const flyToLocation = (location: any) => {
+
+    const newCoordinates = location.center;
+    const currentLocation = mapRef.value?.getCenter().toArray();
+    const distance = calculateDistance(currentLocation, newCoordinates);
+    const duration = calculateDurationBasedOnDistance(distance);
+    const zoom = DEFAULT_ZOOM;
+
+    flyTo(newCoordinates, zoom, { duration });
+
+    setMarkerCoordinates(newCoordinates);
+};
+
+const props = defineProps<{
+    modal: ModalData;
+}>();
+
+watch(
+    () => props.modal.data.manualSession.selectedModality,
+    (newModality) => {
+        if (newModality === 'Presencial') {
+            modalRef.value?.scrollToBottom();
+        }
+    }
+);
+
+watch(markerCoordinates, (newCoordinates) => {
+    props.modal.data.manualSession.locationCoordinates = newCoordinates;
+});
 
 const handleOpenModal = () => {
     modalRef.value?.openModal();
@@ -119,6 +245,11 @@ const handleCloseModal = () => {
 defineExpose({
     openModal: handleOpenModal,
     closeModal: handleCloseModal,
+});
+
+onMounted(() => {
+    updateInputValue();
+    props.modal.data.manualSession.locationCoordinates = markerCoordinates.value;
 });
 
 </script>
