@@ -228,7 +228,6 @@ const getEvents = async () => {
     if (data.value.success) {
         populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
         events.value = data.value.events;
-        console.log(data.value.message);
     }
     else {
         fetchingEvents.value = false;
