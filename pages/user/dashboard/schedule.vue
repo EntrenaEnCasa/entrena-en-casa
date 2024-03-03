@@ -421,10 +421,7 @@ const confirmSession = async () => {
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/session`, {
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: body
     });
 
@@ -465,10 +462,7 @@ const getInPersonSessions = async () => {
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/in-person`, {
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: body
     });
 
@@ -499,10 +493,7 @@ const getOnlineSessions = async () => {
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/online`, {
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: body
     });
 

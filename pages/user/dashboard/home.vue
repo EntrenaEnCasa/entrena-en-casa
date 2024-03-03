@@ -76,16 +76,14 @@ const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
 const userId = userStore.user.user_id;
+const headers = useRequestHeaders(['cookie']);
 
 // Fetch future sessions
 const { data: futureSessions, pending: futureSessionsLoading } = useFetch(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/soon`,
     {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '',
-        },
+        credentials: 'include'
     }
 );
 
@@ -94,10 +92,7 @@ const { data: pastSessions, pending: pastSessionsLoading } = useFetch(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/last`,
     {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '',
-        },
+        credentials: 'include'
     }
 );
 

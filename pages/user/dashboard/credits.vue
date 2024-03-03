@@ -329,10 +329,7 @@ interface APICreditsResponse extends APIResponse {
 
 const { data: creditsData, error: getCreditsError, pending: getCreditsLoading, refresh: getCredits } = useFetch<APICreditsResponse>(`${runtimeConfig.public.apiBase}/student/credits/${user.user_id}`, {
     method: 'GET',
-    headers: {
-        "Content-Type": "application/json",
-        "x-access-token": userStore.userToken || '',
-    },
+    credentials: 'include',
     onResponse({ response }) {
         let responseData = response._data;
         if (responseData.success) {
@@ -395,10 +392,7 @@ const getFormattedCreditType = (creditType: string, creditFormat: string) => {
 
 const { pending: plansInformationLoading, refresh: getPlansInformation } = useFetch<APIPlansResponse>(`${runtimeConfig.public.apiBase}/student/prices/${user.region}`, {
     method: 'GET',
-    headers: {
-        "Content-Type": "application/json",
-        "x-access-token": userStore.userToken || '',
-    },
+    credentials: 'include',
     onResponse({ response }) {
         let responseData = response._data;
         if (responseData.success) {
@@ -440,10 +434,7 @@ const buyPlan = async () => {
 
     const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/credits`, {
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '',
-        },
+        credentials: 'include',
         body: body
     });
 

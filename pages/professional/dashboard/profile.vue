@@ -196,10 +196,7 @@ const getCoverageRanges = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/user/${user_id}`,
         {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
     getCoverageRangesLoading.value = false;
@@ -235,10 +232,7 @@ const addCoverage = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`,
         {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
             body: body
         });
 
@@ -276,10 +270,7 @@ const saveEditChanges = async () => {
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: body
     });
 
@@ -312,10 +303,7 @@ const deleteCoverage = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-range/${rangeID}`,
         {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
     deleteCoverageRangeLoading.value = false;

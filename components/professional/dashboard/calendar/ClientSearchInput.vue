@@ -90,10 +90,7 @@ const fetchResults = async () => {
         results.value = [];
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/student/search`, {
             method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": userStore.userToken
-            },
+            credentials: 'include',
             body: {
                 searchTerm: searchTerm.value
             }
