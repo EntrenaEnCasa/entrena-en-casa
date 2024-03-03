@@ -58,30 +58,32 @@ const login = async () => {
 
     loading.value = true;
 
-    await useFetch(`${runtimeConfig.public.apiBase}/professional/log-in`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: {
-            email: formData.email,
-            password: formData.password,
-        },
-        onResponse({ request, response, options }) {
+    try {
+        const response = await $fetch('/api/auth/professional/log-in', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: {
+                email: formData.email,
+                password: formData.password,
+            },
+        });
 
-            const responseData = response._data;
-            loading.value = false;
-
-            if (responseData.success) {
-                authStore.logIn(responseData.user);
-                router.push('/professional/dashboard/home');
-            }
-            else {
-                alert(responseData.message);
-            }
-
-        },
-    });
+        if (response.success) {
+            authStore.logIn(response.user);
+            router.push('/professional/dashboard/home');
+        }
+        else {
+            alert(response.message);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+    finally {
+        loading.value = false;
+    }
 }
 
 </script>
