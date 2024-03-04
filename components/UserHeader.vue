@@ -99,7 +99,7 @@ const toggleUserMenu = () => userMenuOpen.value = !userMenuOpen.value;
 
 const logout = async () => {
     try {
-        const response = await $fetch('/api/auth/student/log-out', {
+        const response = await $fetch('/api/auth/log-out', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
