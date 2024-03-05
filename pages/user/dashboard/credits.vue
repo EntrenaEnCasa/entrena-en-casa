@@ -20,8 +20,10 @@
                                     <Icon name="material-symbols:supervisor-account-rounded" class="text-3xl" />
                                     <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
                                 </div>
-                                <p>{{ credit.available_credits }} sesiones restantes - Personalizado Presencial Dupla</p>
+                                <p>{{ credit.available_credits }} sesiones restantes - Personalizado Presencial Dupla
+                                </p>
                             </template>
+
                             <template v-else-if="credit.credit_type === 'PP'">
                                 <div class="text-secondary whitespace-nowrap">
                                     <Icon name="ion:person" class="text-2xl" />
@@ -29,6 +31,7 @@
                                 </div>
                                 <p>{{ credit.available_credits }} sesiones restantes - Personalizado Presencial</p>
                             </template>
+
                             <template v-else-if="credit.credit_type === 'GP'">
                                 <div class="text-secondary whitespace-nowrap">
                                     <Icon name="mdi:account-multiple-plus" class="text-2xl" />
@@ -36,6 +39,7 @@
                                 </div>
                                 <p>{{ credit.available_credits }} sesiones restantes - Grupal Presencial</p>
                             </template>
+
                             <template v-else-if="credit.credit_type === 'PO' && credit.format_credit === 'Dupla'">
                                 <div class="text-secondary whitespace-nowrap">
                                     <Icon name="material-symbols:supervisor-account-rounded" class="text-2xl" />
@@ -43,6 +47,7 @@
                                 </div>
                                 <p>{{ credit.available_credits }} sesiones restantes - Personalizado Online Dupla</p>
                             </template>
+
                             <template v-else-if="credit.credit_type === 'PO'">
                                 <div class="text-secondary whitespace-nowrap">
                                     <Icon name="ion:person" class="text-2xl" />
@@ -50,6 +55,7 @@
                                 </div>
                                 <p>{{ credit.available_credits }} sesiones restantes - Personalizado Online</p>
                             </template>
+
                             <template v-else-if="credit.credit_type === 'GO'">
                                 <div class="text-secondary whitespace-nowrap">
                                     <Icon name="mdi:account-multiple-plus" class="text-2xl" />
@@ -72,7 +78,8 @@
             </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-            <CommonButton @click="changeSelectedInformation('PP')" class="px-4 py-2 rounded-lg font-medium w-full outline"
+            <CommonButton @click="changeSelectedInformation('PP')"
+                class="px-4 py-2 rounded-lg font-medium w-full outline"
                 :class="plansInformation.selected === 'PP' ? ' outline-primary-600' : 'outline-transparent'">
                 <div class="flex items-center justify-center gap-2">
                     <div>
@@ -159,7 +166,8 @@
                     Valor
                 </div>
                 <div class=""></div>
-                <div v-show="plansInformation.plans.length > 0" v-for="plan, index in plansInformation.plans" :key="index"
+                <div v-show="plansInformation.plans.length > 0" v-for="plan, index in plansInformation.plans"
+                    :key="index"
                     class="col-span-6 border rounded-lg px-6 py-4 bg-white grid grid-cols-6 gap-5 items-center">
                     <div class="col-span-2">
                         {{ plan.description }}
@@ -193,27 +201,21 @@
                         <div v-if="selectedPlan" class="grid custom-grid items-center grid-cols-2 gap-4">
                             <p>Plan </p>
                             <p class="font-semibold">{{ getFormattedCreditType(selectedPlan.credit_type,
-                                selectedPlan.format_credit)
-                            }}</p>
+                        selectedPlan.format_credit)
+                                }}</p>
                             <p>Cantidad de sesiones</p>
                             <p class="font-semibold">{{ selectedPlan.credit_quantity }}</p>
                             <p>Tiempo máximo para utilizar sesiones</p>
                             <p class="font-semibold">{{ selectedPlan.expiration_time }}</p>
+
                             <template v-if="selectedPlan.format_credit === 'Dupla'">
                                 <p>Condiciones extra</p>
                                 <p class="font-semibold">Ambas personas deberán entrenar juntas todas las sesiones.</p>
                                 <p>Beneficiario plan dupla</p>
                                 <StudentDashboardCreditsStudentSearch v-model:clients="dupla" />
                             </template>
-                            <p class="text-xl font-semibold mt-5">Valor a pagar</p>
-                            <h4 class="text-secondary font-bold text-2xl mt-5">$200.000</h4>
-                        </div>
-                        <div class="flex items-center justify-center gap-x-2 text-xs text-gray-600 mt-5">
-                            <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
-                            <label class="text-gray-500" for="remember">
-                                Acepto las <a href="#" class="underline underline-offset-4 font-semibold">condiciones de
-                                    compra</a>
-                            </label>
+                            <p class="text-xl font-semibold mt-3">Valor a pagar</p>
+                            <h4 class="text-secondary font-bold text-2xl mt-3">{{ selectedPlan.price }}</h4>
                         </div>
                         <div class="flex justify-between mt-6">
                             <CommonButton class="px-4 py-2" bg-color="tertiary" @click="handleCloseConfirmationModal">
@@ -237,9 +239,10 @@
                         <div v-if="selectedCredit" class="grid custom-grid items-center grid-cols-2 gap-4">
                             <p>Plan </p>
                             <p class="font-semibold">{{ getFormattedCreditType(selectedCredit.credit_type,
-                                selectedCredit.format_credit) }}</p>
+                        selectedCredit.format_credit) }}</p>
                             <p>Cantidad de sesiones compradas</p>
-                            <p class="font-semibold">{{ selectedCredit.available_credits + selectedCredit.used_credits }}
+                            <p class="font-semibold">{{ selectedCredit.available_credits + selectedCredit.used_credits
+                                }}
                             </p>
                             <p>Cantidad de créditos restantes disponibles</p>
                             <p class="font-semibold">{{ selectedCredit.available_credits }}</p>
@@ -356,8 +359,8 @@ const handleOpenConfirmationModal = (plan_id: number) => {
 }
 
 const handleCloseConfirmationModal = () => {
-    selectedPlan.value = null;
     confirmationModal.value?.closeModal();
+    selectedPlan.value = null;
 }
 
 const handleOpenDetailsModal = (credit: Credit) => {
@@ -418,7 +421,6 @@ const buyPlan = async () => {
 
     let user_id = [];
     const plan_id = selectedPlan.value.plan_id;
-
     user_id.push(user.user_id);
 
     if (selectedPlan.value.format_credit === 'Dupla') {
@@ -430,23 +432,28 @@ const buyPlan = async () => {
         plan_id: plan_id
     }
 
-    console.log(body);
+    try {
+        const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/credits`, {
+            method: 'POST',
+            credentials: 'include',
+            body: body
+        });
 
-    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/credits`, {
-        method: 'POST',
-        credentials: 'include',
-        body: body
-    });
-
-    buyPlanLoading.value = false;
-    console.log(response);
-
-    if (response.success) {
-        alert("Compra realizada con éxito");
-        getCredits();
-    } else {
-        alert(response.message);
+        if (response.success) {
+            alert("Compra realizada con éxito");
+            getCredits();
+        } else {
+            alert(response.message);
+        }
     }
+    catch (error) {
+        alert("Ocurrió un error al realizar la compra");
+    }
+    finally {
+        buyPlanLoading.value = false;
+        handleCloseConfirmationModal();
+    }
+
 }
 
 </script>
