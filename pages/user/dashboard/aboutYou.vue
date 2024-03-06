@@ -35,10 +35,11 @@
                     agendada e ir midiendo tu avance.
                 </p>
                 <div class="flex flex-col lg:flex-row lg:justify-center gap-4 px-5">
-                    <CommonButton type="button" text="Recordarmelo más tarde" class="px-4 py-2" bg-color="secondary"
-                        @click="openModal()" />
-                    <CommonButton type="submit" :loading="saveUserDataLoading" :disabled="!meta.valid" text="Confirmar"
-                        class="px-4 py-2">
+                    <CommonButton type="button" class="px-4 py-2" bg-color="secondary" @click="openModal()">
+                        Recordarmelo más tarde
+                    </CommonButton>
+                    <CommonButton type="submit" :loading="saveUserDataLoading" :disabled="!meta.valid" class="px-4 py-2">
+                        Confirmar
                     </CommonButton>
                 </div>
             </div>
@@ -54,10 +55,14 @@
                     </div>
                     <div class="flex flex-col lg:flex-row lg:justify-center gap-4">
                         <div>
-                            <CommonButton text="Cancelar" bg-color="tertiary" class="px-4 py-2" @click="" />
+                            <CommonButton bg-color="tertiary" class="px-4 py-2" @click="closeModal()">
+                                Cancelar
+                            </CommonButton>
                         </div>
                         <div>
-                            <CommonButton text="Confirmar" class="px-4 py-2" @click="goToHome" />
+                            <CommonButton class="px-4 py-2" @click="goToHome">
+                                Continuar
+                            </CommonButton>
                         </div>
                     </div>
                 </div>
@@ -196,10 +201,7 @@ const saveUserData = async () => {
 
     const data = await $fetch(`${runtimeConfig.public.apiBase}/student/info`, {
         method: 'PUT',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '' || '',
-        },
+        credentials: 'include',
         body: body
     });
 

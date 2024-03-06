@@ -56,19 +56,12 @@ import { useUserStore } from '~/stores/UserStore';
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
-const props = defineProps({
-    selectedFormat: {
-        type: String,
-        default: ''
-    },
-});
-
 const chips = defineModel('clients', {
     type: Array,
     default: () => []
 });
 
-const placeholder = 'Ingresa el correo electrónico o nombre';
+const placeholder = 'Ingresa el nombre o correo electrónico';
 const searchTerm = ref('');
 const inputFocused = ref(false);
 const results = ref([]);
@@ -78,9 +71,7 @@ const isSearchPending = ref(false);
 const selectedResultIndex = ref(-1);
 let timeoutId = null;
 
-const maxChips = computed(() => {
-    return props.selectedFormat === 'Individual' ? 1 : Infinity;
-});
+const maxChips = 1;
 
 const fetchResults = async () => {
     if (searchTerm.value) {
@@ -162,8 +153,8 @@ const handleKeydown = (event) => {
 };
 
 const addChip = (student) => {
-    if (chips.value.length >= maxChips.value) {
-        alert("Las sesiones individuales solo admiten 1 estudiante");
+    if (chips.value.length >= maxChips) {
+        alert("Solo puedes tener 1 estudiante como dupla");
         searchTerm.value = '';
         results.value = [];
         return;
@@ -179,13 +170,6 @@ const removeChip = (index) => {
 
 watch([searchTerm, filteredResults], () => {
     selectedResultIndex.value = -1;
-});
-
-watch(() => props.selectedFormat, (newFormat) => {
-    if (newFormat === 'Individual' && chips.value.length > 1) {
-        alert("Algunos de los estudiantes añadidos serán eliminados");
-        chips.value = chips.value.slice(0, 1);
-    }
 });
 
 </script>

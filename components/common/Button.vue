@@ -8,7 +8,7 @@
         `text-${textSize}`
     ]" :disabled="disabled || loading">
         <span v-if="!loading">
-            {{ text }}
+            <slot></slot>
         </span>
         <div v-else>
             <span>{{ loadingText }}</span>
@@ -26,10 +26,6 @@
 
 <script setup>
 const props = defineProps({
-    text: {
-        type: String,
-        default: 'Botón'
-    },
     loading: {
         type: Boolean,
         default: false

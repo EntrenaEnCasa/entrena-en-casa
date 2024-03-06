@@ -62,7 +62,9 @@
                         <CommonInput label="Confirmar email" name="email-repeat" type="email" id="email-repeat"
                             icon="fa6-solid:lock" placeholder="1234@entrenaencasa.cl" :rules="validateEmailRepeat" />
                     </div>
-                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" text-size="xl" :loading="loading" />
+                    <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading">
+                        Confirmar
+                    </CommonButton>
                 </Form>
             </CommonModal>
         </Teleport>
@@ -77,7 +79,9 @@
                             id="password-repeat" icon="fa6-solid:lock" placeholder="* * * * * * * *"
                             :rules="validatePasswordRepeat" />
                     </div>
-                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" text-size="xl" :loading="loading" />
+                    <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading">
+                        Confirmar
+                    </CommonButton>
                 </Form>
             </CommonModal>
         </Teleport>
@@ -184,10 +188,7 @@ const changePassword = async () => {
 
     await useFetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
         method: 'PATCH',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: JSON.stringify({
             user_id: userStore.user.user_id,
             newPassword: password.value,
@@ -213,10 +214,7 @@ const changeEmail = async () => {
 
     await useFetch(`${runtimeConfig.public.apiBase}/user/update-email`, {
         method: 'PATCH',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: JSON.stringify({
             user_id: userStore.user.user_id,
             newEmail: email.value,

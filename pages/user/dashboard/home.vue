@@ -10,7 +10,7 @@
                     <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
                 <CommonLoading v-if="futureSessionsLoading" />
-                <div v-else-if="futureSessions.success">
+                <div v-else-if="futureSessions && futureSessions.success">
                     <div v-for="session in futureSessions.sessions" :key="session.session_id">
                         <hr class="my-5">
                         <div class="grid grid-cols-3 items-center">
@@ -69,67 +69,31 @@
     </div>
 </template>
 
-<style scoped lang="scss">
-.userInicio {
-    background: linear-gradient(135deg, rgba(153, 208, 223, 0.10) 0%, rgba(255, 255, 255, 0.10) 0.01%, rgba(63, 136, 166, 0.10) 100%);
-    box-shadow: 0px -29px 89px 0px rgba(0, 0, 0, 0.10);
-}
-</style>
-
 <script setup>
-import { reactive, ref } from 'vue';
 import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
-const userId = ref(userStore.user.user_id); // Make user ID reactive
-
-// Reactive object to manage loading states
-const loadingStates = reactive({
-    futureSessions: false,
-    pastSessions: false,
-});
+const userId = userStore.user.user_id;
+const headers = useRequestHeaders(['cookie']);
 
 // Fetch future sessions
-const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFutureSessions } = useFetch(
-    `${runtimeConfig.public.apiBase}/student/${userId.value}/sessions/soon`,
+const { data: futureSessions, pending: futureSessionsLoading } = useFetch(
+    `${runtimeConfig.public.apiBase}/student/${userId}/sessions/soon`,
     {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '',
-        },
-        onResponse() {
-            loadingStates.futureSessions = false;
-        },
-        onFetchError() {
-            loadingStates.futureSessions = false;
-        },
+        credentials: 'include'
     }
 );
 
 // Fetch past sessions
-const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSessions } = useFetch(
-    `${runtimeConfig.public.apiBase}/student/${userId.value}/sessions/last`,
+const { data: pastSessions, pending: pastSessionsLoading } = useFetch(
+    `${runtimeConfig.public.apiBase}/student/${userId}/sessions/last`,
     {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '',
-        },
-        onResponse() {
-            loadingStates.pastSessions = false;
-        },
-        onFetchError() {
-            loadingStates.pastSessions = false;
-        },
+        credentials: 'include'
     }
 );
 
-// Example of how to manually trigger a refresh
-onMounted(() => {
-    refreshFutureSessions();
-    refreshPastSessions();
-});
 </script>

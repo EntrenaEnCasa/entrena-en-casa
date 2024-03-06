@@ -10,26 +10,21 @@ export const useAuthStore = defineStore('AuthStore', {
     actions: {
         logIn(userData) {
             const userStore = useUserStore();
-            localStorage.setItem('token', userData.token);
             this.loggedIn = true;
-            delete userData.token;
             userStore.setUser(userData);
         },
         logOut() {
             const userStore = useUserStore();
-            localStorage.removeItem('token');
+            // localStorage.removeItem('token');
             userStore.removeUserData();
             this.loggedIn = false;
+            reloadNuxtApp({ path: '/' });
         },
-        checkIfUserIsLoggedIn() {
+        checkIfUserIsLoggedIn(){
             const userStore = useUserStore();
-            if (localStorage.getItem('token')) {
-                userStore.setUserFromLocalStorage();
-                this.loggedIn = true;
-            }
-            else {
-                this.loggedIn = false;
-            }
+            this.loggedIn = true;
+            userStore.setUserFromLocalStorage();
+
         },
         signUp(userData) {
             const userStore = useUserStore();

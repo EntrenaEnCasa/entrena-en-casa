@@ -4,7 +4,7 @@ export const useUserStore = defineStore('UserStore', {
 
     state: () => {
         return {
-            user: null as User | Student | null
+            user: null as User | Student | Professional | null
         }
     },
     getters: {
@@ -13,7 +13,7 @@ export const useUserStore = defineStore('UserStore', {
         }
     },
     actions: {
-        setUser(newUser: User | Student) {
+        setUser(newUser: Student | Professional) {
             this.user = newUser;
             if(localStorage.getItem('token') === null) {
                 this.storeUserInLocalStorage(newUser);
@@ -25,7 +25,7 @@ export const useUserStore = defineStore('UserStore', {
             this.user = null;
             this.removeUserFromLocalStorage();
         },
-        storeUserInLocalStorage(user: User | Student) {
+        storeUserInLocalStorage(user: Student | Professional) {
             localStorage.setItem('user', JSON.stringify(user));
         },
         setUserFromLocalStorage() {
@@ -37,16 +37,13 @@ export const useUserStore = defineStore('UserStore', {
         removeUserFromLocalStorage() {
             localStorage.removeItem('user');
         },
-        updateUserFromLocalStorage(newUser: User | Student) {
+        updateUserFromLocalStorage(newUser: Student | Professional) {
             this.removeUserFromLocalStorage();
             localStorage.setItem('user', JSON.stringify(this.user));
             this.user = newUser;
         },
-        updateCredits(credits: any) {
-            if(this.user != null && 'credits' in this.user){
-                (this.user as Student).credits = credits;
-                this.updateUserFromLocalStorage(this.user);
-            }
-        },
+        isStudent() {
+            return this.user?.user_type === 1;
+        }
     },
 })

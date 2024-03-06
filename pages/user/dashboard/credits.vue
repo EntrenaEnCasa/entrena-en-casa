@@ -1,152 +1,452 @@
 <template>
     <div class="relative grid gap-y-10">
-        <h3 class="text-xl font-medium ">Créditos</h3>
+        <h3 class="text-xl font-semibold ">Compra de sesiones</h3>
         <div class="grid gap-2">
-            <div class="text-secondary flex justify-end mr-3 ">
-                <p class="text-sm mr-3">¿Qué significa cada crédito</p>
+            <div class="text-secondary flex justify-end items-center">
+                <p class="text-sm mr-1 font-medium">¿Qué significa cada sesión?</p>
                 <Icon name="fa6-solid:circle-info" />
             </div>
-            <div class="bg-white flex  justify-between h-14 py-4 px-8 rounded-2xl border border-zinc-200"
+            <div class="bg-white flex flex-col items-center py-6 px-8 rounded-xl border"
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
+                <h5 class="text-xl font-medium text-center mb-5">Sesiones compradas</h5>
                 <div>
-                    <h5 class="text-lg font-semibold">Tus créditos</h5>
+                    <CommonLoading v-show="getCreditsLoading" />
+                    <div v-show="!getCreditsLoading && creditsData && creditsData.credits.length > 0"
+                        class="grid grid-cols-1 xl:grid-cols-2 gap-2">
+                        <div v-for="credit in creditsData?.credits"
+                            class="flex flex-col md:flex-row items-center justify-between border rounded-xl p-5 gap-2 text-gray-400 font-medium w-full">
+                            <template v-if="credit.credit_type === 'PP' && credit.format_credit === 'Dupla'">
+                                <div class="text-secondary whitespace-nowrap">
+                                    <Icon name="material-symbols:supervisor-account-rounded" class="text-3xl" />
+                                    <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                </div>
+                                <p>{{ credit.available_credits }} sesiones restantes - Personalizado Presencial Dupla</p>
+                            </template>
+                            <template v-else-if="credit.credit_type === 'PP'">
+                                <div class="text-secondary whitespace-nowrap">
+                                    <Icon name="ion:person" class="text-2xl" />
+                                    <Icon name="mdi:weight-lifter" class="text-3xl" />
+                                </div>
+                                <p>{{ credit.available_credits }} sesiones restantes - Personalizado Presencial</p>
+                            </template>
+                            <template v-else-if="credit.credit_type === 'GP'">
+                                <div class="text-secondary whitespace-nowrap">
+                                    <Icon name="mdi:account-multiple-plus" class="text-2xl" />
+                                    <Icon name="mdi:weight-lifter" class="text-3xl" />
+                                </div>
+                                <p>{{ credit.available_credits }} sesiones restantes - Grupal Presencial</p>
+                            </template>
+                            <template v-else-if="credit.credit_type === 'PO' && credit.format_credit === 'Dupla'">
+                                <div class="text-secondary whitespace-nowrap">
+                                    <Icon name="material-symbols:supervisor-account-rounded" class="text-2xl" />
+                                    <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                </div>
+                                <p>{{ credit.available_credits }} sesiones restantes - Personalizado Online Dupla</p>
+                            </template>
+                            <template v-else-if="credit.credit_type === 'PO'">
+                                <div class="text-secondary whitespace-nowrap">
+                                    <Icon name="ion:person" class="text-2xl" />
+                                    <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                </div>
+                                <p>{{ credit.available_credits }} sesiones restantes - Personalizado Online</p>
+                            </template>
+                            <template v-else-if="credit.credit_type === 'GO'">
+                                <div class="text-secondary whitespace-nowrap">
+                                    <Icon name="mdi:account-multiple-plus" class="text-2xl" />
+                                    <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                </div>
+                                <p>{{ credit.available_credits }} sesiones restantes - Grupal Online</p>
+                            </template>
+                            <button class="text-secondary whitespace-nowrap" @click="handleOpenDetailsModal(credit)">
+                                <span>
+                                    Ver detalles
+                                </span>
+                                <Icon name="fa6-solid:chevron-right" />
+                            </button>
+                        </div>
+                    </div>
+                    <div v-show="!getCreditsLoading && creditsData && creditsData.credits.length === 0">
+                        <p>No tienes sesiones compradas</p>
+                    </div>
                 </div>
-                <div>
-                    <div v-if="user.credits" class="flex  space-x-4">
-                        <div class="flex items-center space-x-1">
-                            <img src="/plans/gold-medal.png" class="w-4 h-4" alt="">
-                            <span> {{ user.credits.gold }}</span>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+            <CommonButton @click="changeSelectedInformation('PP')" class="px-4 py-2 rounded-lg font-medium w-full outline"
+                :class="plansInformation.selected === 'PP' ? ' outline-primary-600' : 'outline-transparent'">
+                <div class="flex items-center justify-center gap-2">
+                    <div>
+                        <Icon name="ion:person" class="text-2xl" />
+                        <Icon name="mdi:weight-lifter" class="text-3xl" />
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <span>
+                            Personalizado
+                        </span>
+                        <span>
+                            Presencial
+                        </span>
+                    </div>
+                </div>
+            </CommonButton>
+            <CommonButton @click="changeSelectedInformation('GP')" class="px-4 py-2 rounded-lg font-medium outline"
+                :class="plansInformation.selected === 'GP' ? ' outline-primary-600' : 'outline-transparent'">
+                <div class="flex items-center justify-center gap-2">
+                    <div>
+                        <Icon name="mdi:account-multiple-plus" class="text-3xl" />
+                        <Icon name="mdi:weight-lifter" class="text-3xl" />
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <span>
+                            Grupal
+                        </span>
+                        <span>
+                            Presencial
+                        </span>
+                    </div>
+                </div>
+            </CommonButton>
+            <CommonButton @click="changeSelectedInformation('PO')" bg-color="secondary"
+                class="px-4 py-2 rounded-lg text-white font-medium outline"
+                :class="plansInformation.selected === 'PO' ? ' outline-secondary-600' : 'outline-transparent'">
+                <div class="flex items-center justify-center gap-2">
+                    <div class="space-x-2">
+                        <Icon name="ion:person" class="text-2xl" />
+                        <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <span>
+                            Personalizado
+                        </span>
+                        <span>
+                            Online
+                        </span>
+                    </div>
+                </div>
+            </CommonButton>
+            <CommonButton @click="changeSelectedInformation('GO')" bg-color="secondary"
+                class="px-4 py-2 rounded-lg font-medium outline"
+                :class="plansInformation.selected === 'GO' ? ' outline-secondary-600' : 'outline-transparent'">
+                <div class="flex items-center justify-center gap-2">
+                    <div class="space-x-1">
+                        <Icon name="mdi:account-multiple-plus" class="text-3xl" />
+                        <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <span>
+                            Grupal
+                        </span>
+                        <span>
+                            Online
+                        </span>
+                    </div>
+                </div>
+            </CommonButton>
+        </div>
+        <CommonLoading v-show="plansInformationLoading" />
+        <div v-show="!plansInformationLoading" class="overflow-auto">
+            <div class="grid grid-cols-6 items-end mb-5 gap-5 min-w-[900px]">
+                <div class="col-span-2">
+                    Descripción
+                </div>
+                <div class="">
+                    Duración
+                </div>
+                <div class="">
+                    Sesiones totales
+                </div>
+                <div class="">
+                    Valor
+                </div>
+                <div class=""></div>
+                <div v-show="plansInformation.plans.length > 0" v-for="plan, index in plansInformation.plans" :key="index"
+                    class="col-span-6 border rounded-lg px-6 py-4 bg-white grid grid-cols-6 gap-5 items-center">
+                    <div class="col-span-2">
+                        {{ plan.description }}
+                    </div>
+                    <div>
+                        {{ plan.expiration_time }}
+                    </div>
+                    <div>
+                        {{ plan.credit_quantity }}
+                    </div>
+                    <div class="text-lg font-medium text-secondary">
+                        {{ plan.price }}
+                    </div>
+                    <div>
+                        <button @click="handleOpenConfirmationModal(plan.plan_id)"
+                            class="px-4 py-2 bg-primary text-white rounded-md font-medium">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+                <div v-show="plansInformation.plans.length === 0" class="col-span-6 mt-10">
+                    <h3 class="col-span-6 text-lg text-center text-gray-700">No hay información disponible</h3>
+                </div>
+            </div>
+        </div>
+        <Teleport to="body">
+            <CommonModal ref="confirmationModal">
+                <div class="px-5 py-2">
+                    <h3 class="text-xl font-semibold mb-6 text-center">Detalles del tu compra</h3>
+                    <div class="text-center">
+                        <div v-if="selectedPlan" class="grid custom-grid items-center grid-cols-2 gap-4">
+                            <p>Plan </p>
+                            <p class="font-semibold">{{ getFormattedCreditType(selectedPlan.credit_type,
+                                selectedPlan.format_credit)
+                            }}</p>
+                            <p>Cantidad de sesiones</p>
+                            <p class="font-semibold">{{ selectedPlan.credit_quantity }}</p>
+                            <p>Tiempo máximo para utilizar sesiones</p>
+                            <p class="font-semibold">{{ selectedPlan.expiration_time }}</p>
+                            <template v-if="selectedPlan.format_credit === 'Dupla'">
+                                <p>Condiciones extra</p>
+                                <p class="font-semibold">Ambas personas deberán entrenar juntas todas las sesiones.</p>
+                                <p>Beneficiario plan dupla</p>
+                                <StudentDashboardCreditsStudentSearch v-model:clients="dupla" />
+                            </template>
+                            <p class="text-xl font-semibold mt-5">Valor a pagar</p>
+                            <h4 class="text-secondary font-bold text-2xl mt-5">$200.000</h4>
                         </div>
-                        <div class="flex items-center space-x-1">
-                            <img src="/plans/silver-medal.png" class="w-4 h-4" alt="">
-                            <span> {{ user.credits.silver }}</span>
+                        <div class="flex items-center justify-center gap-x-2 text-xs text-gray-600 mt-5">
+                            <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
+                            <label class="text-gray-500" for="remember">
+                                Acepto las <a href="#" class="underline underline-offset-4 font-semibold">condiciones de
+                                    compra</a>
+                            </label>
                         </div>
-                        <div class="flex items-center space-x-1">
-                            <img src="/plans/bronze-medal.png" class="w-4 h-4" alt="">
-                            <span> {{ user.credits.bronze }}</span>
+                        <div class="flex justify-between mt-6">
+                            <CommonButton class="px-4 py-2" bg-color="tertiary" @click="handleCloseConfirmationModal">
+                                Cancelar
+                            </CommonButton>
+                            <CommonButton class="px-4 py-2" @click="buyPlan" :loading="buyPlanLoading">
+                                Comprar plan
+                            </CommonButton>
                         </div>
                     </div>
                 </div>
+            </CommonModal>
+        </Teleport>
 
-            </div>
-        </div>
-        <div class="flex justify-center gap-4 text-center">
-            <button @click="ChangeSelect('gold')"
-                class="w-24 px-4 py-2 bg-yellow-500/80 rounded-lg text-white font-bold ">Oro</button>
-            <button @click="ChangeSelect('silver')"
-                class="px-4 w-24 py-2 bg-gray-500 rounded-lg text-white font-bold ">Plata</button>
-            <button @click="ChangeSelect('bronze')"
-                class="px-4 w-24 py-2 bg-orange-700/60 rounded-lg text-white font-bold ">Bronce</button>
-        </div>
-        <div class="mx-2 md:mx-6  bg-white border border-zinc-200  p-4"
-            style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.10);">
-            <table class=" table-fixed w-full text-sm text-left">
-                <thead class=" text-xs text-gray-700 uppercase ">
-                    <tr class="p-8">
-                        <th class=" w-1/3 md:w-2/3">Descripción</th>
-                        <th class="md:w-1/9">Créditos</th>
-                        <th class="md:w-1/9">Valor</th>
-                        <th class="md:w-1/9"></th>
-                    </tr>
+        <Teleport to="body">
+            <CommonModal ref="detailsModal">
+                <div class="px-5 py-2">
+                    <h3 class="text-xl font-semibold mb-6 text-center">Detalles</h3>
+                    <div class="text-center">
+                        <h4 class="font-semibold text-lg mb-4">Tu compra</h4>
+                        <div v-if="selectedCredit" class="grid custom-grid items-center grid-cols-2 gap-4">
+                            <p>Plan </p>
+                            <p class="font-semibold">{{ getFormattedCreditType(selectedCredit.credit_type,
+                                selectedCredit.format_credit) }}</p>
+                            <p>Cantidad de sesiones compradas</p>
+                            <p class="font-semibold">{{ selectedCredit.available_credits + selectedCredit.used_credits }}
+                            </p>
+                            <p>Cantidad de créditos restantes disponibles</p>
+                            <p class="font-semibold">{{ selectedCredit.available_credits }}</p>
+                            <p>Fecha de expiración</p>
+                            <p class="font-semibold">{{ selectedCredit.expiration_date }}</p>
+                        </div>
+                        <div class="flex justify-center mt-6">
+                            <CommonButton class="px-10 py-2" bg-color="tertiary" @click="handleCloseDetailsModal">
+                                Cerrar
+                            </CommonButton>
+                        </div>
+                    </div>
+                </div>
+            </CommonModal>
+        </Teleport>
 
-                </thead>
-                <tbody>
-                    <tr v-for="item in tableInformation.items" :key="item.id" class="">
-                        <td class="py-4 wrap pr-2 text-md">
-                            {{ item.description }}
-                        </td>
-                        <td class=" py-4  flex items-center space-x-1">
-
-                            <img :src="`/plans/${item.credit_type}-medal.png`" class="w-5 h-5" alt="">
-                            {{ item.quantity }}
-
-                        </td>
-                        <td class=" py-4 flex-wrap font-bold">
-                            {{ item.price }}
-                        </td>
-                        <td class=" py-4 ">
-                            <button class="px-4 py-2 bg-primary text-white rounded-md font-medium"
-                                @click="addCredits(item)">
-                                Comprar
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
     </div>
 </template>
 
-<script setup>
+<style scoped>
+.custom-grid> :nth-child(odd) {
+    justify-self: end;
+    max-width: 300px;
+    text-align: right;
+}
+
+.custom-grid> :nth-child(even) {
+    justify-self: start;
+    max-width: 300px;
+    text-align: left;
+}
+</style>
+
+<script setup lang="ts">
 
 import { useUserStore } from '~/stores/UserStore';
 const runtimeConfig = useRuntimeConfig();
-const router = useRouter();
 const userStore = useUserStore();
+const user = userStore.user as Student;
 
+const selectedPlan = ref<Plan | null>(null); // This is the plan that the user selected to buy
+const selectedCredit = ref<Credit | null>(null); // This is the credit that the user selected to see details
+const buyPlanLoading = ref<boolean>(false);
 
-const user = ref({})
+const confirmationModal = ref<Modal | null>(null);
+const detailsModal = ref<Modal | null>(null);
 
-const newCredits = ref({
-    gold: 0,
-    silver: 0,
-    bronze: 0,
-})
+interface Client {
+    user_id: number;
+    first_name?: string;
+    last_name?: string;
+    email: string;
+}
 
+const dupla = ref<Client[]>([]);
 
-const tableInformation = ref({
-    selected: "gold",
-    items: []
+const plansInformation = reactive({
+    selected: "PP",
+    plans: [] as Plan[],
 });
 
-const ChangeSelect = (type) => {
-    tableInformation.value.selected = type;
-    fetchTableInformation()
+interface APIPlansResponse extends APIResponse {
+    plans: Plan[];
 }
 
-onMounted(() => {
-    user.value = userStore.user;
-    fetchTableInformation()
+interface Plan {
+    plan_id: number;
+    description: string;
+    credit_type: 'PP' | 'GP' | 'PO' | 'GO';
+    expiration_time: string;
+    credit_quantity: number;
+    format_credit: 'Individual' | 'Grupal' | 'Dupla';
+    price: string;
+}
+
+interface Credit {
+    credit_type: string;
+    format_credit: 'Individual' | 'Grupal' | 'Dupla';
+    used_credits: number;
+    available_credits: number;
+    expiration_date: string; // ISO date string
+}
+
+interface APICreditsResponse extends APIResponse {
+    credits: Credit[];
+}
+
+const { data: creditsData, error: getCreditsError, pending: getCreditsLoading, refresh: getCredits } = useFetch<APICreditsResponse>(`${runtimeConfig.public.apiBase}/student/credits/${user.user_id}`, {
+    method: 'GET',
+    credentials: 'include',
+    onResponse({ response }) {
+        let responseData = response._data;
+        if (responseData.success) {
+            console.log(responseData);
+        } else {
+            alert(responseData.message);
+        }
+    },
 })
 
-const fetchTableInformation = async () => {
-    await useFetch("/data.json", {
-        onResponse({ response }) {
-
-            tableInformation.value.items = response._data[tableInformation.value.selected];
-        },
-    });
-};
-
-const addCredits = async (item) => {
-    await useFetch(`${runtimeConfig.public.apiBase}/student/credits`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '',
-        },
-        body: JSON.stringify({
-            user_id: userStore.user.user_id,
-            credit_type: item.credit_type,
-            quantity: item.quantity,
-        }),
-        onResponse({ request, response, options }) {
-            let responseData = response._data;
-            if (responseData.success) {
-                newCredits.value = {
-                    gold: responseData.credits.gold,
-                    silver: responseData.credits.silver,
-                    bronze: responseData.credits.bronze,
-                }
-                userStore.updateCredits(newCredits);
-                alert(responseData.message);
-            } else {
-                alert(responseData.message);
-            }
-        },
-    });
+const changeSelectedInformation = async (selected: string) => {
+    plansInformation.selected = selected;
+    getPlansInformation();
 }
 
+const setPlansInformation = (plans: Plan[]) => {
+    const selected = plansInformation.selected;
+    plansInformation.plans = plans.filter((plan) => plan.credit_type === selected);
+}
+
+const handleOpenConfirmationModal = (plan_id: number) => {
+    selectedPlan.value = plansInformation.plans.find((plan) => plan.plan_id === plan_id) || null;
+    confirmationModal.value?.openModal();
+}
+
+const handleCloseConfirmationModal = () => {
+    selectedPlan.value = null;
+    confirmationModal.value?.closeModal();
+}
+
+const handleOpenDetailsModal = (credit: Credit) => {
+    selectedCredit.value = credit;
+    detailsModal.value?.openModal();
+}
+
+const handleCloseDetailsModal = () => {
+    detailsModal.value?.closeModal();
+}
+
+const getFormattedCreditType = (creditType: string, creditFormat: string) => {
+    if (creditType === 'PP' && creditFormat === 'Dupla') {
+        return "Personalizado Presencial Dupla";
+    }
+    if (creditType === 'PP') {
+        return "Personalizado Presencial";
+    }
+    if (creditType === 'GP') {
+        return "Grupal Presencial";
+    }
+    if (creditType === 'PO' && creditFormat === 'Dupla') {
+        return "Personalizado Online Dupla";
+    }
+    if (creditType === 'PO') {
+        return "Personalizado Online";
+    }
+    if (creditType === 'GO') {
+        return "Grupal Online";
+    }
+}
+
+const { pending: plansInformationLoading, refresh: getPlansInformation } = useFetch<APIPlansResponse>(`${runtimeConfig.public.apiBase}/student/prices/${user.region}`, {
+    method: 'GET',
+    credentials: 'include',
+    onResponse({ response }) {
+        let responseData = response._data;
+        if (responseData.success) {
+            console.log(responseData);
+            setPlansInformation(responseData.plans);
+        } else {
+            alert(responseData.message);
+        }
+    },
+})
+
+const buyPlan = async () => {
+
+    buyPlanLoading.value = true;
+
+    if (selectedPlan.value == null) return;
+
+    if (selectedPlan.value.format_credit === 'Dupla' && dupla.value.length < 1) {
+        alert("Debes seleccionar a tu compañero de entrenamiento");
+        buyPlanLoading.value = false;
+        return;
+    }
+
+    let user_id = [];
+    const plan_id = selectedPlan.value.plan_id;
+
+    user_id.push(user.user_id);
+
+    if (selectedPlan.value.format_credit === 'Dupla') {
+        user_id.push(dupla.value[0].user_id);
+    }
+
+    const body = {
+        user_id: user_id,
+        plan_id: plan_id
+    }
+
+    console.log(body);
+
+    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/credits`, {
+        method: 'POST',
+        credentials: 'include',
+        body: body
+    });
+
+    buyPlanLoading.value = false;
+    console.log(response);
+
+    if (response.success) {
+        alert("Compra realizada con éxito");
+        getCredits();
+    } else {
+        alert(response.message);
+    }
+}
 
 </script>

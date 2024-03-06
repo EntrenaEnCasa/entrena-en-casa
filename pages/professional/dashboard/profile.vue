@@ -11,8 +11,9 @@
                     <div class="text-center flex flex-col gap-4">
                         <div v-if="userStore.user.first_name">
                             <p class="text-sm text-gray-500">Nombre profesional</p>
-                            <p class="font-semibold text-2xl">{{ userStore.user.first_name }} {{
-                                userStore.user.last_name }}</p>
+                            <p class="font-semibold text-2xl">
+                                {{ userStore.user.first_name }} {{ userStore.user.last_name }}
+                            </p>
                         </div>
                         <div v-if="userStore.user.title">
                             <p class="text-sm text-gray-500">Título</p>
@@ -29,7 +30,8 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
+            <div
+                class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
                 <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
                 <CommonLoading v-show="getCoverageRangesLoading" text="cargando rangos de cobertura" />
                 <div v-show="!getCoverageRangesLoading">
@@ -47,7 +49,9 @@
                         </div>
                     </div>
                 </div>
-                <CommonButton text="+ Crear nuevo" class="px-5 py-2 bg-secondary" @click="resetModal(); openModal()" />
+                <CommonButton class="px-5 py-2 bg-secondary" @click="resetModal(); openModal()">
+                    Añadir rango de cobertura
+                </CommonButton>
             </div>
         </div>
         <Teleport to="body">
@@ -83,18 +87,18 @@
                             zoom: 13,
                         }">
                             <MapboxSource source-id="circleSource" :source="{
-                                type: 'geojson',
-                                data: circleGeoJSON
-                            }" />
+                            type: 'geojson',
+                            data: circleGeoJSON
+                        }" />
                             <MapboxLayer v-if="circleData.enabled" :layer="{
-                                id: 'circleLayer',
-                                type: 'fill', // or 'line' depending on how you want to style it
-                                source: 'circleSource',
-                                paint: {
-                                    'fill-color': circleData.fillColor,
-                                    'fill-opacity': circleData.opacity
-                                }
-                            }" />
+                            id: 'circleLayer',
+                            type: 'fill', // or 'line' depending on how you want to style it
+                            source: 'circleSource',
+                            paint: {
+                                'fill-color': circleData.fillColor,
+                                'fill-opacity': circleData.opacity
+                            }
+                        }" />
                             <MapboxDefaultMarker @dragstart="onMarkerDragStart" :marker-id="markerID"
                                 :options="{ draggable: true }" :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
                             </MapboxDefaultMarker>
@@ -103,15 +107,21 @@
                     </div>
                 </div>
                 <div v-show="editMode" class="flex justify-between p-5 pb-2">
-                    <CommonButton @click="deleteCoverage" text="Eliminar" class="px-5 py-2 bg-tertiary"
-                        :loading="deleteCoverageRangeLoading" />
-                    <CommonButton @click="saveEditChanges" text="Confirmar cambios" class="px-5 py-2 mr-2"
-                        :loading="updateCoverageRangeLoading" />
+                    <CommonButton @click="deleteCoverage" class="px-5 py-2 bg-tertiary"
+                        :loading="deleteCoverageRangeLoading">
+                        Eliminar rango
+                    </CommonButton>
+                    <CommonButton @click="saveEditChanges" class="px-5 py-2 mr-2" :loading="updateCoverageRangeLoading">
+                        Guardar cambios
+                    </CommonButton>
                 </div>
                 <div v-show="!editMode" class="flex justify-between p-5 pb-2">
-                    <CommonButton @click="closeModal" text="Cancelar" class="px-5 py-2 bg-tertiary" />
-                    <CommonButton @click="addCoverage" text="Añadir rango" class="px-5 py-2"
-                        :loading="addCoverageRangeLoading" />
+                    <CommonButton @click="closeModal" class="px-5 py-2 bg-tertiary">
+                        Cancelar
+                    </CommonButton>
+                    <CommonButton @click="addCoverage" class="px-5 py-2" :loading="addCoverageRangeLoading">
+                        Añadir rango
+                    </CommonButton>
                 </div>
             </CommonModal>
         </Teleport>
@@ -188,10 +198,7 @@ const getCoverageRanges = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/user/${user_id}`,
         {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
     getCoverageRangesLoading.value = false;
@@ -227,10 +234,7 @@ const addCoverage = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`,
         {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
             body: body
         });
 
@@ -268,10 +272,7 @@ const saveEditChanges = async () => {
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: body
     });
 
@@ -304,10 +305,7 @@ const deleteCoverage = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-range/${rangeID}`,
         {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
     deleteCoverageRangeLoading.value = false;

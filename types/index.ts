@@ -2,8 +2,12 @@ export {};
 
 declare global {
 
-  interface Professional {
-    user_id: number;
+  interface APIResponse {
+    success: boolean;
+    message: string;
+  }
+
+  interface Professional extends User {
     first_name: string;
     last_name: string;
     title: string;
@@ -30,17 +34,17 @@ declare global {
     user_type: 1 | 2 | 3;
   }
 
-  interface Student extends User {
-    credits: {
-      bronze: number;
-      silver: number;
-      gold: number;
-    };
+  interface StudentUser extends User {
+    user_type: 1;
+  }
+  
+  interface Student extends StudentUser {
     location?: {
       lat: number;
       lng: number;
     };
-    info: StudentInfo;
+    region?: string;
+    info: StudentInfo | null;
   }
 
   interface StudentInfo {
@@ -57,6 +61,8 @@ declare global {
   interface Modal {
     openModal: () => void;
     closeModal: () => void;
+    scrollToTop: () => void;
+    scrollToBottom: () => void;
   }
-  
+
 }

@@ -6,8 +6,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center  mx-auto">
                 <div>
                     <div class="contenedor">
-                        <iframe class="responsive-iframe " width="560" height="315"
-                            src="https://www.youtube.com/embed/LMNJWdFQrHg?&autohide=1&showinfo=0&controls=0"
+                        <iframe class="responsive-iframe" width="560" height="315"
+                            src="https://www.youtube.com/embed/LMNJWdFQrHg?si=kuSISxyCRTRFoQzT&amp;controls=0"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>

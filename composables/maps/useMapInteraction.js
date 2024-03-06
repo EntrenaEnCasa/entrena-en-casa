@@ -46,6 +46,10 @@ export const useMapInteraction = (mapRef) => {
         mapRef.value?.flyTo(flyOptions);
     };
 
+    const teleportTo = (center) => {
+        mapRef.value?.setCenter(center);
+    };
+
     const debounce = (func, wait, immediate) => {
         let timeout;
         return function() {
@@ -103,5 +107,5 @@ export const useMapInteraction = (mapRef) => {
         return turf.distance(fromCoordinates, toCoordinates);
     }
 
-    return { flyTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference, calculateDurationBasedOnDistance, calculateDistance, debounceFlyTo };
+    return { flyTo, teleportTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference, calculateDurationBasedOnDistance, calculateDistance, debounceFlyTo };
 }

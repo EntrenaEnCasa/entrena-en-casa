@@ -1,7 +1,7 @@
 <template>
     <Transition name="modal">
-        <div v-show="isOpen" class="fixed grid place-items-center inset-0 z-50 p-4 bg-black/30 overflow-y-auto"
-            @mousedown.self="closeModal">
+        <div ref="scrollableContentRef" v-show="isOpen"
+            class="fixed grid place-items-center inset-0 z-50 p-4 bg-black/30 overflow-y-auto" @mousedown.self="closeModal">
             <div @click.stop class="p-4 bg-white rounded-xl max-w-[calc(100vw_-_50px)] w-full lg:w-fit">
                 <div>
                     <button type="button" class="p-1 transition duration-75 bg-transparent rounded-lg hover:bg-gray-100"
@@ -49,6 +49,8 @@
 <script setup>
 
 const isOpen = ref(false);
+const scrollableContentRef = ref(null);
+
 
 const openModal = () => {
     // document.body.classList.add('overflow-hidden');
@@ -72,6 +74,16 @@ const handleKeyDown = (event) => {
     }
 };
 
+const scrollToTop = () => {
+    scrollableContentRef.value.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const scrollToBottom = () => {
+    nextTick(() => {
+        scrollableContentRef.value.scrollTo({ top: scrollableContentRef.value.offsetHeight, behavior: 'smooth' });
+    });
+};
+
 onMounted(() => {
     window.addEventListener('keydown', handleKeyDown);
 });
@@ -82,7 +94,9 @@ onUnmounted(() => {
 
 defineExpose({
     openModal,
-    closeModal
+    closeModal,
+    scrollToTop,
+    scrollToBottom
 })
 
 </script>
