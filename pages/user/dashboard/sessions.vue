@@ -249,7 +249,6 @@
                                 Te llevaremos a la sección de rellenar datos de estudiante
                             </p>
                         </div>
-
                     </div>
                 </div>
             </CommonModal>
@@ -267,16 +266,11 @@ const router = useRouter();
 
 const user: null | User | Student = userStore.user;
 
-interface APIResponseType {
-    success: boolean;
-    message: string;
-}
-
-interface APISessionResponseType extends APIResponseType {
+interface APISessionResponseType extends APIResponse {
     sessions?: Session[];
 }
 
-interface APIUserResponseType extends APIResponseType {
+interface APIUserResponseType extends APIResponse {
     info?: StudentInfo;
 }
 
@@ -366,7 +360,7 @@ const confirmSession = async () => {
         session_id: detailsModalSession.value?.session_id,
     }
 
-    const response = await $fetch<APIResponseType>(`${runtimeConfig.public.apiBase}/student/session/confirm`, {
+    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/session/confirm`, {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json",

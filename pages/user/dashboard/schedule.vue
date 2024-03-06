@@ -94,23 +94,49 @@
                         Prueba otra fecha.
                     </p>
                 </div>
-                <div v-show="filteredProfessionals.length > 0" class="grid grid-cols-1 lg:grid-cols-2">
+                <div v-show="filteredProfessionals.length > 0" class="grid grid-cols-1 xl:grid-cols-2">
                     <div v-for="professional, index in filteredProfessionals" :key="index"
-                        class="border rounded-xl bg-white py-12 px-8 grid grid-cols-2 xl:grid-cols-3 place-items-center">
+                        class="border rounded-xl bg-white py-10 px-8 grid grid-cols-1 xl:grid-cols-3 gap-4 place-items-center">
                         <div class="col-span-1 text-center">
                             <h3 class="text-2xl font-semibold">{{ professional.first_name + ' ' + professional.last_name }}
                             </h3>
                             <p class="text-sm">{{ professional.title }}</p>
                         </div>
-                        <div class="col-span-1 xl:col-span-2">
-                            <div class="flex flex-wrap gap-2 justify-center items-center">
-                                <button v-for="session in professional.sessions"
-                                    @click="openConfirmationModal(professional, session)"
-                                    class="border rounded-full px-4 py-1.5 bg-secondary text-white">
-                                    <p class="text">
-                                        {{ session.start_time }}hrs
-                                    </p>
-                                </button>
+                        <div class="col-span-1 xl:col-span-2 px-5 text-center xl:text-left">
+                            <div class="space-y-5">
+                                <div v-if="professional.individualSessions.length > 0">
+                                    <h3 class="font-medium mb-2">Personalizada</h3>
+                                    <div class="flex flex-wrap justify-center xl:justify-start gap-2 items-center">
+                                        <button v-for="session in professional.individualSessions"
+                                            :key="session.session_info.session_id"
+                                            @click="openConfirmationModal(professional, session)"
+                                            class="border rounded-full px-4 py-1.5 bg-secondary text-white">
+                                            <p class="text">
+                                                {{ session.start_time }}hrs
+                                            </p>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div v-if="professional.groupSessions.length > 0">
+                                    <h3 class="font-medium mb-2">Grupal</h3>
+                                    <div class="flex flex-wrap justify-center xl:justify-start items-center"
+                                        :class="[isOnline ? 'gap-2' : 'gap-4']">
+                                        <div class="flex flex-col gap-2" v-for="session in professional.groupSessions">
+                                            <a v-if="!isOnline" target="__blank" :href="session.session_info.link"
+                                                class="text-secondary">
+                                                <Icon name="fa6-solid:location-dot" class="text-xl mr-1" />
+                                                <span class="text-sm font-medium underline underline-offset-4">Ver
+                                                    ubicación</span>
+                                            </a>
+                                            <button @click="openConfirmationModal(professional, session)"
+                                                class="border rounded-full px-4 py-1.5 bg-secondary text-white text-center">
+                                                <p class="text">
+                                                    {{ session.start_time }}hrs
+                                                </p>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -122,7 +148,7 @@
             <CommonModal ref="locationModal">
                 <div class="px-2 py-4">
                     <h2 class="text-xl font-semibold text-center mb-6">Ingresa tu dirección</h2>
-                    <MapsMapboxGeocoder ref="geocoderComponent" @locationSelected="flyToLocation" />
+                    <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
                     <div>
                         <div class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px] mt-5">
                             <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
@@ -144,7 +170,6 @@
                     <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
                         <button class="underline font-medium" @click="isDraggable = false">Dejar de ajustar
                             ubicación</button>
-
                     </div>
                     <div class="flex justify-between mt-5">
                         <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
@@ -170,10 +195,20 @@
                         <p class="font-semibold">
                             {{ selectedSession?.session.modality }}
                         </p>
-                        <p class="justify-self-end" v-if="selectedSession?.session.location">Ubicación de la
-                            sesión:</p>
-                        <p v-if="selectedSession?.session.location" class="font-semibold max-w-60">{{
-                            selectedSession?.session.location }}</p>
+                        <template v-if="selectedSession?.session.location">
+                            <p class="justify-self-end">
+                                Ubicación de la
+                                sesión:
+                            </p>
+                            <p v-if="!selectedSession?.isGroup" class="font-semibold max-w-60">
+                                {{ selectedSession?.session.location }}
+                            </p>
+                            <a v-else :href="selectedSession?.session.location" target="__blank"
+                                class="font-medium max-w-60 text-secondary flex items-center">
+                                <Icon name="fa6-solid:location-dot" class="text-xl mr-1" />
+                                <span class="underline underline-offset-4">Ver ubicación</span>
+                            </a>
+                        </template>
                     </div>
                     <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
                         <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
@@ -208,7 +243,7 @@ const isDraggable = ref(false);
 
 const currentZoom = computed(() => mapRef.value?.getZoom());
 
-const geocoderComponent = ref(null);
+const geocoderRef = ref(null);
 const markerCoordinates = ref(DEFAULT_COORDINATES);
 const getMarkerCoordinates = () => markerCoordinates.value;
 
@@ -224,16 +259,18 @@ const professionals = ref([]);
 const filteredProfessionals = computed(() => {
     const selectedDateString = selectedDate.value.toISOString().split('T')[0];
 
-    return professionals.value.map(professional => {
-        // Filter the sessions array to only include the sessions on the selected date
+    const filteredData = professionals.value.map(professional => {
         const filteredSessions = professional.sessions.filter(session => {
-            // Assuming session.date is a string in the format 'yyyy-mm-ddT...'
             return session.date.startsWith(selectedDateString);
         });
 
-        // Return a new professional object with the filtered sessions array
-        return { ...professional, sessions: filteredSessions };
-    }).filter(professional => professional.sessions.length > 0); // Remove professionals with no sessions on the selected date
+        const individualSessions = filteredSessions.filter(session => session.session_info.format === 'Individual');
+        const groupSessions = filteredSessions.filter(session => session.session_info.format === 'Grupal');
+
+        return { ...professional, individualSessions, groupSessions };
+    }).filter(professional => professional.individualSessions.length > 0 || professional.groupSessions.length > 0);
+
+    return filteredData;
 });
 
 const hasSessionsOnDay = (day) => {
@@ -288,7 +325,7 @@ const setMarkerCoordinates = (coordinates) => {
 const updateInputValue = async () => {
     const geocodingData = await getReverseGeocodingData(getMarkerCoordinates());
     const address = geocodingData.place_name;
-    geocoderComponent.value.updateSearchTerm(address);
+    geocoderRef.value.updateSearchTerm(address);
 };
 
 const selectedDate = ref(weekDays.value[0]);
@@ -344,6 +381,17 @@ const selectedSession = ref(null);
 const confirmSessionLoading = ref(false);
 
 const openConfirmationModal = (professionalData, sessionData) => {
+    let location;
+    if (!isOnline.value && sessionData.session_info.format === 'Individual') {
+        location = selectedLocation.value.place_name;
+    }
+    else if (!isOnline.value && sessionData.session_info.format === 'Grupal') {
+        location = sessionData.session_info.link;
+    }
+    else {
+        location = null;
+    }
+
     const newSession = {
         professional: {
             name: professionalData.first_name + ' ' + professionalData.last_name,
@@ -354,8 +402,9 @@ const openConfirmationModal = (professionalData, sessionData) => {
             date: sessionData.date,
             start_time: sessionData.start_time,
             modality: sessionData.session_info.modality,
-            location: !isOnline.value ? selectedLocation.value.place_name : null,
-        }
+            location: location,
+        },
+        isGroup: sessionData.session_info.format === 'Grupal'
     }
     selectedSession.value = newSession;
     confirmationModal.value.openModal();
