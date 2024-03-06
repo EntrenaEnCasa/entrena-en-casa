@@ -46,6 +46,7 @@ export default defineEventHandler(async (event) => {
             // Set HttpOnly cookie
             setCookie(event, 'auth_token', response.token, {
                 path: '/',
+                domain: '.homematch.cl',
                 httpOnly: true,
                 secure: true, // Ensure the cookie is only sent over HTTPS
                 maxAge: 60 * 60 * 24 * 14, // 14 days of expiration
