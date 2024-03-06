@@ -62,7 +62,9 @@
                         <CommonInput label="Confirmar email" name="email-repeat" type="email" id="email-repeat"
                             icon="fa6-solid:lock" placeholder="1234@entrenaencasa.cl" :rules="validateEmailRepeat" />
                     </div>
-                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" text-size="xl" :loading="loading" />
+                    <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading">
+                        Confirmar
+                    </CommonButton>
                 </Form>
             </CommonModal>
         </Teleport>
@@ -77,7 +79,9 @@
                             id="password-repeat" icon="fa6-solid:lock" placeholder="* * * * * * * *"
                             :rules="validatePasswordRepeat" />
                     </div>
-                    <CommonButton text="Confirmar" class="py-2 w-full font-medium" text-size="xl" :loading="loading" />
+                    <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading">
+                        Confirmar
+                    </CommonButton>
                 </Form>
             </CommonModal>
         </Teleport>

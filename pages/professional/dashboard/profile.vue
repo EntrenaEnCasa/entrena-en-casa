@@ -47,7 +47,9 @@
                         </div>
                     </div>
                 </div>
-                <CommonButton text="+ Crear nuevo" class="px-5 py-2 bg-secondary" @click="resetModal(); openModal()" />
+                <CommonButton class="px-5 py-2 bg-secondary" @click="resetModal(); openModal()">
+                    Añadir rango de cobertura
+                </CommonButton>
             </div>
         </div>
         <Teleport to="body">
@@ -103,15 +105,21 @@
                     </div>
                 </div>
                 <div v-show="editMode" class="flex justify-between p-5 pb-2">
-                    <CommonButton @click="deleteCoverage" text="Eliminar" class="px-5 py-2 bg-tertiary"
-                        :loading="deleteCoverageRangeLoading" />
-                    <CommonButton @click="saveEditChanges" text="Confirmar cambios" class="px-5 py-2 mr-2"
-                        :loading="updateCoverageRangeLoading" />
+                    <CommonButton @click="deleteCoverage" class="px-5 py-2 bg-tertiary"
+                        :loading="deleteCoverageRangeLoading">
+                        Eliminar rango
+                    </CommonButton>
+                    <CommonButton @click="saveEditChanges" class="px-5 py-2 mr-2" :loading="updateCoverageRangeLoading">
+                        Guardar cambios
+                    </CommonButton>
                 </div>
                 <div v-show="!editMode" class="flex justify-between p-5 pb-2">
-                    <CommonButton @click="closeModal" text="Cancelar" class="px-5 py-2 bg-tertiary" />
-                    <CommonButton @click="addCoverage" text="Añadir rango" class="px-5 py-2"
-                        :loading="addCoverageRangeLoading" />
+                    <CommonButton @click="closeModal" class="px-5 py-2 bg-tertiary">
+                        Cancelar
+                    </CommonButton>
+                    <CommonButton @click="addCoverage" class="px-5 py-2" :loading="addCoverageRangeLoading">
+                        Añadir rango
+                    </CommonButton>
                 </div>
             </CommonModal>
         </Teleport>

@@ -139,15 +139,20 @@
                     </div>
                     <div v-show="!isDraggable" class="flex flex-col items-center text-secondary mt-3">
                         <p>¿El pin no coincide con la ubicación?</p>
-                        <button class="underline font-medium" @click="isDraggable = true">Ajustar</button>
+                        <button class="underline font-medium" @click="isDraggable = true">Ajustar ubicación</button>
                     </div>
                     <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
-                        <button class="underline font-medium" @click="isDraggable = false">Dejar de ajustar</button>
+                        <button class="underline font-medium" @click="isDraggable = false">Dejar de ajustar
+                            ubicación</button>
 
                     </div>
                     <div class="flex justify-between mt-5">
-                        <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
-                        <CommonButton text="Confirmar ubicación" @click="confirmLocation" class="px-5 py-2 bg-primary" />
+                        <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
+                            Cancelar
+                        </CommonButton>
+                        <CommonButton @click="confirmLocation" class="px-5 py-2 bg-primary">
+                            Confirmar ubicación
+                        </CommonButton>
                     </div>
                 </div>
             </CommonModal>
@@ -171,9 +176,12 @@
                             selectedSession?.session.location }}</p>
                     </div>
                     <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
-                        <CommonButton text="Cancelar" @click="closeLocationModal" class="px-5 py-2 bg-tertiary" />
-                        <CommonButton text="Confirmar ubicación" @click="confirmSession" class="px-5 py-2 bg-primary"
-                            :loading="confirmSessionLoading" />
+                        <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
+                            Cancelar
+                        </CommonButton>
+                        <CommonButton @click="confirmSession" class="px-5 py-2 bg-primary" :loading="confirmSessionLoading">
+                            Confirmar sesión
+                        </CommonButton>
                     </div>
                 </div>
             </CommonModal>
@@ -184,7 +192,7 @@
 <script setup>
 
 import { useUserStore } from '~/stores/UserStore';
-import { useTimeNavigation } from '~/composables/time/useTimeNavigation';
+import { useWeekNavigation } from '~/composables/time/useWeekNavigation';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
 
@@ -205,7 +213,7 @@ const markerCoordinates = ref(DEFAULT_COORDINATES);
 const getMarkerCoordinates = () => markerCoordinates.value;
 
 const { getReverseGeocodingData } = useGeocoding();
-const { weekDays, isStartWeek, goToPreviousWeek, goToNextWeek, formatDate } = useTimeNavigation();
+const { weekDays, isStartWeek, goToPreviousWeek, goToNextWeek, formatDate } = useWeekNavigation();
 const { flyTo, calculateDurationBasedOnDistance, calculateDistance } = useMapInteraction(mapRef);
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
@@ -289,13 +297,13 @@ const startOfWeek = computed(() => weekDays.value[0]);
 const goToNextWeekAndUpdateSelectedDate = () => {
     goToNextWeek();
     selectDate(weekDays.value[0]);
-    getInPersonSessions();
+    getSessions();
 };
 
 const goToPreviousWeekAndUpdateSelectedDate = () => {
     goToPreviousWeek();
     selectDate(weekDays.value[0]);
-    getInPersonSessions();
+    getSessions();
 };
 
 const selectDate = (day) => {
@@ -314,10 +322,10 @@ const closeLocationModal = () => {
 }
 
 const confirmLocation = async () => {
-    updateSelectedLocationToCurrentLocation();
+    await updateSelectedLocationToCurrentLocation();
     saveLocation();
     closeLocationModal();
-    getInPersonSessions();
+    getSessions();
 }
 
 const saveLocation = async () => {

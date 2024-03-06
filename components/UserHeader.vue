@@ -20,23 +20,6 @@
                         <img src="/logo-horizontal.png" class="h-8" alt="Logo" />
                     </router-link>
                 </div>
-                <div v-if="user.user_type === 2">
-                    <h3>Créditos disponibles</h3>
-                    <div class="flex justify-center items-center space-x-4">
-                        <div class="flex items-center space-x-1">
-                            <img src="/plans/gold-medal.png" class="w-4 h-4" alt="">
-                            <span>{{ user.credits.gold }}</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <img src="/plans/silver-medal.png" class="w-4 h-4" alt="">
-                            <span>{{ user.credits.silver }}</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <img src="/plans/bronze-medal.png" class="w-4 h-4" alt="">
-                            <span>{{ user.credits.bronze }}</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="flex items-center">
                     <div class="flex items-center ml-3">
                         <div class="flex space-x-4">

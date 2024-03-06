@@ -25,7 +25,9 @@
                                 {{ student.credits.gold }}
                             </p>
                             <input type="text" class="w-8 border-b outline-none">
-                            <CommonButton class="px-2 py-1 rounded-lg" text="Agregar" />
+                            <CommonButton class="px-2 py-1 rounded-lg">
+                                Agregar
+                            </CommonButton>
                         </div>
                         <div class="flex gap-x-3">
                             <img :src="`/plans/silver-medal.png`" class="w-6 h-6" :alt="gold - medal">
@@ -33,7 +35,9 @@
                                 {{ student.credits.silver }}
                             </p>
                             <input type="text" class="w-8 border-b outline-none">
-                            <CommonButton class="px-2 py-1 rounded-lg" text="Agregar" />
+                            <CommonButton class="px-2 py-1 rounded-lg">
+                                Agregar
+                            </CommonButton>
                         </div>
                         <div class="flex gap-x-3">
                             <img :src="`/plans/bronze-medal.png`" class="w-6 h-6" :alt="gold - medal">
@@ -41,7 +45,9 @@
                                 {{ student.credits.bronze }}
                             </p>
                             <input type="text" class="w-8 border-b outline-none">
-                            <CommonButton class="px-2 py-1 rounded-lg" text="Agregar" />
+                            <CommonButton class="px-2 py-1 rounded-lg">
+                                Agregar
+                            </CommonButton>
                         </div>
                     </div>
                     <div class="mt-10 w-full lg:w-10/12 mx-auto">

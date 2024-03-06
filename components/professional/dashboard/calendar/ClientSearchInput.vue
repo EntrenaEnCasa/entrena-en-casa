@@ -61,13 +61,12 @@ const props = defineProps({
         type: String,
         default: ''
     },
-    modelValue: {
-        type: Array,
-        default: () => []
-    }
 });
 
-const chips = ref(props.modelValue);
+const chips = defineModel('clients', {
+    type: Array,
+    default: () => []
+});
 
 const placeholder = 'Ingresa el correo electrónico o nombre';
 const searchTerm = ref('');
@@ -78,8 +77,6 @@ const hasFetched = ref(false);
 const isSearchPending = ref(false);
 const selectedResultIndex = ref(-1);
 let timeoutId = null;
-
-const emit = defineEmits(['update:modelValue']);
 
 const maxChips = computed(() => {
     return props.selectedFormat === 'Individual' ? 1 : Infinity;
@@ -193,13 +190,5 @@ watch(() => props.selectedFormat, (newFormat) => {
         chips.value = chips.value.slice(0, 1);
     }
 });
-
-watch(chips, (newChips) => {
-    emit('update:modelValue', newChips); // Emit the update:modelValue event when chips changes
-}, { deep: true });
-
-watch(() => props.modelValue, (newValue) => {
-    chips.value = newValue;
-}, { deep: true });
 
 </script>

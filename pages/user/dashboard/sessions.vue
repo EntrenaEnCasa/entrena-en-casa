@@ -137,45 +137,45 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2">
                         <div>
                             <h3 class="text-xl font-semibold text-center mb-4">Detalles de la sesión</h3>
-                            <div class="space-y-2">
+                            <div class="space-y-2" v-if="detailsModalSession != null">
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Profesional:</h4>
-                                    <p class="font-semibold">{{ detailsModalData.session?.professional.first_name + ' ' +
-                                        detailsModalData.session?.professional.last_name }}</p>
+                                    <p class="font-semibold">{{ detailsModalSession.professional.first_name + ' ' +
+                                        detailsModalSession.professional.last_name }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Hora:</h4>
-                                    <p class="font-semibold">{{ detailsModalData.session?.time }}</p>
+                                    <p class="font-semibold">{{ detailsModalSession.time }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Fecha:</h4>
-                                    <p class="font-semibold">{{ detailsModalData.session?.date }}</p>
+                                    <p class="font-semibold">{{ detailsModalSession.date }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Modalidad:</h4>
-                                    <p class="font-semibold">{{ detailsModalData.session?.modality }}</p>
+                                    <p class="font-semibold">{{ detailsModalSession.modality }}</p>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-center mb-3">Sobre ti</h3>
-                            <div class="space-y-2">
+                            <div class="space-y-2" v-if="!userDataLoading && userData && userData.info && userData.success">
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Alumno:</h4>
                                     <p class="font-semibold">
-                                        {{ userData?.info.first_name + ' ' + userData?.info.last_name }}
+                                        {{ userData.info.first_name + ' ' + userData.info.last_name }}
                                     </p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Edad:</h4>
                                     <p class="font-semibold">
-                                        {{ calculateAge(userData?.info.birth_date ?? '') }}
+                                        {{ calculateAge(userData.info.birth_date ?? '') }}
                                     </p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Genero:</h4>
                                     <p class="font-semibold">
-                                        {{ userData?.info.gender }}
+                                        {{ userData.info.gender }}
                                     </p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
@@ -184,8 +184,11 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Teléfono:</h4>
-                                    <p class="font-semibold">{{ userData?.info.phone }}</p>
+                                    <p class="font-semibold">{{ userData.info.phone }}</p>
                                 </div>
+                            </div>
+                            <div v-else-if="userData && !userData.success && professionalWillFillUserData">
+                                <p class="text-center">Aún no has rellenado tus datos de estudiante</p>
                             </div>
                         </div>
                     </div>
@@ -200,29 +203,53 @@
                         </p>
                     </div>
                     <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
-                        <CommonButton text="Cancelar" class="px-4 py-2 bg-tertiary" @click="detailsModal?.closeModal()" />
-                        <CommonButton text="Confirmar asistencia" class="px-4 py-2" @click="confirmSession"
-                            :loading="confirmAttendanceLoading" />
+                        <CommonButton class="px-4 py-2 bg-tertiary" @click="detailsModal?.closeModal()">
+                            Cancelar
+                        </CommonButton>
+                        <CommonButton class="px-4 py-2" @click="confirmSession" :loading="confirmAttendanceLoading">
+                            Confirmar asistencia
+                        </CommonButton>
                     </div>
                 </div>
             </CommonModal>
         </Teleport>
         <Teleport to="body">
             <CommonModal ref="fillUserDataModal">
-                <div class="p-4">
-                    <div class="max-w-2xl">
-                        <h3 class="text-center text-2xl font-semibold mb-3">Aún no has rellenados tus datos de estudiante
+                <div class="p-4 max-w-3xl">
+                    <div class="text-center">
+                        <h3 class=" text-2xl font-semibold mb-4 text-primary">Aún no has rellenados tus datos de estudiante
                         </h3>
-                        <p class="text-center">Para poder
-                            agendar una
-                            sesión, es necesario que rellenes tus datos de estudiante. De esta manera, el profesional podrá
-                            contactarte en caso de ser necesario, y podrá conocer datos que serán necesarios para realizar
-                            los entrenamientos.</p>
+                        <p>
+                            Para poder agendar una sesión, es recomendable que rellenes tus datos de estudiante. De esta
+                            manera, el profesional podrá contactarte en caso de ser necesario, y podrá conocer datos que
+                            serán necesarios para realizar los entrenamientos.
+                        </p>
+                        <p class="font-medium mt-4">
+                            Si así lo prefieres, puedes dejar que el profesional rellene
+                            tus datos por ti.
+                        </p>
                     </div>
-                    <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
-                        <CommonButton text="Cancelar" class="px-4 py-2 bg-tertiary"
-                            @click="fillUserDataModal?.closeModal()" />
-                        <CommonButton text="Ir a rellenar mis datos" class="px-4 py-2" @click="goToFillUserData" />
+                    <div class="mt-6 flex flex-col items-center gap-5 lg:flex-row">
+                        <div class="text-center w-full">
+                            <CommonButton class="w-full px-5 py-2" bg-color="secondary"
+                                @click="handleProfessionalWillFillUserData">
+                                Dejar que el profesional rellene mis datos
+                            </CommonButton>
+                            <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
+                                El profesional se encargará de rellenar tus datos al momento de
+                                realizar la
+                                sesión
+                            </p>
+                        </div>
+                        <div class="text-center w-full">
+                            <CommonButton class="w-full px-5 py-2" @click="goToFillUserData">
+                                Rellenar mis datos
+                            </CommonButton>
+                            <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
+                                Te llevaremos a la sección de rellenar datos de estudiante
+                            </p>
+                        </div>
+
                     </div>
                 </div>
             </CommonModal>
@@ -246,29 +273,27 @@ interface APIResponseType {
 }
 
 interface APISessionResponseType extends APIResponseType {
-    sessions: Session[];
+    sessions?: Session[];
 }
 
 interface APIUserResponseType extends APIResponseType {
-    info: StudentInfo;
+    info?: StudentInfo;
 }
 
 const confirmAttendanceLoading = ref(false);
+const professionalWillFillUserData = ref(false);
+const detailsModal = ref<Modal | null>(null);
+const fillUserDataModal = ref<Modal | null>(null);
+const detailsModalSession = ref<Session | null>(null);
 
 // Utility function to format date
 const formatDate = (date: string): string => {
-    const d = new Date(date);
+    const [year, month, day] = date.split('-').map(Number);
+    const d = new Date(year, month - 1, day);
     return d.toLocaleString('es-ES', { day: '2-digit', month: 'long' });
 }
 
-const detailsModal = ref<Modal | null>(null);
-
-const fillUserDataModal = ref<Modal | null>(null);
-const detailsModalData = reactive({
-    session: null as Session | null,
-});
-
-const { data: userData } = useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`, {
+const { data: userData, pending: userDataLoading } = useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`, {
     method: 'GET',
     headers: {
         "Content-Type": "application/json",
@@ -277,16 +302,20 @@ const { data: userData } = useFetch<APIUserResponseType>(`${runtimeConfig.public
     lazy: true,
 });
 
-const viewSessionDetails = async (session: Session) => {
-
-    if (!userData.value?.success) {
-        fillUserDataModal.value?.openModal();
-    }
-    else {
-        detailsModalData.session = session;
+const viewSessionDetails = (session: Session) => {
+    detailsModalSession.value = session;
+    if (userData.value?.success || professionalWillFillUserData.value) {
         detailsModal.value?.openModal();
     }
+    else {
+        fillUserDataModal.value?.openModal();
+    }
+}
 
+const handleProfessionalWillFillUserData = () => {
+    professionalWillFillUserData.value = true;
+    fillUserDataModal.value?.closeModal();
+    detailsModal.value?.openModal();
 }
 
 const goToFillUserData = () => {
@@ -334,7 +363,7 @@ const confirmSession = async () => {
 
     const body = {
         user_id: user?.user_id,
-        session_id: detailsModalData.session?.session_id,
+        session_id: detailsModalSession.value?.session_id,
     }
 
     const response = await $fetch<APIResponseType>(`${runtimeConfig.public.apiBase}/student/session/confirm`, {

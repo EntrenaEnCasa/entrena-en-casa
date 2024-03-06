@@ -1,4 +1,4 @@
-export const useTimeNavigation = () => {
+export const useWeekNavigation = () => {
   const currentDate = ref(new Date());
 
   const getStartOfWeek = (date: Date) => {
@@ -14,8 +14,11 @@ export const useTimeNavigation = () => {
   };
 
   const startOfWeekDate = computed(() => getStartOfWeek(currentDate.value));
-
   const endOfWeekDate = computed(() => getEndOfWeek(currentDate.value));
+  const currentMonth = computed(() => {
+    return currentDate.value.toLocaleString('es-ES', { month: 'long' });
+  });
+  const currentYear = computed(() => currentDate.value.getFullYear());
 
   const weekDays = computed(() => {
     const result = [];
@@ -62,6 +65,8 @@ export const useTimeNavigation = () => {
     endOfWeekDate,
     weekDays,
     isStartWeek,
+    currentMonth,
+    currentYear,
     goToPreviousWeek,
     goToNextWeek,
     formatDate,

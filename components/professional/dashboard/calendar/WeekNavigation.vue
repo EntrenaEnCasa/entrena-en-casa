@@ -4,16 +4,16 @@
             <CommonLoading />
         </div>
         <div v-show="!isFetchingData" class="flex items-center justify-self-center md:justify-self-start text-2xl">
-            <button @click="goToPreviousWeek" :disabled="!isCurrentWeekOrLater || isFetchingData">
+            <button @click="goToPreviousWeek" :disabled="isStartWeek || isFetchingData">
                 <Icon
-                    :class="{ 'text-gray-300': !isCurrentWeekOrLater || isFetchingData, 'text-gray-800': isCurrentWeekOrLater && !isFetchingData }"
+                    :class="{ 'text-gray-300': isStartWeek || isFetchingData, 'text-gray-800': !isStartWeek && !isFetchingData }"
                     name="fa6-solid:chevron-left"></Icon>
             </button>
             <button @click="goToNextWeek" :disabled="isFetchingData">
                 <Icon :class="{ 'text-gray-300': isFetchingData, 'text-gray-800': !isFetchingData }"
                     name="fa6-solid:chevron-right"></Icon>
             </button>
-            <p class="ml-2 font-medium">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span>
+            <p class="ml-2 font-medium capitalize">{{ currentMonth }} <span class="text-gray-500">{{ currentYear }}</span>
             </p>
         </div>
     </div>
@@ -30,7 +30,7 @@ const props = defineProps({
         type: Number,
         required: true,
     },
-    isCurrentWeekOrLater: {
+    isStartWeek: {
         type: Boolean,
         required: true,
     },
