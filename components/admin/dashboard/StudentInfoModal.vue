@@ -2,65 +2,41 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modal">
-                <div class="w-full">
+                <div class="w-full ">
                     <div
-                        class="text-center lg:text-start grid grid-cols-1 place-items-center lg:place-items-start lg:grid-cols-3 mb-8">
-                        <div class="mb-5 space-y-2 lg:justify-self-start">
+                        class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-3 mb-8 w-10/12 mx-auto mt-5">
+                        <div class="mb-5 space-y-2 ">
                             <h3 class="text-gray-500">Nombre</h3>
-                            <p class="text-3xl font-medium text-gray-700">{{ student.first_name }} {{
-                                student.last_name }}</p>
+                            <p class="text-3xl font-medium text-gray-700" v-if="student?.first_name">{{ student?.first_name }} {{student.last_name }}</p>
+                            <p class="text-3xl font-medium text-gray-700" v-else>{{ student?.email }} </p>
                         </div>
-                        <div class="mb-5 lg:justify-self-center">
+                        <div class="mb-5 ">
                             <img class="w-24 h-24 rounded-full" src="/icons/woman.png" alt="user photo">
                         </div>
-                        <div class="mb-5 space-y-2 lg:justify-self-end">
+                        <div class="mb-5 space-y-2 ">
                             <h3 class="text-gray-500">Correo electrónico</h3>
-                            <p class="text-3xl font-medium text-gray-700">{{ student.email }}</p>
+                            <p class="text-3xl font-medium text-gray-700">{{ student?.email }}</p>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-3 place-items-center gap-y-6">
-                        <div class="flex gap-x-3">
-                            <img :src="`/plans/gold-medal.png`" class="w-6 h-6" :alt="gold - medal">
-                            <p>
-                                {{ student.credits.gold }}
-                            </p>
-                            <input type="text" class="w-8 border-b outline-none">
-                            <CommonButton class="px-2 py-1 rounded-lg">
-                                Agregar
-                            </CommonButton>
-                        </div>
-                        <div class="flex gap-x-3">
-                            <img :src="`/plans/silver-medal.png`" class="w-6 h-6" :alt="gold - medal">
-                            <p>
-                                {{ student.credits.silver }}
-                            </p>
-                            <input type="text" class="w-8 border-b outline-none">
-                            <CommonButton class="px-2 py-1 rounded-lg">
-                                Agregar
-                            </CommonButton>
-                        </div>
-                        <div class="flex gap-x-3">
-                            <img :src="`/plans/bronze-medal.png`" class="w-6 h-6" :alt="gold - medal">
-                            <p>
-                                {{ student.credits.bronze }}
-                            </p>
-                            <input type="text" class="w-8 border-b outline-none">
-                            <CommonButton class="px-2 py-1 rounded-lg">
-                                Agregar
-                            </CommonButton>
+                    <div class=" mb-6 grid grid-cols-1 place-items-center mx-auto w-full ">
+                        <div class="px-5 py-3 rounded-lg border flex items-center justify-between w-full" >
+                            <p class="text-lg">Planes comprados</p>
+                            <button class="bg-secondary px-3 py-2 rounded-lg text-white text-sm" @click="openModalPlans" >Ver planes</button>
+
                         </div>
                     </div>
-                    <div class="mt-10 w-full lg:w-10/12 mx-auto">
-                        <div class="mb-6 px-5 py-3 rounded-lg border flex items-center justify-between">
+                    <div class=" w-full  mx-auto">
+                        <div class="mb-6 px-5 py-3 rounded-lg border flex items-center justify-between" id="futureSessionsToggle" @click="toggleFutureSessions">
+                            <!-- //toggle de sesiones próximas -->
                             <p class="text-lg">Sesiones próximas</p>
-                            <Icon name="fa6-solid:chevron-right" />
+                            <Icon :name="isFutureSessionsVisible ? 'fa6-solid:chevron-down' : 'fa6-solid:chevron-right'"  />
+
                         </div>
-                        <div class="mb-2 px-5 py-3 rounded-lg border flex items-center justify-between">
-                            <p class="text-lg">Sesiones pasadas</p>
-                            <Icon name="fa6-solid:chevron-down" />
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="bg-white table-auto text-sm text-left text-gray-500">
+                        <div class="overflow-x-auto" id="futureSessions" v-show="isFutureSessionsVisible">
+                            <div v-if="futureSessionsLoading">
+                                        <CommonLoading />
+                                    </div>
+                            <table v-else class="bg-white table-auto text-sm text-left text-gray-500 mb-7">
                                 <thead class="text-gray-400">
                                     <tr>
                                         <th scope="col" class="p-6 font-medium">
@@ -76,57 +52,89 @@
                                             Formato
                                         </th>
                                         <th scope="col" class="p-6 font-medium">
-                                            Alumnos
+                                            Profesional
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    
+                                    <tr class="border-b " v-for="session in futureSessions" >
+                                        <td class="px-6 py-4 whitespace-nowrap ">
+                                            {{ session.date }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap ">
+                                           {{session.time}} hrs
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap ">
+                                            {{session.format}}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{session.modality}}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <p>{{session.professional.first_name}} {{ session.professional.last_name }}</p>
+                                            <p class="text-sm text-gray-400">{{ session.professional.title }}</p>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mb-6 px-5 py-3 rounded-lg border flex items-center justify-between" id="pastSessionsToggle"  @click="togglePastSessions">
+                            <!-- //toggle de sesiones pasadas -->
+                            <p class="text-lg">Sesiones pasadas</p>
+                            <Icon :name="isPastSessionsVisible ? 'fa6-solid:chevron-down' : 'fa6-solid:chevron-right'" />
+
+                        </div>
+                        <div class="overflow-x-auto" id="pastSessions" v-show="isPastSessionsVisible">
+                            <div v-if="pastSessionsLoading">
+                                        <CommonLoading />
+                                    </div>
+                            <table v-else  class="bg-white table-auto text-sm text-left text-gray-500 mb-7">
+                                <thead class="text-gray-400" >
+                                    <tr>
+                                        <th scope="col" class="p-6 font-medium">
+                                            Fecha
                                         </th>
                                         <th scope="col" class="p-6 font-medium">
+                                            Hora
+                                        </th>
+                                        <th scope="col" class="p-6 font-medium">
+                                            Modalidad
+                                        </th>
+                                        <th scope="col" class="p-6 font-medium">
+                                            Formato
+                                        </th>
+                                        <th scope="col" class="p-6 font-medium">
+                                            Profesional
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="border-b">
+
+                                    
+                                    <tr class="border-b " v-for="session in pastSessions" >
                                         <td class="px-6 py-4 whitespace-nowrap ">
-                                            25/06
+                                            {{ session.date }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap ">
-                                            16:00hrs
+                                           {{session.time}} hrs
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap ">
-                                            Presencial - borde costero
+                                            {{session.format}}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            Grupal
+                                            {{session.modality}}
                                         </td>
-                                        <td class="px-6 py-4">
-                                            5/10
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <p>Jorge</p>
-                                            <br />
-                                            <p>Entrenador Físico</p>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-b">
-                                        <td class="px-6 py-4 whitespace-nowrap ">
-                                            28/08
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap ">
-                                            13:00hrs
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap ">
-                                            Online
-                                        </td>
+
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            Grupal
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            2/2
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <p>Jorge</p>
-                                            <br />
-                                            <p>Entrenador Físico</p>
+                                            <p>{{session.professional.first_name}} {{ session.professional.last_name }}</p>
+                                            <p class="text-sm text-gray-400">{{ session.professional.title }}</p>
                                         </td>
                                     </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -134,26 +142,120 @@
                 </div>
             </CommonModal>
         </Teleport>
+
+        <AdminDashboardPlanStudentInfoModal :plansLoading="plansLoading" :plans="plans" ref="planInfoModal" />
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-const modal = ref(null);
-
-const openModal = () => {
-    modal.value.openModal();
+const runtimeConfig = useRuntimeConfig();
+interface PlansResponse extends APIResponse {
+    credits: Plan[];
 }
 
-const props = defineProps({
-    student: {
-        type: Object,
-        required: true
-    }
-})
+
+interface Plan {
+    transaction_id: number;
+    credit_type: string;
+    format_credit: string;
+    used_credits: number;
+    available_credits: number;
+    expiration_date: string;
+}
+
+const planInfoModal = ref<Modal | null>(null);
+
+const isPastSessionsVisible = ref(false);
+const isFutureSessionsVisible = ref(false);
+const plansLoading = ref(false);
+const plans = ref<Plan[]>([]);
+
+const toggleFutureSessions = () => {
+    isFutureSessionsVisible.value = !isFutureSessionsVisible.value;
+}
+const togglePastSessions = () => {
+    isPastSessionsVisible.value = !isPastSessionsVisible.value;
+}
+
+
+interface Student {
+    user_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+}
+
+interface Session {
+    session_id: number;
+    date: string;
+    time: string;
+    available: boolean;
+    modality: string;
+    format: string;
+    link: string;
+    actual_assistant: number;
+    type: string;
+    coordinates: string | null;
+    professional: Professional;
+}
+interface Professional{
+    user_id: number;
+    first_name: string;
+    last_name: string;
+    title: string;
+    phone: string | null;
+}
+
+const modal = ref<Modal | null>(null);
+
+const openModal = () => {
+    modal.value?.openModal();
+}
+
+const props = defineProps<{
+    student: Student | null;
+    futureSessions: Session[];
+    pastSessions: Session[];
+    futureSessionsLoading: boolean;
+    pastSessionsLoading: boolean;
+}>();
 
 defineExpose({
     openModal
 })
+
+const getStudentPlans = async (student: Student) => {
+
+plansLoading.value = true;
+
+try {
+    const response = await $fetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/students/credits/${student.user_id}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
+
+    if(response.success){
+        plans.value = response.credits;
+    }
+    else{
+        console.error(response.message);
+    }
+
+}
+catch (error) {
+    console.error(error);
+}
+finally {
+    plansLoading.value = false;
+}
+
+};
+
+const openModalPlans = () => {
+    planInfoModal.value?.openModal();
+    getStudentPlans(props.student!);
+}
+
 
 </script>
