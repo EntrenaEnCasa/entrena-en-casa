@@ -129,8 +129,8 @@
                                     {{ session.professional.title }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
-                                    <div class="flex items-center gap-x-1">
-                                        {{ session.actual_assistant }} / {{ session.assitant_limit }}
+                                    <div class="flex items-center justify-center">
+                                        {{ session.actual_assistant }} 
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
