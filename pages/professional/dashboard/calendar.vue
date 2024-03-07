@@ -4,9 +4,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
 
-                <ProfessionalDashboardCalendarWeekNavigation :currentMonth="currentMonth" :isFetchingData="fetchingEvents"
-                    :currentYear="currentYear" :isStartWeek="isStartWeek" @go-to-previous-week="handleGoToPreviousWeek"
-                    @go-to-next-week="handleGoToNextWeek" />
+                <ProfessionalDashboardCalendarWeekNavigation :currentMonth="currentMonth"
+                    :isFetchingData="fetchingEvents" :currentYear="currentYear" :isStartWeek="isStartWeek"
+                    @go-to-previous-week="handleGoToPreviousWeek" @go-to-next-week="handleGoToNextWeek" />
 
                 <div class="justify-self-center bg-gray-200 rounded-lg px-16 py-1">
                     <p class="font-semibold">Semanal</p>
@@ -46,7 +46,8 @@
                                 </li>
                                 <li>
                                     <button @click="newEventModal.handleClick"
-                                        class="px-4 py-2 text-sm rounded-b bg-primary hover:bg-primary-600" role="menuitem">
+                                        class="px-4 py-2 text-sm rounded-b bg-primary hover:bg-primary-600"
+                                        role="menuitem">
                                         Evento Manual
                                     </button>
                                 </li>
@@ -90,7 +91,8 @@
         <!-- Modals -->
 
         <ProfessionalDashboardCalendarModalsEmptySlotModal ref="emptySlotModalRef" :modal="emptySlotModal" />
-        <ProfessionalDashboardCalendarModalsEmptySessionModal ref="newEmptySessionModalRef" :modal="newEmptySessionModal" />
+        <ProfessionalDashboardCalendarModalsEmptySessionModal ref="newEmptySessionModalRef"
+            :modal="newEmptySessionModal" />
         <ProfessionalDashboardCalendarModalsNewEventModal ref="newEventModalRef" :modal="newEventModal" />
         <ProfessionalDashboardCalendarModalsEditEmptySessionModal ref="editEmptySessionModalRef"
             :modal="editEmptySessionModal" />
@@ -309,7 +311,7 @@ const emptySlotModal = reactive({
 
 const newEmptySessionModal = reactive({
     data: {
-        selectedFormat: 'Individual',
+        selectedFormat: 'Personalizado',
         selectedModality: 'Online',
         link: '',
         locationCoordinates: [],
@@ -327,7 +329,7 @@ const newEmptySessionModal = reactive({
         }
     },
     resetModalData: () => {
-        newEmptySessionModal.data.selectedFormat = 'Individual';
+        newEmptySessionModal.data.selectedFormat = 'Personalizado';
         newEmptySessionModal.data.selectedModality = 'Online';
     },
     handleClickFromButton: () => {
@@ -346,7 +348,7 @@ const newEmptySessionModal = reactive({
             link = await createGoogleMapsLink(newEmptySessionModal.data.locationCoordinates);
             coordinates = JSON.stringify(newEmptySessionModal.data.locationCoordinates);
         }
-        else if (newEmptySessionModal.data.selectedFormat === 'Individual' && newEmptySessionModal.data.selectedModality === 'Presencial') {
+        else if (newEmptySessionModal.data.selectedFormat === 'Personalizado' && newEmptySessionModal.data.selectedModality === 'Presencial') {
             link = '';
             coordinates = null;
         }
@@ -410,7 +412,7 @@ const newEventModal = reactive({
         loading: false,
         manualSession: {
             clients: [],
-            selectedFormat: 'Individual',
+            selectedFormat: 'Personalizado',
             selectedModality: 'Online',
             link: '',
             locationCoordinates: [],
@@ -435,7 +437,7 @@ const newEventModal = reactive({
     resetModalData: () => {
         newEventModal.data.selectedEventType = 'Nuevo entrenamiento';
         newEventModal.data.manualSession.clients = [];
-        newEventModal.data.manualSession.selectedFormat = 'Individual';
+        newEventModal.data.manualSession.selectedFormat = 'Personalizado';
         newEventModal.data.manualSession.selectedModality = 'Online';
         newEventModal.data.manualSession.link = '';
         newEventModal.data.personalEvent.clients = [];
@@ -462,7 +464,7 @@ const newEventModal = reactive({
                 link = await createGoogleMapsLink(newEventModal.data.manualSession.locationCoordinates);
                 coordinates = JSON.stringify(newEventModal.data.manualSession.locationCoordinates);
             }
-            else if (newEventModal.data.manualSession.selectedFormat === 'Individual' && newEventModal.data.manualSession.selectedModality === 'Presencial') {
+            else if (newEventModal.data.manualSession.selectedFormat === 'Personalizado' && newEventModal.data.manualSession.selectedModality === 'Presencial') {
                 link = '';
                 coordinates = null;
             }
@@ -476,7 +478,7 @@ const newEventModal = reactive({
                 "date": localDateString, // fecha en formato YYYY-MM-DD
                 "start_time": selectedStartTime.value, // hora en formato HH:MM
                 "end_time": automaticallySelectedEndTime.value, // hora en formato HH:MM
-                "format": newEventModal.data.manualSession.selectedFormat, // "Individual" o "Grupal"
+                "format": newEventModal.data.manualSession.selectedFormat, // "Personalizado" o "Grupal"
                 "modality": newEventModal.data.manualSession.selectedModality, // "Online" o "Presencial"
                 "text": link, // link de la sesión, se pasa como text
                 "clients": clientsIDs, // array de ids de clientes
@@ -606,7 +608,7 @@ const editEmptySessionModal = reactive({
             link = await createGoogleMapsLink(editEmptySessionModal.data.locationCoordinates);
             coordinates = JSON.stringify(editEmptySessionModal.data.locationCoordinates);
         }
-        else if (editEmptySessionModal.data.selectedFormat === 'Individual' && editEmptySessionModal.data.selectedModality === 'Presencial') {
+        else if (editEmptySessionModal.data.selectedFormat === 'Personalizado' && editEmptySessionModal.data.selectedModality === 'Presencial') {
             link = '';
             coordinates = null;
         }
@@ -678,7 +680,7 @@ const editManualSessionModal = reactive({
     data: {
         selectedEventType: 'Nuevo entrenamiento',
         clients: [],
-        selectedFormat: 'Individual',
+        selectedFormat: 'Personalizado',
         selectedModality: 'Online',
         link: '',
         event: null,

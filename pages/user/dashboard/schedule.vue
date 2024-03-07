@@ -106,10 +106,10 @@
                         </div>
                         <div class="col-span-1 xl:col-span-2 px-5 text-center xl:text-left">
                             <div class="space-y-5">
-                                <div v-if="professional.individualSessions.length > 0">
+                                <div v-if="professional.customSessions.length > 0">
                                     <h3 class="font-medium mb-2">Personalizada</h3>
                                     <div class="flex flex-wrap justify-center xl:justify-start gap-2 items-center">
-                                        <button v-for="session in professional.individualSessions"
+                                        <button v-for="session in professional.customSessions"
                                             :key="session.session_info.session_id"
                                             @click="openConfirmationModal(professional, session)"
                                             class="border rounded-full px-4 py-1.5 bg-secondary text-white">
@@ -267,11 +267,11 @@ const filteredProfessionals = computed(() => {
             return session.date.startsWith(selectedDateString);
         });
 
-        const individualSessions = filteredSessions.filter(session => session.session_info.format === 'Individual');
+        const customSessions = filteredSessions.filter(session => session.session_info.format === 'Personalizado');
         const groupSessions = filteredSessions.filter(session => session.session_info.format === 'Grupal');
 
-        return { ...professional, individualSessions, groupSessions };
-    }).filter(professional => professional.individualSessions.length > 0 || professional.groupSessions.length > 0);
+        return { ...professional, customSessions: customSessions, groupSessions };
+    }).filter(professional => professional.customSessions.length > 0 || professional.groupSessions.length > 0);
 
     return filteredData;
 });
@@ -385,7 +385,7 @@ const confirmSessionLoading = ref(false);
 
 const openConfirmationModal = (professionalData, sessionData) => {
     let location;
-    if (!isOnline.value && sessionData.session_info.format === 'Individual') {
+    if (!isOnline.value && sessionData.session_info.format === 'Personalizado') {
         location = selectedLocation.value.place_name;
     }
     else if (!isOnline.value && sessionData.session_info.format === 'Grupal') {

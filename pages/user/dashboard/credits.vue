@@ -314,13 +314,13 @@ interface Plan {
     credit_type: 'PP' | 'GP' | 'PO' | 'GO';
     expiration_time: string;
     credit_quantity: number;
-    format_credit: 'Individual' | 'Grupal' | 'Dupla';
+    format_credit: 'Personalizado' | 'Grupal' | 'Dupla';
     price: string;
 }
 
 interface Credit {
     credit_type: string;
-    format_credit: 'Individual' | 'Grupal' | 'Dupla';
+    format_credit: 'Personalizado' | 'Grupal' | 'Dupla';
     used_credits: number;
     available_credits: number;
     expiration_date: string; // ISO date string
