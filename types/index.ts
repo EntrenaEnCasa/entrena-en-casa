@@ -23,7 +23,6 @@ declare global {
     format: "Personalizado" | "Grupal";
     modality: "Online" | "Presencial";
     link: string | null;
-    credit_type: "bronze" | "silver" | "gold";
     actual_assistant: number;
     professional: Professional;
   }
