@@ -51,7 +51,7 @@
                         <table class="mt-6 min-w-max w-full table-auto">
                             <thead>
                                 <tr class=" text-gray-600 leading-normal">
-                                    <th class="py-3 px-6 text-left">Confirmado</th>
+                                    <th class="py-3 px-6 text-center">Confirmado</th>
                                     <th class="py-3 px-6 text-left">Nombre</th>
                                     <th class="py-3 px-6 text-left">Teléfono</th>
                                     <th class="py-3 px-6 text-left">Edad</th>
