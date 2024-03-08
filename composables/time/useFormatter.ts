@@ -23,11 +23,23 @@ export const useFormatter = () => {
   // 'timeString' is a string like '13:00'
   const extractHourFromTimeString = (time: string) : number => {
     return parseInt(time.split(':')[0]);
-};
+  };
+
+  const formatDateToWeekdayMonthAndYear = (date: string | Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    };
+    const formatter = new Intl.DateTimeFormat('es-CL', options);
+    return formatter.format(new Date(date));
+  };
   
   return {
     formatHourToTimeString,
     extractHourFromTimeString,
-    formatDateToWeekdayAndDay
+    formatDateToWeekdayAndDay,
+    formatDateToWeekdayMonthAndYear
   }
 }
