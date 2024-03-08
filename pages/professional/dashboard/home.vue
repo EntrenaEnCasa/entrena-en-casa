@@ -1,31 +1,48 @@
 <template>
     <div class="">
         <h2 class="text-xl text-center font-semibold text-gray-600 mb-4">Sesión en curso</h2>
-        <div class="bg-white rounded-xl divide-y">
+        <CommonLoading v-if="currentSessionLoading" />
+        <div v-else-if="currentSessionError">
+            <div class="text-center text-red-500">
+                Error al obtener la sesión en curso
+            </div>
+        </div>
+        <div v-else-if="!currentSessionData?.success">
+            <p class="text-center">
+                {{ currentSessionData?.message }}
+            </p>
+        </div>
+        <div v-else class="bg-white rounded-xl divide-y">
             <div class="p-5">
-                <h3 class="text-center font-semibold text-lg">Domingo 25 de Junio de 2023 - 16:00hrs</h3>
+                <h3 class="text-center font-semibold text-lg first-letter:uppercase">
+                    {{ formatDateToWeekdayMonthAndYear(currentSessionData.sessionInfo.date) }} -
+                    {{ currentSessionData.sessionInfo.time }}hrs
+                </h3>
             </div>
             <div class="p-5">
                 <div class="my-10 flex flex-wrap justify-center gap-x-8 sm:gap-20 lg:gap-x-32 gap-y-5">
                     <div class="flex flex-col">
                         <h4 class="text-xl font-semibold">Modalidad</h4>
-                        <p>Online</p>
+                        <p>{{ currentSessionData.sessionInfo.modality }}</p>
                     </div>
                     <div class="flex flex-col">
                         <h4 class="text-xl font-semibold">Formato</h4>
-                        <p>Grupal</p>
+                        <p>{{ currentSessionData.sessionInfo.format }}</p>
                     </div>
                     <div class="flex flex-col">
                         <div class="flex gap-x-2">
-                            <h4 class="text-xl font-semibold">Lugar</h4>
-                            <a class="flex text-secondary items-center" href="#">
+                            <h4 class="text-xl font-semibold">
+                                {{ currentSessionData.sessionInfo.modality === 'Online' ? 'Reunión' : 'Lugar' }}
+                            </h4>
+                            <a class="flex text-secondary items-center" target="_blank"
+                                :href="currentSessionData.sessionInfo.link">
                                 <span>
                                     Link
                                 </span>
                                 <Icon name="fa6-solid:chevron-right" />
                             </a>
                         </div>
-                        <p>Online</p>
+                        <p>{{ currentSessionData.sessionInfo.modality === 'Online' ? 'Online' : '' }}</p>
                     </div>
                 </div>
                 <div>
@@ -41,40 +58,46 @@
                                     <th class="py-3 px-6 text-left">Género</th>
                                     <th class="py-3 px-6 text-left">Peso</th>
                                     <th class="py-3 px-6 text-left">Estatura</th>
-                                    <th v-if="userWithoutData.length > 0" class="py-3 px-6 text-left"></th>
+                                    <th v-if="studentsWithoutData && studentsWithoutData.length > 0"
+                                        class="py-3 px-6 text-left"></th>
                                 </tr>
                             </thead>
                             <tbody class="">
-                                <tr v-for="user, index in data" :key="index">
+                                <tr v-for="student, index in currentSessionData?.students" :key="index">
 
                                     <td class="py-3 px-6 text-center">
                                         <Icon
-                                            :name="user.isConfirmed ? 'fa6-regular:circle-check' : 'fa6-regular:circle-xmark'"
+                                            :name="student.confirmed ? 'fa6-regular:circle-check' : 'fa6-regular:circle-xmark'"
                                             class="text-2xl"
-                                            :class="user.isConfirmed ? 'text-primary' : 'text-tertiary'" />
+                                            :class="student.confirmed ? 'text-primary' : 'text-tertiary'" />
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        <div v-if="user.first_name">
-                                            <div class="text-base font-medium">{{ user.first_name }} {{ user.last_name
-                                                }}</div>
-                                            <div class="text-sm text-gray-500">{{ user.email }}</div>
+                                        <div v-if="student.first_name">
+                                            <div class="text-base font-medium">
+                                                {{ student.first_name }} {{ student.last_name }}
+                                            </div>
+                                            <div class="text-sm text-gray-500">{{ student.email }}</div>
                                         </div>
                                         <div v-else>
                                             <div>Sin datos</div>
-                                            <div class="text-sm text-gray-500">{{ user.email }}</div>
+                                            <div class="text-sm text-gray-500">{{ student.email }}</div>
                                         </div>
                                     </td>
-                                    <td class="py-3 px-6 text-left">{{ user.phone || 'Sin datos' }}</td>
-                                    <td class="py-3 px-6 text-left">{{ user.age ? user.age + ' años' : 'Sin datos' }}
+                                    <td class="py-3 px-6 text-left">{{ student.phone || 'Sin datos' }}</td>
+                                    <td class="py-3 px-6 text-left">{{ student.age ? student.age + ' años' : 'Sin datos'
+                                        }}
                                     </td>
-                                    <td class="py-3 px-6 text-left">{{ user.gender || 'Sin datos' }}</td>
-                                    <td class="py-3 px-6 text-left">{{ user.weight ? user.weight + ' kg' : 'Sin datos'
-                                        }}</td>
-                                    <td class="py-3 px-6 text-left">{{ user.height ? user.height + ' cm' : 'Sin datos'
-                                        }}</td>
-                                    <td v-if="userWithoutData.length > 0" class="py-3 px-6 text-left">
-                                        <CommonButton v-if="user.first_name === null" class="px-4 py-2"
-                                            bg-color="secondary" @click="handleOpenModal">
+                                    <td class="py-3 px-6 text-left">{{ student.gender || 'Sin datos' }}</td>
+                                    <td class="py-3 px-6 text-left">
+                                        {{ student.weight ? student.weight + ' kg' : 'Sin datos' }}
+                                    </td>
+                                    <td class="py-3 px-6 text-left">
+                                        {{ student.height ? student.height + ' cm' : 'Sin datos' }}
+                                    </td>
+                                    <td v-if="studentsWithoutData && studentsWithoutData.length > 0"
+                                        class="py-3 px-6 text-left">
+                                        <CommonButton v-if="student.first_name === null" class="px-4 py-2"
+                                            bg-color="secondary" @click="handleOpenModal(student)">
                                             <Icon name="fa6-solid:user-pen" class="text-2xl" />
                                         </CommonButton>
                                     </td>
@@ -85,11 +108,12 @@
                 </div>
             </div>
         </div>
+
         <Teleport to="body">
             <CommonModal ref="addStudentDataModal">
                 <div class="px-3 py-6">
-                    <Form v-slot="{ meta }" class="space-y-5 max-w-xl">
-                        <div class="grid grid-cols-2 gap-4">
+                    <Form v-slot="{ meta }" class="space-y-5">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <CommonInput label="Nombre" v-model="formData.firstName" name="firstName" type="text"
                                 id="firstName" placeholder="Ingresa el nombre del alumno" :rules="validateFirstName" />
                             <CommonInput label="Apellido" v-model="formData.lastName" name="lastName" type="text"
@@ -111,7 +135,7 @@
                                 right-text="CM" />
                         </div>
                         <CommonButton class="py-2 w-full font-medium" text-size="lg" :loading="addDataLoading"
-                            :disabled="!meta.valid">
+                            :disabled="!meta.valid" @click="updateStudentInfo">
                             Guardar
                         </CommonButton>
 
@@ -123,6 +147,47 @@
 </template>
 
 <script setup lang="ts">
+
+import { useUserStore } from '~/stores/UserStore';
+import { useFormatter } from '~/composables/time/useFormatter';
+
+const userStore = useUserStore();
+const config = useRuntimeConfig();
+const { formatDateToWeekdayMonthAndYear } = useFormatter();
+
+interface currentSessionResponse {
+    success: boolean;
+    message: string;
+    sessionInfo: SessionInfo;
+    students: Student[];
+}
+
+interface updateStudentInfoResponse {
+    success: boolean;
+    message: string;
+}
+
+interface SessionInfo {
+    session_id: number;
+    coordinates: string | null;
+    link: string;
+    modality: string;
+    format: string;
+    date: string;
+    time: string;
+}
+
+interface Student {
+    first_name: string | null;
+    last_name: string | null;
+    email: string;
+    phone: string | null;
+    age: number | null;
+    gender: string | null;
+    weight: number | null;
+    height: number | null;
+    confirmed: boolean;
+}
 
 const addStudentDataModal = ref<Modal | null>(null);
 const addDataLoading = ref(false);
@@ -142,6 +207,15 @@ const genderOptions = [
     { label: 'Femenino', value: 'Femenino' },
     { label: 'Otro', value: 'Otro' }
 ];
+
+const { data: currentSessionData, pending: currentSessionLoading, error: currentSessionError, refresh: getCurrentSession } = await useFetch<currentSessionResponse>(`${config.public.apiBase}/professional/session/attendance/${userStore.user?.user_id}`, {
+    method: 'GET',
+    credentials: 'include',
+});
+
+const studentsWithoutData = computed(() => {
+    return currentSessionData.value?.students.filter(student => student.first_name === null);
+});
 
 const validateFirstName = () => {
     if (!formData.firstName) {
@@ -216,59 +290,52 @@ const validatePhoneNumber = () => {
     return true;
 };
 
-const handleOpenModal = () => {
+const handleOpenModal = (student: Student) => {
+    console.log(student);
     addStudentDataModal.value?.openModal();
 }
 
-const userWithoutData = computed(() => {
-    return data.filter(item => item.first_name === null);
-});
+const updateStudentInfo = async () => {
 
-const data = [
-    {
-        first_name: 'Juan',
-        last_name: 'Pérez',
-        email: 'example@example.cl',
-        phone: '+569 3456 7890',
-        age: 25,
-        gender: 'Masculino',
-        weight: 70,
-        height: 170,
-        isConfirmed: true
-    },
-    {
-        first_name: 'María',
-        last_name: 'González',
-        email: 'example@example.cl',
-        phone: '+569 3456 7890',
-        age: 22,
-        gender: 'Femenino',
-        weight: 60,
-        height: 160,
-        isConfirmed: true
-    },
-    {
-        first_name: 'Pedro',
-        last_name: 'López',
-        email: 'example@example.cl',
-        phone: '+569 3456 7890',
-        age: 30,
-        gender: 'Masculino',
-        weight: 80,
-        height: 180,
-        isConfirmed: false
-    },
-    {
-        first_name: null,
-        last_name: null,
-        email: 'ejemplo@ejemplo.cl',
-        phone: null,
-        age: null,
-        gender: null,
-        weight: null,
-        height: null,
-        isConfirmed: false
+    addDataLoading.value = true;
+
+    const body = {
+        user_id: 1,
+        updates: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            phone: formData.phoneNumber,
+            birth_date: formData.birthDate,
+            gender: formData.gender,
+            weight: formData.weight,
+            height: formData.height,
+        }
     }
-]
+
+    try {
+        const response = await $fetch<updateStudentInfoResponse>(`${config.public.apiBase}/professional/student/update`, {
+            method: 'PUT',
+            credentials: 'include',
+            body: body
+        });
+
+        if (response.success) {
+            getCurrentSession();
+            console.log(response.message);
+        }
+        else {
+            console.log(response.message);
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+    finally {
+        addDataLoading.value = false;
+        addStudentDataModal.value?.closeModal();
+    }
+
+}
+
 
 </script>
