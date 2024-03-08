@@ -148,11 +148,13 @@
 
 <script setup lang="ts">
 
+import { useToast } from 'vue-toastification';
 import { useUserStore } from '~/stores/UserStore';
 import { useFormatter } from '~/composables/time/useFormatter';
 
 const userStore = useUserStore();
 const config = useRuntimeConfig();
+const toast = useToast();
 const { formatDateToWeekdayMonthAndYear } = useFormatter();
 
 interface currentSessionResponse {
@@ -178,6 +180,7 @@ interface SessionInfo {
 }
 
 interface Student {
+    user_id: number;
     first_name: string | null;
     last_name: string | null;
     email: string;
@@ -191,6 +194,7 @@ interface Student {
 
 const addStudentDataModal = ref<Modal | null>(null);
 const addDataLoading = ref(false);
+const selectedStudent = ref<Student | null>(null);
 
 const formData = reactive({
     firstName: "",
@@ -291,7 +295,7 @@ const validatePhoneNumber = () => {
 };
 
 const handleOpenModal = (student: Student) => {
-    console.log(student);
+    selectedStudent.value = student;
     addStudentDataModal.value?.openModal();
 }
 
@@ -299,8 +303,14 @@ const updateStudentInfo = async () => {
 
     addDataLoading.value = true;
 
+    if (selectedStudent.value === null) {
+        toast.error('Hubo un error al intentar actualizar la información del alumno');
+        addDataLoading.value = false;
+        return;
+    }
+
     const body = {
-        user_id: 1,
+        student_id: selectedStudent.value.user_id,
         updates: {
             first_name: formData.firstName,
             last_name: formData.lastName,
@@ -320,14 +330,15 @@ const updateStudentInfo = async () => {
         });
 
         if (response.success) {
+            toast.success(response.message);
             getCurrentSession();
-            console.log(response.message);
         }
         else {
-            console.log(response.message);
+            toast.error(response.message);
         }
     }
     catch (error) {
+        toast.error('Hubo un error al intentar actualizar la información del alumno');
         console.log(error);
     }
     finally {
