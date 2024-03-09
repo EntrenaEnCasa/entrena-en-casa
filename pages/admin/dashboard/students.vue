@@ -38,10 +38,20 @@
                         <tbody>
                             <tr v-for="student in data?.students" class="border-b" :key="student.user_id">
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ student.first_name }}
+                                    <div v-if="student.first_name">
+                                        {{ student.first_name }}
+                                    </div>
+                                    <div v-else>
+                                        Sin datos
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ student.last_name }}
+                                    <div v-if="student.first_name">
+                                        {{ student.first_name }}
+                                    </div>
+                                    <div v-else>
+                                        Sin datos
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ student.email }}
@@ -71,8 +81,6 @@
 
 <script setup lang="ts">
 
-import type { RefSymbol } from "@vue/reactivity";
-import { useUserStore } from "~/stores/UserStore";
 
 interface StudentResponse extends APIResponse {
     students: Student[];
@@ -167,6 +175,7 @@ const getFutureSessions = async (student: Student) => {
 
         if(response.success){
             futureSessions.value = response.sessions;
+
         }
         else{
             console.error(response.message);
