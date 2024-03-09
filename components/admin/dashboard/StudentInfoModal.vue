@@ -4,16 +4,14 @@
             <CommonModal ref="modal">
                 <div class="w-full ">
                     <div
-                        class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-3 mb-8 w-10/12 mx-auto mt-5">
-                        <div class="mb-5 space-y-2 ">
+                    class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 mb-8 w-10/12 mx-auto mt-5">
+                        <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Nombre</h3>
-                            <p class="text-3xl font-medium text-gray-700" v-if="student?.first_name">{{ student?.first_name }} {{student.last_name }}</p>
-                            <p class="text-3xl font-medium text-gray-700" v-else>{{ student?.email }} </p>
+                            <p class="text-3xl font-medium text-gray-700" v-if="student && student?.first_name">{{ student?.first_name }} {{student?.last_name }}</p>
+                            <p class="text-3xl font-medium text-gray-700" v-else> Sin datos </p>
                         </div>
-                        <div class="mb-5 ">
-                            <img class="w-24 h-24 rounded-full" src="/icons/woman.png" alt="user photo">
-                        </div>
-                        <div class="mb-5 space-y-2 ">
+
+                        <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Correo electrónico</h3>
                             <p class="text-3xl font-medium text-gray-700">{{ student?.email }}</p>
                         </div>
@@ -74,8 +72,8 @@
                                             {{session.modality}}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <p>{{session.professional.first_name}} {{ session.professional.last_name }}</p>
-                                            <p class="text-sm text-gray-400">{{ session.professional.title }}</p>
+                                            <p>{{session.professional?.first_name}} {{ session.professional?.last_name }}</p>
+                                            <p class="text-sm text-gray-400">{{ session.professional?.title }}</p>
                                         </td>
                                     </tr>
 
@@ -143,7 +141,7 @@
             </CommonModal>
         </Teleport>
 
-        <AdminDashboardPlanStudentInfoModal :plansLoading="plansLoading" :plans="plans" ref="planInfoModal" />
+        <AdminDashboardPlanStudentInfoModal :plansLoading="plansLoading" :student="student" :plans="plans" ref="planInfoModal" />
     </div>
 </template>
 
@@ -255,6 +253,8 @@ finally {
 const openModalPlans = () => {
     planInfoModal.value?.openModal();
     getStudentPlans(props.student!);
+    modal.value?.closeModal();
+
 }
 
 
