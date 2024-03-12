@@ -110,7 +110,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="session in futureSessions.sessions" class="border-b" :key="session.id">
+                            <tr v-for="session in futureSessions" class="border-b" :key="session.session_id">
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ session.date }}
                                 </td>
@@ -130,11 +130,12 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
                                     <div class="flex items-center justify-center">
-                                        {{ session.actual_assistant }} 
+                                        {{ session.actual_assistant }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <button class="px-4 py-2 bg-primary text-white rounded-md font-medium ">
+                                    <button class="px-4 py-2 bg-primary text-white rounded-md font-medium "
+                                        @click="openModalModifySession(session.session_id)">
                                         Ver Detalles
                                     </button>
                                 </td>
@@ -196,50 +197,113 @@
                 </form>
             </div>
         </aside>
+        <AdminDashboardHomeModifySessionModal :loading="sessionInfoLoading" :sessionInfo="sessionInfo"
+            ref="modifySessionModal" />
     </div>
 </template>
 
 
-<script setup>
+<script lang="ts" setup>
 
 const filterSidebarOpen = ref(false);
 const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
 
-import { useUserStore } from '~/stores/UserStore'
 
 const runtimeConfig = useRuntimeConfig();
-const userStore = useUserStore();
-
-const futureSessions = ref({
-    success: false,
-    loading: false,
-    message: '',
-    sessions: [],
-});
+const sessionInfo = ref<SessionInfo | null>(null);
+const modifySessionModal = ref<Modal | null>(null);
+const sessionInfoLoading = ref<boolean>(false);
 
 
-onMounted(async () => {
-    await getFutureSessions();
-
-});
-
-const getFutureSessions = async () => {
-
-    futureSessions.value.loading = true;
-    await useFetch(`${runtimeConfig.public.apiBase}/admin/sessions/future`, {
-        method: 'GET',
-        credentials: 'include',
-        onResponse({ request, response, options }) {
-            futureSessions.value = response._data;
-            futureSessions.value.loading = false;
-        },
-    });
+const futureSessions = ref<Session[]>([]);
+interface SessionInfoResponse extends APIResponse {
+    session: SessionInfo;
 }
+interface SessionsResponse extends APIResponse {
+    sessions: Session[];
+}
+
+interface SessionInfo {
+    session_id: number;
+    date: string;
+    time: string;
+    available: number;
+    format: string;
+    modality: string;
+    link: string
+    actual_assistant: number;
+    type: string;
+    coordinates: string | null;
+    students: Student[];
+    professional: Professional;
+}
+
+interface Student {
+    user_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+}
+interface Professional {
+    user_id: number;
+    first_name: string;
+    last_name: string;
+    title: string;
+}
+
+interface Session {
+    session_id: number;
+    date: string;
+    time: string;
+    modality: string;
+    format: string;
+    professional: Professional;
+    actual_assistant: number;
+}
+
+
+
+const { data, pending: futureSessionsLoading, error, refresh: getFutureSessions } = await useFetch<SessionsResponse>(`${runtimeConfig.public.apiBase}/admin/sessions/future`, {
+    method: 'GET',
+    credentials: 'include',
+});
+futureSessions.value = data.value?.sessions || [];
+
 
 const filter = () => {
     console.log("filter");
 }
 
+const getSessionInfo = async (session_id: number) => {
+    sessionInfoLoading.value = true;
+
+    try {
+        const response = await $fetch<SessionInfoResponse>(`${runtimeConfig.public.apiBase}/admin/session/${session_id}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+
+        if (response.success) {
+            sessionInfo.value = response.session;
+
+        }
+        else {
+            console.error(response.message);
+        }
+
+    }
+    catch (error) {
+        console.error(error);
+    }
+    finally {
+        sessionInfoLoading.value = false;
+    }
+}
+
+const openModalModifySession = (session_id: number) => {
+    getSessionInfo(session_id);
+    modifySessionModal.value?.openModal();
+}
 
 </script>
 
