@@ -4,13 +4,14 @@
             <CommonModal ref="modal">
                 <div class="w-full text-center">
                     <div
-                    class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 mb-8 w-10/12 mx-auto mt-5">
+                        class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 mb-8 w-10/12 mx-auto mt-5">
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Nombre</h3>
-                            <p class="text-3xl font-medium text-gray-700" v-if="student?.first_name">{{ student?.first_name }} {{student?.last_name }}</p>
+                            <p class="text-3xl font-medium text-gray-700" v-if="student?.first_name">{{
+                                student?.first_name }} {{ student?.last_name }}</p>
                             <p class="text-3xl font-medium text-gray-700" v-else>Sin datos </p>
                         </div>
-                        
+
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Correo electrónico</h3>
                             <p class="text-3xl font-medium text-gray-700">{{ student?.email }}</p>
@@ -20,41 +21,44 @@
                         <div class="flex justify-between items-center mb-5">
                             <h3 class=" mx-auto text-3xl">Agregar Plan</h3>
                         </div>
-                        <div> 
-                            <form  class="flex flex-col items-center justify-center">
+                        <div>
+                            <form class="flex flex-col items-center justify-center">
                                 <div class="flex flex-col items-center w-full py-5">
                                     <label for="plan" class="text-gray-500 text-left w-full mb-2">Tipo de Plan</label>
-                                    <select v-model="selectedPlan" id="plan" class="w-full px-5 py-3 border border-gray-200 rounded-lg  outline-none" >
+                                    <select v-model="selectedPlan" id="plan"
+                                        class="w-full px-5 py-3 border border-gray-200 rounded-lg  outline-none">
                                         <option value="0" disabled selected>Selecciona un plan</option>
-                                        <option v-for="plan in Plans" :value="plan.plan_id">{{ formatPlan(plan.credit_type) }} - {{ plan.credit_quantity }} créditos </option>
+                                        <option v-for="plan in Plans" :value="plan.plan_id">{{
+                                formatPlan(plan.credit_type) }} - {{ plan.credit_quantity }} créditos
+                                        </option>
                                     </select>
                                 </div>
                             </form>
-                            <div v-show="selectedPlan!==0" >
-                                <table class="bg-white table-auto text-sm text-center mx-auto mb-7" >
-                            <thead class="text-gray-400" >
-                                    <tr>
-                                        <th scope="col" class="font-medium">
-                                            
-                                        </th>
-                                        <th scope="col" class="font-medium">
-                                            
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="selectedPlanData">
-                                    <tr>
-                                        <td class="px-6 py-2">
-                                            <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5 items-center">
-                                                <p class="font-light
+                            <div v-show="selectedPlan !== 0">
+                                <table class="bg-white table-auto text-sm text-center mx-auto mb-7">
+                                    <thead class="text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="font-medium">
+
+                                            </th>
+                                            <th scope="col" class="font-medium">
+
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="selectedPlanData">
+                                        <tr>
+                                            <td class="px-6 py-2">
+                                                <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5 items-center">
+                                                    <p class="font-light
                                                 text-right  ">Plan</p>
-                                                <p class=" font-bold
-                                                text-left" >{{ formatPlan(selectedPlanData.credit_type) }}</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr>
+                                                    <p class=" font-bold
+                                                text-left">{{ formatPlan(selectedPlanData.credit_type) }}</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
                                             <td class="grid grid-cols-2 w-4/6 mx-auto gap-5 items-center mb-5">
                                                 <p class="font-light text-right  ">Cantidad de sesiones</p>
                                                 <div class="flex items-center">
@@ -64,7 +68,7 @@
                                                             <Icon name="mdi:weight-lifter" class="text-3xl" />
                                                         </div>
                                                     </div>
-                                                    <div v-else-if="selectedPlanData.credit_type === 'GP' ">
+                                                    <div v-else-if="selectedPlanData.credit_type === 'GP'">
                                                         <div class="text-primary whitespace-nowrap">
                                                             <Icon name="mdi:account-multiple-plus" class="text-2xl" />
                                                             <Icon name="mdi:weight-lifter" class="text-3xl" />
@@ -73,49 +77,54 @@
                                                     <div v-else-if="selectedPlanData.credit_type === 'PO'">
                                                         <div class="text-primary whitespace-nowrap">
                                                             <Icon name="ion:person" class="text-2xl" />
-                                                            <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                                            <Icon name="material-symbols:laptop-mac-outline"
+                                                                class="text-3xl" />
                                                         </div>
                                                     </div>
-                                                    <div v-else-if="selectedPlanData.credit_type === 'GO' ">
+                                                    <div v-else-if="selectedPlanData.credit_type === 'GO'">
                                                         <div class="text-primary whitespace-nowrap">
                                                             <Icon name="mdi:account-multiple-plus" class="text-2xl" />
-                                                            <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                                            <Icon name="material-symbols:laptop-mac-outline"
+                                                                class="text-3xl" />
                                                         </div>
                                                     </div>
-                                                    <p class=" font-bold ml-3" >{{ selectedPlanData?.credit_quantity }}</p>
+                                                    <p class=" font-bold ml-3">{{ selectedPlanData?.credit_quantity }}
+                                                    </p>
                                                 </div>
                                             </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-2">
-                                            <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5 items-center">
-                                                <p class="font-light text-right  ">Tiempo máximo para utilizar sesiones </p>
-                                                <p class=" font-bold text-left" >{{ selectedPlanData?.expiration_time }} días</p>
-                                            </div>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-2">
+                                                <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5 items-center">
+                                                    <p class="font-light text-right  ">Tiempo máximo para utilizar
+                                                        sesiones </p>
+                                                    <p class=" font-bold text-left">{{ selectedPlanData?.expiration_time
+                                                        }} días</p>
+                                                </div>
                                             </td>
-                                    </tr>
+                                        </tr>
                                     </tbody>
 
-                        </table>
+                                </table>
                             </div>
                         </div>
                     </div>
                     <div class="flex justify-between">
-                            <CommonButton bg-color="tertiary" class="px-4 py-2" @click="closeModal()">
-                                Cancelar
-                            </CommonButton>
-                            <CommonButton class="px-4 py-2" @click="addPlan">
-                                Confirmar
-                            </CommonButton>
+                        <CommonButton bg-color="tertiary" class="px-4 py-2" @click="closeModal()">
+                            Cancelar
+                        </CommonButton>
+                        <CommonButton class="px-4 py-2" @click="addPlan">
+                            Confirmar
+                        </CommonButton>
                     </div>
                 </div>
-                    </CommonModal>
-                    </Teleport>
-                    </div>
+            </CommonModal>
+        </Teleport>
+    </div>
 </template>
 <script setup lang="ts">
-const modal = ref<Modal | null>(null); 
-interface AddPlanResponse extends APIResponse {}
+const modal = ref<Modal | null>(null);
+interface AddPlanResponse extends APIResponse { }
 interface PlansResponse extends APIResponse {
     plans: Plan[];
 }
@@ -130,7 +139,7 @@ interface Student {
 
 const Plans = ref([] as Plan[]);
 
-interface Plan{
+interface Plan {
     plan_id: number;
     region: string;
     credit_type: string;
@@ -149,6 +158,7 @@ const selectedPlanData = ref<Plan | null>()
 watch(selectedPlan, (newSelectedPlan) => {
     selectedPlanData.value = Plans.value.find(plan => plan.plan_id === newSelectedPlan);
 }, { immediate: true });
+
 const props = defineProps<{
     student: Student | null;
 }>();
@@ -166,14 +176,14 @@ defineExpose({
     openModal
 })
 
-const {data, pending: plansLoading, error, refresh: getPlans} = await useFetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${props.student?.user_id}`, {
-        method: 'GET',
-        credentials: 'include',
-    });
-    Plans.value = data.value?.plans || [];
+const { data, pending: plansLoading, error, refresh: getPlans } = await useFetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${props.student?.user_id}`, {
+    method: 'GET',
+    credentials: 'include',
+});
+Plans.value = data.value?.plans || [];
 
-const addPlan = async ( ) => {
-    
+const addPlan = async () => {
+
     addPlanLoading.value = true;
 
     try {
@@ -184,15 +194,15 @@ const addPlan = async ( ) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                user_id : [props.student?.user_id],
+                user_id: [props.student?.user_id],
                 plan_id: selectedPlan.value
             })
         });
 
-        if(!response.success){
+        if (!response.success) {
             console.error(response.message);
         }
-        else{
+        else {
             console.log('Plan añadido');
         }
 
@@ -202,7 +212,7 @@ const addPlan = async ( ) => {
     }
     finally {
         addPlanLoading.value = false;
-       closeModal();
+        closeModal();
     }
 
 };
