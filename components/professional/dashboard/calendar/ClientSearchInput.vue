@@ -61,6 +61,10 @@ const props = defineProps({
         type: String,
         default: ''
     },
+    clients: {
+        type: Array,
+        default: () => []
+    }
 });
 
 const chips = defineModel('clients', {
@@ -79,7 +83,8 @@ const selectedResultIndex = ref(-1);
 let timeoutId = null;
 
 const maxChips = computed(() => {
-    return props.selectedFormat === 'Individual' ? 1 : Infinity;
+
+    return props.selectedFormat === 'Personalizado' ? 2 : Infinity;
 });
 
 const fetchResults = async () => {
@@ -163,7 +168,7 @@ const handleKeydown = (event) => {
 
 const addChip = (student) => {
     if (chips.value.length >= maxChips.value) {
-        alert("Las sesiones individuales solo admiten 1 estudiante");
+        alert("Las sesiones personalizadas solo admiten máximo 2 estudiantes");
         searchTerm.value = '';
         results.value = [];
         return;
@@ -182,10 +187,14 @@ watch([searchTerm, filteredResults], () => {
 });
 
 watch(() => props.selectedFormat, (newFormat) => {
-    if (newFormat === 'Individual' && chips.value.length > 1) {
+    if (newFormat === 'Personalizado' && chips.value.length > 2) {
         alert("Algunos de los estudiantes añadidos serán eliminados");
         chips.value = chips.value.slice(0, 1);
     }
+});
+
+onMounted(() => {
+    console.log(props.selectedFormat);
 });
 
 </script>
