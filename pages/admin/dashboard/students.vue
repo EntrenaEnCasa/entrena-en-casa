@@ -75,12 +75,13 @@
                 </div>
             </div>
         </div>
-        <AdminDashboardStudentInfoModal :student="currentStudent" :pastSessions="pastSessions" :futureSessions="futureSessions" :futureSessionsLoading="futureSessionsLoading" :pastSessionsLoading="pastSessionsLoading" ref="studentModal" />
+        <AdminDashboardStudentsStudentInfoModal :student="currentStudent" :pastSessions="pastSessions"
+            :futureSessions="futureSessions" :futureSessionsLoading="futureSessionsLoading"
+            :pastSessionsLoading="pastSessionsLoading" ref="studentModal" />
     </div>
 </template>
 
 <script setup lang="ts">
-
 
 interface StudentResponse extends APIResponse {
     students: Student[];
@@ -122,7 +123,7 @@ interface Session {
     coordinates: string | null;
     professional: Professional;
 }
-interface Professional{
+interface Professional {
     user_id: number;
     first_name: string;
     last_name: string;
@@ -130,10 +131,10 @@ interface Professional{
     phone: string | null;
 }
 
-const {data, pending: studentsLoading, error, refresh: getStudents} = await useFetch<StudentResponse>(`${runtimeConfig.public.apiBase}/admin/students`, {
-        method: 'GET',
-        credentials: 'include',
-    });
+const { data, pending: studentsLoading, error, refresh: getStudents } = await useFetch<StudentResponse>(`${runtimeConfig.public.apiBase}/admin/students`, {
+    method: 'GET',
+    credentials: 'include',
+});
 
 
 const getPastSessions = async (student: Student) => {
@@ -146,10 +147,15 @@ const getPastSessions = async (student: Student) => {
             credentials: 'include',
         });
 
-        if(response.success){
-            pastSessions.value = response.sessions;
+        if (response.success) {
+            if (response.sessions) {
+                pastSessions.value = response.sessions;
+            }
+            else {
+                pastSessions.value = [];
+            }
         }
-        else{
+        else {
             console.error(response.message);
         }
 
@@ -173,11 +179,15 @@ const getFutureSessions = async (student: Student) => {
             credentials: 'include',
         });
 
-        if(response.success){
-            futureSessions.value = response.sessions;
-
+        if (response.success) {
+            if (response.sessions) {
+                futureSessions.value = response.sessions;
+            }
+            else {
+                futureSessions.value = [];
+            }
         }
-        else{
+        else {
             console.error(response.message);
         }
 
