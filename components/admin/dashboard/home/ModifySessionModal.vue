@@ -94,8 +94,8 @@ type: Object,
                     </form>
                     <div class="flex justify-between gap-4 mt-5">
                         <CommonButton @click="closeModal" bg-color="tertiary"
-                            class="px-4 py-2 rounded-lg text-white font-medium outline">Cancelar</CommonButton>
-                        <CommonButton @click="updateSession" bg-color="primary"
+                            class="px-4 py-2 rounded-lg text-white font-medium outline">Volver</CommonButton>
+                        <CommonButton @click="updateSession" bg-color="secondary"
                             class="px-4 py-2 rounded-lg text-white font-medium outline">Modificar sesión
                         </CommonButton>
                     </div>
