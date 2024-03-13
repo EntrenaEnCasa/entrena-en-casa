@@ -1,81 +1,12 @@
 <template>
-    <div class="p-6 sm:p-8 space-y-4">
-        <!-- <div class="relative">
-            <div name="content">
-                <div class="mb-4">
-                    <h3 class="text-xl font-medium ">Sesiones en curso</h3>
-                </div>
-                <div class="overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
-                            <tr>
-                                <th scope="col" class="p-6">
-                                    Fecha
-                                </th>
-                                <th scope="col" class="p-6">
-                                    Hora
-                                </th>
-                                <th scope="col" class="p-6">
-                                    Modalidad
-                                </th>
-                                <th scope="col" class="p-6">
-                                    Formato
-                                </th>
-                                <th scope="col" class="p-6">
-                                    Profesional
-                                </th>
-                                <th scope="col" class="p-6">
-                                    Alumnos
-                                </th>
-                                <th scope="col" class="p-6">
-                                    Acción
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="session in sessions" class="border-b" :key="session.id">
-                                <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.date }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.time }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.modality }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ session.format }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ session.professional.name }}
-                                    <br>
-                                    {{ session.professional.profession }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
-                                    <div class="flex items-center gap-x-1">
-                                        {{ session.alumnos.taken }}/{{ session.alumnos.max }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <button class="px-4 py-2 bg-primary text-white rounded-md font-medium ">
-                                        Ver Detalles
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div> -->
-
-
+    <div class="h-full">
         <div class="relative">
             <div name="content">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-xl font-medium ">Sesiones futuras</h3>
-
                 </div>
-                <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                <CommonLoading v-if="futureSessionsLoading" />
+                <div v-else class="overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                             <tr>
@@ -103,7 +34,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="session in futureSessions" class="border-b" :key="session.session_id">
+                            <tr v-for="session in futureSessionsData?.sessions" class="border-b"
+                                :key="session.session_id">
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     {{ session.date }}
                                 </td>
@@ -140,28 +72,23 @@
 
         </div>
 
-        <AdminDashboardHomeModifySessionModal :loading="sessionInfoLoading" :sessionInfo="sessionInfo"
-            ref="modifySessionModal" />
+        <AdminDashboardHomeModifySessionModal @refresh-data="test" :loading="sessionInfoLoading"
+            :sessionInfo="sessionInfo" ref="modifySessionModal" />
     </div>
 </template>
 
 
 <script lang="ts" setup>
 
-const filterSidebarOpen = ref(false);
-const toggleFilterSidebar = () => filterSidebarOpen.value = !filterSidebarOpen.value;
-
-
 const runtimeConfig = useRuntimeConfig();
 const sessionInfo = ref<SessionInfo | null>(null);
 const modifySessionModal = ref<Modal | null>(null);
 const sessionInfoLoading = ref<boolean>(false);
 
-
-const futureSessions = ref<Session[]>([]);
 interface SessionInfoResponse extends APIResponse {
     session: SessionInfo;
 }
+
 interface SessionsResponse extends APIResponse {
     sessions: Session[];
 }
@@ -204,13 +131,16 @@ interface Session {
     actual_assistant: number;
 }
 
-
-
-const { data, pending: futureSessionsLoading, error, refresh: getFutureSessions } = await useFetch<SessionsResponse>(`${runtimeConfig.public.apiBase}/admin/sessions/future`, {
+const { data: futureSessionsData, pending: futureSessionsLoading, error, refresh: getFutureSessions } = await useFetch<SessionsResponse>(`${runtimeConfig.public.apiBase}/admin/sessions/future`, {
     method: 'GET',
     credentials: 'include',
 });
-futureSessions.value = data.value?.sessions || [];
+
+const test = () => {
+    console.log("test");
+    getFutureSessions();
+    console.log("test");
+}
 
 
 const filter = () => {
