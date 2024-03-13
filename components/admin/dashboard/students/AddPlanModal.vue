@@ -124,7 +124,9 @@
 </template>
 <script setup lang="ts">
 const modal = ref<Modal | null>(null);
-interface AddPlanResponse extends APIResponse { }
+import { useToast } from 'vue-toastification';
+const toast = useToast();
+
 interface PlansResponse extends APIResponse {
     plans: Plan[];
 }
@@ -187,7 +189,7 @@ const addPlan = async () => {
     addPlanLoading.value = true;
 
     try {
-        const response = await $fetch<AddPlanResponse>(`${runtimeConfig.public.apiBase}/admin/students/credits`, {
+        const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/students/credits`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -200,10 +202,10 @@ const addPlan = async () => {
         });
 
         if (!response.success) {
-            console.error(response.message);
+            toast.error(response.message);
         }
         else {
-            console.log('Plan añadido');
+            toast.success('Plan añadido exitosamente');
         }
 
     }

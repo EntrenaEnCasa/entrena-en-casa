@@ -109,6 +109,8 @@ type: Object,
 import { useGeocoding } from '~/composables/maps/useGeocoding';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
 
 interface CustomGeocoder {
@@ -254,7 +256,6 @@ const updateSession = async () => {
         coordinates: '[' + markerCoordinates.value[0] + ',' + markerCoordinates.value[1] + ']',
         type: "session"
     }
-    console.log(dataSession)
     try {
         const response = await $fetch<sessionUpdateResponse>(`${runtimeConfig.public.apiBase}/admin/session/`, {
             method: 'PUT',
@@ -266,11 +267,11 @@ const updateSession = async () => {
         });
 
         if (response.success) {
-            console.log(response.message);
+            toast.success(response.message);
             closeModal();
         }
         else {
-            console.error(response.message);
+            toast.error(response.message);
         }
 
     }

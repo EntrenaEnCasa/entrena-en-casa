@@ -102,15 +102,13 @@
 <script setup lang="ts">
 
 import { useTimeRangeStore } from '~/stores/professional/dashboard/calendar/TimeRangeStore';
-
 const { selectedStartTime } = storeToRefs(useTimeRangeStore());
 
-
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
 import { useGeocoding } from '~/composables/maps/useGeocoding';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
-
-
 
 interface CustomGeocoder {
     updateSearchTerm: (term: string) => void;
@@ -261,7 +259,7 @@ const validateForm = () => {
 const createSession = async () => {
     if (!sessionInfo || !sessionInfo.value) return;
     if (!validateForm()) {
-        alert('Formulario incompleto');
+        toast.error('Formulario incompleto');
         return;
     }
     setLinkCoordinates();
@@ -288,12 +286,11 @@ const createSession = async () => {
         });
 
         if (response.success) {
-            alert(response.message);
-
+            toast.success(response.message);
             resetForm();
         }
         else {
-            console.error(response.message);
+            toast.error(response.message);
         }
 
     }
