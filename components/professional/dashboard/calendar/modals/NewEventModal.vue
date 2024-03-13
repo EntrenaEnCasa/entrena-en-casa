@@ -55,7 +55,7 @@
                                     <span class="font-medium text-sm mb-2">Formato</span>
                                     <select v-model="modal.data.manualSession.selectedFormat"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                        <option value="Individual">Individual</option>
+                                        <option value="Personalizado">Personalizado</option>
                                         <option value="Grupal">Grupal</option>
                                     </select>
                                 </label>
@@ -78,12 +78,13 @@
                                 class="flex flex-col col-span-full">
                                 <span class="font-medium text-sm mb-2">Ubicación</span>
                                 <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
-                                <div class="relative flex justify-center w-full h-full min-h-[250px] lg:min-w-[400px] mt-5">
+                                <div
+                                    class="relative flex justify-center w-full h-full min-h-[250px] lg:min-w-[400px] mt-5">
                                     <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
-                                        style: 'mapbox://styles/mapbox/streets-v12',
-                                        center: DEFAULT_COORDINATES,
-                                        zoom: DEFAULT_ZOOM,
-                                    }">
+                                    style: 'mapbox://styles/mapbox/streets-v12',
+                                    center: DEFAULT_COORDINATES,
+                                    zoom: DEFAULT_ZOOM,
+                                }">
                                         <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
                                             :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
                                         </MapboxDefaultMarker>
@@ -136,14 +137,14 @@ interface ModalData {
         loading: boolean;
         manualSession: {
             clients: any[];
-            selectedFormat: 'Individual' | 'Grupal';
+            selectedFormat: 'Personalizado' | 'Grupal';
             selectedModality: 'Online' | 'Presencial';
             link: string;
             locationCoordinates: number[];
         },
         personalEvent: {
             clients: any[];
-            selectedFormat: 'Individual' | 'Grupal';
+            selectedFormat: 'Personalizado' | 'Grupal';
             additionalInfo: string;
         },
     }

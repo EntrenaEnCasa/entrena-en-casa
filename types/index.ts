@@ -20,10 +20,9 @@ declare global {
     time: string;
     available: boolean;
     confirmed: boolean;
-    format: "Individual" | "Grupal";
+    format: "Personalizado" | "Grupal";
     modality: "Online" | "Presencial";
     link: string | null;
-    credit_type: "bronze" | "silver" | "gold";
     actual_assistant: number;
     professional: Professional;
   }

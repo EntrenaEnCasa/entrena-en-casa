@@ -25,7 +25,8 @@
                     id="height" placeholder="Ingresa tu estatura actual" :rules="validateHeight" right-text="CM"
                     class="w-full" />
                 <CommonInput label="¿Cual es tu número de teléfono?" v-model="formData.phoneNumber" name="phoneNumber"
-                    type="number" id="phoneNumber" placeholder="9 XXXX XXXX" :rules="validatePhoneNumber" class="w-full" />
+                    type="number" id="phoneNumber" placeholder="9 XXXX XXXX" :rules="validatePhoneNumber"
+                    class="w-full" />
             </div>
 
             <div class="mt-10">
@@ -38,7 +39,8 @@
                     <CommonButton type="button" class="px-4 py-2" bg-color="secondary" @click="openModal()">
                         Recordarmelo más tarde
                     </CommonButton>
-                    <CommonButton type="submit" :loading="saveUserDataLoading" :disabled="!meta.valid" class="px-4 py-2">
+                    <CommonButton type="submit" :loading="saveUserDataLoading" :disabled="!meta.valid"
+                        class="px-4 py-2">
                         Confirmar
                     </CommonButton>
                 </div>
@@ -90,9 +92,9 @@ const formData = reactive({
 const saveUserDataLoading = ref(false);
 
 const genderOptions = [
-    { value: 'Masculino', text: 'Masculino' },
-    { value: 'Femenino', text: 'Femenino' },
-    { value: 'Otro', text: 'Otro' }
+    { value: 'Masculino', label: 'Masculino' },
+    { value: 'Femenino', label: 'Femenino' },
+    { value: 'Otro', label: 'Otro' }
 ];
 
 const validateFirstName = () => {
@@ -220,6 +222,3 @@ definePageMeta({
     layout: "auth",
 });
 </script>
-    
-
-
