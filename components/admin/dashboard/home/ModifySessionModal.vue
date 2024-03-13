@@ -243,7 +243,7 @@ const updateSession = async () => {
     if (!props.sessionInfo) return;
 
     const dataSession = {
-        user_id: props.sessionInfo.professional.user_id,
+        user_id: professionals.value[0]?.user_id,
         session_id: props.sessionInfo.session_id,
         date: props.sessionInfo.date,
         time: props.sessionInfo.time,
