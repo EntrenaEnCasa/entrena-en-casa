@@ -93,21 +93,23 @@ type: Object,
                         </div>
                     </form>
                     <div class="flex justify-between gap-4 mt-5">
-                        <CommonButton @click="closeModal" bg-color="tertiary"
-                            class="px-4 py-2 rounded-lg text-white font-medium outline">Volver</CommonButton>
-                        <CommonButton @click="updateSession" bg-color="secondary"
+                        <CommonButton @click="openModalDeleteSession" bg-color="tertiary"
+                            class="px-4 py-2 rounded-lg text-white font-medium outline">Borrar sesión</CommonButton>
+                        <CommonButton @click="updateSession" bg-color="primary"
                             class="px-4 py-2 rounded-lg text-white font-medium outline">Modificar sesión
                         </CommonButton>
                     </div>
                 </div>
             </CommonModal>
         </Teleport>
+        <AdminDashboardHomeDeleteSessionModal ref="modalDeleteSession" :sessionInfo="sessionInfo" />
     </div>
 </template>
 <script lang="ts" setup>
 
 import { useGeocoding } from '~/composables/maps/useGeocoding';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
+
 
 import { useToast } from 'vue-toastification';
 const toast = useToast();
@@ -117,10 +119,11 @@ interface CustomGeocoder {
     updateSearchTerm: (term: string) => void;
 }
 
+
 const DEFAULT_COORDINATES = [-70.6506, -33.4372];
 const DEFAULT_ZOOM = 13;
 
-const markerCoordinates = ref(DEFAULT_COORDINATES);
+const markerCoordinates = ref(DEFAULT_COORDINATES) ?? null;
 const isDraggable = ref(false);
 
 const mapID = "editEmptySessionMap";
@@ -181,12 +184,13 @@ const flyToLocation = (location: any) => {
 
 
 const modal = ref<Modal | null>(null);
+const modalDeleteSession = ref<Modal | null>(null);
 const runtimeConfig = useRuntimeConfig();
 interface sessionUpdateResponse extends APIResponse { }
 
 
 interface SessionInfo {
-    session_id: number;
+    session_id: number | null;
     date: string;
     time: string;
     available: number;
@@ -229,6 +233,7 @@ onMounted(() => {
 
 const resetModal = () => {
     if (props.sessionInfo) {
+        props.sessionInfo.session_id = null;
         props.sessionInfo.format = '';
         props.sessionInfo.modality = '';
         props.sessionInfo.link = '';
@@ -239,6 +244,11 @@ const resetModal = () => {
 const openModal = () => {
     modal.value?.openModal();
     resetModal();
+}
+
+const openModalDeleteSession = () => {
+    modal.value?.closeModal();
+    modalDeleteSession.value?.openModal();
 }
 
 const updateSession = async () => {
@@ -292,5 +302,7 @@ defineExpose({
     openModal,
     closeModal
 })
+
+
 
 </script>
