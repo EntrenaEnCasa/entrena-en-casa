@@ -3,7 +3,7 @@
         <div name="content ">
             <div class="flex items-center justify-start gap-5 mb-4">
                 <h3 class="text-xl font-medium ">Nueva sesión</h3>
-                <button class="flex items-center gap-2 text-secondary font-medium" @click="resetForm"></button>
+
 
             </div>
             <form v-if="sessionInfo" class="px-5 mx-auto">
@@ -62,10 +62,10 @@
                             <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
                             <div class="relative flex justify-center w-full h-full min-h-[250px] lg:min-w-100 mt-5">
                                 <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
-                    style: 'mapbox://styles/mapbox/streets-v12',
-                    center: DEFAULT_COORDINATES,
-                    zoom: DEFAULT_ZOOM,
-                }">
+                style: 'mapbox://styles/mapbox/streets-v12',
+                center: DEFAULT_COORDINATES,
+                zoom: DEFAULT_ZOOM,
+            }">
                                     <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
                                         :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
                                     </MapboxDefaultMarker>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="flex justify-between my-8">
-                    <CommonButton @click="resetForm" class="px-4 py-2 bg-tertiary"> Reiniciar
+                    <CommonButton @click="resetForm" bg-color="secondary" class="px-4 py-2"> Reiniciar
                     </CommonButton>
 
                     <CommonButton @click="createSession" :loading="loadingResponse" class="px-4 py-2">
@@ -223,7 +223,6 @@ const sessionInfo = ref<SessionInfo>(
 );
 
 onMounted(() => {
-
     setMarkerCoordinates(defaultCoordinates);
     updateInputValue();
     flyToCenter();
@@ -240,6 +239,7 @@ const resetForm = () => {
         sessionInfo.value.professional = {} as Professional;
     }
     professionals.value = [];
+    reloadNuxtApp();
 }
 
 const validateForm = () => {
@@ -287,7 +287,7 @@ const createSession = async () => {
 
         if (response.success) {
             toast.success(response.message);
-            resetForm();
+            reloadNuxtApp();
         }
         else {
             toast.error(response.message);
