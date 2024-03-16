@@ -1,5 +1,5 @@
 // server/api/auth/logout.post.ts
-import { defineEventHandler, setCookie } from 'h3'
+import { defineEventHandler } from 'h3'
 
 export default defineEventHandler((event) => {
     // Clear the HttpOnly cookie by setting its expiration date in the past or setting its value to empty
