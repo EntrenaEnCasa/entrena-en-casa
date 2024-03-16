@@ -12,12 +12,13 @@
     "@nuxt/devtools": "^1.0.8",
     "@nuxt/image": "^1.4.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
-    "@types/node": "^20.11.25",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
+    "@types/node": "^20.11.27",
     "mapbox-gl": "^3.2.0",
     "nuxt": "^3.10.3",
     "nuxt-icon": "^0.6.9",
     "nuxt-mapbox": "^1.5.9",
-    "sass": "^1.71.1",
+    "sass": "^1.72.0",
     "sass-loader": "^13.3.3",
     "typescript": "^5.4.2",
     "vue-tsc": "^1.8.27"
@@ -25,7 +26,7 @@
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
     "@turf/turf": "^6.5.0",
-    "@vee-validate/nuxt": "^4.12.5",
+    "@vee-validate/nuxt": "^4.12.6",
     "pinia": "^2.1.7",
     "vue-toastification": "2.0.0-rc.5"
   }
