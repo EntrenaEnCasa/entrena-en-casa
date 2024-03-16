@@ -179,7 +179,7 @@
                         {{ plan.credit_quantity }}
                     </div>
                     <div class="text-lg font-medium text-secondary">
-                        {{ plan.price }}
+                        {{ plan.formattedPrice }}
                     </div>
                     <div>
                         <button @click="handleOpenConfirmationModal(plan.plan_id)"
@@ -215,7 +215,7 @@
                                 <StudentDashboardCreditsStudentSearch v-model:clients="dupla" />
                             </template>
                             <p class="text-xl font-semibold mt-3">Valor a pagar</p>
-                            <h4 class="text-secondary font-bold text-2xl mt-3">{{ selectedPlan.price }}</h4>
+                            <h4 class="text-secondary font-bold text-2xl mt-3">{{ selectedPlan.formattedPrice }}</h4>
                         </div>
                         <div class="flex justify-between mt-6">
                             <CommonButton class="px-4 py-2" bg-color="tertiary" @click="handleCloseConfirmationModal">
@@ -278,9 +278,13 @@
 
 <script setup lang="ts">
 
+import { usePaymentStore } from '~/stores/PaymentStore';
 import { useUserStore } from '~/stores/UserStore';
+
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
+const paymentStore = usePaymentStore();
+
 const user = userStore.user as Student;
 
 const selectedPlan = ref<Plan | null>(null); // This is the plan that the user selected to buy
@@ -315,7 +319,8 @@ interface Plan {
     expiration_time: string;
     credit_quantity: number;
     format_credit: 'Personalizado' | 'Grupal' | 'Dupla';
-    price: string;
+    price: number;
+    formattedPrice: string;
 }
 
 interface Credit {
@@ -328,6 +333,11 @@ interface Credit {
 
 interface APICreditsResponse extends APIResponse {
     credits: Credit[];
+}
+
+interface APIPaymentCreateResponse extends APIResponse {
+    url: string;
+    flowOrder: number;
 }
 
 const { data: creditsData, error: getCreditsError, pending: getCreditsLoading, refresh: getCredits } = useFetch<APICreditsResponse>(`${runtimeConfig.public.apiBase}/student/credits/${user.user_id}`, {
@@ -419,30 +429,43 @@ const buyPlan = async () => {
         return;
     }
 
-    let user_id = [];
+    let user_ids = [];
     const plan_id = selectedPlan.value.plan_id;
-    user_id.push(user.user_id);
+    user_ids.push(user.user_id);
 
     if (selectedPlan.value.format_credit === 'Dupla') {
-        user_id.push(dupla.value[0].user_id);
-    }
-
-    const body = {
-        user_id: user_id,
-        plan_id: plan_id
+        user_ids.push(dupla.value[0].user_id);
     }
 
     try {
-        const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/credits`, {
+
+        const body = {
+            email: user.email,
+            user_ids: user_ids,
+            plan_id: plan_id,
+        }
+
+        const response = await $fetch<APIPaymentCreateResponse>(`/api/payment/createPayment`, {
             method: 'POST',
-            credentials: 'include',
             body: body
         });
 
         if (response.success) {
-            alert("Compra realizada con éxito");
-            getCredits();
-        } else {
+
+            const flowTransaction = {
+                user_id: userStore.user ? userStore.user.user_id : 0,
+                plan_id: plan_id,
+                flowOrder: response.flowOrder,
+            }
+
+            paymentStore.setFlowTransaction(flowTransaction);
+
+            await navigateTo(response.url, {
+                external: true
+            });
+
+        }
+        else {
             alert(response.message);
         }
     }
