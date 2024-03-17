@@ -496,27 +496,30 @@ const newEventModal = reactive({
                 "coordinates": coordinates,
             };
 
-            const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
-                method: 'POST',
-                credentials: 'include',
-                body: body
-            });
+            try {
 
-            if (error.value) {
-                console.log("Fetch error:", error.value);
+                const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: body
+                });
+
+                if (response.success) {
+                    getEvents();
+                    toast.success(response.message);
+                }
+                else {
+                    toast.error(response.message);
+                }
+            }
+            catch (error) {
+                console.log("Fetch error:", error);
+                toast.error("Error al crear la sesión");
+
+            }
+            finally {
                 newEventModal.data.loading = false;
-                return;
-            }
-
-            newEventModal.data.loading = false;
-            newEventModal.closeModal();
-
-            if (data.value.success) {
-                getEvents();
-                console.log(data.value.message);
-            }
-            else {
-                console.log(data.value.message);
+                newEventModal.closeModal();
             }
 
         }
@@ -534,28 +537,30 @@ const newEventModal = reactive({
                 "type": "personal", // "Nuevo entrenamiento" o "Evento personal"
             };
 
-            const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
-                method: 'POST',
-                credentials: 'include',
-                body: body
-            });
+            try {
+                const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: body
+                });
 
-            if (error.value) {
-                console.log("Fetch error:", error.value);
+                if (response.success) {
+                    getEvents();
+                    toast.success(response.message);
+                }
+                else {
+                    toast.error(response.message);
+                }
+            }
+            catch (error) {
+                console.log("Fetch error:", error);
+                toast.error("Error al crear el evento personal");
+            }
+            finally {
                 newEventModal.data.loading = false;
-                return;
+                newEventModal.closeModal();
             }
 
-            newEventModal.data.loading = false;
-            newEventModal.closeModal();
-
-            if (data.value.success) {
-                console.log(data.value.message);
-                getEvents();
-            }
-            else {
-                console.log(data.value.message);
-            }
         }
     },
 });
