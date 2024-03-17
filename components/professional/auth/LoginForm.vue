@@ -21,14 +21,18 @@
 <script setup>
 
 import { useAuthStore } from '~/stores/AuthStore'
+import { useToast } from 'vue-toastification'
 
 const router = useRouter();
 const runtimeConfig = useRuntimeConfig();
 const authStore = useAuthStore();
+const toast = useToast();
+
 const formData = reactive({
     email: "",
     password: ""
 });
+
 const loading = ref(false);
 
 const validateEmail = (value) => {
@@ -73,13 +77,15 @@ const login = async () => {
         if (response.success) {
             authStore.logIn(response.user);
             router.push('/professional/dashboard/home');
+            toast.success('Inicio de sesión exitoso');
         }
         else {
-            alert(response.message);
+            toast.error(response.message);
         }
     }
     catch (error) {
         console.error(error);
+        toast.error('Ocurrió un error al iniciar sesión');
     }
     finally {
         loading.value = false;
