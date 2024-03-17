@@ -111,9 +111,11 @@ import { useTimeRangeStore } from '~/stores/professional/dashboard/calendar/Time
 import { useFormatter } from '~/composables/time/useFormatter';
 import { useWeekNavigation } from '~/composables/time/useWeekNavigation';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
+import { useToast } from 'vue-toastification';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
+const toast = useToast();
 const { formatDateToWeekdayAndDay, formatHourToTimeString } = useFormatter();
 const { isStartWeek, goToPreviousWeek, goToNextWeek, currentYear, currentMonth, currentDate } = useWeekNavigation();
 const { getReverseGeocodingData } = useGeocoding();
@@ -209,30 +211,34 @@ const getEvents = async () => {
         start_date: localDateString, // fecha en formato YYYY-MM-DD
     }
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
-        method: 'POST',
-        credentials: 'include',
-        body: body
-    });
+    try {
 
-    if (error.value) {
-        console.log("Fetch error:", error.value);
-        fetchingEvents.value = false;
-        return;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
+            method: 'POST',
+            credentials: 'include',
+            body: body
+        });
+
+        initializeEventMatrix(); // Reset the matrix before populating
+
+        if (response.success) {
+            populateEventMatrix(response.events); // Fill the matrix with the fetched events
+            events.value = response.events;
+        }
+        else {
+            events.value = [];
+            toast.error(response.message);
+        }
     }
-
-    fetchingEvents.value = false;
-    initializeEventMatrix(); // Reset the matrix before populating
-
-    if (data.value.success) {
-        populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
-        events.value = data.value.events;
-    }
-    else {
-        fetchingEvents.value = false;
+    catch (error) {
+        console.log("Fetch error:", error);
         events.value = [];
-        console.log(data.value.message);
+        toast.error("Error al obtener los eventos");
     }
+    finally {
+        fetchingEvents.value = false;
+    }
+
 };
 
 const populateEventMatrix = (events) => {
@@ -368,26 +374,30 @@ const newEmptySessionModal = reactive({
             "coordinates": coordinates,
         }
 
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
-            method: 'POST',
-            credentials: 'include',
-            body: body
-        });
+        try {
 
-        newEmptySessionModal.loading = false;
-        newEmptySessionModal.closeModal();
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session`, {
+                method: 'POST',
+                credentials: 'include',
+                body: body
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                getEvents();
+                toast.success(response.message);
+            }
+            else {
+                toast.error(response.message);
+            }
+
         }
-
-        if (data.value.success) {
-            console.log(data.value.message);
-            getEvents();
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al crear la sesión");
         }
-        else {
-            console.log(data.value.message);
+        finally {
+            newEmptySessionModal.loading = false;
+            newEmptySessionModal.closeModal();
         }
 
     }
