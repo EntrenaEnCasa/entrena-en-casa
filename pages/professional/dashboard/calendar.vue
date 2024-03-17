@@ -674,26 +674,30 @@ const editEmptySessionModal = reactive({
     removeSession: async () => {
 
         editEmptySessionModal.data.removeSessionLoading = true;
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
 
-        editEmptySessionModal.data.removeSessionLoading = false;
+        try {
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
-            console.log(data.value.message);
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al eliminar la sesión");
+        }
+        finally {
+            editEmptySessionModal.data.removeSessionLoading = false;
             editEmptySessionModal.closeModal();
-            getEvents();
         }
-        else {
-            console.log(data.value.message);
-        }
+
     },
 });
 
