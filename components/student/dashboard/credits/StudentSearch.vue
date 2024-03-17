@@ -52,9 +52,11 @@
 <script setup>
 
 import { useUserStore } from '~/stores/UserStore';
+import { useToast } from 'vue-toastification';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
+const toast = useToast();
 
 const chips = defineModel('clients', {
     type: Array,
@@ -79,25 +81,30 @@ const fetchResults = async () => {
         isLoading.value = true;
         hasFetched.value = false;
         results.value = [];
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/student/search`, {
-            method: 'POST',
-            credentials: 'include',
-            body: {
-                searchTerm: searchTerm.value
+
+        try {
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/student/search`, {
+                method: 'POST',
+                credentials: 'include',
+                body: {
+                    searchTerm: searchTerm.value
+                }
+            });
+
+            if (response.success) {
+                results.value = response.students;
             }
-        });
-
-        isLoading.value = false;
-        hasFetched.value = true;
-
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            else {
+                toast.error(response.message || 'Ocurrió un error al buscar estudiantes');
+            }
         }
-
-        if (data.value.success) {
-            console.log(data.value);
-            results.value = data.value.students;
+        catch (error) {
+            console.log(error);
+            toast.error('Ocurrió un error al buscar estudiantes');
+        }
+        finally {
+            isLoading.value = false;
+            hasFetched.value = true;
         }
     }
 };
