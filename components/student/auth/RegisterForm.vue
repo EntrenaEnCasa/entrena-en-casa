@@ -10,7 +10,8 @@
                 type="password" id="password-repeat" icon="fa6-solid:lock" placeholder="* * * * * * * *"
                 :rules="validatePasswordRepeat" />
             <CommonSelect label="¿En qué región te encuentras?" v-model="formData.region" name="region" id="region"
-                placeholder="Ingresa tu región" :rules="validateRegion" :options="regionOptions" />
+                placeholder="Ingresa tu región" :rules="validateRegion" :options="regionOptions"
+                class="md:col-span-2" />
         </div>
         <!-- <div class="flex items-center space-x-1">
             <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
