@@ -91,6 +91,7 @@
 <script setup>
 
 import { useUserStore } from '@/stores/UserStore';
+import { useToast } from 'vue-toastification';
 
 const runtimeConfig = useRuntimeConfig();
 
@@ -186,26 +187,34 @@ const validatePasswordRepeat = (passRepeat) => {
 const changePassword = async () => {
     loading.value = true;
 
-    await useFetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
-        method: 'PATCH',
-        credentials: 'include',
-        body: JSON.stringify({
-            user_id: userStore.user.user_id,
-            newPassword: password.value,
-        }),
-        onResponse({ request, response, options }) {
+    try {
 
-            loading.value = false;
-            const responseData = response._data;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
+            method: 'PATCH',
+            credentials: 'include',
+            body: {
+                user_id: userStore.user.user_id,
+                newPassword: password.value,
+            },
 
-            if (responseData.success) {
-                alert(responseData.message);
-            }
-            else {
-                alert(responseData.message);
-            }
+        });
+
+        if (response.success) {
+            toast.success(response.message);
         }
-    });
+        else {
+            toast.error(response.message);
+        }
+
+    }
+    catch (error) {
+        console.error(error);
+        toast.error('Ocurrió un error al cambiar la contraseña');
+    }
+    finally {
+        loading.value = false;
+    }
+
 };
 
 
