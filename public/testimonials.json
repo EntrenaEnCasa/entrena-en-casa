@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "María Gutierrez",
+        "profession": "Doctora",
+        "description": "Desde que inicie mi entrenamiento me siento excelente, más activa, liviana y cada día más fuerte y saludable. Además de eso mentalmente sintiéndome feliz con los resultados que he obtenido. Vamos equipo el grito de guerra de Jorge, vamos que si puedes, eso nos incentiva a ser cada vez más fuertes, rápidos. El compromiso del entrenamiento y del grupo es un 100%."
+    },
+    {
+        "id": 2,
+        "name": "Jorge Pérez",
+        "profession": "Ingeniero",
+        "description": "Siempre quise llevar una vida más activa, pero me faltaba motivación. Desde que empecé a entrenar con el equipo de entrena en casa, me siento más fuerte, más rápido y más saludable. Además, el grupo es muy motivador y el entrenador es muy profesional. ¡Gracias por ayudarme a alcanzar mis objetivos!"
+    }
+]
