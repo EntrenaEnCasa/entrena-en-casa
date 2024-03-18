@@ -82,10 +82,12 @@
 
 import { useAuthStore } from '~/stores/AuthStore';
 import { useUserStore } from '~/stores/UserStore';
+import { useToast } from 'vue-toastification';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const userStore = useUserStore();
+const toast = useToast();
 
 const toggleSidebar = () => emit('toggleSidebar');
 const userMenuOpen = ref(false);
@@ -108,11 +110,14 @@ const logout = async () => {
 
         if (response.success) {
             authStore.logOut();
-            console.log(response.message);
+        }
+        else {
+            toast.error('Error al cerrar sesión');
         }
     }
     catch (error) {
-        alert(error);
+        console.log(error);
+        toast.error('Error al cerrar sesión');
     }
 }
 

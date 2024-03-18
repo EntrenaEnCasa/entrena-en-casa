@@ -161,7 +161,7 @@ const handleKeydown = (event) => {
 
 const addChip = (student) => {
     if (chips.value.length >= maxChips) {
-        alert("Solo puedes tener 1 estudiante como dupla");
+        toast.warning('Solo puedes tener 1 estudiante como dupla');
         searchTerm.value = '';
         results.value = [];
         return;

@@ -168,7 +168,7 @@ const handleKeydown = (event) => {
 
 const addChip = (student) => {
     if (chips.value.length >= maxChips.value) {
-        alert("Las sesiones personalizadas solo admiten 1 estudiante");
+        toast.error("Las sesiones personalizadas solo pueden tener un estudiante");
         searchTerm.value = '';
         results.value = [];
         return;
