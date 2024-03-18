@@ -750,49 +750,58 @@ const editManualSessionModal = reactive({
             clients: editManualSessionModal.data.clients.map(client => client.user_id),
         }
 
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
-            method: 'PUT',
-            credentials: 'include',
-            body: body
-        });
+        try {
 
-        editManualSessionModal.data.updateSessionLoading = false;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: body
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al actualizar la sesión");
+        }
+        finally {
+            editManualSessionModal.data.updateSessionLoading = false;
             editManualSessionModal.closeModal();
-            getEvents();
         }
-        else {
-            console.log(data.value.message);
-        }
+
     },
     removeSession: async () => {
 
         editManualSessionModal.data.removeSessionLoading = true;
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editManualSessionModal.data.event.event_id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
 
-        editManualSessionModal.data.removeSessionLoading = false;
+        try {
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editManualSessionModal.data.event.event_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
-            console.log(data.value.message);
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al eliminar la sesión");
+        }
+        finally {
+            editManualSessionModal.data.removeSessionLoading = false;
             editManualSessionModal.closeModal();
-            getEvents();
-        }
-        else {
-            console.log(data.value.message);
         }
     },
 });
