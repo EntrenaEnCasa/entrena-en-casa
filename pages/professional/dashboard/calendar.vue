@@ -490,7 +490,7 @@ const newEventModal = reactive({
                 "end_time": automaticallySelectedEndTime.value, // hora en formato HH:MM
                 "format": newEventModal.data.manualSession.selectedFormat, // "Personalizado" o "Grupal"
                 "modality": newEventModal.data.manualSession.selectedModality, // "Online" o "Presencial"
-                "text": link, // link de la sesión, se pasa como text
+                "link": link, // link de la sesión, se pasa como text
                 "clients": clientsIDs, // array de ids de clientes
                 "type": "manual_session", // "manual session en caso de Nuevo entrenamiento"
                 "coordinates": coordinates,
@@ -746,7 +746,7 @@ const editManualSessionModal = reactive({
             end_time: automaticallySelectedEndTime.value,
             format: editManualSessionModal.data.selectedFormat,
             modality: editManualSessionModal.data.selectedModality,
-            text: editManualSessionModal.data.link,
+            link: editManualSessionModal.data.link,
             clients: editManualSessionModal.data.clients.map(client => client.user_id),
         }
 
@@ -827,7 +827,7 @@ const editPersonalEventModal = reactive({
     },
     handleClick: (day, time, event) => {
         editPersonalEventModal.data.clients = [...event.clients]; // Create a new array
-        editPersonalEventModal.data.additionalInfo = event.text;
+        editPersonalEventModal.data.additionalInfo = event.info;
         editPersonalEventModal.data.event = event;
         updateCurrentlySelectedDate(day, time);
         updateSelectedEndTimeFromString(event.end_time);
@@ -843,30 +843,34 @@ const editPersonalEventModal = reactive({
             date: getLocalDateString(selectedDate.value),
             start_time: selectedStartTime.value,
             end_time: selectedEndTime.value,
-            text: editPersonalEventModal.data.additionalInfo,
+            info: editPersonalEventModal.data.additionalInfo,
             clients: editPersonalEventModal.data.clients.map(client => client.user_id),
             type: "personal",
         }
 
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
-            method: 'PUT',
-            credentials: 'include',
-            body: body
-        });
+        try {
 
-        editPersonalEventModal.data.updateSessionLoading = false;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: body
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al actualizar el evento personal");
+        }
+        finally {
+            editPersonalEventModal.data.updateSessionLoading = false;
             editPersonalEventModal.closeModal();
-            getEvents();
-        }
-        else {
-            console.log(data.value.message);
         }
     },
     removeSession: async () => {
