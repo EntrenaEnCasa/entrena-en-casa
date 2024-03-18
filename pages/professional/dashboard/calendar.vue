@@ -876,25 +876,31 @@ const editPersonalEventModal = reactive({
     removeSession: async () => {
 
         editPersonalEventModal.data.removeSessionLoading = true;
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editPersonalEventModal.data.event.event_id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
 
-        editPersonalEventModal.data.removeSessionLoading = false;
+        try {
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editPersonalEventModal.data.event.event_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al eliminar el evento personal");
+        }
+        finally {
+            editPersonalEventModal.data.removeSessionLoading = false;
             editPersonalEventModal.closeModal();
-            getEvents();
         }
-        else {
-            console.log(data.value.message);
-        }
+
     },
 });
 
