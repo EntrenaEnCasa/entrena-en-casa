@@ -15,11 +15,11 @@
                 </swiper-container>
                 <div class="flex justify-center gap-6 mt-5">
                     <button @click="handleNavigationPrev"
-                        class="border border-gray-300 bg-white text-gray-700 rounded-full h-20 w-20">
+                        class="border border-gray-300 bg-white text-gray-700 rounded-full h-16 w-16">
                         <Icon name="fa6-solid:arrow-left" class="text-2xl" />
                     </button>
                     <button @click="handleNavigationNext"
-                        class="border border-gray-300 bg-white text-gray-700 rounded-full h-20 w-20">
+                        class="border border-gray-300 bg-white text-gray-700 rounded-full h-16 w-16">
                         <Icon name="fa6-solid:arrow-right" class="text-2xl" />
                     </button>
                 </div>
