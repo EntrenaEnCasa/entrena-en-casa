@@ -1,6 +1,6 @@
 <template>
     <div class="relative">
-        <div class="border text-gray-800 text-sm rounded-md px-5 py-3.5 max-w-2xl box-border"
+        <div class="border bg-white text-gray-800 text-sm rounded-md px-5 py-3.5 w-full box-border"
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
             <div class="flex items-center flex-wrap gap-y-4 gap-x-2">
                 <input type="text" v-model="searchTerm" :placeholder="placeholder" class="outline-none w-full"
@@ -19,7 +19,7 @@
                     </span>
                 </div>
             </div>
-            <div class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3"
+            <div class="border rounded-md absolute  top-[110%] left-0 right-0 bg-white shadow-lg p-3 z-40"
                 v-if="inputFocused && searchTerm">
                 <CommonLoading v-if="isLoading" text="Buscando" />
                 <ul v-else>
@@ -52,16 +52,14 @@
 <script setup>
 
 import { useUserStore } from '~/stores/UserStore';
-import { useToast } from 'vue-toastification';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
-const toast = useToast();
 
 const props = defineProps({
     selectedFormat: {
         type: String,
-        default: ''
+        required: true
     },
     clients: {
         type: Array,
@@ -74,6 +72,7 @@ const chips = defineModel('clients', {
     default: () => []
 });
 
+
 const placeholder = 'Ingresa el correo electrónico o nombre';
 const searchTerm = ref('');
 const inputFocused = ref(false);
@@ -85,7 +84,7 @@ const selectedResultIndex = ref(-1);
 let timeoutId = null;
 
 const maxChips = computed(() => {
-    return props.selectedFormat === 'Personalizado' ? 1 : Infinity;
+    return props.selectedFormat === 'Personalizado' ? 2 : Infinity;
 });
 
 const fetchResults = async () => {
@@ -94,28 +93,24 @@ const fetchResults = async () => {
         isLoading.value = true;
         hasFetched.value = false;
         results.value = [];
-
-        try {
-
-            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/student/search`, {
-                method: 'POST',
-                credentials: 'include',
-                body: {
-                    searchTerm: searchTerm.value
-                }
-            });
-
-            if (response.success) {
-                results.value = response.students;
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/admin/students/search`, {
+            method: 'POST',
+            credentials: 'include',
+            body: {
+                searchTerm: searchTerm.value
             }
+        });
+
+        isLoading.value = false;
+        hasFetched.value = true;
+
+        if (error.value) {
+            console.log("Fetch error:", error.value);
+            return;
         }
-        catch (error) {
-            console.log("Fetch error: ", error);
-            toast.error('Ocurrió un error al buscar el estudiante');
-        }
-        finally {
-            isLoading.value = false;
-            hasFetched.value = true;
+
+        if (data.value.success) {
+            results.value = data.value.students;
         }
     }
 };
@@ -172,7 +167,7 @@ const handleKeydown = (event) => {
 
 const addChip = (student) => {
     if (chips.value.length >= maxChips.value) {
-        toast.error("Las sesiones personalizadas solo pueden tener un estudiante");
+        alert("Las sesiones individuales solo admiten 2 estudiantes");
         searchTerm.value = '';
         results.value = [];
         return;
@@ -191,14 +186,12 @@ watch([searchTerm, filteredResults], () => {
 });
 
 watch(() => props.selectedFormat, (newFormat) => {
-    if (newFormat === 'Personalizado' && chips.value.length > 1) {
+    if (newFormat === 'Individual' && chips.value.length > 2) {
         alert("Algunos de los estudiantes añadidos serán eliminados");
         chips.value = chips.value.slice(0, 1);
     }
 });
 
-onMounted(() => {
-    console.log(props.selectedFormat);
-});
+
 
 </script>

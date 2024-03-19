@@ -1,23 +1,33 @@
 <template>
     <div class="relative">
-        <div class="border text-gray-800 text-sm rounded-md px-5 py-3.5 max-w-2xl box-border"
+        <div class=" flex justify-start mb-3">
+
+            <div v-for="(chip, index) in chips" :key="chip.user_id">
+                <span
+                    class="inline-flex items-left px-3 py-1.5 rounded-full text-xs font-medium bg-secondary text-white">
+                    <Icon @click="removeChip(index)" class="text-lg mr-2 my-auto " name="fa6-solid:circle-xmark" />
+                    <span v-if="chip.first_name">
+                        <span class="text-sm">
+                            {{ chip.first_name }} {{ chip.last_name }}
+                        </span>
+                        <span v-if="chip.title">
+                            <br>
+                            <span class="text-xs pr-2">{{ chip.title }}</span>
+                        </span>
+
+                    </span>
+                    <span v-else>
+                        {{ chip.email }}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="border text-gray-800 text-sm rounded-md  bg-white px-5 py-3.5 w-full box-border"
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
             <div class="flex items-center flex-wrap gap-y-4 gap-x-2">
                 <input type="text" v-model="searchTerm" :placeholder="placeholder" class="outline-none w-full"
                     @focus="inputFocused = true" @blur="inputFocused = false" @input="delayedFetchResults"
                     @keydown="handleKeydown">
-                <div v-for="(chip, index) in chips" :key="chip.user_id">
-                    <span
-                        class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium bg-secondary text-white">
-                        <Icon @click="removeChip(index)" class="text-lg mr-1" name="fa6-solid:circle-xmark" />
-                        <span v-if="chip.first_name">
-                            {{ chip.first_name }} {{ chip.last_name }}
-                        </span>
-                        <span v-else>
-                            {{ chip.email }}
-                        </span>
-                    </span>
-                </div>
             </div>
             <div class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3"
                 v-if="inputFocused && searchTerm">
@@ -51,28 +61,20 @@
 
 <script setup>
 
-import { useUserStore } from '~/stores/UserStore';
-import { useToast } from 'vue-toastification';
-
-const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
-const toast = useToast();
 
 const props = defineProps({
-    selectedFormat: {
-        type: String,
-        default: ''
-    },
-    clients: {
+    professionals: {
         type: Array,
         default: () => []
     }
 });
 
-const chips = defineModel('clients', {
+const chips = defineModel('professionals', {
     type: Array,
     default: () => []
 });
+
 
 const placeholder = 'Ingresa el correo electrónico o nombre';
 const searchTerm = ref('');
@@ -84,9 +86,7 @@ const isSearchPending = ref(false);
 const selectedResultIndex = ref(-1);
 let timeoutId = null;
 
-const maxChips = computed(() => {
-    return props.selectedFormat === 'Personalizado' ? 1 : Infinity;
-});
+const maxChips = 1;
 
 const fetchResults = async () => {
     if (searchTerm.value) {
@@ -94,28 +94,24 @@ const fetchResults = async () => {
         isLoading.value = true;
         hasFetched.value = false;
         results.value = [];
-
-        try {
-
-            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/student/search`, {
-                method: 'POST',
-                credentials: 'include',
-                body: {
-                    searchTerm: searchTerm.value
-                }
-            });
-
-            if (response.success) {
-                results.value = response.students;
+        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/admin/professionals/search`, {
+            method: 'POST',
+            credentials: 'include',
+            body: {
+                searchTerm: searchTerm.value
             }
+        });
+
+        isLoading.value = false;
+        hasFetched.value = true;
+
+        if (error.value) {
+            console.log("Fetch error:", error.value);
+            return;
         }
-        catch (error) {
-            console.log("Fetch error: ", error);
-            toast.error('Ocurrió un error al buscar el estudiante');
-        }
-        finally {
-            isLoading.value = false;
-            hasFetched.value = true;
+
+        if (data.value.success) {
+            results.value = data.value.professionals;
         }
     }
 };
@@ -135,18 +131,17 @@ const delayedFetchResults = () => {
 };
 
 const filteredResults = computed(() => {
-    const chipIds = chips.value.map(chip => chip.user_id);
-
+    const chipIds = Array.isArray(chips.value) ? chips.value.map(chip => chip.user_id) : [];
     if (!searchTerm.value && chips.value.length === 0) return results.value.slice(0, 5);
 
     if (!searchTerm.value && chips.value.length > 0) return results.value.filter(student =>
         !chipIds.includes(student.user_id)
     );
 
-    return results.value.filter(student =>
-        ((student.first_name && student.first_name.toLowerCase().includes(searchTerm.value.toLowerCase())) ||
-            student.email.toLowerCase().includes(searchTerm.value.toLowerCase())) &&
-        !chipIds.includes(student.user_id)
+    return results.value.filter(professional =>
+        ((professional.first_name && professional.first_name.toLowerCase().includes(searchTerm.value.toLowerCase())) ||
+            professional.email.toLowerCase().includes(searchTerm.value.toLowerCase())) &&
+        !chipIds.includes(professional.user_id)
     ).slice(0, 5);
 });
 
@@ -170,14 +165,14 @@ const handleKeydown = (event) => {
     }
 };
 
-const addChip = (student) => {
-    if (chips.value.length >= maxChips.value) {
-        toast.error("Las sesiones personalizadas solo pueden tener un estudiante");
+const addChip = (professional) => {
+    if (chips.value.length >= maxChips) {
+        alert("Las sesiones solo admiten 1 profesional");
         searchTerm.value = '';
         results.value = [];
         return;
     }
-    chips.value.unshift(student);
+    chips.value.unshift(professional);
     searchTerm.value = '';
     results.value = [];
 };
@@ -190,15 +185,13 @@ watch([searchTerm, filteredResults], () => {
     selectedResultIndex.value = -1;
 });
 
-watch(() => props.selectedFormat, (newFormat) => {
-    if (newFormat === 'Personalizado' && chips.value.length > 1) {
-        alert("Algunos de los estudiantes añadidos serán eliminados");
+watch(() => chips, () => {
+    if (chips.value.length > 2) {
+        alert("Algunos de los profesionales añadidos serán eliminados");
         chips.value = chips.value.slice(0, 1);
     }
 });
 
-onMounted(() => {
-    console.log(props.selectedFormat);
-});
+
 
 </script>
