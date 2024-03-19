@@ -4,7 +4,8 @@
             class="border text-gray-800 text-sm rounded-md py-3.5 max-w-2xl outline-none w-full px-12"
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }" @focus="inputFocused = true"
             @blur="inputFocused = false" @input="delayedFetchResults" @keydown="handleKeydown">
-        <div class="absolute top-1/2 left-3 transform -translate-y-1/2 rounded-full p-1 flex items-center justify-center">
+        <div
+            class="absolute top-1/2 left-3 transform -translate-y-1/2 rounded-full p-1 flex items-center justify-center">
             <Icon name="heroicons:map-pin" class="text-2xl" />
         </div>
         <div
@@ -35,6 +36,9 @@
 
 <script setup>
 
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 const placeholder = 'Busca un lugar';
 const searchTerm = ref('');
 const inputFocused = ref(false);
@@ -49,13 +53,22 @@ const fetchResults = async () => {
         searchState.value = 'loading';
         results.value = [];
 
-        const { data } = await useFetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchTerm.value)}.json?language=ES&country=CL&access_token=${runtimeConfig.public.mapboxApiKey}`);
+        try {
 
-        searchState.value = data.value && data.value.features ? 'success' : 'failure';
+            const response = await $fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchTerm.value)}.json?language=ES&country=CL&access_token=${runtimeConfig.public.mapboxApiKey}`);
 
-        if (searchState.value === 'success') {
-            results.value = data.value.features;
+            searchState.value = response && response.features ? 'success' : 'failure';
+
+            if (searchState.value === 'success') {
+                results.value = response.features;
+            }
         }
+        catch (error) {
+            searchState.value = 'failure';
+            console.log(error);
+            toast.error('Ocurrió un error al buscar el lugar');
+        }
+
     }
 };
 
