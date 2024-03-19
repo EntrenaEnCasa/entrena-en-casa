@@ -1,6 +1,6 @@
 <template>
     <div class="my-12">
-        <Vue3Marquee duration="40">
+        <Vue3Marquee :duration="40">
             <template v-for="image in images" :key="image.id">
                 <div class="p-5">
                     <NuxtImg class="shadow-lg border border-gray-100 h-[300px] lg:h-[420px] rounded-2xl"
