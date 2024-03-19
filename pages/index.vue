@@ -6,4 +6,5 @@
     <HomeWhatIs />
     <HomeTestimonialOurStudents />
     <HomeContact />
+    <HomeWhatsappButton />
 </template>
