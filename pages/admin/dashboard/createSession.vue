@@ -1,101 +1,96 @@
 <template class="p-4">
     <div>
-        <div name="content ">
-            <div class="flex items-center justify-start gap-5 mb-4">
-                <h3 class="text-xl font-medium ">Nueva sesión</h3>
-
-
-            </div>
-            <form v-if="sessionInfo" class="px-5 mx-auto">
-                <div class="flex justify-between items-start ">
-                    <div>
-                        <span class="font-medium text-sm mb-2">Fecha</span>
-
-                        <input type="date" name="date" id="date" v-model="sessionInfo.date"
-                            class="mt-2 block px-4 py-3 border shadow sm:text-sm border-gray-200 rounded-md ">
-                    </div>
-                    <div>
-                        <span class="font-medium text-sm mb-2">Horario</span>
-                        <ProfessionalDashboardCalendarTimeRange :isManual="false" class="mr-16 " />
-                    </div>
-                </div>
-                <div class="grid space-y-5">
-                    <div class="">
-                        <label class="w-full flex flex-col">
-                            <span class="font-medium text-sm">Profesional</span>
-                            <AdminDashboardProfessionalSearchInput v-model:professionals="professionals" />
-                        </label>
-                    </div>
-                    <div class=" grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
-                        <label class="w-full flex flex-col">
-                            <span class="font-medium text-sm mb-2">Formato</span>
-                            <select v-model="sessionInfo.format"
-                                class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                <option value="Personalizado">Personalizado</option>
-                                <option value="Grupal">Grupal</option>
-                            </select>
-                        </label>
-                        <label class="w-full flex flex-col">
-                            <span class="font-medium text-sm mb-2">Modalidad</span>
-                            <select v-model="sessionInfo.modality"
-                                class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                <option value="Online">Online</option>
-                                <option value="Presencial">Presencial</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div class="">
-                        <label class="w-full flex flex-col ">
-                            <span class="font-medium text-sm mb-2">Clientes</span>
-                            <AdminDashboardStudentSearchInput v-model:clients="sessionInfo.students"
-                                :selectedFormat="sessionInfo.format" />
-                        </label>
-                    </div>
-                    <div class=" min-w-full ">
-                        <div v-show="sessionInfo.modality === 'Online'" class="flex flex-col col-span-full">
-                            <span class="font-medium text-sm mb-2">Link</span>
-                            <input v-model="sessionInfo.link" type="text" placeholder="https://"
-                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
-                        </div>
-                        <div v-show="sessionInfo.modality === 'Presencial'" class="flex flex-col w-full col-span-full ">
-                            <span class="font-medium text-sm mb-2">Ubicación</span>
-                            <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
-                            <div class="relative flex justify-center w-full h-full min-h-[250px] lg:min-w-100 mt-5">
-                                <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
-                style: 'mapbox://styles/mapbox/streets-v12',
-                center: DEFAULT_COORDINATES,
-                zoom: DEFAULT_ZOOM,
-            }">
-                                    <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
-                                        :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
-                                    </MapboxDefaultMarker>
-                                    <MapboxNavigationControl />
-                                </MapboxMap>
-                            </div>
-                            <div v-show="!isDraggable" class="flex flex-col items-center text-secondary mt-3">
-                                <p>¿El pin no coincide con la ubicación?</p>
-                                <button class="underline font-medium" @click.prevent="isDraggable = true">Ajustar
-                                    ubicación</button>
-                            </div>
-                            <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
-                                <button class="underline font-medium" @click.prevent="isDraggable = false">Dejar de
-                                    ajustar
-                                    ubicación</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="flex justify-between my-8">
-                    <CommonButton @click="resetForm" bg-color="secondary" class="px-4 py-2"> Reiniciar
-                    </CommonButton>
-
-                    <CommonButton @click="createSession" :loading="loadingResponse" class="px-4 py-2">
-                        Crear sesión </CommonButton>
-                </div>
-            </form>
-
+        <div class="flex items-center justify-start gap-5 mb-4">
+            <h3 class="text-xl font-medium ">Nueva sesión</h3>
         </div>
+        <form v-if="sessionInfo" class="px-5 mx-auto">
+            <div class="flex justify-between items-start ">
+                <div>
+                    <span class="font-medium text-sm mb-2">Fecha</span>
+
+                    <input type="date" name="date" id="date" v-model="sessionInfo.date"
+                        class="mt-2 block px-4 py-3 border shadow sm:text-sm border-gray-200 rounded-md ">
+                </div>
+                <div>
+                    <span class="font-medium text-sm mb-2">Horario</span>
+                    <ProfessionalDashboardCalendarTimeRange :isManual="false" class="mr-16 " />
+                </div>
+            </div>
+            <div class="grid space-y-5">
+                <div class="">
+                    <label class="w-full flex flex-col">
+                        <span class="font-medium text-sm">Profesional</span>
+                        <AdminDashboardProfessionalSearchInput v-model:professionals="professionals" />
+                    </label>
+                </div>
+                <div class=" grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
+                    <label class="w-full flex flex-col">
+                        <span class="font-medium text-sm mb-2">Formato</span>
+                        <select v-model="sessionInfo.format"
+                            class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                            <option value="Personalizado">Personalizado</option>
+                            <option value="Grupal">Grupal</option>
+                        </select>
+                    </label>
+                    <label class="w-full flex flex-col">
+                        <span class="font-medium text-sm mb-2">Modalidad</span>
+                        <select v-model="sessionInfo.modality"
+                            class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
+                            <option value="Online">Online</option>
+                            <option value="Presencial">Presencial</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="">
+                    <label class="w-full flex flex-col ">
+                        <span class="font-medium text-sm mb-2">Clientes</span>
+                        <AdminDashboardStudentSearchInput v-model:clients="sessionInfo.students"
+                            :selectedFormat="sessionInfo.format" />
+                    </label>
+                </div>
+                <div class=" min-w-full ">
+                    <div v-show="sessionInfo.modality === 'Online'" class="flex flex-col col-span-full">
+                        <span class="font-medium text-sm mb-2">Link</span>
+                        <input v-model="sessionInfo.link" type="text" placeholder="https://"
+                            class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary">
+                    </div>
+                    <div v-show="sessionInfo.modality === 'Presencial'" class="flex flex-col w-full col-span-full ">
+                        <span class="font-medium text-sm mb-2">Ubicación</span>
+                        <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
+                        <div class="relative flex justify-center w-full h-full min-h-[250px] lg:min-w-100 mt-5">
+                            <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: DEFAULT_COORDINATES,
+            zoom: DEFAULT_ZOOM,
+        }">
+                                <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
+                                    :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
+                                </MapboxDefaultMarker>
+                                <MapboxNavigationControl />
+                            </MapboxMap>
+                        </div>
+                        <div v-show="!isDraggable" class="flex flex-col items-center text-secondary mt-3">
+                            <p>¿El pin no coincide con la ubicación?</p>
+                            <button class="underline font-medium" @click.prevent="isDraggable = true">Ajustar
+                                ubicación</button>
+                        </div>
+                        <div v-show="isDraggable" class="flex flex-col items-center text-secondary mt-3">
+                            <button class="underline font-medium" @click.prevent="isDraggable = false">Dejar de
+                                ajustar
+                                ubicación</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="flex justify-between my-8">
+                <CommonButton @click="resetForm" bg-color="secondary" class="px-4 py-2"> Reiniciar
+                </CommonButton>
+
+                <CommonButton @click="createSession" :loading="loadingResponse" class="px-4 py-2">
+                    Crear sesión </CommonButton>
+            </div>
+        </form>
     </div>
 </template>
 

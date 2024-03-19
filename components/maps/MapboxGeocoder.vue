@@ -1,7 +1,7 @@
 <template>
-    <div class="relative z-50">
+    <div class="relative z-30">
         <input type="text" v-model="searchTerm" :placeholder="placeholder"
-            class="border text-gray-800 text-sm rounded-md py-3.5 max-w-2xl outline-none w-full px-12"
+            class="border text-gray-800 text-sm rounded-md py-3.5 outline-none w-full px-12"
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }" @focus="inputFocused = true"
             @blur="inputFocused = false" @input="delayedFetchResults" @keydown="handleKeydown">
         <div

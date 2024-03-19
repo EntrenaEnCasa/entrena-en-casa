@@ -1,5 +1,5 @@
 <template>
-    <div class="relative z-50">
+    <div class="relative">
         <div class="border bg-white text-gray-800 text-sm rounded-md px-5 py-3.5 w-full box-border"
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
             <div class="flex items-center flex-wrap gap-y-4 gap-x-2">
