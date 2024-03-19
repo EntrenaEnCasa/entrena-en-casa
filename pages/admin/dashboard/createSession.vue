@@ -4,16 +4,15 @@
             <h3 class="text-xl font-medium ">Nueva sesión</h3>
         </div>
         <form v-if="sessionInfo" class="px-5 mx-auto">
-            <div class="flex justify-between items-start ">
+            <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                 <div>
                     <span class="font-medium text-sm mb-2">Fecha</span>
-
                     <input type="date" name="date" id="date" v-model="sessionInfo.date"
-                        class="mt-2 block px-4 py-3 border shadow sm:text-sm border-gray-200 rounded-md ">
+                        class="mt-2 block px-4 py-3 border shadow text-sm border-gray-200 rounded-md ">
                 </div>
                 <div>
                     <span class="font-medium text-sm mb-2">Horario</span>
-                    <ProfessionalDashboardCalendarTimeRange :isManual="false" class="mr-16 " />
+                    <ProfessionalDashboardCalendarTimeRange class="min-w-max" :isManual="false" />
                 </div>
             </div>
             <div class="grid space-y-5">
