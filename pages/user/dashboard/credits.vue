@@ -352,10 +352,6 @@ const { data: creditsData, error: getCreditsError, pending: getCreditsLoading, r
         } else {
             toast.error(responseData.message);
         }
-    },
-    onRequestError(error) {
-        console.error(error);
-        toast.error('Ocurrió un error al obtener tus sesiones');
     }
 })
 
@@ -415,12 +411,11 @@ const { pending: plansInformationLoading, refresh: getPlansInformation } = useFe
     onResponse({ response }) {
         let responseData = response._data;
         if (responseData.success) {
-            console.log(responseData);
             setPlansInformation(responseData.plans);
         } else {
-            alert(responseData.message);
+            toast.error(responseData.message);
         }
-    },
+    }
 })
 
 const buyPlan = async () => {
