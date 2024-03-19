@@ -8,11 +8,18 @@ export default defineNuxtConfig({
     'nuxt-icon',
     '@vee-validate/nuxt',
     'nuxt-mapbox',
-    "@nuxt/image"
+    "@nuxt/image",
+    '@pinia-plugin-persistedstate/nuxt',
   ],
   runtimeConfig: {
+    flowApiKey: process.env.FLOW_API_KEY,
+    flowSecretKey: process.env.FLOW_SECRET_KEY,
+    flowHosting: process.env.FLOW_HOSTING,
+    backendApiKey: process.env.BACKEND_API_KEY,
+    backendSecretKey: process.env.BACKEND_SECRET_KEY,
     public: {
       apiBase: process.env.API_BASE,
+      nuxtApiBase: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.NUXT_API_BASE,
       mapboxApiKey: process.env.MAPBOX_API_KEY,
     }
   },

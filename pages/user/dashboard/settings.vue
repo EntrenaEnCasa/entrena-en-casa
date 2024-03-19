@@ -44,9 +44,9 @@
             </div>
         </div>
         <div class="flex justify-center mt-20">
-            <div class="flex items-center gap-2">
-                <p class="font-medium text-red-500 text-xl">¿Darse de baja?</p>
-                <button class="px-4 py-1 bg-red-500 text-white flex items-center gap-2 font-medium rounded-md">
+            <div class="flex flex-col items-center gap-2">
+                <p class="font-medium text-tertiary text-xl">¿Darse de baja?</p>
+                <button class="px-4 py-1 bg-tertiary text-white flex items-center gap-2 font-medium rounded-md">
                     <Icon name="fa6-solid:triangle-exclamation" />
                     <span>Desactivar perfil</span>
                 </button>
@@ -91,8 +91,10 @@
 <script setup>
 
 import { useUserStore } from '@/stores/UserStore';
+import { useToast } from 'vue-toastification';
 
 const runtimeConfig = useRuntimeConfig();
+const toast = useToast();
 
 const userStore = useUserStore();
 const loading = ref(false);
@@ -186,52 +188,65 @@ const validatePasswordRepeat = (passRepeat) => {
 const changePassword = async () => {
     loading.value = true;
 
-    await useFetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
-        method: 'PATCH',
-        credentials: 'include',
-        body: JSON.stringify({
-            user_id: userStore.user.user_id,
-            newPassword: password.value,
-        }),
-        onResponse({ request, response, options }) {
+    try {
 
-            loading.value = false;
-            const responseData = response._data;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
+            method: 'PATCH',
+            credentials: 'include',
+            body: JSON.stringify({
+                user_id: userStore.user.user_id,
+                newPassword: password.value,
+            })
+        });
 
-            if (responseData.success) {
-                alert(responseData.message);
-            }
-            else {
-                alert(responseData.message);
-            }
+        if (response.success) {
+            toast.success('Contraseña cambiada con éxito');
         }
-    });
-};
+        else {
+            toast.error(response.message);
+        }
 
+    }
+    catch (error) {
+        console.error(error);
+        toast.error('Ocurrió un error al cambiar la contraseña');
+    }
+    finally {
+        loading.value = false;
+
+    }
+
+};
 
 const changeEmail = async () => {
     loading.value = true;
 
-    await useFetch(`${runtimeConfig.public.apiBase}/user/update-email`, {
-        method: 'PATCH',
-        credentials: 'include',
-        body: JSON.stringify({
-            user_id: userStore.user.user_id,
-            newEmail: email.value,
-        }),
-        onResponse({ request, response, options }) {
+    try {
 
-            loading.value = false;
-            const responseData = response._data;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/user/update-email`, {
+            method: 'PATCH',
+            credentials: 'include',
+            body: JSON.stringify({
+                user_id: userStore.user.user_id,
+                newEmail: email.value,
+            })
+        });
 
-            if (responseData.success) {
-                alert(responseData.message);
-            }
-            else {
-                alert(responseData.message);
-            }
+        if (response.success) {
+            toast.success('Correo electrónico cambiado con éxito');
         }
-    });
+        else {
+            toast.error(response.message);
+        }
+    }
+    catch (error) {
+        console.error(error);
+        toast.error('Ocurrió un error al cambiar el correo electrónico');
+    }
+    finally {
+        loading.value = false;
+    }
+
 };
 
 </script>

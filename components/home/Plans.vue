@@ -7,7 +7,7 @@
                         <p class="font-semibold tracking-[.2rem]">ENTRENAMIENTO FUNCIONAL</p>
                         <p class="font-semibold text-sm" style="letter-spacing: .15rem;">BORDE COSTERO</p>
                         <p class="text-center my-3">
-                            Entrenamiento una vez por semana
+                            Entrenamiento una vez por semana de forma grupal por un mes
                             <br>
                             Cada sábado a las 12:00hrs
                         </p>
@@ -25,13 +25,13 @@
                         </div>
                     </div>
                     <div class="px-4 py-3 border mx-auto bg-white relative w-full">
-                        <p class="font-semibold tracking-[.2rem]">PLAN ESTÁNDAR</p>
+                        <p class="font-semibold tracking-[.2rem]">PLAN PERSONALIZADO ONLINE</p>
                         <p class="text-center my-3">
-                            Entrenamiento dos veces por semana
+                            Entrenamiento dos veces por semana por un mes
                             <br>
                             Acompañamiento el 100% de la sesión
                             <br />
-                            modalidad <span class="text-secondary">online</span>
+                            Modalidad <span class="text-secondary">online</span>
                         </p>
                         <div class="flex justify-center md:justify-end text-secondary">
                             <CommonButton class="tellural py-1 px-3 rounded-md">
@@ -50,12 +50,12 @@
                         </div>
                     </div>
                     <div class="px-4 py-3 border mx-auto bg-white relative w-full">
-                        <p class="font-semibold tracking-[.2rem]">PLAN ESTÁNDAR</p>
+                        <p class="font-semibold tracking-[.2rem]">PLAN PERSONALIZADO INDIVIDUAL</p>
                         <p class="font-semibold text-sm" style="letter-spacing: .15rem;">VIÑA DEL MAR</p>
                         <p class="text-center my-3">
-                            Entrenamiento dos veces por semana
+                            Entrenamiento dos veces por semana por un mes
                             <br>
-                            Sesión individual
+                            Sesión personalizada individual
                             <br />
                             Modalidad <span class="text-secondary">presencial</span>
                         </p>

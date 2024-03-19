@@ -111,9 +111,11 @@ import { useTimeRangeStore } from '~/stores/professional/dashboard/calendar/Time
 import { useFormatter } from '~/composables/time/useFormatter';
 import { useWeekNavigation } from '~/composables/time/useWeekNavigation';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
+import { useToast } from 'vue-toastification';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
+const toast = useToast();
 const { formatDateToWeekdayAndDay, formatHourToTimeString } = useFormatter();
 const { isStartWeek, goToPreviousWeek, goToNextWeek, currentYear, currentMonth, currentDate } = useWeekNavigation();
 const { getReverseGeocodingData } = useGeocoding();
@@ -209,30 +211,34 @@ const getEvents = async () => {
         start_date: localDateString, // fecha en formato YYYY-MM-DD
     }
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
-        method: 'POST',
-        credentials: 'include',
-        body: body
-    });
+    try {
 
-    if (error.value) {
-        console.log("Fetch error:", error.value);
-        fetchingEvents.value = false;
-        return;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
+            method: 'POST',
+            credentials: 'include',
+            body: body
+        });
+
+        initializeEventMatrix(); // Reset the matrix before populating
+
+        if (response.success) {
+            populateEventMatrix(response.events); // Fill the matrix with the fetched events
+            events.value = response.events;
+        }
+        else {
+            events.value = [];
+            toast.error(response.message);
+        }
     }
-
-    fetchingEvents.value = false;
-    initializeEventMatrix(); // Reset the matrix before populating
-
-    if (data.value.success) {
-        populateEventMatrix(data.value.events); // Fill the matrix with the fetched events
-        events.value = data.value.events;
-    }
-    else {
-        fetchingEvents.value = false;
+    catch (error) {
+        console.log("Fetch error:", error);
         events.value = [];
-        console.log(data.value.message);
+        toast.error("Error al obtener los eventos");
     }
+    finally {
+        fetchingEvents.value = false;
+    }
+
 };
 
 const populateEventMatrix = (events) => {
@@ -368,26 +374,30 @@ const newEmptySessionModal = reactive({
             "coordinates": coordinates,
         }
 
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
-            method: 'POST',
-            credentials: 'include',
-            body: body
-        });
+        try {
 
-        newEmptySessionModal.loading = false;
-        newEmptySessionModal.closeModal();
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session`, {
+                method: 'POST',
+                credentials: 'include',
+                body: body
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                getEvents();
+                toast.success(response.message);
+            }
+            else {
+                toast.error(response.message);
+            }
+
         }
-
-        if (data.value.success) {
-            console.log(data.value.message);
-            getEvents();
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al crear la sesión");
         }
-        else {
-            console.log(data.value.message);
+        finally {
+            newEmptySessionModal.loading = false;
+            newEmptySessionModal.closeModal();
         }
 
     }
@@ -480,33 +490,36 @@ const newEventModal = reactive({
                 "end_time": automaticallySelectedEndTime.value, // hora en formato HH:MM
                 "format": newEventModal.data.manualSession.selectedFormat, // "Personalizado" o "Grupal"
                 "modality": newEventModal.data.manualSession.selectedModality, // "Online" o "Presencial"
-                "text": link, // link de la sesión, se pasa como text
+                "link": link, // link de la sesión, se pasa como text
                 "clients": clientsIDs, // array de ids de clientes
                 "type": "manual_session", // "manual session en caso de Nuevo entrenamiento"
                 "coordinates": coordinates,
             };
 
-            const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
-                method: 'POST',
-                credentials: 'include',
-                body: body
-            });
+            try {
 
-            if (error.value) {
-                console.log("Fetch error:", error.value);
+                const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: body
+                });
+
+                if (response.success) {
+                    getEvents();
+                    toast.success(response.message);
+                }
+                else {
+                    toast.error(response.message);
+                }
+            }
+            catch (error) {
+                console.log("Fetch error:", error);
+                toast.error("Error al crear la sesión");
+
+            }
+            finally {
                 newEventModal.data.loading = false;
-                return;
-            }
-
-            newEventModal.data.loading = false;
-            newEventModal.closeModal();
-
-            if (data.value.success) {
-                getEvents();
-                console.log(data.value.message);
-            }
-            else {
-                console.log(data.value.message);
+                newEventModal.closeModal();
             }
 
         }
@@ -524,28 +537,30 @@ const newEventModal = reactive({
                 "type": "personal", // "Nuevo entrenamiento" o "Evento personal"
             };
 
-            const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
-                method: 'POST',
-                credentials: 'include',
-                body: body
-            });
+            try {
+                const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: body
+                });
 
-            if (error.value) {
-                console.log("Fetch error:", error.value);
+                if (response.success) {
+                    getEvents();
+                    toast.success(response.message);
+                }
+                else {
+                    toast.error(response.message);
+                }
+            }
+            catch (error) {
+                console.log("Fetch error:", error);
+                toast.error("Error al crear el evento personal");
+            }
+            finally {
                 newEventModal.data.loading = false;
-                return;
+                newEventModal.closeModal();
             }
 
-            newEventModal.data.loading = false;
-            newEventModal.closeModal();
-
-            if (data.value.success) {
-                console.log(data.value.message);
-                getEvents();
-            }
-            else {
-                console.log(data.value.message);
-            }
         }
     },
 });
@@ -629,50 +644,60 @@ const editEmptySessionModal = reactive({
             coordinates: coordinates,
         }
 
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
-            method: 'PUT',
-            credentials: 'include',
-            body: body
-        });
+        try {
 
-        editEmptySessionModal.data.updateSessionLoading = false;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: body
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
+
         }
-
-        if (data.value.success) {
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al actualizar la sesión");
+        }
+        finally {
+            editEmptySessionModal.data.updateSessionLoading = false;
             editEmptySessionModal.closeModal();
-            getEvents();
         }
-        else {
-            console.log(data.value.message);
-        }
+
     },
     removeSession: async () => {
 
         editEmptySessionModal.data.removeSessionLoading = true;
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
 
-        editEmptySessionModal.data.removeSessionLoading = false;
+        try {
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
-            console.log(data.value.message);
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al eliminar la sesión");
+        }
+        finally {
+            editEmptySessionModal.data.removeSessionLoading = false;
             editEmptySessionModal.closeModal();
-            getEvents();
         }
-        else {
-            console.log(data.value.message);
-        }
+
     },
 });
 
@@ -721,53 +746,62 @@ const editManualSessionModal = reactive({
             end_time: automaticallySelectedEndTime.value,
             format: editManualSessionModal.data.selectedFormat,
             modality: editManualSessionModal.data.selectedModality,
-            text: editManualSessionModal.data.link,
+            link: editManualSessionModal.data.link,
             clients: editManualSessionModal.data.clients.map(client => client.user_id),
         }
 
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
-            method: 'PUT',
-            credentials: 'include',
-            body: body
-        });
+        try {
 
-        editManualSessionModal.data.updateSessionLoading = false;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: body
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al actualizar la sesión");
+        }
+        finally {
+            editManualSessionModal.data.updateSessionLoading = false;
             editManualSessionModal.closeModal();
-            getEvents();
         }
-        else {
-            console.log(data.value.message);
-        }
+
     },
     removeSession: async () => {
 
         editManualSessionModal.data.removeSessionLoading = true;
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editManualSessionModal.data.event.event_id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
 
-        editManualSessionModal.data.removeSessionLoading = false;
+        try {
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editManualSessionModal.data.event.event_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
-            console.log(data.value.message);
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al eliminar la sesión");
+        }
+        finally {
+            editManualSessionModal.data.removeSessionLoading = false;
             editManualSessionModal.closeModal();
-            getEvents();
-        }
-        else {
-            console.log(data.value.message);
         }
     },
 });
@@ -793,7 +827,7 @@ const editPersonalEventModal = reactive({
     },
     handleClick: (day, time, event) => {
         editPersonalEventModal.data.clients = [...event.clients]; // Create a new array
-        editPersonalEventModal.data.additionalInfo = event.text;
+        editPersonalEventModal.data.additionalInfo = event.info;
         editPersonalEventModal.data.event = event;
         updateCurrentlySelectedDate(day, time);
         updateSelectedEndTimeFromString(event.end_time);
@@ -809,54 +843,64 @@ const editPersonalEventModal = reactive({
             date: getLocalDateString(selectedDate.value),
             start_time: selectedStartTime.value,
             end_time: selectedEndTime.value,
-            text: editPersonalEventModal.data.additionalInfo,
+            info: editPersonalEventModal.data.additionalInfo,
             clients: editPersonalEventModal.data.clients.map(client => client.user_id),
             type: "personal",
         }
 
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
-            method: 'PUT',
-            credentials: 'include',
-            body: body
-        });
+        try {
 
-        editPersonalEventModal.data.updateSessionLoading = false;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: body
+            });
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al actualizar el evento personal");
+        }
+        finally {
+            editPersonalEventModal.data.updateSessionLoading = false;
             editPersonalEventModal.closeModal();
-            getEvents();
-        }
-        else {
-            console.log(data.value.message);
         }
     },
     removeSession: async () => {
 
         editPersonalEventModal.data.removeSessionLoading = true;
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editPersonalEventModal.data.event.event_id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
 
-        editPersonalEventModal.data.removeSessionLoading = false;
+        try {
 
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editPersonalEventModal.data.event.event_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            if (response.success) {
+                toast.success(response.message);
+                getEvents();
+            }
+            else {
+                toast.error(response.message);
+            }
         }
-
-        if (data.value.success) {
+        catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Error al eliminar el evento personal");
+        }
+        finally {
+            editPersonalEventModal.data.removeSessionLoading = false;
             editPersonalEventModal.closeModal();
-            getEvents();
         }
-        else {
-            console.log(data.value.message);
-        }
+
     },
 });
 

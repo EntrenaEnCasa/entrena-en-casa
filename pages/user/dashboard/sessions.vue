@@ -26,7 +26,7 @@
                             </div>
                             <div class="flex flex-col items-center gap-2 py-2">
                                 <h3 class="text-2xl font-semibold">{{ session.professional.first_name + ' ' +
-                                    session.professional.last_name }}</h3>
+                session.professional.last_name }}</h3>
                                 <p class="font-light text-gray-700">{{ session.professional.title }}</p>
                                 <a v-if="session.modality === 'Online'" :href="session.link || ''" target="_blank"
                                     class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline underline-offset-2">
@@ -77,11 +77,11 @@
                             </div>
                             <div class="flex flex-col items-center gap-y-2">
                                 <b class="text-[#000000] text-lg font-medium ">{{ session.format + ' - ' +
-                                    session.modality }}</b>
+                session.modality }}</b>
                                 <a :href="session.link || ''" target="_blank"
                                     ss="text-xl font-medium underline text-secondary decoration-secondary underline-offset-2">Link</a>
                                 <p class="text-[#949494]">{{ session.professional.first_name + ' ' +
-                                    session.professional.last_name + ' - ' + session.professional.title }}</p>
+                session.professional.last_name + ' - ' + session.professional.title }}</p>
                             </div>
                             <div class="text-[#949494] text-base text-center gap-2">
                                 <p>Calificar sesión</p>
@@ -141,7 +141,7 @@
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Profesional:</h4>
                                     <p class="font-semibold">{{ detailsModalSession.professional.first_name + ' ' +
-                                        detailsModalSession.professional.last_name }}</p>
+                detailsModalSession.professional.last_name }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Hora:</h4>
@@ -159,7 +159,8 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-center mb-3">Sobre ti</h3>
-                            <div class="space-y-2" v-if="!userDataLoading && userData && userData.info && userData.success">
+                            <div class="space-y-2"
+                                v-if="!userDataLoading && userData && userData.info && userData.success">
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Alumno:</h4>
                                     <p class="font-semibold">
@@ -193,7 +194,8 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <p class="max-w-xl mx-auto text-xs  text-center">* Se te enviará el link de acceso a la reunión vía
+                        <p class="max-w-xl mx-auto text-xs  text-center">* Se te enviará el link de acceso a la reunión
+                            vía
                             Google
                             Meet por
                             correo
@@ -217,7 +219,8 @@
             <CommonModal ref="fillUserDataModal">
                 <div class="p-4 max-w-3xl">
                     <div class="text-center">
-                        <h3 class=" text-2xl font-semibold mb-4 text-primary">Aún no has rellenados tus datos de estudiante
+                        <h3 class=" text-2xl font-semibold mb-4 text-primary">Aún no has rellenados tus datos de
+                            estudiante
                         </h3>
                         <p>
                             Para poder agendar una sesión, es recomendable que rellenes tus datos de estudiante. De esta
@@ -258,11 +261,13 @@
 <script setup lang="ts">
 
 import { useUserStore } from '~/stores/UserStore';
+import { useToast } from 'vue-toastification';
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const route = useRoute();
 const router = useRouter();
+const toast = useToast();
 
 const user: null | User | Student = userStore.user;
 
@@ -351,21 +356,33 @@ const confirmSession = async () => {
         session_id: detailsModalSession.value?.session_id,
     }
 
-    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/session/confirm`, {
-        method: 'PUT',
-        credentials: 'include',
-        body: body,
-    });
+    try {
 
-    confirmAttendanceLoading.value = false;
+        const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/session/confirm`, {
+            method: 'PUT',
+            credentials: 'include',
+            body: body,
+        });
 
-    if (response.success) {
-        detailsModal.value?.closeModal();
-        refreshFutureSessions();
+        if (response.success) {
+            detailsModal.value?.closeModal();
+            refreshFutureSessions();
+            toast.success('Asistencia confirmada con éxito');
+        }
+        else {
+            console.log(response.message);
+            toast.error(response.message);
+        }
+
     }
-    else {
-        console.log(response.message);
+    catch (error) {
+        console.error(error);
+        toast.error('Ocurrió un error al confirmar la asistencia');
     }
+    finally {
+        confirmAttendanceLoading.value = false;
+    }
+
 }
 
 watchEffect(() => {
