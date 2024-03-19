@@ -68,6 +68,7 @@ export default defineEventHandler(async (event) => {
     console.log(response);
 
     if (!response.optional) {
+      console.log("No se puede realizar la compra de créditos. Intente nuevamente.");
       throw new Error(
         "No se puede realizar la compra de créditos. Intente nuevamente."
       );
@@ -76,12 +77,14 @@ export default defineEventHandler(async (event) => {
     const { user_ids, plan_id } = response.optional;
 
     if (!user_ids || !plan_id) {
+      console.log("No se puede realizar la compra de créditos, faltan parametros. Intente nuevamente.");
       throw new Error(
         "No se puede realizar la compra de créditos, faltan parametros. Intente nuevamente."
       );
     }
 
     if(response.status == 2) {
+      console.log("antes de cargar créditos");
       try {
         const body = {
           user_id: user_ids.split(',').map(Number),
@@ -90,6 +93,11 @@ export default defineEventHandler(async (event) => {
 
         const apiKey = config.backendApiKey; // Retrieve the API key from environment variables
         const encryptedApiKey = encryptApiKey(apiKey);
+
+        console.log("body");
+        console.log(body);
+
+        console.log("encrypted api key: ", encryptedApiKey);
   
         const response = await $fetch<addCreditsResponse>(
           `${config.apiBaseUrl}/student/credits`,
