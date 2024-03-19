@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.API_BASE,
       nuxtApiBase: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.NUXT_API_BASE,
-
+      nodeEnv: process.env.NODE_ENV,
       mapboxApiKey: process.env.MAPBOX_API_KEY,
     }
   },
