@@ -75,9 +75,12 @@
 
 <script setup>
 
+import { useToast } from 'vue-toastification';
+
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
 const user = userStore.user;
+const toast = useToast();
 
 const formData = reactive({
     firstName: "",
@@ -201,21 +204,35 @@ const saveUserData = async () => {
         phone: formData.phoneNumber,
     }
 
-    const data = await $fetch(`${runtimeConfig.public.apiBase}/student/info`, {
-        method: 'PUT',
-        credentials: 'include',
-        body: body
-    });
+    try {
 
-    if (data.success) {
-        const user = userStore.user;
-        const newUser = { ...user, info: { ...body } };
-        console.log(newUser);
-        userStore.setUser(newUser);
-        goToHome();
-    } else {
-        console.log(data.message);
+        const data = await $fetch(`${runtimeConfig.public.apiBase}/student/info`, {
+            method: 'PUT',
+            credentials: 'include',
+            body: body
+        });
+
+        if (data.success) {
+            const user = userStore.user;
+            const newUser = { ...user, info: { ...body } };
+            userStore.setUser(newUser);
+            toast.success('Datos guardados correctamente');
+            goToHome();
+        } else {
+            toast.error(data.message);
+        }
+
     }
+    catch (error) {
+        console.error(error);
+        toast.error('Ocurrió un error al guardar los datos');
+    }
+    finally {
+        saveUserDataLoading.value = false;
+    }
+
+
+
 };
 
 definePageMeta({

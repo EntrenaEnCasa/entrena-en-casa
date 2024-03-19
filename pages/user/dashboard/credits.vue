@@ -280,10 +280,12 @@
 
 import { usePaymentStore } from '~/stores/PaymentStore';
 import { useUserStore } from '~/stores/UserStore';
+import { useToast } from 'vue-toastification';
 
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
 const paymentStore = usePaymentStore();
+const toast = useToast();
 
 const user = userStore.user as Student;
 
@@ -348,9 +350,9 @@ const { data: creditsData, error: getCreditsError, pending: getCreditsLoading, r
         if (responseData.success) {
             console.log(responseData);
         } else {
-            alert(responseData.message);
+            toast.error(responseData.message);
         }
-    },
+    }
 })
 
 const changeSelectedInformation = async (selected: string) => {
@@ -409,12 +411,11 @@ const { pending: plansInformationLoading, refresh: getPlansInformation } = useFe
     onResponse({ response }) {
         let responseData = response._data;
         if (responseData.success) {
-            console.log(responseData);
             setPlansInformation(responseData.plans);
         } else {
-            alert(responseData.message);
+            toast.error(responseData.message);
         }
-    },
+    }
 })
 
 const buyPlan = async () => {
@@ -424,7 +425,7 @@ const buyPlan = async () => {
     if (selectedPlan.value == null) return;
 
     if (selectedPlan.value.format_credit === 'Dupla' && dupla.value.length < 1) {
-        alert("Debes seleccionar a tu compañero de entrenamiento");
+        toast.error('Debes seleccionar un beneficiario para el plan dupla');
         buyPlanLoading.value = false;
         return;
     }
@@ -466,11 +467,12 @@ const buyPlan = async () => {
 
         }
         else {
-            alert(response.message);
+            toast.error(response.message);
         }
     }
     catch (error) {
-        alert("Ocurrió un error al realizar la compra");
+        console.error(error);
+        toast.error('Ocurrió un error intentar realizar la compra');
     }
     finally {
         buyPlanLoading.value = false;

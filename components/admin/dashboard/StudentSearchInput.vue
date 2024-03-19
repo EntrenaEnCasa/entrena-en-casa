@@ -1,5 +1,5 @@
 <template>
-    <div class="relative z-50">
+    <div class="relative">
         <div class="border bg-white text-gray-800 text-sm rounded-md px-5 py-3.5 w-full box-border"
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
             <div class="flex items-center flex-wrap gap-y-4 gap-x-2">
@@ -19,7 +19,7 @@
                     </span>
                 </div>
             </div>
-            <div class="border rounded-md absolute  top-[110%] left-0 right-0 bg-white shadow-lg p-3 z-50"
+            <div class="border rounded-md absolute  top-[110%] left-0 right-0 bg-white shadow-lg p-3 z-40"
                 v-if="inputFocused && searchTerm">
                 <CommonLoading v-if="isLoading" text="Buscando" />
                 <ul v-else>

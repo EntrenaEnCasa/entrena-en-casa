@@ -13,9 +13,9 @@
     "@nuxt/image": "^1.4.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
-    "@types/node": "^20.11.27",
+    "@types/node": "^20.11.28",
     "mapbox-gl": "^3.2.0",
-    "nuxt": "^3.10.3",
+    "nuxt": "^3.11.0",
     "nuxt-icon": "^0.6.9",
     "nuxt-mapbox": "^1.5.9",
     "sass": "^1.72.0",
@@ -28,6 +28,7 @@
     "@turf/turf": "^6.5.0",
     "@vee-validate/nuxt": "^4.12.6",
     "pinia": "^2.1.7",
+    "swiper": "^11.0.7",
     "vue-toastification": "2.0.0-rc.5"
   }
 }

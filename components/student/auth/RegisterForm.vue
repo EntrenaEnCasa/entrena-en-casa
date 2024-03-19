@@ -1,18 +1,19 @@
 <template>
-    <Form class="w-full space-y-4" @submit="register" v-slot="{ meta }">
-        <CommonInput label="Correo electrónico" v-model="formData.email" name="email" type="email" id="email"
-            icon="fa6-solid:envelope" placeholder="Ingresa tu correo electrónico" :rules="validateEmail" />
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <Form class="w-full" @submit="register" v-slot="{ meta }">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <CommonInput label="Correo electrónico" v-model="formData.email" name="email" type="email" id="email"
+                icon="fa6-solid:envelope" placeholder="Ingresa tu correo electrónico" :rules="validateEmail"
+                class="md:col-span-2" />
             <CommonInput label="Contraseña" v-model="formData.password" name="password" type="password" id="password"
                 icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePassword" />
             <CommonInput label="Confirmar contraseña" v-model="formData.passwordRepeat" name="password-repeat"
                 type="password" id="password-repeat" icon="fa6-solid:lock" placeholder="* * * * * * * *"
                 :rules="validatePasswordRepeat" />
             <CommonSelect label="¿En qué región te encuentras?" v-model="formData.region" name="region" id="region"
-                placeholder="Ingresa tu región" :rules="validateRegion" :options="regionOptions" class="col-span-2" />
+                placeholder="Ingresa tu región" :rules="validateRegion" :options="regionOptions"
+                class="md:col-span-2" />
         </div>
-        <div class="flex items-center space-x-1">
+        <!-- <div class="flex items-center space-x-1">
             <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
             <label class="text-gray-500" for="remember">
                 Acepto los
@@ -20,7 +21,7 @@
                     términos y condiciones
                 </span>
             </label>
-        </div>
+        </div> -->
         <CommonButton class="py-2 w-full font-medium" text-size="xl" :disabled="!meta.valid" :loading="loading">
             Registrarse
         </CommonButton>
@@ -29,35 +30,39 @@
 <script setup>
 
 import { useAuthStore } from '~/stores/AuthStore'
+import { useToast } from 'vue-toastification'
 
 const authStore = useAuthStore();
 const router = useRouter();
 const runtimeConfig = useRuntimeConfig();
+const toast = useToast();
+
 const formData = reactive({
     email: '',
     password: '',
     passwordRepeat: '',
     region: '',
 });
+
 const loading = ref(false);
 
 const regionOptions = [
-    { value: 'CL-AI', text: 'Aisén del General Carlos Ibañez del Campo' },
-    { value: 'CL-AN', text: 'Antofagasta' },
-    { value: 'CL-AP', text: 'Arica y Parinacota' },
-    { value: 'CL-AT', text: 'Atacama' },
-    { value: 'CL-BI', text: 'Bío Bío' },
-    { value: 'CL-CO', text: 'Coquimbo' },
-    { value: 'CL-AR', text: 'Araucanía' },
-    { value: 'CL-LI', text: 'Libertador General Bernardo O\'Higgins' },
-    { value: 'CL-LL', text: 'Los Lagos' },
-    { value: 'CL-LR', text: 'Los Ríos' },
-    { value: 'CL-MA', text: 'Magallanes y de la Antártica Chilena' },
-    { value: 'CL-ML', text: 'Maule' },
-    { value: 'CL-RM', text: 'Región Metropolitana de Santiago' },
-    { value: 'CL-NB', text: 'Ñuble' },
-    { value: 'CL-TA', text: 'Tarapacá' },
-    { value: 'CL-VS', text: 'Valparaíso' }
+    { value: 'CL-AI', label: 'Aisén del General Carlos Ibañez del Campo' },
+    { value: 'CL-AN', label: 'Antofagasta' },
+    { value: 'CL-AP', label: 'Arica y Parinacota' },
+    { value: 'CL-AT', label: 'Atacama' },
+    { value: 'CL-BI', label: 'Bío Bío' },
+    { value: 'CL-CO', label: 'Coquimbo' },
+    { value: 'CL-AR', label: 'Araucanía' },
+    { value: 'CL-LI', label: 'Libertador General Bernardo O\'Higgins' },
+    { value: 'CL-LL', label: 'Los Lagos' },
+    { value: 'CL-LR', label: 'Los Ríos' },
+    { value: 'CL-MA', label: 'Magallanes y de la Antártica Chilena' },
+    { value: 'CL-ML', label: 'Maule' },
+    { value: 'CL-RM', label: 'Región Metropolitana de Santiago' },
+    { value: 'CL-NB', label: 'Ñuble' },
+    { value: 'CL-TA', label: 'Tarapacá' },
+    { value: 'CL-VS', label: 'Valparaíso' }
 ];
 
 const registrationState = reactive({
@@ -148,31 +153,37 @@ const register = async () => {
         region: formData.region,
     }
 
-    console.log(registerData);
-
     registrationState.error = false;
 
-    await useFetch(`${runtimeConfig.public.apiBase}/student/sign-up`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: registerData,
-        onResponse({ request, response, options }) {
-            const responseData = response._data;
-            loading.value = false;
+    try {
 
-            if (responseData.success) {
-                console.log(responseData);
-                authStore.signUp(responseData.user);
-                router.push('/user/dashboard/aboutyou');
-            }
-            else {
-                registrationState.error = true;
-                registrationState.errorMessage = responseData.message;
-            }
-        },
-    });
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/student/sign-up`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: registerData,
+        });
+
+        if (response.success) {
+            authStore.signUp(response.user);
+            router.push('/user/dashboard/aboutyou');
+        }
+        else {
+            registrationState.error = true;
+            registrationState.errorMessage = response.message;
+            toast.error(response.message);
+        }
+    }
+    catch (error) {
+        registrationState.error = true;
+        registrationState.errorMessage = "Error al intentar registrarse";
+        toast.error("Error al intentar registrarse");
+    }
+    finally {
+        loading.value = false;
+    }
+
 }
 
 </script>
