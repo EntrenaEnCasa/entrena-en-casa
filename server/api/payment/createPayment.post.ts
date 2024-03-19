@@ -66,7 +66,7 @@ export default defineEventHandler(async (event) => {
         email: "gonzalo.antoniobc@gmail.com",
         subject: 'Pago de prueba',
         commerceOrder: Math.floor(Math.random() * (2000 - 1100 + 1)) + 1100,
-        urlConfirmation: `https://${config.public.nuxtApiBase}/payment/confirm`,
+        urlConfirmation: `https://${config.public.nuxtApiBase}/api/payment/confirm`,
         urlReturn: `${config.public.nuxtApiBase}/user/dashboard/paymentStatus`,
         optional: JSON.stringify({ user_ids: userIdsString, plan_id: plan_id }),
       }, config.flowSecretKey);
