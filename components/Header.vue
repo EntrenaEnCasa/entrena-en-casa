@@ -1,7 +1,7 @@
 <template>
     <nav class="bg-gradiente">
         <div class="mx-auto max-w-7xl px-2 lg:px-8">
-            <div class="relative flex h-20 items-center justify-between">
+            <div class="relative flex h-20 items-center justify-between z-30">
                 <div class="absolute inset-y-0 left-0 flex items-center lg:hidden">
                     <!-- Mobile menu button-->
                     <button type="button"
@@ -13,8 +13,8 @@
 
             Menu open: "hidden", Menu closed: "block"
           -->
-                        <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                            aria-hidden="true">
+                        <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                         </svg>
@@ -23,8 +23,8 @@
 
             Menu open: "block", Menu closed: "hidden"
           -->
-                        <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                            aria-hidden="true">
+                        <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
@@ -84,12 +84,6 @@
         </div>
     </nav>
 </template>
-<style scoped>
-.bg-gradiente {
-    background: url('/background.svg') no-repeat center center fixed;
-    /* background: linear-gradient(136deg, rgba(198, 243, 255, 0.15) 0%, rgba(113, 212, 240, 0.15) 64.54%, rgba(0, 142, 181, 0.15) 100%); */
-}
-</style>
 <script setup>
 
 const menuOpen = ref(false);
