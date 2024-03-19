@@ -4,13 +4,14 @@
             <div class="flex flex-col lg:flex-row justify-between items-center mb-4 gap-5">
                 <h3 class="text-xl font-medium">Agendar sesión</h3>
                 <div class="flex flex-col items-center">
-                    <button @click="openLocationModal" class="rounded-md px-4 py-2 flex bg-gray-200 text-gray-500 gap-x-2"
+                    <button @click="openLocationModal"
+                        class="rounded-md px-4 py-2 flex bg-gray-200 text-gray-500 gap-x-2"
                         :class="{ 'invisible': isOnline }">
                         <Icon name="heroicons:map-pin" class="text-2xl flex-shrink-0" />
                         <div class="max-w-xs">
                             <p v-show="!selectedLocation">Ubicación</p>
                             <p v-show="selectedLocation" class="line-clamp-1">{{
-                                selectedLocation?.place_name }}</p>
+                            selectedLocation?.place_name }}</p>
                         </div>
                     </button>
 
@@ -22,8 +23,8 @@
                 <div class="flex items-center gap-2">
                     <span :class="{ 'text-gray-400': isOnline }">Presencial</span>
                     <!-- Toggle container -->
-                    <button class="relative w-14 h-8 rounded-full p-1" :class="[isOnline ? 'bg-secondary' : 'bg-primary']"
-                        @click="isOnline = !isOnline">
+                    <button class="relative w-14 h-8 rounded-full p-1"
+                        :class="[isOnline ? 'bg-secondary' : 'bg-primary']" @click="isOnline = !isOnline">
                         <!-- Toggle thumb -->
                         <div class="absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform"
                             :class="{ 'translate-x-6': isOnline }"></div>
@@ -98,16 +99,17 @@
                     <div v-for="professional, index in filteredProfessionals" :key="index"
                         class="border rounded-xl bg-white py-10 px-8 grid grid-cols-1 xl:grid-cols-3 gap-4 place-items-center">
                         <div class="col-span-1 text-center">
-                            <h3 class="text-2xl font-semibold">{{ professional.first_name + ' ' + professional.last_name }}
+                            <h3 class="text-2xl font-semibold">{{ professional.first_name + ' ' + professional.last_name
+                                }}
                             </h3>
                             <p class="text-sm">{{ professional.title }}</p>
                         </div>
                         <div class="col-span-1 xl:col-span-2 px-5 text-center xl:text-left">
                             <div class="space-y-5">
-                                <div v-if="professional.individualSessions.length > 0">
+                                <div v-if="professional.customSessions.length > 0">
                                     <h3 class="font-medium mb-2">Personalizada</h3>
                                     <div class="flex flex-wrap justify-center xl:justify-start gap-2 items-center">
-                                        <button v-for="session in professional.individualSessions"
+                                        <button v-for="session in professional.customSessions"
                                             :key="session.session_info.session_id"
                                             @click="openConfirmationModal(professional, session)"
                                             class="border rounded-full px-4 py-1.5 bg-secondary text-white">
@@ -152,10 +154,10 @@
                     <div>
                         <div class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px] mt-5">
                             <MapboxMap :map-id="mapID" class="w-full h-full rounded-xl" :options="{
-                                style: 'mapbox://styles/mapbox/streets-v12',
-                                center: DEFAULT_COORDINATES,
-                                zoom: DEFAULT_ZOOM,
-                            }">
+                            style: 'mapbox://styles/mapbox/streets-v12',
+                            center: DEFAULT_COORDINATES,
+                            zoom: DEFAULT_ZOOM,
+                        }">
                                 <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
                                     :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
                                 </MapboxDefaultMarker>
@@ -214,7 +216,8 @@
                         <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
                             Cancelar
                         </CommonButton>
-                        <CommonButton @click="confirmSession" class="px-5 py-2 bg-primary" :loading="confirmSessionLoading">
+                        <CommonButton @click="confirmSession" class="px-5 py-2 bg-primary"
+                            :loading="confirmSessionLoading">
                             Confirmar sesión
                         </CommonButton>
                     </div>
@@ -264,11 +267,11 @@ const filteredProfessionals = computed(() => {
             return session.date.startsWith(selectedDateString);
         });
 
-        const individualSessions = filteredSessions.filter(session => session.session_info.format === 'Individual');
+        const customSessions = filteredSessions.filter(session => session.session_info.format === 'Personalizado');
         const groupSessions = filteredSessions.filter(session => session.session_info.format === 'Grupal');
 
-        return { ...professional, individualSessions, groupSessions };
-    }).filter(professional => professional.individualSessions.length > 0 || professional.groupSessions.length > 0);
+        return { ...professional, customSessions: customSessions, groupSessions };
+    }).filter(professional => professional.customSessions.length > 0 || professional.groupSessions.length > 0);
 
     return filteredData;
 });
@@ -382,7 +385,7 @@ const confirmSessionLoading = ref(false);
 
 const openConfirmationModal = (professionalData, sessionData) => {
     let location;
-    if (!isOnline.value && sessionData.session_info.format === 'Individual') {
+    if (!isOnline.value && sessionData.session_info.format === 'Personalizado') {
         location = selectedLocation.value.place_name;
     }
     else if (!isOnline.value && sessionData.session_info.format === 'Grupal') {

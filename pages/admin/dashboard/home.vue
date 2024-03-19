@@ -171,7 +171,7 @@
                         </select>
                         <select id="selectFormat" class="text-center py-2 rounded-md bg-[#ededed]">
                             <option selected>Seleccionar Formato</option>
-                            <option>Individual</option>
+                            <option>Personalizado</option>
                             <option>Grupal</option>
                         </select>
                         <div>

@@ -4,8 +4,8 @@
         <ProfessionalSidebar ref="sidebar" />
         <main @click="sidebar.sidebarOpen = false" class="mt-[4.5rem] lg:ml-72 transition-[background]">
             <div class="relative">
-                <div class="min-h-[calc(100vh_-_4.5rem)] bg-[#F7FAFA] flex">
-                    <div class="flex-1">
+                <div class="min-h-[calc(100vh_-_4.5rem)] bg-[#F7FAFA]">
+                    <div>
                         <slot></slot>
                     </div>
                 </div>
