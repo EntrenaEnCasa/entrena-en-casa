@@ -1,10 +1,10 @@
 <template>
     <div class="h-full">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 h-full">
-            <div class="mt-16">
+            <div class="mt-32">
                 <div class="bg-white rounded-lg p-6 shadow-lg border flex flex-col items-center h-full">
                     <!-- Circle image container -->
-                    <div class="w-36 h-36 rounded-full bg-blue-100 mb-4 -mt-20">
+                    <div class="w-52 h-52 rounded-full bg-white mb-4 -mt-40 p-4">
                         <NuxtImg src="/icons/woman.png" class="w-full h-full object-cover" />
                     </div>
                     <!-- Content container -->
