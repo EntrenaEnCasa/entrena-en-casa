@@ -6,7 +6,7 @@
 
                 <div
                     class="col-span-2 grid items-center justify-center w-4/5 lg:w-2/3 text-center lg:text-left lg:ml-10  mb-10 lg:mt-10">
-                    <h1 class="text-4xl   text-black mb-4 tellural font-bold w-full mx-auto lg:mx-0 lg:w-4/5  ">Personal
+                    <h1 class="text-4xl   text-black mb-4 tellural font-bold w-full mx-auto lg:mx-0 lg:w-4/5">Personal
                         Trainers
                         Online,
                         Domicilio y al aire libre
@@ -19,13 +19,13 @@
                     <div>
                         <div class="flex items-center justify-center lg:justify-start mx-auto mt-6 space-x-4 ">
                             <router-link to="/user/auth/register"
-                                class="border-0 rounded-full text-white px-4 py-3 font-medium bg-secondary">Registrarse
+                                class="border-0 rounded-full text-white px-6 py-3 font-medium bg-secondary">Registrarse
                             </router-link>
                             <nuxtLink to="https://youtu.be/LMNJWdFQrHg" target="_blank"
                                 class="flex items-center space-x-2">
-                                <div class=" border-0 rounded-full text-secondary p-3 font-medium bg-white ml-4">
-
-                                    <Icon name="fa6-solid:play" class=" text-xl" />
+                                <div
+                                    class="rounded-full shadow-lg text-secondary h-12 w-12 font-medium bg-white flex justify-center items-center">
+                                    <Icon name="fa6-solid:play" class="ml-1 text-xl" />
                                 </div>
                                 <span class="text-secondary">Ver video</span>
                             </nuxtLink>
