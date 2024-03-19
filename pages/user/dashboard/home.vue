@@ -1,4 +1,4 @@
-<template >
+<template>
     <div class="space-y-4">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
@@ -95,5 +95,9 @@ const { data: pastSessions, pending: pastSessionsLoading } = useFetch(
         credentials: 'include'
     }
 );
+
+onMounted(() => {
+    console.log(runtimeConfig.public.apiBase);
+});
 
 </script>

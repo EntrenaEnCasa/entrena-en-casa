@@ -44,10 +44,14 @@ export default defineEventHandler(async (event) => {
         });
 
         if (response && response.token) {
+
+            const domain = config.public.nodeEnv === 'production' ? '.homematch.cl' : 'localhost';
+
             // Set HttpOnly cookie
             setCookie(event, 'auth_token', response.token, {
                 path: '/',
                 httpOnly: true,
+                domain: domain,
                 secure: true, // Ensure the cookie is only sent over HTTPS
                 maxAge: 60 * 60 * 24 * 14, // 14 days of expiration
             });
