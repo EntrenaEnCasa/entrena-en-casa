@@ -52,7 +52,7 @@
             </div>
         </div>
         <div
-            class=" mt-36 lg:mt-12 mx-auto rounded-lg shadow-lg bg-white w-10/12 p-4 lg:absolute  lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-1/2 ">
+            class="mt-20 lg:mt-12 mx-auto rounded-xl shadow-lg bg-white w-10/12 px-4 py-6 lg:absolute  lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-1/2 ">
 
             <div class=" grid grid-cols-1 lg:grid-cols-4 gap-4">
                 <div class="w-full flex items-center gap-2">
