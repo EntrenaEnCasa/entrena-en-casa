@@ -1,7 +1,7 @@
 <template>
     <HomeBanner />
+    <HomeServices />
     <HomeWhyUs />
-    <HomePlans />
     <HomeWhatIs />
     <HomeTestimonialOurStudents />
     <HomeContact />
