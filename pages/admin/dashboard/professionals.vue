@@ -94,10 +94,7 @@ const getAllProfessionals = async () => {
 
     await useFetch(`${runtimeConfig.public.apiBase}/admin/professionals`, {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken,
-        },
+        credentials: 'include',
         onResponse({ request, response, options }) {
             allProfessionals.value = response._data;
             allProfessionals.value.loading = false;

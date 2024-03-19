@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE,
+      nodeEnv: process.env.NODE_ENV,
       mapboxApiKey: process.env.MAPBOX_API_KEY,
     }
   },

@@ -58,30 +58,29 @@ const login = async () => {
 
     loading.value = true;
 
-    await useFetch(`${runtimeConfig.public.apiBase}/admin/log-in`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: {
-            email: formData.email,
-            password: formData.password,
-        },
-        onResponse({ request, response, options }) {
-
-            const responseData = response._data;
-            loading.value = false;
-
-            if (responseData.success) {
-                authStore.logIn(responseData.user);
-                router.push('/admin/dashboard/home');
+    try {
+        const response = await $fetch('/api/auth/admin/log-in', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: {
+                email: formData.email,
+                password: formData.password,
             }
-            else {
-                alert(responseData.message);
-            }
+        });
 
-        },
-    });
+        if (response.success) {
+            authStore.logIn(response.user);
+            router.push('/admin/dashboard/home');
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+    finally {
+        loading.value = false;
+    }
 }
 
 </script>

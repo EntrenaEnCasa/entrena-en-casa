@@ -1,4 +1,4 @@
-<template >
+<template>
     <div class="space-y-4">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
@@ -76,16 +76,14 @@ const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
 const userId = userStore.user.user_id;
+const headers = useRequestHeaders(['cookie']);
 
 // Fetch future sessions
 const { data: futureSessions, pending: futureSessionsLoading } = useFetch(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/soon`,
     {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '',
-        },
+        credentials: 'include'
     }
 );
 
@@ -94,11 +92,12 @@ const { data: pastSessions, pending: pastSessionsLoading } = useFetch(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/last`,
     {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '',
-        },
+        credentials: 'include'
     }
 );
+
+onMounted(() => {
+    console.log(runtimeConfig.public.apiBase);
+});
 
 </script>

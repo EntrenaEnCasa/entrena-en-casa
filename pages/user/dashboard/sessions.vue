@@ -289,10 +289,7 @@ const formatDate = (date: string): string => {
 
 const { data: userData, pending: userDataLoading } = useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`, {
     method: 'GET',
-    headers: {
-        "Content-Type": "application/json",
-        "x-access-token": userStore.userToken || '',
-    },
+    credentials: 'include',
     lazy: true,
 });
 
@@ -335,20 +332,14 @@ const calculateAge = (dob: string): number => {
 const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFutureSessions, error: futureSessionsError } = useFetch<APISessionResponseType>(
     `${runtimeConfig.public.apiBase}/student/${userStore.user?.user_id}/sessions/future`, {
     method: 'GET',
-    headers: {
-        "Content-Type": "application/json",
-        "x-access-token": userStore.userToken || '',
-    },
+    credentials: 'include',
 });
 
 // Fetch past sessions
 const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSessions, error: pastSessionsError } = useFetch<APISessionResponseType>(
     `${runtimeConfig.public.apiBase}/student/${userStore.user?.user_id}/sessions/past`, {
     method: 'GET',
-    headers: {
-        "Content-Type": "application/json",
-        "x-access-token": userStore.userToken || '',
-    },
+    credentials: 'include',
 });
 
 const confirmSession = async () => {
@@ -362,10 +353,7 @@ const confirmSession = async () => {
 
     const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/student/session/confirm`, {
         method: 'PUT',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '' || '',
-        },
+        credentials: 'include',
         body: body,
     });
 

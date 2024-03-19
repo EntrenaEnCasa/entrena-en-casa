@@ -188,10 +188,7 @@ const changePassword = async () => {
 
     await useFetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
         method: 'PATCH',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: JSON.stringify({
             user_id: userStore.user.user_id,
             newPassword: password.value,
@@ -217,10 +214,7 @@ const changeEmail = async () => {
 
     await useFetch(`${runtimeConfig.public.apiBase}/user/update-email`, {
         method: 'PATCH',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: JSON.stringify({
             user_id: userStore.user.user_id,
             newEmail: email.value,

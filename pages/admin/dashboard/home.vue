@@ -228,10 +228,7 @@ const getFutureSessions = async () => {
     futureSessions.value.loading = true;
     await useFetch(`${runtimeConfig.public.apiBase}/admin/sessions/future`, {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken,
-        },
+        credentials: 'include',
         onResponse({ request, response, options }) {
             futureSessions.value = response._data;
             futureSessions.value.loading = false;

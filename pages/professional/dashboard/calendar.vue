@@ -209,10 +209,7 @@ const getEvents = async () => {
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: body
     });
 
@@ -371,10 +368,7 @@ const newEmptySessionModal = reactive({
 
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
             method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
             body: body
         });
 
@@ -492,10 +486,7 @@ const newEventModal = reactive({
 
             const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
                 method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-access-token": userStore.userToken
-                },
+                credentials: 'include',
                 body: body
             });
 
@@ -533,10 +524,7 @@ const newEventModal = reactive({
 
             const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
                 method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-access-token": userStore.userToken || ''
-                },
+                credentials: 'include',
                 body: body
             });
 
@@ -641,10 +629,7 @@ const editEmptySessionModal = reactive({
 
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session`, {
             method: 'PUT',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
             body: body
         });
 
@@ -668,10 +653,7 @@ const editEmptySessionModal = reactive({
         editEmptySessionModal.data.removeSessionLoading = true;
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-session/${editEmptySessionModal.data.event.session_info.session_id}`, {
             method: 'DELETE',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
         editEmptySessionModal.data.removeSessionLoading = false;
@@ -743,10 +725,7 @@ const editManualSessionModal = reactive({
 
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/manual`, {
             method: 'PUT',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
             body: body
         });
 
@@ -770,10 +749,7 @@ const editManualSessionModal = reactive({
         editManualSessionModal.data.removeSessionLoading = true;
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editManualSessionModal.data.event.event_id}`, {
             method: 'DELETE',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
         editManualSessionModal.data.removeSessionLoading = false;
@@ -838,10 +814,7 @@ const editPersonalEventModal = reactive({
 
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/session/personal`, {
             method: 'PUT',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
             body: body
         });
 
@@ -865,10 +838,7 @@ const editPersonalEventModal = reactive({
         editPersonalEventModal.data.removeSessionLoading = true;
         const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-event/${editPersonalEventModal.data.event.event_id}`, {
             method: 'DELETE',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
         editPersonalEventModal.data.removeSessionLoading = false;

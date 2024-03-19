@@ -201,10 +201,7 @@ const saveUserData = async () => {
 
     const data = await $fetch(`${runtimeConfig.public.apiBase}/student/info`, {
         method: 'PUT',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken || '' || '',
-        },
+        credentials: 'include',
         body: body
     });
 

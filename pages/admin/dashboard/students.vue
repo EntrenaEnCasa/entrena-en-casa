@@ -123,10 +123,7 @@ const getAllStudents = async () => {
 
     await useFetch(`${runtimeConfig.public.apiBase}/admin/students`, {
         method: 'GET',
-        headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userStore.userToken,
-        },
+        credentials: 'include',
         onResponse({ request, response, options }) {
             allStudents.value = response._data;
             allStudents.value.loading = false;

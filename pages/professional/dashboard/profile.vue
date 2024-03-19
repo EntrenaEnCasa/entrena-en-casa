@@ -11,8 +11,9 @@
                     <div class="text-center flex flex-col gap-4">
                         <div v-if="userStore.user.first_name">
                             <p class="text-sm text-gray-500">Nombre profesional</p>
-                            <p class="font-semibold text-2xl">{{ userStore.user.first_name }} {{
-                                userStore.user.last_name }}</p>
+                            <p class="font-semibold text-2xl">
+                                {{ userStore.user.first_name }} {{ userStore.user.last_name }}
+                            </p>
                         </div>
                         <div v-if="userStore.user.title">
                             <p class="text-sm text-gray-500">Título</p>
@@ -29,7 +30,8 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
+            <div
+                class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
                 <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
                 <CommonLoading v-show="getCoverageRangesLoading" text="cargando rangos de cobertura" />
                 <div v-show="!getCoverageRangesLoading">
@@ -85,18 +87,18 @@
                             zoom: 13,
                         }">
                             <MapboxSource source-id="circleSource" :source="{
-                                type: 'geojson',
-                                data: circleGeoJSON
-                            }" />
+                            type: 'geojson',
+                            data: circleGeoJSON
+                        }" />
                             <MapboxLayer v-if="circleData.enabled" :layer="{
-                                id: 'circleLayer',
-                                type: 'fill', // or 'line' depending on how you want to style it
-                                source: 'circleSource',
-                                paint: {
-                                    'fill-color': circleData.fillColor,
-                                    'fill-opacity': circleData.opacity
-                                }
-                            }" />
+                            id: 'circleLayer',
+                            type: 'fill', // or 'line' depending on how you want to style it
+                            source: 'circleSource',
+                            paint: {
+                                'fill-color': circleData.fillColor,
+                                'fill-opacity': circleData.opacity
+                            }
+                        }" />
                             <MapboxDefaultMarker @dragstart="onMarkerDragStart" :marker-id="markerID"
                                 :options="{ draggable: true }" :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
                             </MapboxDefaultMarker>
@@ -196,10 +198,7 @@ const getCoverageRanges = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/user/${user_id}`,
         {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
     getCoverageRangesLoading.value = false;
@@ -235,10 +234,7 @@ const addCoverage = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`,
         {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
             body: body
         });
 
@@ -276,10 +272,7 @@ const saveEditChanges = async () => {
 
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "x-access-token": userStore.userToken || ''
-        },
+        credentials: 'include',
         body: body
     });
 
@@ -312,10 +305,7 @@ const deleteCoverage = async () => {
     const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-range/${rangeID}`,
         {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                "x-access-token": userStore.userToken || ''
-            },
+            credentials: 'include',
         });
 
     deleteCoverageRangeLoading.value = false;

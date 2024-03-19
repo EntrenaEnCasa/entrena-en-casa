@@ -97,8 +97,23 @@ onMounted(() => {
 
 const toggleUserMenu = () => userMenuOpen.value = !userMenuOpen.value;
 
-const logout = () => {
-    authStore.logOut();
+const logout = async () => {
+    try {
+        const response = await $fetch('/api/auth/log-out', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (response.success) {
+            authStore.logOut();
+            console.log(response.message);
+        }
+    }
+    catch (error) {
+        alert(error);
+    }
 }
 
 const emit = defineEmits(['toggleSidebar'])
