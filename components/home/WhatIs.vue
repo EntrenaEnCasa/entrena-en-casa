@@ -6,12 +6,11 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center  mx-auto">
                 <div class="lg:col-span-2">
                     <div class="contenedor">
-                        <iframe class="responsive-iframe  rounded-3xl" width="560" height="315"
-                            src="https://www.youtube.com/embed/LMNJWdFQrHg?si=kuSISxyCRTRFoQzT&amp;controls=0"
+                        <iframe class="responsive-iframe rounded-3xl" width="560" height="315"
+                            src="https://www.youtube.com/embed/o_HHBh3WxX0?si=vNy-Qjjoql13hFW4&vq=hd1080&amp;controls=0"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen>
-                        </iframe>
+                            allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="w-full lg:w-11/12 mx-auto leading-tight font-light">

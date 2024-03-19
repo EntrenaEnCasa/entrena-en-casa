@@ -21,8 +21,9 @@
                             <NuxtLink to="/user/auth/register"
                                 class="border-0 rounded-full text-white px-6 py-3 font-medium bg-secondary">Registrarse
                             </NuxtLink>
-                            <NuxtLink to="https://youtu.be/LMNJWdFQrHg" target="_blank"
-                                class="flex items-center space-x-2">
+                            <NuxtLink
+                                to="https://www.youtube.com/watch?v=o_HHBh3WxX0&ab_channel=JorgeSierraEntrenaenCasa"
+                                target="_blank" class="flex items-center space-x-2">
                                 <div
                                     class="rounded-full shadow-lg text-secondary h-12 w-12 font-medium bg-white flex justify-center items-center">
                                     <Icon name="fa6-solid:play" class="ml-1 text-xl" />
