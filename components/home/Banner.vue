@@ -33,11 +33,11 @@
 
                     </div>
                 </div>
-                <div class="hidden lg:block ">
+                <div class="hidden lg:block -z-10">
                     <NuxtImg src="/home/banner-img-min.png" alt="Banner"
-                        class=" absolute h-screen -top-24 right-0 lg:right-16 w-auto object-cover  " />
+                        class="absolute h-screen -top-24 right-0 lg:right-16 w-auto object-cover" />
                     <div
-                        class="absolute top-20 right-24 bg-white px-4 py-3 rounded-lg  space-x-2 flex items-center shadow-xl">
+                        class="absolute top-20 right-24 bg-white px-4 py-3 rounded-lg space-x-2 flex items-center shadow-xl">
                         <h3 class="text-2xl font-bold">60+</h3>
                         <p class="text-gray-500 text-sm leading-tight">Clases <br> grupales</p>
                     </div>
@@ -103,6 +103,7 @@
 <style scoped>
 .bg-gradiente {
     background: url('/background.svg') no-repeat center center fixed;
+    z-index: -20;
     /* background: linear-gradient(136deg, rgba(198, 243, 255, 0.15) 0%, rgba(113, 212, 240, 0.15) 64.54%, rgba(0, 142, 181, 0.15) 100%); */
 }
 </style>
