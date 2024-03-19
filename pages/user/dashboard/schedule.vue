@@ -233,6 +233,7 @@ import { useUserStore } from '~/stores/UserStore';
 import { useWeekNavigation } from '~/composables/time/useWeekNavigation';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
+import { useToast } from 'vue-toastification';
 
 const DEFAULT_COORDINATES = [-70.6506, -33.4372];
 const DEFAULT_ZOOM = 13;
@@ -255,6 +256,7 @@ const { weekDays, isStartWeek, goToPreviousWeek, goToNextWeek, formatDate } = us
 const { flyTo, calculateDurationBasedOnDistance, calculateDistance } = useMapInteraction(mapRef);
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
+const toast = useToast();
 
 const isOnline = ref(false);
 const professionals = ref([]);
@@ -422,28 +424,32 @@ const confirmSession = async () => {
         user_id: userStore.user.user_id,
     }
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/session`, {
-        method: 'POST',
-        credentials: 'include',
-        body: body
-    });
+    try {
 
-    confirmSessionLoading.value = false;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/student/session`, {
+            method: 'POST',
+            credentials: 'include',
+            body: body
+        });
 
-    if (error.value) {
-        console.log("Fetch error:", error.value);
-        return;
+        if (response.success) {
+            toast.success(response.message);
+            getSessions();
+        }
+        else {
+            toast.error(response.message);
+        }
+
+    }
+    catch (error) {
+        console.log(error);
+        toast.error('Ocurrió un error al confirmar la sesión');
+    }
+    finally {
+        confirmSessionLoading.value = false;
+        confirmationModal.value.closeModal();
     }
 
-    if (data.value.success) {
-        console.log(data.value.message);
-        getSessions();
-    }
-    else {
-        console.log(data.value.message);
-    }
-
-    confirmationModal.value.closeModal();
 }
 
 const getInPersonSessions = async () => {
@@ -463,26 +469,31 @@ const getInPersonSessions = async () => {
         user_id: userStore.user.user_id,
     }
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/in-person`, {
-        method: 'POST',
-        credentials: 'include',
-        body: body
-    });
+    try {
 
-    sessionsLoading.value = false;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/student/sessions/in-person`, {
+            method: 'POST',
+            credentials: 'include',
+            body: body
+        });
 
-    if (error.value) {
-        console.log("Fetch error:", error.value);
-        return;
+        if (response.success) {
+            professionals.value = response.professionals;
+        }
+        else {
+            professionals.value = [];
+            toast.error(response.message);
+        }
     }
-
-    if (data.value.success) {
-        professionals.value = data.value.professionals;
-    }
-    else {
+    catch (error) {
+        console.log(error);
         professionals.value = [];
-        console.log(data.value.message);
+        toast.error('Ocurrió un error al cargar las sesiones');
     }
+    finally {
+        sessionsLoading.value = false;
+    }
+
 }
 
 const getOnlineSessions = async () => {
@@ -494,26 +505,31 @@ const getOnlineSessions = async () => {
         user_id: userStore.user.user_id,
     }
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/student/sessions/online`, {
-        method: 'POST',
-        credentials: 'include',
-        body: body
-    });
+    try {
 
-    sessionsLoading.value = false;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/student/sessions/online`, {
+            method: 'POST',
+            credentials: 'include',
+            body: body
+        });
 
-    if (error.value) {
-        console.log("Fetch error:", error.value);
-        return;
+        if (response.success) {
+            professionals.value = response.professionals;
+        }
+        else {
+            professionals.value = [];
+            toast.error(response.message);
+        }
     }
-
-    if (data.value.success) {
-        professionals.value = data.value.professionals;
-    }
-    else {
+    catch (error) {
+        console.log(error);
         professionals.value = [];
-        console.log(data.value.message);
+        toast.error('Ocurrió un error al cargar las sesiones');
     }
+    finally {
+        sessionsLoading.value = false;
+    }
+
 }
 
 const getSessions = () => {

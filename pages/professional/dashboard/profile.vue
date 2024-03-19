@@ -1,10 +1,10 @@
 <template>
     <div class="h-full">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 h-full">
-            <div class="mt-16">
+            <div class="mt-32">
                 <div class="bg-white rounded-lg p-6 shadow-lg border flex flex-col items-center h-full">
                     <!-- Circle image container -->
-                    <div class="w-36 h-36 rounded-full bg-blue-100 mb-4 -mt-20">
+                    <div class="w-52 h-52 rounded-full bg-white mb-4 -mt-40 p-4">
                         <NuxtImg src="/icons/woman.png" class="w-full h-full object-cover" />
                     </div>
                     <!-- Content container -->
@@ -35,11 +35,11 @@
                 <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
                 <CommonLoading v-show="getCoverageRangesLoading" text="cargando rangos de cobertura" />
                 <div v-show="!getCoverageRangesLoading">
-                    <div v-if="coverageRanges.length == 0">
+                    <div v-if="coverageRanges.data.length == 0">
                         No hay rangos de cobertura actualmente
                     </div>
                     <div v-else class="flex flex-col items-center gap-y-2">
-                        <div v-for="range, index in coverageRanges"
+                        <div v-for="range, index in coverageRanges.data"
                             class="inline-flex items-center gap-x-2 rounded-full bg-gray-100 px-6 py-1.5">
                             <p class="font-semibold">{{ range.range_name }}</p>
                             <p class="font-light">{{ range.radius }} km</p>
@@ -135,6 +135,7 @@ import * as turf from '@turf/turf';
 import { useUserStore } from '~/stores/UserStore';
 import { useMapInteraction } from '~/composables/maps/useMapInteraction';
 import { useGeocoding } from '~/composables/maps/useGeocoding';
+import { useToast } from 'vue-toastification';
 
 const DEFAULT_COORDINATES = [-71.593916, -33.040681];
 const DEFAULT_RADIUS = "1";
@@ -145,8 +146,6 @@ const CIRCLE_OPACITY = 0.5;
 const editMode = ref(false);
 const editIndex = ref(null);
 
-const coverageRanges = ref([]);
-const getCoverageRangesLoading = ref(false);
 const addCoverageRangeLoading = ref(false);
 const updateCoverageRangeLoading = ref(false);
 const deleteCoverageRangeLoading = ref(false);
@@ -188,36 +187,17 @@ const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig()
 const { prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference, debounceFlyTo } = useMapInteraction(mapRef);
 const { getReverseGeocodingData } = useGeocoding();
+const toast = useToast();
 
 // Methods
 
-const getCoverageRanges = async () => {
-    getCoverageRangesLoading.value = true;
-    const user_id = userStore.user.user_id;
-
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/user/${user_id}`,
-        {
-            method: 'GET',
-            credentials: 'include',
-        });
-
-    getCoverageRangesLoading.value = false;
-
-    if (error.value) {
-        console.error('An error occurred:', error.value);
-        return;
-    }
-
-    if (data.value.success) {
-        console.log(data.value.message);
-        coverageRanges.value = data.value.data;
-    }
-    else {
-        console.log(data.value.message);
-    }
-};
+const { data: coverageRanges, error: getCoverageRangesError, pending: getCoverageRangesLoading, refresh: getCoverageRanges } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/user/${userStore.user.user_id}`, {
+    method: 'GET',
+    credentials: 'include',
+});
 
 const addCoverage = async () => {
+
     addCoverageRangeLoading.value = true;
     const geoData = await getReverseGeocodingData(markerCoordinates.value);
     const short_code = geoData.context[3].short_code;
@@ -231,35 +211,37 @@ const addCoverage = async () => {
         short_code: short_code
     };
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`,
-        {
-            method: 'POST',
-            credentials: 'include',
-            body: body
-        });
+    try {
 
-    addCoverageRangeLoading.value = false;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/range`,
+            {
+                method: 'POST',
+                credentials: 'include',
+                body: body
+            });
 
-    if (error.value) {
-        console.error('An error occurred:', error.value);
-        return;
+        if (response.success) {
+            toast.success(response.message);
+            getCoverageRanges();
+        }
+        else {
+            toast.error(response.message);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+    finally {
+        addCoverageRangeLoading.value = false;
+        closeModal();
     }
 
-    if (data.value.success) {
-        console.log(data.value.message);
-        getCoverageRanges();
-    }
-    else {
-        console.log(data.value.message);
-    }
-
-    closeModal();
 };
 
 const saveEditChanges = async () => {
 
     updateCoverageRangeLoading.value = true;
-    const rangeID = coverageRanges.value[editIndex.value].range_id;
+    const rangeID = coverageRanges.value.data[editIndex.value].range_id;
 
     // Prepare the request body
     const body = {
@@ -270,61 +252,65 @@ const saveEditChanges = async () => {
         }
     };
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range`, {
-        method: 'PUT',
-        credentials: 'include',
-        body: body
-    });
+    try {
 
-    updateCoverageRangeLoading.value = false;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/range`, {
+            method: 'PUT',
+            credentials: 'include',
+            body: body
+        });
 
-    if (error.value) {
-        console.error('An error occurred:', error.value);
-        editMode.value = false;
+        if (response.success) {
+            toast.success("Rango de cobertura actualizado exitosamente");
+            getCoverageRanges();
+        }
+        else {
+            toast.error(response.message);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+    finally {
+        updateCoverageRangeLoading.value = false;
         closeModal();
-        return;
+        editMode.value = false;
     }
 
-    if (data.value) {
-        console.log(data.value.message);
-        getCoverageRanges();
-    }
-    else {
-        console.log(data.value.message);
-    }
-
-    closeModal();
-    editMode.value = false;
 };
 
 const deleteCoverage = async () => {
 
     deleteCoverageRangeLoading.value = true;
-    const rangeID = coverageRanges.value[editIndex.value].range_id;
+    const rangeID = coverageRanges.value.data[editIndex.value].range_id;
 
-    const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/professional/delete-range/${rangeID}`,
-        {
-            method: 'DELETE',
-            credentials: 'include',
-        });
+    try {
 
-    deleteCoverageRangeLoading.value = false;
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/delete-range/${rangeID}`,
+            {
+                method: 'DELETE',
+                credentials: 'include',
+            });
 
-    if (error.value) {
-        console.error('An error occurred:', error.value);
-        return;
+        if (response.success) {
+            toast.success("Rango de cobertura eliminado exitosamente");
+            getCoverageRanges();
+        }
+        else {
+            toast.error(response.message);
+        }
+
+    }
+    catch (error) {
+        console.error(error);
+    }
+    finally {
+        deleteCoverageRangeLoading.value = false;
+        closeModal();
     }
 
-    if (data.value.success) {
-        console.log(data.value.message);
-        getCoverageRanges();
-    }
-    else {
-        console.log(data.value.message);
-    }
-
-    closeModal();
 };
+
 
 const resetModal = () => {
     rangeName.value = "";
@@ -333,9 +319,9 @@ const resetModal = () => {
 };
 
 const openEditModal = (index) => {
-    rangeName.value = coverageRanges.value[index].range_name;
-    inputRadius.value = coverageRanges.value[index].radius;
-    const coordinates = [coverageRanges.value[index].lng, coverageRanges.value[index].lat];
+    rangeName.value = coverageRanges.value.data[index].range_name;
+    inputRadius.value = coverageRanges.value.data[index].radius;
+    const coordinates = [coverageRanges.value.data[index].lng, coverageRanges.value.data[index].lat];
     setMarkerCoordinates(coordinates);
     editIndex.value = index;
     editMode.value = true;
@@ -427,7 +413,6 @@ const closeModal = () => {
 
 onMounted(() => {
     setupMap();
-    getCoverageRanges();
 });
 
 const setupMap = () => {

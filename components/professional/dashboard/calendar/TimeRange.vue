@@ -14,7 +14,9 @@
                     {{ time }}
                 </option>
             </select>
-            <p v-show="!isManual">{{ automaticallySelectedEndTime }}hrs</p>
+            <p v-show="!isManual">
+                {{ automaticallySelectedEndTime }}hrs
+            </p>
         </div>
     </div>
 </template>

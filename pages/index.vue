@@ -3,6 +3,6 @@
     <HomeWhyUs />
     <HomePlans />
     <HomeWhatIs />
-    <HomeOurStudents />
+    <HomeTestimonialOurStudents />
     <HomeContact />
 </template>
