@@ -1,11 +1,11 @@
 <template>
-    <div class="py-10 lg:pb-32 bg-gradiente relative ">
-        <div class="tellural h-[200px] lg:h-[300px]">
+    <div class="py-10 lg:pb-32 bg-gradiente relative">
+        <div class="tellural">
 
             <div class="grid grid-cols-1 lg:grid-cols-3 place-items-center justify center w-full  mt-5 lg:mt-0 h-full">
 
                 <div
-                    class="col-span-2 grid items-center justify-center w-4/5 lg:w-2/3 text-center lg:text-left lg:ml-10  mb-10 lg:mt-10">
+                    class="lg:col-span-2 grid items-center justify-center w-4/5 lg:w-2/3 text-center lg:text-left lg:ml-10  mb-10 lg:mt-10">
                     <h1 class="text-4xl text-black mb-4 tellural font-bold w-full mx-auto lg:mx-0 lg:w-4/5">Personal
                         Trainers
                         Online,
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div
-            class="mt-20 lg:mt-12 mx-auto rounded-xl shadow-lg bg-white w-10/12 px-4 py-6 lg:absolute lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-1/2">
+            class="mt-3 lg:mt-12 mx-auto rounded-xl shadow-lg bg-white w-10/12 px-4 py-6 lg:absolute lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-1/2">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                 <div class="w-full flex items-center gap-2">
                     <div>
