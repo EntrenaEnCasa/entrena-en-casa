@@ -6,7 +6,7 @@
                 <h2 class="text-3xl md:text-4xl font-medium text-center">¿Tienes dudas? ¡Contactanos!</h2>
             </div>
             <div class="flex flex-col lg:flex-row items-stretch w-full mb-10 gap-10">
-                <Form class="space-y-4 flex-1">
+                <Form @submit="sendEmail" v-slot="{ meta }" class="space-y-4 flex-1">
                     <CommonInput v-model="formData.email" type="text" name="email" label="Correo electrónico"
                         placeholder="Ingresa tu correo electrónico" />
                     <CommonInput v-model="formData.subject" type="text" name="subject" label="Asunto"
@@ -45,5 +45,9 @@ const formData = reactive({
     subject: "",
     message: ""
 });
+
+const sendEmail = () => {
+    console.log(formData);
+}
 
 </script>
