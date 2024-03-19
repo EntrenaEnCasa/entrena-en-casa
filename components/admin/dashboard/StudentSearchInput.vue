@@ -19,7 +19,7 @@
                     </span>
                 </div>
             </div>
-            <div class="border rounded-md absolute  top-[110%] left-0 right-0 bg-white shadow-lg p-3 z-50"
+            <div class="border rounded-md absolute  top-[110%] left-0 right-0 bg-white shadow-lg p-3 z-30"
                 v-if="inputFocused && searchTerm">
                 <CommonLoading v-if="isLoading" text="Buscando" />
                 <ul v-else>
