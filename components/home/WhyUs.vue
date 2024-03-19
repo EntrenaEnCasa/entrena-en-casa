@@ -1,5 +1,5 @@
 <template>
-    <div class="my-5 md:mt-36 lg:mt-32">
+    <div class="my-5">
         <div class="text-center w-11/12 mx-auto">
             <h3 class=" tracking-[.3rem]">BENEFICIOS</h3>
             <h2 class="font-medium my-3 text-4xl">¿Por qué Entrena en Casa?</h2>
