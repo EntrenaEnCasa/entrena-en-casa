@@ -1,12 +1,12 @@
 <template>
-    <div class="py-10 flex flex-col items-center w-11/12 mx-auto">
+    <div class="py-10 flex flex-col items-center w-11/12 sm:w-10/12 mx-auto">
         <p class="text-sm tracking-[.15rem]">SOBRE NOSOTROS</p>
         <h2 class="font-medium text-3xl md:text-4xl">¿Qué es Entrena en Casa?</h2>
         <div class="mt-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center  mx-auto">
-                <div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center  mx-auto">
+                <div class="lg:col-span-2">
                     <div class="contenedor">
-                        <iframe class="responsive-iframe" width="560" height="315"
+                        <iframe class="responsive-iframe  rounded-3xl" width="560" height="315"
                             src="https://www.youtube.com/embed/LMNJWdFQrHg?si=kuSISxyCRTRFoQzT&amp;controls=0"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -14,23 +14,11 @@
                         </iframe>
                     </div>
                 </div>
-                <div class="w-full lg:w-11/12 mx-auto leading-tight font-light flex flex-col justify-center text-justify">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit obcaecati libero voluptates in? Ducimus
-                        eius <span class="font-semibold">corrupti</span> libero esse voluptatibus eveniet quod, facilis
-                        voluptate, tempora eligendi pariatur
-                        assumenda iure?</p>
-                    <br>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
-                        porro et,
-                        exercitationem nobis
-                        rem explicabo quaerat vero. <span class="font-semibold">Illum</span> odit vel error dolor ad saepe
-                        voluptatum, qui numquam eligendi
-                        exercitationem ipsam?</p>
-                    <br>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis porro et, exercitationem nobis
-                        rem <span class="font-semibold">explicabo</span> quaerat vero. Illum odit vel error dolor ad saepe
-                        <span class="fw-semibold">voluptatum</span>, qui numquam eligendi
-                        exercitationem ipsam?
+                <div class="w-full lg:w-11/12 mx-auto leading-tight font-light">
+                    <p>
+                        Elige localidad y si quieres entrenar en tu casa, al aire libre o de manera Online. Nuestros
+                        entrenamientos están pensados en hacer de la actividad física una experiencia agradable y junto
+                        con ello consigas los resultados.
                     </p>
                 </div>
             </div>
