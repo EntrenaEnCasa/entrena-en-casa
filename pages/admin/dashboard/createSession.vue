@@ -206,8 +206,8 @@ const sessionInfo = ref<SessionInfo>(
         date: "",
         time: "",
         available: 0,
-        format: "",
-        modality: "",
+        format: "Personalizado",
+        modality: "Online",
         link: "",
         type: "",
         coordinates: "",
@@ -224,15 +224,6 @@ onMounted(() => {
 });
 
 const resetForm = () => {
-    if (sessionInfo && sessionInfo.value) {
-        sessionInfo.value.format = '';
-        sessionInfo.value.modality = '';
-        sessionInfo.value.link = '';
-        sessionInfo.value.date = '';
-        sessionInfo.value.students = [];
-        sessionInfo.value.professional = {} as Professional;
-    }
-    professionals.value = [];
     reloadNuxtApp();
 }
 
