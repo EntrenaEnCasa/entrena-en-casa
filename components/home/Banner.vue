@@ -1,64 +1,63 @@
 <template>
-    <div class="py-10 md:pb-32 bg-gradiente relative">
-        <div class="tellural">
-            <h1 class="w-11/12 mx-auto text-center font-bold text-4xl md:text-5xl">
-                Son cada vez más
-                <br>
-                alumnos entrenando
-                <br>
-                <div class="mt-4 inline-block px-5 py-2 text-white rounded-xl text-2xl md:text-3xl font-bold bg-primary">
-                    online
-                </div>
-            </h1>
-            <div class="grid grid-cols-1 md:grid-cols-3 place-items-center mt-5 md:mt-0">
-                <div class="hidden md:flex flex-col space-y-4">
-                    <div class="self-start ml-8">
-                        <img src="/icons/star.svg" alt="running" width="60">
-                    </div>
+    <div class="py-10 lg:pb-32 bg-gradiente relative ">
+        <div class="tellural h-[200px] lg:h-[300px]">
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 place-items-center justify center w-full  mt-5 lg:mt-0 h-full">
+
+                <div
+                    class="col-span-2 grid items-center justify-center w-4/5 lg:w-2/3 text-center lg:text-left lg:ml-10  mb-10 lg:mt-10">
+                    <h1 class="text-4xl   text-black mb-4 tellural font-bold w-full mx-auto lg:mx-0 lg:w-4/5  ">Personal
+                        Trainers
+                        Online,
+                        Domicilio y al aire libre
+                    </h1>
+                    <p class=" text-center lg:text-left text-gray-500 mb-4 w-full lg:w-4/5">Entrenando donde y cuando
+                        quieras,
+                        un entrenamiento y nutrición personalizada.
+                        ¿Listo para un cambio?</p>
+
                     <div>
-                        <img src="/home/dad-son-exercising.png" alt="dad-son-exercising" class="w-full h-auto">
-                    </div>
-                    <div class="self-end mr-4">
-                        <img src="/icons/star.svg" alt="running" width="40">
-                    </div>
-                </div>
-                <div class="gap-4 flex items-center justify-center flex-col space-y-6">
-                    <div class="px-10 py-2 text-white rounded-full leading-tight shadow-xl"
-                        style="background-color: #00A4E8">
-                        Conoce la nueva
-                        <br>
-                        metodología
-                    </div>
-                </div>
-                <div class="hidden md:flex">
-                    <img src="/home/yoga-couple.png" alt="yoga-couple" width="200">
-                    <div>
-                        <div>
-                            <span class="text-3xl">+50</span>
-                            <p class="lh-1 text-secondary">
-                                Alumnos
-                                <br>
-                                activos
-                            </p>
+                        <div class="flex items-center justify-center lg:justify-start mx-auto mt-6 space-x-4 ">
+                            <router-link to="/user/auth/register"
+                                class="border-0 rounded-full text-white px-4 py-3 font-medium bg-secondary">Registrarse
+                            </router-link>
+                            <nuxtLink to="https://youtu.be/LMNJWdFQrHg" target="_blank"
+                                class="flex items-center space-x-2">
+                                <div class=" border-0 rounded-full text-secondary p-3 font-medium bg-white ml-4">
+
+                                    <Icon name="fa6-solid:play" class=" text-xl" />
+                                </div>
+                                <span class="text-secondary">Ver video</span>
+                            </nuxtLink>
                         </div>
-                        <div>
-                            <span class="text-3xl">+60</span>
-                            <p class="lh-1 text-secondary">
-                                Clases
-                                <br>
-                                grupales
-                            </p>
-                        </div>
+
                     </div>
                 </div>
+                <div class="hidden lg:block ">
+                    <NuxtImg src="/home/banner-img-min.png" alt="Banner"
+                        class=" absolute h-screen -top-24 right-0 lg:right-16 w-auto object-cover  " />
+                    <div
+                        class="absolute top-20 right-24 bg-white px-4 py-3 rounded-lg  space-x-2 flex items-center shadow-xl">
+                        <h3 class="text-2xl font-bold">60+</h3>
+                        <p class="text-gray-500 text-sm leading-tight">Clases <br> grupales</p>
+                    </div>
+                    <div
+                        class="absolute top-72 right-1/3  bg-white px-4 py-3 rounded-lg  space-x-2 flex items-center shadow-xl">
+                        <h3 class="text-2xl font-bold">50+</h3>
+                        <p class="text-gray-500 text-sm leading-tight">Alumnos <br> activos</p>
+                    </div>
+                </div>
+
+
             </div>
         </div>
         <div
-            class="mt-12 mx-auto rounded-lg shadow-lg bg-white w-10/12 p-8 md:absolute md:bottom-0 md:left-1/2 md:-translate-x-1/2 md:translate-y-1/2 ">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            class=" mt-36 lg:mt-12 mx-auto rounded-lg shadow-lg bg-white w-10/12 p-4 lg:absolute  lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-1/2 ">
+
+            <div class=" grid grid-cols-1 lg:grid-cols-4 gap-4">
                 <div class="w-full flex items-center gap-2">
                     <div>
-                        <Icon name="fa6-solid:location-dot" class="text-4xl w-16 min-w-16" />
+                        <Icon name="fa6-solid:location-dot" class="text-3xl w-16 min-w-16" />
                     </div>
                     <div class="flex flex-col leading-tight">
                         <h4 class="font-semibold mb-1">
@@ -69,7 +68,7 @@
                 </div>
                 <div class="w-full flex items-center gap-2">
                     <div>
-                        <Icon name="fa6-solid:dumbbell" class="text-4xl w-16" />
+                        <Icon name="fa6-solid:dumbbell" class="text-3xl w-16" />
                     </div>
 
                     <div class="flex flex-col leading-tight">
@@ -81,7 +80,7 @@
                 </div>
                 <div class="w-full flex items-center gap-2">
                     <div>
-                        <Icon name="fa6-solid:user" class="text-4xl w-16" />
+                        <Icon name="fa6-solid:user" class="text-3xl w-16" />
                     </div>
 
                     <div class="flex flex-col leading-tight">
@@ -91,7 +90,7 @@
                             individual como grupal</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-center md:justify-start">
+                <div class="flex items-center justify-center mx-auto ">
                     <router-link to="/user/auth/register" class="border-0 rounded-lg text-white px-3 py-2 font-medium"
                         style="background-color: #00A4E8">Registrarse
                         ahora
