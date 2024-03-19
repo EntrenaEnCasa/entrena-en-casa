@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
 
         if (response && response.token) {
 
-            const domain = config.public.nodeEnv === 'production' ? '.homematch.cl' : 'localhost';
+            const domain = config.public.nodeEnv === 'production' ? '.entrenaencasa.cl' : 'localhost';
 
             // Set HttpOnly cookie
             setCookie(event, 'auth_token', response.token, {

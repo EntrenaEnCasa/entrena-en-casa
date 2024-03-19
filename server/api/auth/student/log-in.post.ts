@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
             }),
         });
 
-        const domain = config.public.nodeEnv === 'production' ? '.homematch.cl' : 'localhost';
+        const domain = config.public.nodeEnv === 'production' ? '.entrenaencasa.cl' : 'localhost';
 
         if (response && response.token) {
             // Set HttpOnly cookie
