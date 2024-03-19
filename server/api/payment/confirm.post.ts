@@ -92,7 +92,7 @@ export default defineEventHandler(async (event) => {
         const encryptedApiKey = encryptApiKey(apiKey);
   
         const response = await $fetch<addCreditsResponse>(
-          `${config.apiBase}/student/credits`,
+          `${config.public.apiBase}/student/credits`,
           {
             method: "POST",
             headers: {
