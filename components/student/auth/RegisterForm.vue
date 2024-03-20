@@ -157,7 +157,7 @@ const register = async () => {
 
     try {
 
-        const response = await $fetch(`${runtimeConfig.public.apiBase}/student/sign-up`, {
+        const response = await $fetch(`api/auth/student/sign-up`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -168,6 +168,7 @@ const register = async () => {
         if (response.success) {
             authStore.signUp(response.user);
             router.push('/user/dashboard/aboutyou');
+            toast.success(response.message);
         }
         else {
             registrationState.error = true;

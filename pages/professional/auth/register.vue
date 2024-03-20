@@ -158,7 +158,7 @@ const register = async () => {
     saveUserDataLoading.value = true;
 
     try {
-        const response = await $fetch<UserAPIResponse>(`${runtimeConfig.public.apiBase}/professional/sign-up`, {
+        const response = await $fetch<UserAPIResponse>(`api/auth/professional/sign-up`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -172,22 +172,22 @@ const register = async () => {
             })
         });
 
-        if (!response.success) {
-            toast.error(response.message);
-        }
-        else {
+        if (response.success) {
+            toast.success(response.message);
             authStore.signUp(response.user);
             router.push('/professional/dashboard/home');
-            toast.success(response.message);
+        }
+        else {
+            toast.error(response.message);
         }
 
     }
     catch (error) {
         console.error(error);
+        toast.error("Error al intentar registrarse");
     }
     finally {
         saveUserDataLoading.value = false;
-
     }
 
 };
