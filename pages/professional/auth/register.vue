@@ -158,7 +158,7 @@ const register = async () => {
     saveUserDataLoading.value = true;
 
     try {
-        const response = await $fetch<UserAPIResponse>(`api/auth/professional/sign-up`, {
+        const response = await $fetch<UserAPIResponse>(`/api/auth/professional/sign-up`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

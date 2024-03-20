@@ -157,7 +157,7 @@ const register = async () => {
 
     try {
 
-        const response = await $fetch(`api/auth/student/sign-up`, {
+        const response = await $fetch(`/api/auth/student/sign-up`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
