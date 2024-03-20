@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
   const { subject, message, email } = await readBody(event);
   const fromMail = 'Entrena en casa <contacto@entrenaencasa.cl>';
-  const toMails = ['gonzalo.antoniobc@gmail.com']
+  const toMails = ['entrenaencasa1@gmail.com']
 
   try {
     const data = await resend.emails.send({
