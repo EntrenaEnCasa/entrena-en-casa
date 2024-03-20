@@ -1,4 +1,3 @@
-// server/api/auth/student/log-in.post.ts
 export default defineEventHandler(async (event) => {
 
     interface Body {
