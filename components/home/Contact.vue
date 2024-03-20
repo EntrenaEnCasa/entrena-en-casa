@@ -40,6 +40,10 @@
 
 <script setup>
 
+import { useToast } from 'vue-toastification'
+
+const toast = useToast();
+
 const formData = reactive({
     email: "",
     subject: "",
@@ -85,8 +89,47 @@ const validateMessage = (value) => {
     return true;
 }
 
-const sendEmail = () => {
-    console.log(formData);
+const sendEmail = async (values, { resetForm }) => {
+
+    loading.value = true;
+
+    const body = {
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+    }
+
+    try {
+        const response = await $fetch('/api/email/send', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: body
+        });
+
+        if (response.success) {
+            toast.success('Mensaje enviado correctamente');
+            resetForm();
+        }
+        else {
+            toast.error(response.message);
+        }
+    }
+    catch (error) {
+        console.log(error);
+        toast.error('Ocurrió un error al enviar el correo');
+    }
+    finally {
+        loading.value = false;
+    }
+
+}
+
+const resetFormData = () => {
+    formData.email = "";
+    formData.subject = "";
+    formData.message = "";
 }
 
 </script>
