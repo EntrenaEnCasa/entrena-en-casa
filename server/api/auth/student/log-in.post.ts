@@ -24,7 +24,10 @@ export default defineEventHandler(async (event) => {
 
     // Validate email and password
     if (!email || !password) {
-        throw new Error('El email y la contraseña son necesarios para iniciar sesión');
+        throw createError({
+            statusCode: 400,
+            message: "Faltan datos para iniciar sesión",
+        });
     }
 
     const config = useRuntimeConfig(event);
@@ -44,7 +47,7 @@ export default defineEventHandler(async (event) => {
 
         const domain = config.public.nodeEnv === 'production' ? '.entrenaencasa.cl' : 'localhost';
 
-        if (response && response.token) {
+        if (response.success) {
 
             // Set HttpOnly cookie
             setCookie(event, 'auth_token', response.token, {
@@ -63,12 +66,18 @@ export default defineEventHandler(async (event) => {
 
             return newResponse;
         }
+        else {
+            return {
+                success: false,
+                message: response.message
+            }
+        }
     } catch (error) {
         console.error('Error al intentar iniciar sesión:', error);
-        return createError({
+        throw createError({
             statusCode: 401,
             message: "Error al iniciar sesión",
-          });
+        });
     }
 
 });
