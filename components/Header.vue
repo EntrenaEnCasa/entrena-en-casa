@@ -36,13 +36,11 @@
                     <div class="hidden lg:flex items-center">
                         <div class="flex space-x-4">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <a href="#" class="text-secondary rounded-md px-3 py-2 font-medium"
-                                aria-current="page">Inicio</a>
-                            <a href="#"
-                                class="text-gray-600 hover:bg-secondary hover:text-white rounded-md px-3 py-2 font-medium">Sobre
-                                Nosotros</a>
-                            <a href="#"
-                                class="text-gray-600 hover:bg-secondary hover:text-white rounded-md px-3 py-2 font-medium">Planes</a>
+                            <NuxtLink to="/" class="text-secondary rounded-md px-3 py-2 font-medium"
+                                aria-current="page">Inicio</NuxtLink>
+                            <NuxtLink to="/plans"
+                                class="text-gray-600 hover:bg-secondary hover:text-white rounded-md px-3 py-2 font-medium">
+                                Planes</NuxtLink>
                         </div>
                     </div>
                     <div class="hidden lg:flex items-center font-medium text-gray-500 space-x-2">
