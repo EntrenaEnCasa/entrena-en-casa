@@ -28,7 +28,8 @@
                                 <h3 class="text-2xl font-semibold">{{ session.professional.first_name + ' ' +
                 session.professional.last_name }}</h3>
                                 <p class="font-light text-gray-700">{{ session.professional.title }}</p>
-                                <a v-if="session.modality === 'Online'" :href="session.link || ''" target="_blank"
+                                <p v-if="session.link == ''" class="text-gray-700">Aún no hay link de acceso</p>
+                                <a v-else-if="session.modality === 'Online'" :href="session.link || ''" target="_blank"
                                     class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline underline-offset-2">
                                     <Icon name="icon-park-outline:new-computer" />
                                     <p>Online</p>
