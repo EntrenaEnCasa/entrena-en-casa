@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="  text-[#949494]">No tienes ninguna sesión a futuro.</div>
+                    <div class="text-[#949494]">No tienes ninguna sesión a futuro.</div>
                 </div>
 
             </div>
@@ -36,7 +36,7 @@
                     <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
                 <CommonLoading v-if="pastSessionsLoading" />
-                <div v-else-if="pastSessions.success">
+                <div v-else-if="pastSessions && pastSessions.success">
                     <div v-for="session in pastSessions.sessions" :key="session.session_id">
                         <hr class="my-5">
                         <div class="grid grid-cols-3 items-center">
@@ -79,7 +79,7 @@ const userId = userStore.user.user_id;
 const headers = useRequestHeaders(['cookie']);
 
 // Fetch future sessions
-const { data: futureSessions, pending: futureSessionsLoading } = useFetch(
+const { data: futureSessions, pending: futureSessionsLoading } = await useFetch(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/soon`,
     {
         method: 'GET',
@@ -88,7 +88,7 @@ const { data: futureSessions, pending: futureSessionsLoading } = useFetch(
 );
 
 // Fetch past sessions
-const { data: pastSessions, pending: pastSessionsLoading } = useFetch(
+const { data: pastSessions, pending: pastSessionsLoading } = await useFetch(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/last`,
     {
         method: 'GET',

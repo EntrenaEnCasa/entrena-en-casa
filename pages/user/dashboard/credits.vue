@@ -342,7 +342,7 @@ interface APIPaymentCreateResponse extends APIResponse {
     flowOrder: number;
 }
 
-const { data: creditsData, error: getCreditsError, pending: getCreditsLoading, refresh: getCredits } = useFetch<APICreditsResponse>(`${runtimeConfig.public.apiBase}/student/credits/${user.user_id}`, {
+const { data: creditsData, error: getCreditsError, pending: getCreditsLoading, refresh: getCredits } = await useFetch<APICreditsResponse>(`${runtimeConfig.public.apiBase}/student/credits/${user.user_id}`, {
     method: 'GET',
     credentials: 'include',
     onResponse({ response }) {
@@ -405,7 +405,7 @@ const getFormattedCreditType = (creditType: string, creditFormat: string) => {
     }
 }
 
-const { pending: plansInformationLoading, refresh: getPlansInformation } = useFetch<APIPlansResponse>(`${runtimeConfig.public.apiBase}/student/prices/${user.region}`, {
+const { pending: plansInformationLoading, refresh: getPlansInformation } = await useFetch<APIPlansResponse>(`${runtimeConfig.public.apiBase}/student/prices/${user.region}`, {
     method: 'GET',
     credentials: 'include',
     onResponse({ response }) {

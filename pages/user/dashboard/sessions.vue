@@ -292,7 +292,7 @@ const formatDate = (date: string): string => {
     return d.toLocaleString('es-ES', { day: '2-digit', month: 'long' });
 }
 
-const { data: userData, pending: userDataLoading } = useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`, {
+const { data: userData, pending: userDataLoading } = await useFetch<APIUserResponseType>(`${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`, {
     method: 'GET',
     credentials: 'include',
     lazy: true,
@@ -334,14 +334,14 @@ const calculateAge = (dob: string): number => {
 }
 
 // Fetch future sessions
-const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFutureSessions, error: futureSessionsError } = useFetch<APISessionResponseType>(
+const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFutureSessions, error: futureSessionsError } = await useFetch<APISessionResponseType>(
     `${runtimeConfig.public.apiBase}/student/${userStore.user?.user_id}/sessions/future`, {
     method: 'GET',
     credentials: 'include',
 });
 
 // Fetch past sessions
-const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSessions, error: pastSessionsError } = useFetch<APISessionResponseType>(
+const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSessions, error: pastSessionsError } = await useFetch<APISessionResponseType>(
     `${runtimeConfig.public.apiBase}/student/${userStore.user?.user_id}/sessions/past`, {
     method: 'GET',
     credentials: 'include',
