@@ -28,7 +28,7 @@
                                     <select v-model="selectedPlan" id="plan"
                                         class="w-full px-5 py-3 border border-gray-200 rounded-lg  outline-none">
                                         <option value="0" disabled selected>Selecciona un plan</option>
-                                        <option v-for="plan in Plans" :value="plan.plan_id">{{
+                                        <option v-for="plan in data?.plans" :value="plan.plan_id">{{
                                 formatPlan(plan.credit_type) }} - {{ plan.credit_quantity }} créditos
                                         </option>
                                     </select>
@@ -139,8 +139,6 @@ interface Student {
     email: string;
 }
 
-const Plans = ref([] as Plan[]);
-
 interface Plan {
     plan_id: number;
     region: string;
@@ -152,14 +150,9 @@ interface Plan {
     description: string;
 }
 
-
 const selectedPlan = ref<number>(0);
 const addPlanLoading = ref(false);
 const selectedPlanData = ref<Plan | null>()
-
-watch(selectedPlan, (newSelectedPlan) => {
-    selectedPlanData.value = Plans.value.find(plan => plan.plan_id === newSelectedPlan);
-}, { immediate: true });
 
 const props = defineProps<{
     student: Student | null;
@@ -181,8 +174,8 @@ defineExpose({
 const { data, pending: plansLoading, error, refresh: getPlans } = await useFetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${props.student?.user_id}`, {
     method: 'GET',
     credentials: 'include',
+    lazy: true
 });
-Plans.value = data.value?.plans || [];
 
 const addPlan = async () => {
 
@@ -234,4 +227,9 @@ const formatPlan = (creditType: string) => {
         return "Grupal Online";
     }
 }
+
+watch(selectedPlan, (newSelectedPlan) => {
+    selectedPlanData.value = data.value?.plans.find(plan => plan.plan_id === newSelectedPlan);
+}, { immediate: true });
+
 </script>
