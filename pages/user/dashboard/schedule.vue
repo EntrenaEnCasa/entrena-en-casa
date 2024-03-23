@@ -61,39 +61,55 @@
                 </button>
             </div>
             <div v-show="!sessionsLoading" class="my-10">
-                <div v-if="!selectedLocation && !isOnline"
+                <!-- <div v-if="!selectedLocation && !isOnline"
                     class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
-                    <h2 class="text-3xl font-semibold text-primary mb-5">No se ha ingresado ubicación</h2>
-                    <p class="max-w-2xl mx-auto text-gray-700">
-                        No podemos mostrarte sesiones presenciales si no ingresas la
-                        <span class="font-bold">
-                            ubicación aproximada
-                        </span>
-                        , ya que no sabemos si el profesional tendrá cobertura.
-                        Puedes ingresar
-                        <span class="font-bold">
-                            “Online”
-                        </span>
-                        como opción si no deseas que sea presencial.
-                    </p>
+
+                </div> -->
+                <div v-show="(!selectedLocation && !isOnline) || (filteredProfessionals.length === 0)"
+                    class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
+                    <div v-show="!selectedLocation && !isOnline">
+                        <h2 class="text-3xl font-semibold text-primary mb-5">No se ha ingresado ubicación</h2>
+                        <p class="max-w-2xl mx-auto text-gray-700">
+                            No podemos mostrarte sesiones presenciales si no ingresas la
+                            <span class="font-bold">
+                                ubicación aproximada
+                            </span>
+                            , ya que no sabemos si el profesional tendrá cobertura.
+                            Puedes ingresar
+                            <span class="font-bold">
+                                “Online”
+                            </span>
+                            como opción si no deseas que sea presencial.
+                        </p>
+                    </div>
+                    <div v-show="(selectedLocation && !isOnline) && filteredProfessionals.length === 0">
+                        <h2 class="text-3xl font-semibold text-primary mb-5">No hay profesionales</h2>
+                        <p class="max-w-2xl mx-auto text-gray-700">
+                            No encontramos ninguna hora con nuestros profesionales para la ubicación y fecha
+                            ingresada.
+                            Prueba otra fecha o prueba otra ubicación.
+                        </p>
+                    </div>
+                    <div v-show="isOnline && filteredProfessionals.length === 0">
+                        <h2 class="text-3xl font-semibold text-primary mb-5">No hay profesionales</h2>
+                        <p class="max-w-2xl mx-auto text-gray-700">
+                            No encontramos ninguna hora con nuestros profesionales para la fecha
+                            ingresada.
+                            Prueba otra fecha.
+                        </p>
+                    </div>
                 </div>
-                <div v-show="(selectedLocation && !isOnline) && filteredProfessionals.length == 0"
-                    class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
-                    <h2 class="text-3xl font-semibold text-primary mb-5">No hay profesionales</h2>
-                    <p class="max-w-2xl mx-auto text-gray-700">
-                        No encontramos ninguna hora con nuestros profesionales para la ubicación y fecha
-                        ingresada.
-                        Prueba otra fecha o prueba otra ubicación.
+                <div v-show="((selectedLocation && !isOnline) || isOnline) && filteredProfessionals.length === 0"
+                    class="inline-flex flex-col items-center w-full text-center">
+                    <p class="max-w-xl mx-auto text-gray-700 mt-6 mb-3">
+                        Puedes ponerte en contacto directamente con el administrador para coordinar una sesión a
+                        través de whatsapp
                     </p>
-                </div>
-                <div v-show="isOnline && filteredProfessionals.length == 0"
-                    class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
-                    <h2 class="text-3xl font-semibold text-primary mb-5">No hay profesionales</h2>
-                    <p class="max-w-2xl mx-auto text-gray-700">
-                        No encontramos ninguna hora con nuestros profesionales para la fecha
-                        ingresada.
-                        Prueba otra fecha.
-                    </p>
+                    <NuxtLink to="https://wa.me/56971370313?text=Hola%20Entrena%20En%20Casa,%20tengo%20una%20duda."
+                        target="_blank" class="rounded  px-4 py-1.5 text-primary space-x-1">
+                        <Icon name="logos:whatsapp-icon" class="text-4xl" />
+                        <span class="underline underline-offset-4">Contactar</span>
+                    </NuxtLink>
                 </div>
                 <div v-show="filteredProfessionals.length > 0" class="grid grid-cols-1 xl:grid-cols-2">
                     <div v-for="professional, index in filteredProfessionals" :key="index"
