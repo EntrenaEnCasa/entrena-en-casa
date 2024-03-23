@@ -1,14 +1,20 @@
 [
     {
         "id": 1,
-        "name": "María Gutierrez",
-        "profession": "Doctora",
-        "description": "Desde que inicie mi entrenamiento me siento excelente, más activa, liviana y cada día más fuerte y saludable. Además de eso mentalmente sintiéndome feliz con los resultados que he obtenido. Vamos equipo el grito de guerra de Jorge, vamos que si puedes, eso nos incentiva a ser cada vez más fuertes, rápidos. El compromiso del entrenamiento y del grupo es un 100%."
+        "name": "Maribel Müller",
+        "profession": "",
+        "description": "Llevo casi tres meses ejercitando con  Jorge y es lejos la mejor decisión que he tomado, Jorge es seco, te motiva y te apoya no solo para que des lo mejor de ti en cada clase sino para que también puedas de a poco lograr tus objetivos ademas es empático y siempre toma en cuenta las necesidades individuales de sus alumnos... y debo decir que Jorge es una persona que además tiene una gran calidad humana .Tiene además un gran equipo, lo recomiendo 100% !"
     },
     {
         "id": 2,
-        "name": "Jorge Pérez",
-        "profession": "Ingeniero",
-        "description": "Siempre quise llevar una vida más activa, pero me faltaba motivación. Desde que empecé a entrenar con el equipo de entrena en casa, me siento más fuerte, más rápido y más saludable. Además, el grupo es muy motivador y el entrenador es muy profesional. ¡Gracias por ayudarme a alcanzar mis objetivos!"
+        "name": "Evelyn Paez",
+        "profession": "",
+        "description": "Bueno siempre es bueno poder hacer actividad física, pero encontrar alguien que se acomode al horario y sea responsable es difícil, pero  encontré eso en @entrenaencasa, ya se cumplirán 3 años junto a esta modalidad online y ha resultado perfecto para mi."
+    },
+    {
+        "id": 3,
+        "name": "Chileactivo",
+        "profession": "",
+        "description": "Lo máximo. Excelente, llevo 2 meses con el equipo y estoy muy contenta con los cambios obtenidos en mi condición física. Estuve en gimnasios haciendo rutinas por mi cuenta pero me desmotivaba y no obtenía ningún resultado . Ahora estoy acompañada, en mi casa, no tengo que desplazarme a otros lugares.  El equipo es muy responsable y dedicado, se adaptan a los objetivos que uno tiene. Muy bueno y espero continuar por mucho tiempo. 100% recomendable."
     }
 ]
