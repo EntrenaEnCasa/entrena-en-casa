@@ -83,8 +83,9 @@ const { data: futureSessions, pending: futureSessionsLoading } = await useFetch(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/soon`,
     {
         method: 'GET',
-        credentials: 'include'
-    }
+        credentials: 'include',
+        lazy: true
+    },
 );
 
 // Fetch past sessions
@@ -92,7 +93,8 @@ const { data: pastSessions, pending: pastSessionsLoading } = await useFetch(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/last`,
     {
         method: 'GET',
-        credentials: 'include'
+        credentials: 'include',
+        lazy: true
     }
 );
 

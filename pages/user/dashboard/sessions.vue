@@ -339,6 +339,7 @@ const { data: futureSessions, pending: futureSessionsLoading, refresh: refreshFu
     `${runtimeConfig.public.apiBase}/student/${userStore.user?.user_id}/sessions/future`, {
     method: 'GET',
     credentials: 'include',
+    lazy: true,
 });
 
 // Fetch past sessions
@@ -346,6 +347,7 @@ const { data: pastSessions, pending: pastSessionsLoading, refresh: refreshPastSe
     `${runtimeConfig.public.apiBase}/student/${userStore.user?.user_id}/sessions/past`, {
     method: 'GET',
     credentials: 'include',
+    lazy: true,
 });
 
 const confirmSession = async () => {

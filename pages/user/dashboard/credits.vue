@@ -352,7 +352,8 @@ const { data: creditsData, error: getCreditsError, pending: getCreditsLoading, r
         } else {
             toast.error(responseData.message);
         }
-    }
+    },
+    lazy: true
 })
 
 const changeSelectedInformation = async (selected: string) => {
@@ -415,7 +416,8 @@ const { pending: plansInformationLoading, refresh: getPlansInformation } = await
         } else {
             toast.error(responseData.message);
         }
-    }
+    },
+    lazy: true
 })
 
 const buyPlan = async () => {
