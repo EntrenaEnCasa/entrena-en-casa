@@ -16,8 +16,9 @@
                         </div>
                     </form>
                 </div>
+                <CommonLoading v-if="professionalsDataPending" />
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="bg-white w-full table-auto text-sm text-left text-gray-500" v-if="allProfessionals">
+                    <table class="bg-white w-full table-auto text-sm text-left text-gray-500" v-if="professionalsData">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                             <tr>
                                 <th scope="col" class="p-6">Nombre</th>
@@ -28,7 +29,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="professional in allProfessionals.professionals" class="border-b"
+                            <tr v-for="professional in professionalsData.professionals" class="border-b"
                                 :key="professional.user_id">
                                 <td class="px-6 py-4 whitespace-nowrap ">
                                     <div v-if="professional.first_name">
@@ -54,7 +55,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <button class="px-4 py-2 bg-primary text-white rounded-md font-medium"
-                                        @click="openModalProfessional(professional)">
+                                        @click="openProfessionalModal(professional)">
                                         Ver Detalles
                                     </button>
                                 </td>
@@ -65,27 +66,26 @@
                 <AdminDashboardProfessionalsProfessionalInfoModal :professional="currentProfessional"
                     :pastSessions="pastSessions" :futureSessions="futureSessions"
                     :futureSessionsLoading="futureSessionsLoading" :pastSessionsLoading="pastSessionsLoading
-                        " ref="professionalModal" />
+                    " ref="professionalModal" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "~/stores/UserStore";
 
-const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const currentProfessional = ref<Professional | null>(null);
 
-interface StudentResponse extends APIResponse {
-    students: Student[];
-}
 interface FutureSessionsResponse extends APIResponse {
     sessions: Session[];
 }
 interface PastSessionsResponse extends APIResponse {
     sessions: Session[];
+}
+
+interface ProfessionalsDataResponse extends APIResponse {
+    professionals: Professional[];
 }
 
 interface Professional {
@@ -117,29 +117,10 @@ const pastSessions = ref<Session[]>([]);
 const futureSessionsLoading = ref<boolean>(false);
 const pastSessionsLoading = ref<boolean>(false);
 
-const allProfessionals = ref({
-    success: false,
-    loading: false,
-    message: "",
-    professionals: [] as Professional[],
+const { data: professionalsData, pending: professionalsDataPending, error } = await useFetch<ProfessionalsDataResponse>(`${runtimeConfig.public.apiBase}/admin/professionals`, {
+    method: "GET",
+    credentials: "include",
 });
-
-onMounted(async () => {
-    await getAllProfessionals();
-});
-
-const getAllProfessionals = async () => {
-    allProfessionals.value.loading = true;
-
-    await useFetch(`${runtimeConfig.public.apiBase}/admin/professionals`, {
-        method: "GET",
-        credentials: "include",
-        onResponse({ request, response, options }) {
-            allProfessionals.value = response._data;
-            allProfessionals.value.loading = false;
-        },
-    });
-};
 
 const getPastSessions = async (professional: Professional) => {
     pastSessionsLoading.value = true;
@@ -197,7 +178,7 @@ const getFutureSessions = async (professional: Professional) => {
     }
 };
 
-const openModalProfessional = (professional: Professional) => {
+const openProfessionalModal = (professional: Professional) => {
     professionalModal.value?.openModal();
     currentProfessional.value = professional;
     getFutureSessions(professional);
