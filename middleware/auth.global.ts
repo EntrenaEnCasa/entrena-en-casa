@@ -5,7 +5,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     const authStore = useAuthStore();
     const userStore = useUserStore();
-    authStore.checkIfUserIsLoggedIn();
+
+    authStore.checkAuthState();
 
     const user = userStore.user;
 
