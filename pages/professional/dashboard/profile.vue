@@ -194,6 +194,7 @@ const toast = useToast();
 const { data: coverageRanges, error: getCoverageRangesError, pending: getCoverageRangesLoading, refresh: getCoverageRanges } = await useFetch(`${runtimeConfig.public.apiBase}/professional/range/user/${userStore.user.user_id}`, {
     method: 'GET',
     credentials: 'include',
+    lazy: true
 });
 
 const addCoverage = async () => {

@@ -215,6 +215,7 @@ const genderOptions = [
 const { data: currentSessionData, pending: currentSessionLoading, error: currentSessionError, refresh: getCurrentSession } = await useFetch<currentSessionResponse>(`${config.public.apiBase}/professional/session/attendance/${userStore.user?.user_id}`, {
     method: 'GET',
     credentials: 'include',
+    lazy: true
 });
 
 const studentsWithoutData = computed(() => {

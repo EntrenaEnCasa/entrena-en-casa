@@ -134,6 +134,7 @@ interface Professional {
 const { data, pending: studentsLoading, error, refresh: getStudents } = await useFetch<StudentResponse>(`${runtimeConfig.public.apiBase}/admin/students`, {
     method: 'GET',
     credentials: 'include',
+    lazy: true
 });
 
 

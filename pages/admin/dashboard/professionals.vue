@@ -120,6 +120,7 @@ const pastSessionsLoading = ref<boolean>(false);
 const { data: professionalsData, pending: professionalsDataPending, error } = await useFetch<ProfessionalsDataResponse>(`${runtimeConfig.public.apiBase}/admin/professionals`, {
     method: "GET",
     credentials: "include",
+    lazy: true
 });
 
 const getPastSessions = async (professional: Professional) => {

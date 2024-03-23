@@ -95,7 +95,8 @@ const { data, error, pending } = await useFetch<PaymentStatusResponse>('/api/pay
     method: 'GET',
     query: {
         flowOrder: paymentStore.flowTransaction?.flowOrder
-    }
+    },
+    lazy: true
 });
 
 const getStatus = (status: number) => {

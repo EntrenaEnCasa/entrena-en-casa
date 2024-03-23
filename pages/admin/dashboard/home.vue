@@ -134,6 +134,7 @@ interface Session {
 const { data: futureSessionsData, pending: futureSessionsLoading, error, refresh: getFutureSessions } = await useFetch<SessionsResponse>(`${runtimeConfig.public.apiBase}/admin/sessions/future`, {
     method: 'GET',
     credentials: 'include',
+    lazy: true
 });
 
 const test = () => {
