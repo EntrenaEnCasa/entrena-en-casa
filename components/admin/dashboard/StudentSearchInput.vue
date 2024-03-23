@@ -51,10 +51,10 @@
 
 <script setup>
 
-import { useUserStore } from '~/stores/UserStore';
+import { useToast } from 'vue-toastification';
 
-const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
+const toast = useToast();
 
 const props = defineProps({
     selectedFormat: {
@@ -93,24 +93,28 @@ const fetchResults = async () => {
         isLoading.value = true;
         hasFetched.value = false;
         results.value = [];
-        const { data, error } = await useFetch(`${runtimeConfig.public.apiBase}/admin/students/search`, {
-            method: 'POST',
-            credentials: 'include',
-            body: {
-                searchTerm: searchTerm.value
+        try {
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/admin/students/search`, {
+                method: 'POST',
+                credentials: 'include',
+                body: {
+                    searchTerm: searchTerm.value
+                }
+            });
+
+            if (response.success) {
+                results.value = data.value.students;
             }
-        });
-
-        isLoading.value = false;
-        hasFetched.value = true;
-
-        if (error.value) {
-            console.log("Fetch error:", error.value);
-            return;
+            else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            console.log("Fetch error:", error);
+            toast.error("Ocurrió un error al buscar los estudiantes");
         }
-
-        if (data.value.success) {
-            results.value = data.value.students;
+        finally {
+            isLoading.value = false;
+            hasFetched.value = true;
         }
     }
 };
