@@ -9,5 +9,11 @@ export default defineEventHandler((event) => {
         secure: true, // Ensure the cookie is only sent over HTTPS
     });
 
+    // Clear the client-accessible cookie by setting its expiration date in the past or setting its value to empty
+    deleteCookie(event, 'is_authenticated', {
+        path: '/',
+        secure: true,
+    });
+
     return { success: true, message: 'Cierre de sesión correcto' };
 });

@@ -48,6 +48,7 @@ export default defineEventHandler(async (event) => {
         if (response.success) {
 
             const domain = config.public.nodeEnv === 'production' ? '.entrenaencasa.cl' : 'localhost';
+            const maxAge = 60 * 60 * 24 * 14; // 14 days of expiration
 
             // Set HttpOnly cookie
             setCookie(event, 'auth_token', response.token, {
@@ -55,7 +56,15 @@ export default defineEventHandler(async (event) => {
                 httpOnly: true,
                 domain: domain,
                 secure: true, // Ensure the cookie is only sent over HTTPS
-                maxAge: 60 * 60 * 24 * 14, // 14 days of expiration
+                maxAge: maxAge,
+            });
+
+            // Set client-accessible cookie
+            setCookie(event, 'is_authenticated', 'true', {
+                path: '/',
+                domain: domain,
+                secure: true,
+                maxAge: maxAge,
             });
 
             const newResponse = {
