@@ -1,63 +1,59 @@
 <template>
-    <div class="p-6 sm:p-8">
-        <div class="relative">
-            <div name="content">
-                <div class="mb-4">
-                    <h3 class="text-xl font-medium">Profesionales</h3>
-                </div>
-                <CommonLoading v-if="professionalsDataPending" />
-                <div class="overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="bg-white w-full table-auto text-sm text-left text-gray-500" v-if="professionalsData">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
-                            <tr>
-                                <th scope="col" class="p-6">Nombre</th>
-                                <th scope="col" class="p-6">Apellido</th>
-                                <th scope="col" class="p-6">Correo</th>
-                                <th scope="col" class="p-6">Título</th>
-                                <th scope="col" class="p-6">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="professional in professionalsData.professionals" class="border-b"
-                                :key="professional.user_id">
-                                <td class="px-6 py-4 whitespace-nowrap ">
-                                    <div v-if="professional.first_name">
-                                        {{ professional.first_name }}
-                                    </div>
-                                    <div v-else>
-                                        Sin datos
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap ">
-                                    <div v-if="professional.last_name">
-                                        {{ professional.last_name }}
-                                    </div>
-                                    <div v-else>
-                                        Sin datos
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ professional.email }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap ">
-                                    {{ professional.title }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <button class="px-4 py-2 bg-primary text-white rounded-md font-medium"
-                                        @click="openProfessionalModal(professional)">
-                                        Ver Detalles
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <AdminDashboardProfessionalsProfessionalInfoModal :professional="currentProfessional"
-                    :pastSessions="pastSessions" :futureSessions="futureSessions"
-                    :futureSessionsLoading="futureSessionsLoading" :pastSessionsLoading="pastSessionsLoading
-                    " ref="professionalModal" />
-            </div>
+    <div>
+        <div class="mb-4">
+            <h3 class="text-xl font-medium">Profesionales</h3>
         </div>
+        <CommonLoading v-if="professionalsDataPending" />
+        <div class="overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="bg-white w-full table-auto text-sm text-left text-gray-500" v-if="professionalsData">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                    <tr>
+                        <th scope="col" class="p-6">Nombre</th>
+                        <th scope="col" class="p-6">Apellido</th>
+                        <th scope="col" class="p-6">Correo</th>
+                        <th scope="col" class="p-6">Título</th>
+                        <th scope="col" class="p-6">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="professional in professionalsData.professionals" class="border-b"
+                        :key="professional.user_id">
+                        <td class="px-6 py-4 whitespace-nowrap ">
+                            <div v-if="professional.first_name">
+                                {{ professional.first_name }}
+                            </div>
+                            <div v-else>
+                                Sin datos
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap ">
+                            <div v-if="professional.last_name">
+                                {{ professional.last_name }}
+                            </div>
+                            <div v-else>
+                                Sin datos
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ professional.email }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap ">
+                            {{ professional.title }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <button class="px-4 py-2 bg-primary text-white rounded-md font-medium"
+                                @click="openProfessionalModal(professional)">
+                                Ver Detalles
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <AdminDashboardProfessionalsProfessionalInfoModal :professional="currentProfessional"
+            :pastSessions="pastSessions" :futureSessions="futureSessions" :futureSessionsLoading="futureSessionsLoading"
+            :pastSessionsLoading="pastSessionsLoading
+            " ref="professionalModal" />
     </div>
 </template>
 
