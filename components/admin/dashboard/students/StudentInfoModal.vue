@@ -2,46 +2,46 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modal">
-                <div class="w-full ">
+                <div class="w-full mt-3">
                     <CommonLoading v-if="!student || futureSessionsLoading || pastSessionsLoading" />
                     <div v-else>
-                        <div
-                            class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 mb-8 w-10/12 mx-auto mt-5">
-                            <div class="mb-5 space-y-2 px-1">
+                        <h2 class="text-2xl text-center mb-5 font-semibold">Estudiante</h2>
+                        <div class="text-center space-y-5 mb-10 w-10/12 mx-auto">
+                            <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
-                                <p class="text-3xl font-medium text-gray-700" v-if="student && student?.first_name">{{
+                                <p class="text-2xl font-medium text-gray-700" v-if="student && student?.first_name">{{
                         student?.first_name }} {{ student?.last_name }}</p>
-                                <p class="text-3xl font-medium text-gray-700" v-else> Sin datos </p>
+                                <p class="text-2xl font-medium text-gray-700" v-else>Sin datos</p>
                             </div>
 
-                            <div class="mb-5 space-y-2 px-1">
+                            <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Correo electrónico</h3>
-                                <p class="text-3xl font-medium text-gray-700">{{ student?.email }}</p>
+                                <p class="text-2xl font-medium text-gray-700">{{ student?.email }}</p>
                             </div>
                         </div>
-                        <div class=" mb-6 grid grid-cols-1 place-items-center mx-auto w-full ">
-                            <div class="px-5 py-3 rounded-lg border flex items-center justify-between w-full">
-                                <p class="text-lg">Planes comprados</p>
-                                <button class="bg-secondary px-3 py-2 rounded-lg text-white text-sm"
-                                    @click="openModalPlans">Ver planes</button>
-
+                        <div class="space-y-6 mb-6">
+                            <div class="flex items-center justify-between">
+                                <div class="px-5 py-3 rounded-lg border flex items-center justify-between w-full">
+                                    <p class="text-lg">Planes comprados</p>
+                                    <CommonButton bg-color="secondary" text-size="sm" class="px-4 py-2"
+                                        @click="openModalPlans">
+                                        Ver planes
+                                    </CommonButton>
+                                </div>
                             </div>
-                        </div>
-                        <div class=" w-full  mx-auto">
-                            <div class="mb-6 px-5 py-3 rounded-lg border flex items-center justify-between"
+                            <div class="px-5 py-3 rounded-lg border flex items-center justify-between"
                                 id="futureSessionsToggle" @click="toggleFutureSessions">
                                 <!-- //toggle de sesiones próximas -->
                                 <p class="text-lg">Sesiones próximas</p>
                                 <Icon
                                     :name="isFutureSessionsVisible ? 'fa6-solid:chevron-down' : 'fa6-solid:chevron-right'" />
-
                             </div>
                             <div class="overflow-x-auto" id="futureSessions" v-show="isFutureSessionsVisible">
                                 <div v-if="futureSessionsLoading">
                                     <CommonLoading />
                                 </div>
                                 <table v-else-if="futureSessions.length > 0"
-                                    class="bg-white table-auto text-sm text-left text-gray-500 mb-7">
+                                    class="bg-white table-auto text-sm text-left text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">
@@ -63,8 +63,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
-
                                         <tr class="border-b " v-for="session in futureSessions">
                                             <td class="px-6 py-4 whitespace-nowrap ">
                                                 {{ session.date }}
@@ -79,33 +77,32 @@
                                                 {{ session.modality }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <p>{{ session.professional?.first_name }} {{
-                        session.professional?.last_name
-                    }}</p>
+                                                <p>
+                                                    {{ session.professional?.first_name }} {{
+                        session.professional?.last_name }}
+                                                </p>
                                                 <p class="text-sm text-gray-400">{{ session.professional?.title }}</p>
                                             </td>
                                         </tr>
-
                                     </tbody>
                                 </table>
-                                <div v-else class="text-center text-gray-400 mb-7">
+                                <div v-else class="text-center text-gray-400">
                                     <p>No hay sesiones próximas</p>
                                 </div>
                             </div>
-                            <div class="mb-6 px-5 py-3 rounded-lg border flex items-center justify-between"
+                            <div class="px-5 py-3 rounded-lg border flex items-center justify-between"
                                 id="pastSessionsToggle" @click="togglePastSessions">
                                 <!-- //toggle de sesiones pasadas -->
                                 <p class="text-lg">Sesiones pasadas</p>
                                 <Icon
                                     :name="isPastSessionsVisible ? 'fa6-solid:chevron-down' : 'fa6-solid:chevron-right'" />
-
                             </div>
                             <div class="overflow-x-auto" id="pastSessions" v-show="isPastSessionsVisible">
                                 <div v-if="pastSessionsLoading">
                                     <CommonLoading />
                                 </div>
                                 <table v-else-if="pastSessions.length > 0"
-                                    class="bg-white table-auto text-sm text-left text-gray-500 mb-7">
+                                    class="bg-white table-auto text-sm text-left text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">
@@ -145,7 +142,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <p>{{ session.professional.first_name }} {{
                         session.professional.last_name
-                                                    }}
+                    }}
                                                 </p>
                                                 <p class="text-sm text-gray-400">{{ session.professional.title }}</p>
                                             </td>
@@ -153,7 +150,7 @@
 
                                     </tbody>
                                 </table>
-                                <div v-else class="text-center text-gray-400 mb-7">
+                                <div v-else class="text-center text-gray-400">
                                     <p>No hay sesiones pasadas</p>
                                 </div>
                             </div>
