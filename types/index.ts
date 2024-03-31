@@ -42,7 +42,7 @@ declare global {
       lat: number;
       lng: number;
     };
-    region?: string;
+    region?: number;
     info: StudentInfo | null;
   }
 

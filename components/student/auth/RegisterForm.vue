@@ -47,22 +47,22 @@ const formData = reactive({
 const loading = ref(false);
 
 const regionOptions = [
-    { value: 'CL-AI', label: 'Aisén del General Carlos Ibañez del Campo' },
-    { value: 'CL-AN', label: 'Antofagasta' },
-    { value: 'CL-AP', label: 'Arica y Parinacota' },
-    { value: 'CL-AT', label: 'Atacama' },
-    { value: 'CL-BI', label: 'Bío Bío' },
-    { value: 'CL-CO', label: 'Coquimbo' },
-    { value: 'CL-AR', label: 'Araucanía' },
-    { value: 'CL-LI', label: 'Libertador General Bernardo O\'Higgins' },
-    { value: 'CL-LL', label: 'Los Lagos' },
-    { value: 'CL-LR', label: 'Los Ríos' },
-    { value: 'CL-MA', label: 'Magallanes y de la Antártica Chilena' },
-    { value: 'CL-ML', label: 'Maule' },
-    { value: 'CL-RM', label: 'Región Metropolitana de Santiago' },
-    { value: 'CL-NB', label: 'Ñuble' },
-    { value: 'CL-TA', label: 'Tarapacá' },
-    { value: 'CL-VS', label: 'Valparaíso' }
+    { value: 11, label: 'Aisén del General Carlos Ibañez del Campo' },
+    { value: 2, label: 'Antofagasta' },
+    { value: 15, label: 'Arica y Parinacota' },
+    { value: 3, label: 'Atacama' },
+    { value: 8, label: 'Bío Bío' },
+    { value: 4, label: 'Coquimbo' },
+    { value: 9, label: 'Araucanía' },
+    { value: 6, label: 'Libertador General Bernardo O\'Higgins' },
+    { value: 10, label: 'Los Lagos' },
+    { value: 14, label: 'Los Ríos' },
+    { value: 12, label: 'Magallanes y de la Antártica Chilena' },
+    { value: 7, label: 'Maule' },
+    { value: 13, label: 'Región Metropolitana de Santiago' },
+    { value: 16, label: 'Ñuble' },
+    { value: 1, label: 'Tarapacá' },
+    { value: 5, label: 'Valparaíso' }
 ];
 
 const registrationState = reactive({

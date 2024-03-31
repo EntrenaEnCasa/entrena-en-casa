@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     interface Body {
         email: string;
         password: string;
-        region: string;
+        region: number;
     }
 
     interface Response {
