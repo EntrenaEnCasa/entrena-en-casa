@@ -34,6 +34,13 @@
                         <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Crear nueva sesión</span>
                     </router-link>
                 </li>
+                <li>
+                    <router-link @click="sidebarOpen = false" to="/admin/dashboard/plans"
+                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
+                        <Icon name="solar:tag-price-bold" class="w-5 h-5  group-hover:text-white" />
+                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white">Planes</span>
+                    </router-link>
+                </li>
                 <!-- <li>
                     <router-link @click="sidebarOpen = false" to="/user/dashboard/recommendations"
                         class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary group">
