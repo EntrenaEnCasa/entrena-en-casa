@@ -8,7 +8,7 @@
                 </div>
                 <div class="flex justify-center items-center p-5">
                     <CommonButton @click="deletePlan" bg-color="tertiary" class="px-4 py-2 rounded-md mr-2">
-                        Eliminar sesión
+                        Eliminar Plan
                     </CommonButton>
                     <CommonButton @click="closeModal" bg-color="gray-200" text-color="gray-700"
                         class="px-4 py-2 rounded-md">
