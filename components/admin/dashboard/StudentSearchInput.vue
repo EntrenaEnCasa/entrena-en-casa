@@ -103,7 +103,7 @@ const fetchResults = async () => {
             });
 
             if (response.success) {
-                results.value = data.value.students;
+                results.value = response.students;
             }
             else {
                 toast.error(response.message);
