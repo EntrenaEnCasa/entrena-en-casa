@@ -30,9 +30,9 @@
                     </button>
                 </div>
                 <div class="flex flex-1 items-center justify-center lg:items-stretch lg:justify-between">
-                    <div class="flex flex-shrink-0 items-center">
+                    <NuxtLink to="/" class="flex flex-shrink-0 items-center">
                         <img class="h-12 w-auto" src="/logo-horizontal.png" alt="Logo entrena en casa">
-                    </div>
+                    </NuxtLink>
                     <div class="hidden lg:flex items-center">
                         <div class="flex space-x-4">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
