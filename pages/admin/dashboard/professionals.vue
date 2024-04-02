@@ -80,6 +80,7 @@ interface Professional {
     title: string;
     phone: string | null;
     email: string;
+    enabled: boolean;
 }
 interface Session {
     session_id: number;

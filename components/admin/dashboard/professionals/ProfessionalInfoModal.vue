@@ -6,6 +6,7 @@
                     <CommonLoading v-if="!professional || pastSessionsLoading || futureSessionsLoading" />
                     <div v-else>
                         <h2 class="text-2xl text-center mb-5 font-semibold">Entrenador</h2>
+
                         <div class="text-center space-y-5 mb-10 w-10/12 mx-auto">
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
@@ -18,6 +19,13 @@
                                 <h3 class="text-gray-500">Correo electrónico</h3>
                                 <p class="text-2xl font-medium text-gray-700">{{ professional.email }}</p>
                             </div>
+                            <CommonButton @click="disableUser()" bg-color="tertiary"
+                                class="py-2 px-3 text-white  mx-auto mb-5" v-if="professional && professional.enabled">
+                                Deshabilitar usuario</CommonButton>
+                            <CommonButton @click="enableUser()" bg-color="primary"
+                                class="py-2 px-3 text-white  mx-auto mb-5"
+                                v-else-if="professional && !professional.enabled">
+                                Habilitar usuario</CommonButton>
                         </div>
                         <div class="space-y-6 mb-6">
                             <div class="px-5 py-3 rounded-lg border flex items-center justify-between"
@@ -147,12 +155,10 @@
 
 <script setup lang="ts">
 
+import { useToast } from 'vue-toastification';
 
-
+const toast = useToast();
 const runtimeConfig = useRuntimeConfig();
-
-
-
 const isPastSessionsVisible = ref(false);
 const isFutureSessionsVisible = ref(false);
 
@@ -186,6 +192,7 @@ interface Professional {
     title: string;
     phone: string | null;
     email: string;
+    enabled: boolean;
 }
 
 const modal = ref<Modal | null>(null);
@@ -206,10 +213,39 @@ defineExpose({
     openModal
 })
 
-onMounted(() => {
-    console.log(props.futureSessions)
-})
-
-
+const disableUser = async () => {
+    if (!props.professional) return;
+    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/disable-account`, {
+        method: 'POST',
+        credentials: 'include',
+        body: {
+            user_id: props.professional.user_id
+        }
+    });
+    if (response.success) {
+        toast.success('Usuario deshabilitado');
+        modal.value?.closeModal();
+        reloadNuxtApp();
+    } else {
+        toast.error('Error al deshabilitar usuario');
+    }
+}
+const enableUser = async () => {
+    if (!props.professional) return;
+    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/enable-account`, {
+        method: 'POST',
+        credentials: 'include',
+        body: {
+            user_id: props.professional.user_id
+        }
+    });
+    if (response.success) {
+        toast.success('Usuario deshabilitado');
+        modal.value?.closeModal();
+        reloadNuxtApp();
+    } else {
+        toast.error('Error al deshabilitar usuario');
+    }
+}
 
 </script>

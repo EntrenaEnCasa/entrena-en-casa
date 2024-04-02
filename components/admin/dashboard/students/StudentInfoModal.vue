@@ -18,7 +18,14 @@
                                 <h3 class="text-gray-500">Correo electrónico</h3>
                                 <p class="text-2xl font-medium text-gray-700">{{ student?.email }}</p>
                             </div>
+                            <CommonButton @click="disableUser()" bg-color="tertiary"
+                                class="py-2 px-3 text-white  mx-auto mb-5" v-if="student && student.enabled">
+                                Deshabilitar usuario</CommonButton>
+                            <CommonButton @click="enableUser()" bg-color="primary"
+                                class="py-2 px-3 text-white  mx-auto mb-5" v-else-if="student && !student.enabled">
+                                Habilitar usuario</CommonButton>
                         </div>
+
                         <div class="space-y-6 mb-6">
                             <div class="flex items-center justify-between">
                                 <div class="px-5 py-3 rounded-lg border flex items-center justify-between w-full">
@@ -166,7 +173,8 @@
 </template>
 
 <script setup lang="ts">
-
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
 const runtimeConfig = useRuntimeConfig();
 interface PlansResponse extends APIResponse {
@@ -203,6 +211,7 @@ interface Student {
     first_name: string;
     last_name: string;
     email: string;
+    enabled: boolean;
 }
 
 interface Session {
@@ -277,6 +286,39 @@ const openModalPlans = () => {
     modal.value?.closeModal();
 
 }
-
+const disableUser = async () => {
+    if (!props.student) return;
+    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/disable-account`, {
+        method: 'POST',
+        credentials: 'include',
+        body: {
+            user_id: props.student.user_id
+        }
+    });
+    if (response.success) {
+        toast.success('Usuario deshabilitado');
+        modal.value?.closeModal();
+        reloadNuxtApp();
+    } else {
+        toast.error('Error al deshabilitar usuario');
+    }
+}
+const enableUser = async () => {
+    if (!props.student) return;
+    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/enable-account`, {
+        method: 'POST',
+        credentials: 'include',
+        body: {
+            user_id: props.student.user_id
+        }
+    });
+    if (response.success) {
+        toast.success('Usuario habilitado');
+        modal.value?.closeModal();
+        reloadNuxtApp();
+    } else {
+        toast.error('Error al habilitar usuario');
+    }
+}
 
 </script>
