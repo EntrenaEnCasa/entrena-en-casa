@@ -30,7 +30,8 @@ declare global {
   interface User {
     user_id: number;
     email: string;
-    user_type: 1 | 2 | 3;
+    user_type: 0 | 1 | 2;
+    verified: boolean;
   }
 
   interface StudentUser extends User {
