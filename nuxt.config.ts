@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     flowHosting: process.env.FLOW_HOSTING,
     backendApiKey: process.env.BACKEND_API_KEY,
     backendSecretKey: process.env.BACKEND_SECRET_KEY,
+    emailToken: process.env.EMAIL_TOKEN,
     public: {
       apiBase: process.env.API_BASE,
       nuxtApiBase: process.env.NUXT_API_BASE,
