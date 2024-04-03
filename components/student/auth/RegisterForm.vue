@@ -167,7 +167,7 @@ const register = async () => {
 
         if (response.success) {
             authStore.signUp(response.user);
-            router.push('/user/dashboard/aboutyou');
+            router.push('/user/dashboard/aboutYou');
             toast.success(response.message);
         }
         else {
