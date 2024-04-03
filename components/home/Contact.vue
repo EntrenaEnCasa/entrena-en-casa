@@ -100,7 +100,7 @@ const sendEmail = async (values, { resetForm }) => {
     }
 
     try {
-        const response = await $fetch('/api/email/send', {
+        const response = await $fetch('/api/email/send/contactForm', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
