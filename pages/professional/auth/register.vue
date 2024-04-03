@@ -147,10 +147,6 @@ const validateTitle = () => {
     return true;
 };
 
-
-
-
-
 const router = useRouter();
 
 const register = async () => {
