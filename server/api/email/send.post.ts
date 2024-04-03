@@ -5,22 +5,15 @@ const resend = new Resend(config.resendApiKey);
 
 export default defineEventHandler(async (event) => {
 
-  const { subject, message, email } = await readBody(event);
-  const fromMail = 'Entrena en casa <contacto@entrenaencasa.cl>';
-  const toMails = ['entrenaencasa0@gmail.com']
-
+  const { data } = await readBody(event);
+  
   try {
-    const data = await resend.emails.send({
-      from: fromMail,
-      to: toMails,
-      subject: "Contacto desde entrenaencasa.cl",
-      html: emailTemplate(email, subject, message)
-    });
+    const response = await resend.emails.send(data);
 
-    if(data.error) {
+    if(response.error) {
         return {
             success: false,
-            error: "Hubo un error al enviar la solicitud"
+            message: "Hubo un error al enviar la solicitud"
         }
     }
     return {
@@ -31,7 +24,7 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     return { 
         success: false,
-        error: "Hubo un error al enviar la solicitud"
+        message: "Hubo un error al enviar la solicitud"
      };
   }
 });
