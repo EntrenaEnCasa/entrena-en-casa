@@ -33,8 +33,8 @@
             <div
                 class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
                 <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
-                <CommonLoading v-show="getCoverageRangesLoading" text="cargando rangos de cobertura" />
-                <div v-show="!getCoverageRangesLoading">
+                <CommonLoading v-if="getCoverageRangesLoading" text="cargando rangos de cobertura" />
+                <div v-else="!getCoverageRangesLoading">
                     <div v-if="coverageRanges.data.length == 0">
                         No hay rangos de cobertura actualmente
                     </div>
