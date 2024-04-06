@@ -34,12 +34,13 @@
                         <img class="h-12 w-auto" src="/logo-horizontal.png" alt="Logo entrena en casa">
                     </NuxtLink>
                     <div class="hidden lg:flex items-center">
-                        <div class="flex space-x-4">
+                        <div class="flex space-x-2">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <NuxtLink to="/" class="text-secondary rounded-md px-3 py-2 font-medium"
+                            <NuxtLink to="/"
+                                class="hover:bg-secondary hover:text-white rounded-md px-4 py-2 font-medium"
                                 aria-current="page">Inicio</NuxtLink>
                             <NuxtLink to="/plans"
-                                class="text-gray-600 hover:bg-secondary hover:text-white rounded-md px-3 py-2 font-medium">
+                                class="text-gray-600 hover:bg-secondary hover:text-white rounded-md px-4 py-2 font-medium">
                                 Planes</NuxtLink>
                         </div>
                     </div>
@@ -82,6 +83,15 @@
         </div>
     </nav>
 </template>
+<style scoped>
+.router-link-active {
+    @apply text-secondary;
+}
+
+.router-link-active:hover {
+    @apply bg-secondary text-white;
+}
+</style>
 <script setup>
 
 const menuOpen = ref(false);
