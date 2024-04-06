@@ -1,5 +1,5 @@
 <template>
-    <div class="group fixed bottom-4 right-4 p-2 flex items-end justify-end w-32 h-32">
+    <div class="group fixed bottom-4 right-4 p-2 flex items-end justify-end w-32 h-32 z-20">
         <NuxtLink to="https://wa.me/56971370313?text=Hola%20Entrena%20En%20Casa,%20tengo%20una%20duda." target="_blank"
             class="text-white shadow-xl flex items-center justify-center p-3 rounded-full bg-gradient-to-r bg-green-500 z-50 absolute cursor-pointer">
             <Icon name="ic:outline-whatsapp" class="w-10 h-10 transition duration-[0.6s]" />
