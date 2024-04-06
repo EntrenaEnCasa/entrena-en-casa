@@ -11,9 +11,9 @@
             </div>
         </div>
         <div class="flex flex-col justify-center items-center mb-12">
-            <nuxt-link to="/">
+            <NuxtLink to="/">
                 <NuxtImg src="/logo.png" class="mb-4 w-36" alt="logo" />
-            </nuxt-link>
+            </NuxtLink>
             <StudentAuthLoginForm />
             <p class="mt-4 text-gray-500">
                 ¿No tienes cuenta?
