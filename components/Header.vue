@@ -30,7 +30,7 @@
                     </button>
                 </div>
                 <div class="flex flex-1 items-center justify-center lg:items-stretch lg:justify-between">
-                    <NuxtLink to="/" class="flex flex-shrink-0 items-center">
+                    <NuxtLink to="/" class="flex flex-shrink-0 items-center !bg-transparent">
                         <NuxtImg class="h-12 w-auto" src="/logo-horizontal.png" alt="Logo entrena en casa" />
                     </NuxtLink>
                     <div class="hidden lg:flex items-center">
