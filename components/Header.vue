@@ -62,16 +62,16 @@
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                 <nuxt-link to="/"
                     class="text-gray-600 hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">Inicio</nuxt-link>
-                <nuxt-link to="/"
+                <!-- <nuxt-link to="/"
                     class="text-gray-600 hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">Sobre
-                    Nosotros</nuxt-link>
-                <nuxt-link to="/"
+                    Nosotros</nuxt-link> -->
+                <nuxt-link to="/plans"
                     class="text-gray-600 hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">
                     Planes
                 </nuxt-link>
                 <div class="space-y-1 py-5">
                     <nuxt-link to="/user/auth/register"
-                        class="text-secondary hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">
+                        class="hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">
                         Registrarse
                     </nuxt-link>
                     <nuxt-link to="/user/auth/login"
