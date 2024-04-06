@@ -1,9 +1,8 @@
 <template>
-    <div class="py-10 lg:pb-32 bg-gradiente relative">
-        <div class="tellural">
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 place-items-center justify center w-full  mt-5 lg:mt-0 h-full">
-
+    <div class="relative">
+        <div class="py-10 lg:pb-32 bg-gradiente">
+            <div
+                class=" tellural grid grid-cols-1 lg:grid-cols-3 place-items-center justify center w-full  mt-5 lg:mt-0 h-full">
                 <div
                     class="lg:col-span-2 grid items-center justify-center w-4/5 lg:w-2/3 text-center lg:text-left lg:ml-10  mb-10 lg:mt-10">
                     <h1 class="text-4xl text-black mb-4 tellural font-bold w-full mx-auto lg:mx-0 lg:w-4/5">Personal
@@ -48,53 +47,51 @@
                         <p class="text-gray-500 text-sm leading-tight">Alumnos <br> activos</p>
                     </div>
                 </div>
-
-
             </div>
-        </div>
-        <div
-            class="mt-3 lg:mt-12 mx-auto rounded-xl shadow-lg bg-white w-10/12 px-4 py-6 lg:absolute lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-1/2">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                <div class="w-full flex items-center gap-2">
-                    <div>
-                        <Icon name="fa6-solid:location-dot" class="text-3xl w-16 min-w-16" />
+            <div
+                class="mt-3 lg:mt-12 mx-auto rounded-xl shadow-lg bg-white w-10/12 px-4 py-6 lg:absolute lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-1/2">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                    <div class="w-full flex items-center gap-2">
+                        <div>
+                            <Icon name="fa6-solid:location-dot" class="text-3xl w-16 min-w-16" />
+                        </div>
+                        <div class="flex flex-col leading-tight">
+                            <h4 class="font-semibold mb-1">
+                                Modalidad
+                            </h4>
+                            <p class="text-sm">Online o presencial, tu escoges</p>
+                        </div>
                     </div>
-                    <div class="flex flex-col leading-tight">
-                        <h4 class="font-semibold mb-1">
-                            Modalidad
-                        </h4>
-                        <p class="text-sm">Online o presencial, tu escoges</p>
-                    </div>
-                </div>
-                <div class="w-full flex items-center gap-2">
-                    <div>
-                        <Icon name="fa6-solid:dumbbell" class="text-3xl w-16" />
-                    </div>
+                    <div class="w-full flex items-center gap-2">
+                        <div>
+                            <Icon name="fa6-solid:dumbbell" class="text-3xl w-16" />
+                        </div>
 
-                    <div class="flex flex-col leading-tight">
-                        <p class="font-semibold mb-1">Modalidad
-                        </p>
-                        <p class="text-sm">Programa tus propias
-                            sesiones, ve a tu propio ritmo</p>
+                        <div class="flex flex-col leading-tight">
+                            <p class="font-semibold mb-1">Modalidad
+                            </p>
+                            <p class="text-sm">Programa tus propias
+                                sesiones, ve a tu propio ritmo</p>
+                        </div>
                     </div>
-                </div>
-                <div class="w-full flex items-center gap-2">
-                    <div>
-                        <Icon name="fa6-solid:user" class="text-3xl w-16" />
-                    </div>
+                    <div class="w-full flex items-center gap-2">
+                        <div>
+                            <Icon name="fa6-solid:user" class="text-3xl w-16" />
+                        </div>
 
-                    <div class="flex flex-col leading-tight">
-                        <p class="font-semibold mb-1">Modalidad
-                        </p>
-                        <p class="text-sm">Entrena tanto
-                            individual como grupal</p>
+                        <div class="flex flex-col leading-tight">
+                            <p class="font-semibold mb-1">Modalidad
+                            </p>
+                            <p class="text-sm">Entrena tanto
+                                individual como grupal</p>
+                        </div>
                     </div>
-                </div>
-                <div class="flex items-center justify-center mx-auto ">
-                    <NuxtLink to="/user/auth/register"
-                        class="border-0 rounded-lg text-white px-3 py-2 font-medium bg-secondary cursor-pointer">
-                        Registrarse ahora
-                    </NuxtLink>
+                    <div class="flex items-center justify-center mx-auto ">
+                        <NuxtLink to="/user/auth/register"
+                            class="border-0 rounded-lg text-white px-3 py-2 font-medium bg-secondary cursor-pointer">
+                            Registrarse ahora
+                        </NuxtLink>
+                    </div>
                 </div>
             </div>
         </div>

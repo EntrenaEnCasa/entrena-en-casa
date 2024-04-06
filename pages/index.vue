@@ -1,10 +1,14 @@
 <template>
-    <HomeBanner />
-    <HomeServices />
-    <HomeSlider />
-    <HomeWhyUs />
-    <HomeWhatIs />
-    <HomeTestimonialOurStudents />
-    <HomeContact />
-    <HomeWhatsappButton />
+    <div>
+        <HomeBanner />
+        <main>
+            <HomeServices />
+            <HomeSlider />
+            <HomeWhyUs />
+            <HomeWhatIs />
+            <HomeTestimonialOurStudents />
+            <HomeContact />
+        </main>
+        <HomeWhatsappButton />
+    </div>
 </template>
