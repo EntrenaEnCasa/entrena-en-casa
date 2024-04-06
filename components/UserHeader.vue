@@ -17,7 +17,7 @@
                 </div>
                 <div class="hidden lg:block">
                     <router-link to="/" class="flex ml-3">
-                        <img src="/logo-horizontal.png" class="h-8" alt="Logo" />
+                        <NuxtImg src="/logo-horizontal.png" class="h-8" alt="Logo" />
                     </router-link>
                 </div>
                 <div class="flex items-center">
@@ -36,7 +36,7 @@
                                     class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
                                     aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                     <span class="sr-only">Open user menu</span>
-                                    <img class="w-12 h-12 rounded-full" src="/icons/woman.png" alt="user photo">
+                                    <NuxtImg class="w-12 h-12 rounded-full" src="/icons/woman.png" alt="user photo" />
                                 </button>
                             </div>
                         </div>

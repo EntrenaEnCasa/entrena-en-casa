@@ -1,7 +1,7 @@
 <template>
     <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         <div class="flex flex-col justify-center items-center mb-12 w-4/5 mx-auto">
-            <img src="/logo.png" class="mb-4 w-36" alt="logo">
+            <NuxtImg src="/logo.png" class="mb-4 w-36" alt="logo" />
             <StudentAuthRegisterForm ref="form" />
             <p class="mt-4 text-gray-500">
                 ¿Ya tienes cuenta?
@@ -20,7 +20,7 @@
                 <div class="mb-4">
                     <h1 class="font-bold text-white text-7xl">¿Estás <br> preparado?</h1>
                 </div>
-                <img src="/emoji/runners.svg" class="w-1/2 mx-auto" alt="runners">
+                <NuxtImg src="/emoji/runners.svg" class="w-1/2 mx-auto" alt="runners" />
             </div>
         </div>
 

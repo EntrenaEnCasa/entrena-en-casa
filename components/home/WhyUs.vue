@@ -6,7 +6,7 @@
             <p class="font-light">Entrena en Casa es la nueva forma de ejercitarse y vivir de forma más saludable.</p>
         </div>
         <div class="flex my-10 justify-between">
-            <img class="hidden xl:block" src="/home/woman-exercising.png" alt="woman exercising" width="500">
+            <NuxtImg class="hidden xl:block" src="/home/woman-exercising.png" alt="woman exercising" width="500" />
             <div class="flex justify-center items-center w-11/12 mx-auto">
                 <ul class="text-start space-y-2 flex flex-col items-center">
                     <li class="flex w-3/4 items-center">
