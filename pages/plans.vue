@@ -110,7 +110,7 @@ watch([region], () => {
     console.log("region: " + region.value);
 });
 
-const { data: plansResponse, pending: plansLoading, error } = await useFetch(`${config.public.apiBase}/user/price`, {
+const { data: plansResponse, pending: plansLoading, error } = await useFetch(`${config.public.apiBase}/user/prices`, {
     method: 'POST',
     body: {
         region: region,
