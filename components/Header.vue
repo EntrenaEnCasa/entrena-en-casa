@@ -30,16 +30,17 @@
                     </button>
                 </div>
                 <div class="flex flex-1 items-center justify-center lg:items-stretch lg:justify-between">
-                    <NuxtLink to="/" class="flex flex-shrink-0 items-center">
-                        <img class="h-12 w-auto" src="/logo-horizontal.png" alt="Logo entrena en casa">
+                    <NuxtLink to="/" class="flex flex-shrink-0 items-center !bg-transparent">
+                        <NuxtImg class="h-12 w-auto" src="/logo-horizontal.png" alt="Logo entrena en casa" />
                     </NuxtLink>
                     <div class="hidden lg:flex items-center">
-                        <div class="flex space-x-4">
+                        <div class="flex space-x-2">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <NuxtLink to="/" class="text-secondary rounded-md px-3 py-2 font-medium"
+                            <NuxtLink to="/"
+                                class="hover:bg-secondary hover:text-white rounded-md px-4 py-2 font-medium"
                                 aria-current="page">Inicio</NuxtLink>
                             <NuxtLink to="/plans"
-                                class="text-gray-600 hover:bg-secondary hover:text-white rounded-md px-3 py-2 font-medium">
+                                class="text-gray-600 hover:bg-secondary hover:text-white rounded-md px-4 py-2 font-medium">
                                 Planes</NuxtLink>
                         </div>
                     </div>
@@ -61,16 +62,16 @@
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                 <nuxt-link to="/"
                     class="text-gray-600 hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">Inicio</nuxt-link>
-                <nuxt-link to="/"
+                <!-- <nuxt-link to="/"
                     class="text-gray-600 hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">Sobre
-                    Nosotros</nuxt-link>
-                <nuxt-link to="/"
+                    Nosotros</nuxt-link> -->
+                <nuxt-link to="/plans"
                     class="text-gray-600 hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">
                     Planes
                 </nuxt-link>
                 <div class="space-y-1 py-5">
                     <nuxt-link to="/user/auth/register"
-                        class="text-secondary hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">
+                        class="hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">
                         Registrarse
                     </nuxt-link>
                     <nuxt-link to="/user/auth/login"
@@ -82,6 +83,15 @@
         </div>
     </nav>
 </template>
+<style scoped>
+.router-link-active {
+    @apply text-secondary;
+}
+
+.router-link-active:hover {
+    @apply bg-secondary text-white;
+}
+</style>
 <script setup>
 
 const menuOpen = ref(false);

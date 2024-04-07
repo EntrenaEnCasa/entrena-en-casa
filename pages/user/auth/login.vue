@@ -7,13 +7,13 @@
                     <h1 class="mb-3 text-7xl font-bold text-white">¡Bienvenido <br> de nuevo!</h1>
                     <p class="text-[22px] text-white">¿Listo para un nuevo desafío?</p>
                 </div>
-                <img src="/emoji/runners.svg" class="w-1/2 mx-auto" alt="runner">
+                <NuxtImg src="/emoji/runners.svg" class="w-1/2 mx-auto" alt="runner" />
             </div>
         </div>
         <div class="flex flex-col justify-center items-center mb-12">
-            <nuxt-link to="/">
-                <img src="/logo.png" class="mb-4 w-36" alt="logo">
-            </nuxt-link>
+            <NuxtLink to="/">
+                <NuxtImg src="/logo.png" class="mb-4 w-36" alt="logo" />
+            </NuxtLink>
             <StudentAuthLoginForm />
             <p class="mt-4 text-gray-500">
                 ¿No tienes cuenta?

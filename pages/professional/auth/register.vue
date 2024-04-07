@@ -2,9 +2,9 @@
     <div class="min-h-screen grid items-center">
         <div>
             <div class="flex flex-col items-center pt-10 mx-3 ">
-                <nuxt-link to="/">
+                <NuxtLink to="/">
                     <NuxtImg class="mx-auto w-28 h-28" src="/logo.png" alt="logo" />
-                </nuxt-link>
+                </NuxtLink>
             </div>
             <div class="py-12 w-4/5 mx-auto">
                 <h1 class="text-2xl font-bold text-center mb-2">Registro de profesionales</h1>

@@ -1,10 +1,10 @@
 <template>
     <div class="min-h-screen flex items-center max-w-xl mx-auto">
         <div class="w-full flex flex-col justify-center items-center mb-12">
-            <nuxt-link to="/">
-                <img src="/logo.png" class="mb-4 w-36" alt="logo">
-            </nuxt-link>
-            <AdminAuthLoginForm/>
+            <NuxtLink to="/">
+                <NuxtImg src="/logo.png" class="mb-4 w-36" alt="logo" />
+            </NuxtLink>
+            <AdminAuthLoginForm />
         </div>
     </div>
 </template>

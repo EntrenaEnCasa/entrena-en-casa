@@ -9,7 +9,7 @@
                 @input="$emit('update:modelValue', $event.target.value)" as="select"
                 class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary"
                 :rules="rules">
-                <option disabled value="">{{ placeholder }}</option>
+                <option v-if="placeholder" disabled value="">{{ placeholder }}</option>
                 <option v-for="option in options" :key="option.value" :value="option.value">
                     {{ option.label }}
                 </option>

@@ -1,9 +1,9 @@
 <template>
     <div class="min-h-screen">
         <div class="flex flex-col items-center pt-5 mx-3 mb-10">
-            <nuxt-link to="/">
+            <NuxtLink to="/">
                 <NuxtImg class="mx-auto w-28 h-28" src="/logo.png" alt="logo" />
-            </nuxt-link>
+            </NuxtLink>
             <p class="text-secondary text-lg font-semibold ">Cuéntanos un poco sobre ti</p>
         </div>
 

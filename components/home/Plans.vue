@@ -12,7 +12,8 @@
                             Cada sábado a las 12:00hrs
                         </p>
                         <div class="flex flex-col items-center md:flex-row md:justify-between">
-                            <p class="italic text-center md:text-left text-secondary mb-3">Apto para todo tipo de personas
+                            <p class="italic text-center md:text-left text-secondary mb-3">Apto para todo tipo de
+                                personas
                             </p>
                             <CommonButton class="tellural py-1 px-3 rounded-md">
                                 Contratar
@@ -43,7 +44,8 @@
                                 $112.000
                             </span>
                         </div>
-                        <div class="text-center mt-2 md:mt-0 md:absolute md:top-[15%] md:right-[8px] md:translate-y-full">
+                        <div
+                            class="text-center mt-2 md:mt-0 md:absolute md:top-[15%] md:right-[8px] md:translate-y-full">
                             <span class="tellural text-secondary">
                                 $14.000/sesión
                             </span>
@@ -69,7 +71,8 @@
                                 $140.000
                             </span>
                         </div>
-                        <div class="text-center mt-2 md:mt-0 md:absolute md:top-[15%] md:right-[8px] md:translate-y-full">
+                        <div
+                            class="text-center mt-2 md:mt-0 md:absolute md:top-[15%] md:right-[8px] md:translate-y-full">
                             <span class="tellural text-secondary">
                                 $17.500/sesión
                             </span>
@@ -81,7 +84,7 @@
                 <p class="text-sm tracking-[.2rem]">SERVICIOS</p>
                 <h5 class="text-4xl font-medium">Nuestros planes</h5>
                 <p class="text-sm tracking-[.2rem]">MÁS VENDIDOS</p>
-                <img src=" /home/runner.png" alt="" width="350">
+                <NuxtImg src=" /home/runner.png" alt="" width="350" />
                 <router-link to="/" class="bg-primary text-white px-2 py-2 tellural">Ver todos los planes</router-link>
             </div>
         </div>

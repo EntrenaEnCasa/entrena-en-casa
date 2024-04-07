@@ -1,6 +1,6 @@
 <template>
     <button :class="[
-        'rounded-md',
+        `rounded-${roundedSize}`,
         `bg-${bgColor}`,
         `text-${textColor}`,
         `disabled:bg-${bgColor}-100`,
@@ -14,11 +14,11 @@
             <span>{{ loadingText }}</span>
             <span>
                 <Icon :class="[
-                    'animate-spin',
-                    'ml-2',
-                    `text-${textColor}`,
-                    `text-${iconSize}`
-                ]" name="fa6-solid:circle-notch" />
+        'animate-spin',
+        'ml-2',
+        `text-${textColor}`,
+        `text-${iconSize}`
+    ]" name="fa6-solid:circle-notch" />
             </span>
         </div>
     </button>
@@ -53,6 +53,10 @@ const props = defineProps({
     iconSize: {
         type: String,
         default: '2xl'
-    }
+    },
+    roundedSize: {
+        type: String,
+        default: 'md'
+    },
 });
 </script>
