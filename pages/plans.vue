@@ -21,7 +21,10 @@
                 <div v-for="plan in plansResponse.plans"
                     class="bg-white p-8 rounded-xl shadow flex flex-col items-center space-y-5">
                     <h3 class="text-3xl text-secondary font-semibold">{{ plan.formattedPrice }}</h3>
-                    <h4 class="text-2xl text-gray-800 font-semibold text-center">Plan 8 sesiones individuales</h4>
+                    <h4 class="text-2xl text-gray-800 font-semibold text-center">
+                        Plan de {{ plan.credit_quantity }} sesiones {{ format === "Individual" ? "individuales" : format
+                            === "Dupla" ? "dupla" : "grupales" }}
+                    </h4>
                     <p class="font-medium text-center">{{ plan.description }}
                     </p>
                     <ul class="space-y-3">
@@ -46,11 +49,11 @@
                             </div>
                             <p>
                                 {{
-                    format === "Individual" ?
-                        "Formato personalizado, un tiempo solo para ti" :
-                        format === "Dupla" ?
-                            "Formato en dupla, siempre con alguien de confianza" :
-                            "Formato grupal, entrena junto a la comunidad de Entrena en Casa"
+                                    format === "Individual" ?
+                                        "Formato personalizado, un tiempo solo para ti" :
+                                        format === "Dupla" ?
+                                            "Formato en dupla, siempre con alguien de confianza" :
+                                            "Formato grupal, entrena junto a la comunidad de Entrena en Casa"
                                 }}
 
                             </p>
