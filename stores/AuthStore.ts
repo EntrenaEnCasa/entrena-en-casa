@@ -24,9 +24,6 @@ export const useAuthStore = defineStore( 'AuthStore', () => {
             toast.error('Su sesión ha expirado, por favor ingrese nuevamente');
         }
         loggedIn.value = isAuthenticated;
-        if (isAuthenticated) {
-            userStore.setUserFromLocalStorage();
-        }
     }
 
     const signUp = (userData: any) => {
