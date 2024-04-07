@@ -32,7 +32,7 @@
                 </p>
             </template>
         </div>
-        <div class="max-w-3xl px-6">
+        <div v-else class="max-w-3xl px-6">
             <h2 class="font-semibold text-3xl text-zinc-700 mb-2">¡Tu cuenta ya ha sido verificada!</h2>
             <p class="mb-5 max-w-xl mx-auto">¡Ya puedes disfrutar de todas las características de Entrena en Casa!</p>
             <CommonButton @click="() => $router.push('/user/dashboard/home')" class="px-5 py-2">
