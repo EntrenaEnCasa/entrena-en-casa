@@ -46,11 +46,11 @@
                             </div>
                             <p>
                                 {{
-                                    format === "Individual" ?
-                                        "Formato personalizado, un tiempo solo para ti" :
-                                        format === "Dupla" ?
-                                            "Formato en dupla, siempre con alguien de confianza" :
-                                            "Formato grupal, entrena junto a la comunidad de Entrena en Casa"
+                    format === "Individual" ?
+                        "Formato personalizado, un tiempo solo para ti" :
+                        format === "Dupla" ?
+                            "Formato en dupla, siempre con alguien de confianza" :
+                            "Formato grupal, entrena junto a la comunidad de Entrena en Casa"
                                 }}
 
                             </p>
@@ -73,7 +73,7 @@ const region = ref(13);
 const format = ref("Individual");
 const modality = ref("P");
 const creditType = computed(() => {
-    return format.value === "Dupla" || "Individual" ? "P" + modality.value : "G" + modality.value;
+    return format.value === "Dupla" || format.value === "Individual" ? "P" + modality.value : "G" + modality.value;
 });
 
 const regionOptions = ref([
@@ -105,10 +105,6 @@ const sessionModalities = ref([
     { value: 'P', label: 'Presencial' },
     { value: 'O', label: 'Online' },
 ]);
-
-watch([region], () => {
-    console.log("region: " + region.value);
-});
 
 const { data: plansResponse, pending: plansLoading, error } = await useFetch(`${config.public.apiBase}/user/prices`, {
     method: 'POST',
