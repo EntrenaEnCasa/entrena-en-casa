@@ -3,8 +3,8 @@
         <div class="text-center max-w-2xl mx-auto">
 
             <div v-if="loading">
+                <p class="text-3xl font-semibold mb-4">Verificando información...</p>
                 <CommonLoading />
-                <p class="tetx-xl">Cargando</p>
             </div>
             <div v-else-if="error" class="space-y-5">
                 <div>
@@ -102,7 +102,8 @@ const { data: response, pending: loading, error } = await useFetch(`/api/auth/ve
             const newUser = { ...currentUser, verified: true };
             userStore.setUser(newUser);
         }
-    }
+    },
+    lazy: true
 });
 
 const goToWhatsapp = async () => {
