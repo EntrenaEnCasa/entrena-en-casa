@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
         }
     } 
 
-    const { email, user_ids, plan_id } = await readBody<Body>(event);
+    const { user_ids, plan_id } = await readBody<Body>(event);
     let amount = null;
 
     const config = useRuntimeConfig();
@@ -64,7 +64,7 @@ export default defineEventHandler(async (event) => {
         apiKey: config.flowApiKey,
         currency: 'CLP',
         email: "gonzalo.antoniobc@gmail.com",
-        subject: 'Pago de prueba',
+        subject: 'Pago de plan entrena en casa',
         commerceOrder: Math.floor(Math.random() * (2000 - 1100 + 1)) + 1100,
         urlConfirmation: `${config.public.nuxtApiBase}/api/payment/confirm`,
         urlReturn: `${config.public.nuxtApiBase}/user/dashboard/paymentStatus`,
@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
     console.log(formData);
 
     try {
-        const response = await $fetch<FlowResponse>("https://sandbox.flow.cl/api/payment/create", {
+        const response = await $fetch<FlowResponse>(`${config.flowHosting}/api/payment/create`, {
             method: 'POST',
             body: formData,
             redirect: 'follow',
