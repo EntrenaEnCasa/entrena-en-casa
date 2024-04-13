@@ -242,7 +242,7 @@ const getEvents = async () => {
 };
 
 const populateEventMatrix = (events) => {
-    const timeZone = "UTC"; // Change this to the target time zone
+    const timeZone = "UTC";
     events.forEach(event => {
         // Convert UTC date to the target time zone
         const startDateTime = new Date(`${event.date.split('T')[0]}T${event.start_time}:00Z`);
