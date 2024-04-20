@@ -1,4 +1,3 @@
-import { get } from 'http';
 import { createQueryParams } from '~/server/utils/paymentUtils';
 
 export default defineEventHandler(async (event) => {
