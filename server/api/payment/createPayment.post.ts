@@ -3,7 +3,6 @@ import { createFormData } from '~/server/utils/paymentUtils';
 export default defineEventHandler(async (event) => {
 
     interface Body {
-        amount: number;
         email: string;
         user_ids: number[];
         plan_id: number;
@@ -27,7 +26,7 @@ export default defineEventHandler(async (event) => {
         }
     } 
 
-    const { user_ids, plan_id } = await readBody<Body>(event);
+    const { email, user_ids, plan_id } = await readBody<Body>(event);
     let amount = null;
 
     const config = useRuntimeConfig();
@@ -60,10 +59,10 @@ export default defineEventHandler(async (event) => {
 
     const formData = createFormData({
         amount,
+        email,
         apiKey: config.flowApiKey,
         currency: 'CLP',
-        email: "gonzalo.antoniobc@gmail.com",
-        subject: 'Pago de plan entrena en casa',
+        subject: 'Compra de plan - Entrena en Casa',
         commerceOrder: Math.floor(Math.random() * (2000 - 1100 + 1)) + 1100,
         urlConfirmation: `${config.public.nuxtApiBase}/api/payment/confirm`,
         urlReturn: `${config.public.nuxtApiBase}/user/dashboard/paymentStatus`,
