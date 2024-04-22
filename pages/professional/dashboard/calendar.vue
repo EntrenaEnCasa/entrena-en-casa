@@ -1,64 +1,65 @@
 <template>
     <div>
-        <div class="mt-4 mb-10">
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
 
-                <ProfessionalDashboardCalendarWeekNavigation :currentMonth="currentMonth"
-                    :isFetchingData="fetchingEvents" :currentYear="currentYear" :isStartWeek="isStartWeek"
-                    @go-to-previous-week="handleGoToPreviousWeek" @go-to-next-week="handleGoToNextWeek" />
+            <ProfessionalDashboardCalendarWeekNavigation :currentMonth="currentMonth" :isFetchingData="fetchingEvents"
+                :currentYear="currentYear" :isStartWeek="isStartWeek" @go-to-previous-week="handleGoToPreviousWeek"
+                @go-to-next-week="handleGoToNextWeek" />
 
-                <div class="justify-self-center bg-gray-200 rounded-lg px-16 py-1">
-                    <p class="font-semibold">Semanal</p>
-                </div>
+            <div class="justify-self-center bg-gray-200 rounded-lg px-16 py-1">
+                <p class="font-semibold">Semanal</p>
+            </div>
 
-                <div class="flex gap-2 items-center justify-self-center md:justify-self-end">
-                    <button v-show="!editMode" :disabled="events.length == 0" @click="toggleEditState"
-                        class="bg-primary rounded text-white font-semibold px-4 py-1 disabled:bg-primary-100 disabled:cursor-not-allowed">
-                        Editar
+            <div class="flex gap-2 items-center justify-self-center md:justify-self-end">
+                <button v-show="!editMode" :disabled="events.length == 0" @click="toggleEditState"
+                    class="bg-primary rounded text-white font-semibold px-4 py-1 disabled:bg-primary-100 disabled:cursor-not-allowed">
+                    Editar
+                </button>
+                <button v-show="editMode" @click="toggleEditState"
+                    class="bg-secondary rounded text-white font-semibold px-4 py-1">
+                    <div class="flex items-center gap-x-1">
+                        <Icon name="fa6-solid:pen-to-square"></Icon>
+                        <p>
+                            Modo edición
+                        </p>
+                    </div>
+                </button>
+                <div v-show="!editMode" class="relative">
+                    <button @click.stop="newDropdown.toggle()"
+                        class=" bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
+                        <span>
+                            Nuevo
+                        </span>
+                        <Icon name="fa6-solid:chevron-down"></Icon>
                     </button>
-                    <button v-show="editMode" @click="toggleEditState"
-                        class="bg-secondary rounded text-white font-semibold px-4 py-1">
-                        <div class="flex items-center gap-x-1">
-                            <Icon name="fa6-solid:pen-to-square"></Icon>
-                            <p>
-                                Modo edición
-                            </p>
-                        </div>
-                    </button>
-                    <div v-show="!editMode" class="relative">
-                        <button @click.stop="newDropdown.toggle()"
-                            class=" bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
-                            <span>
-                                Nuevo
-                            </span>
-                            <Icon name="fa6-solid:chevron-down"></Icon>
-                        </button>
-                        <div class="min-w-max absolute top-6 border right-0 z-50 my-4 text-base list-none text-white shadow-md font-semibold rounded"
-                            :class="{ hidden: !newDropdown.active }">
-                            <ul class="divide-y divide-gray-200">
-                                <li>
-                                    <button @click="newEmptySessionModal.handleClickFromButton"
-                                        class="w-full px-4 py-2 rounded-t text-sm bg-primary hover:bg-primary-600"
-                                        role="menuitem">
-                                        Disponibilidad
-                                    </button>
-                                </li>
-                                <li>
-                                    <button @click="newEventModal.handleClick"
-                                        class="px-4 py-2 text-sm rounded-b bg-primary hover:bg-primary-600"
-                                        role="menuitem">
-                                        Evento Manual
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="min-w-max absolute top-6 border right-0 z-50 my-4 text-base list-none text-white shadow-md font-semibold rounded"
+                        :class="{ hidden: !newDropdown.active }">
+                        <ul class="divide-y divide-gray-200">
+                            <li>
+                                <button @click="newEmptySessionModal.handleClickFromButton"
+                                    class="w-full px-4 py-2 rounded-t text-sm bg-primary hover:bg-primary-600"
+                                    role="menuitem">
+                                    Disponibilidad
+                                </button>
+                            </li>
+                            <li>
+                                <button @click="newEventModal.handleClick"
+                                    class="px-4 py-2 text-sm rounded-b bg-primary hover:bg-primary-600" role="menuitem">
+                                    Evento Manual
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-
             </div>
         </div>
-        <ProfessionalDashboardCalendarEventGrid :fetchingEvents="fetchingEvents" :eventMatrix="eventMatrix"
+        <div class="my-6 flex items-center">
+            <Icon name="ic:outline-access-time" class="text-2xl text-gray-600 mr-2" />
+            <CommonSelect v-model="slotDurationInMinutes" name="duration" id="duration"
+                :options="slotDurationInMinutesOptions" class="w-max" />
+        </div>
+        <ProfessionalDashboardCalendarEventGrid :fetchingEvents="fetchingEvents" :calendarData="calendarData"
             :editMode="editMode" :emptySlotModal="emptySlotModal" :editEventHandler="editEventHandler" />
 
         <div class="mt-10 mb-4 flex justify-center">
@@ -116,7 +117,7 @@ import { useToast } from 'vue-toastification';
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const toast = useToast();
-const { formatDateToWeekdayAndDay, formatHourToTimeString } = useFormatter();
+const { formatDateToWeekdayAndDay } = useFormatter();
 const { isStartWeek, goToPreviousWeek, goToNextWeek, currentYear, currentMonth, currentDate } = useWeekNavigation();
 const { getReverseGeocodingData } = useGeocoding();
 
@@ -125,15 +126,38 @@ const { updateSelectedDate, goToStartOfWeek } = dayNavigationStore;
 const { selectedDate } = storeToRefs(dayNavigationStore);
 
 const timeRangeStore = useTimeRangeStore();
-const { updateSelectedStartTimeFromNumber, updateSelectedEndTimeFromString, setSelectedStartTimeToFirstAvailableTime } = timeRangeStore;
+const { updateSelectedStartTimeFromString, updateSelectedEndTimeFromString, setSelectedStartTimeToFirstAvailableTime } = timeRangeStore;
 const { selectedStartTime, automaticallySelectedEndTime, selectedEndTime } = storeToRefs(timeRangeStore);
 
 const events = ref([]); // Array of events
 const fetchingEvents = ref(false); // Loading state of the events
 
-const eventMatrix = ref([]); // Matrix of events
-const startHour = 9; // Starting hour of the day
-const endHour = 20; // Ending hour of the day
+const slotDurationInMinutes = ref(60); // Duration of each time slot in minutes
+const slotDurationInMinutesOptions = ref([
+    {
+        value: 15,
+        label: '15 minutos',
+    },
+    {
+        value: 30,
+        label: '30 minutos',
+    },
+    {
+        value: 45,
+        label: '45 minutos',
+    },
+    {
+        value: 60,
+        label: '1 hora',
+    }
+]);
+
+watch(slotDurationInMinutes, () => {
+    initializeCalendarData();
+    getEvents();
+});
+
+const calendarData = ref([]);
 
 // Edit mode state
 const editMode = ref(false);
@@ -141,17 +165,6 @@ const editMode = ref(false);
 const toggleEditState = () => {
     editMode.value = !editMode.value;
 }
-
-// Returns current week days, starting from today to the same day of the next week
-const daysList = computed(() => {
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-        const date = new Date(currentDate.value);
-        date.setDate(date.getDate() + i);
-        days.push(date);
-    }
-    return days;
-});
 
 const handleGoToNextWeek = () => {
     goToNextWeek();
@@ -169,26 +182,81 @@ const newDropdown = reactive({
     close: () => newDropdown.active = false,
 });
 
-/* Matrix logic */
-
-const initializeEventMatrix = () => {
+const initializeCalendarData = () => {
     // Reset the matrix
-    eventMatrix.value = [];
+    calendarData.value = [];
+
+    // Get the current date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to 00:00
+
+    // Calculate the start and end of the week
+    const startOfWeek = new Date(today);
+    const endOfWeek = new Date(today);
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // Add 6 days to get the end of the week
+
+    // Calculate the number of slots per day
+    const slotsPerDay = 24 * (60 / slotDurationInMinutes.value);
 
     // Populate the matrix with placeholders for each time slot
-    for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-        eventMatrix.value[dayIndex] = [];
-        for (let hour = startHour; hour <= endHour; hour++) {
-            let hourIndex = hour - startHour;
-            eventMatrix.value[dayIndex][hourIndex] = {
-                day: dayIndex + 1,
-                time: hour,
-                formattedDay: formatDateToWeekdayAndDay(daysList.value[dayIndex]),
-                formattedTime: formatHourToTimeString(hour),
-                event: null
-            };
-        }
+    for (let date = startOfWeek; date <= endOfWeek; date.setDate(date.getDate() + 1)) {
+        const day = {
+            date: new Date(date), // Create a new Date object to avoid mutation
+            formattedDate: formatDateToWeekdayAndDay(date),
+            timeSlots: Array.from({ length: slotsPerDay }, (_, i) => {
+                const hours = Math.floor(i * slotDurationInMinutes.value / 60);
+                const minutes = (i * slotDurationInMinutes.value) % 60;
+                return {
+                    time: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`,
+                    event: null, // Initialize with null, you can populate events here
+                };
+            }),
+        };
+
+        calendarData.value.push(day);
     }
+
+    console.log("Calendar initalized");
+    console.log(calendarData.value);
+}
+
+const getTimeSlotIndex = (time) => {
+    const [hours, minutes] = time.split(':');
+    return (parseInt(hours) * 60 + parseInt(minutes)) / slotDurationInMinutes.value;
+};
+
+const populateCalendar = (events) => {
+
+    // Get the current date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to 00:00
+
+    // Calculate the start of the week
+    const startOfWeek = new Date(today);
+
+    // Populate events in the appropriate time slots
+    events.forEach((event) => {
+        const eventDate = new Date(event.date);
+        const dayDiff = (eventDate.getTime() - startOfWeek.getTime()) / (1000 * 60 * 60 * 24);
+        const dayIndex = Math.floor(dayDiff);
+
+        console.log(event);
+
+        const startTimeSlotIndex = getTimeSlotIndex(event.start_time);
+        const endTimeSlotIndex = getTimeSlotIndex(event.end_time);
+
+        for (let i = startTimeSlotIndex; i < endTimeSlotIndex; i++) {
+            const timeSlot = calendarData.value[dayIndex].timeSlots[i];
+            if (timeSlot.event === null) {
+                timeSlot.event = event;
+            } else {
+                console.warn('Overlapping events detected');
+            }
+        }
+    });
+
+    console.log("Calendar population complete");
+    console.log(calendarData.value);
 };
 
 const getLocalDateString = (date) => {
@@ -219,11 +287,11 @@ const getEvents = async () => {
             body: body
         });
 
-        initializeEventMatrix(); // Reset the matrix before populating
-
         if (response.success) {
-            populateEventMatrix(response.events); // Fill the matrix with the fetched events
+            // populateCalendarData(response.events)
+            populateCalendar(response.events);
             events.value = response.events;
+            console.log(events.value);
         }
         else {
             events.value = [];
@@ -241,42 +309,11 @@ const getEvents = async () => {
 
 };
 
-const populateEventMatrix = (events) => {
-    const timeZone = "UTC";
-    events.forEach(event => {
-        // Convert UTC date to the target time zone
-        const startDateTime = new Date(`${event.date.split('T')[0]}T${event.start_time}:00Z`);
-        const startDate = convertUtcDateToLocalDate(startDateTime, timeZone);
-
-        let durationHours = 1; // Default duration for events without an end time
-
-        if (event.type === 'personal' && event.end_time) {
-            const endDateTime = new Date(`${event.date.split('T')[0]}T${event.end_time}:00Z`);
-            const endDate = convertUtcDateToLocalDate(endDateTime, timeZone);
-            durationHours = (endDate - startDate) / (1000 * 60 * 60);
-        }
-
-        for (let i = 0; i < durationHours; i++) {
-            const eventHour = startDate.getHours() + i;
-            const eventHourIndex = eventHour - startHour;
-
-            const eventDayIndex = daysList.value.findIndex(day =>
-                day.getFullYear() === startDate.getFullYear() &&
-                day.getMonth() === startDate.getMonth() &&
-                day.getDate() === startDate.getDate()
-            );
-
-            if (eventDayIndex >= 0 && eventHourIndex >= 0 && eventHourIndex < 12) {
-                eventMatrix.value[eventDayIndex][eventHourIndex].event = event;
-            }
-        }
-    });
-};
-
 // Helper function to convert UTC date to a date in the target time zone
 function convertUtcDateToLocalDate(utcDate, timeZone) {
     return new Date(utcDate.toLocaleString('en-US', { timeZone }));
 }
+
 
 /* Modals */
 
@@ -904,19 +941,16 @@ const editPersonalEventModal = reactive({
     },
 });
 
-const updateCurrentlySelectedDate = (day, time) => {
-
-    const newDate = new Date(currentDate.value);
-    newDate.setDate(newDate.getDate() + day - 1);
-    updateSelectedDate(newDate);
-    updateSelectedStartTimeFromNumber(time);
-};
+const updateCurrentlySelectedDate = (date, timeString) => {
+    updateSelectedDate(date);
+    updateSelectedStartTimeFromString(timeString);
+}
 
 /* Lifecycle hooks */
 
 onMounted(() => {
     // Get the events when the component is mounted
-    initializeEventMatrix();
+    initializeCalendarData();
     getEvents();
     //allows for closing the dropdown when clicking outside of it
     document.addEventListener('click', newDropdown.close);
