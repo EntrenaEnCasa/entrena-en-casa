@@ -309,12 +309,6 @@ const getEvents = async () => {
 
 };
 
-// Helper function to convert UTC date to a date in the target time zone
-function convertUtcDateToLocalDate(utcDate, timeZone) {
-    return new Date(utcDate.toLocaleString('en-US', { timeZone }));
-}
-
-
 /* Modals */
 
 // Empty slot modal
