@@ -34,19 +34,20 @@
                 class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
                 <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
                 <CommonLoading v-if="getCoverageRangesLoading" text="cargando rangos de cobertura" />
-                <div v-else="!getCoverageRangesLoading">
-                    <div v-if="coverageRanges.data.length == 0">
-                        No hay rangos de cobertura actualmente
-                    </div>
-                    <div v-else class="flex flex-col items-center gap-y-2">
-                        <div v-for="range, index in coverageRanges.data"
-                            class="inline-flex items-center gap-x-2 rounded-full bg-gray-100 px-6 py-1.5">
-                            <p class="font-semibold">{{ range.range_name }}</p>
-                            <p class="font-light">{{ range.radius }} km</p>
-                            <button @click="openEditModal(index)">
-                                <Icon name="fa6-solid:pen-to-square" class="text-primary" />
-                            </button>
-                        </div>
+                <div v-else-if="getCoverageRangesError">
+                    <p class="text-red-500">Hubo un error al cargar los rangos de cobertura</p>
+                </div>
+                <div v-else-if="!coverageRanges.success">
+                    No hay rangos de cobertura actualmente
+                </div>
+                <div v-else class="flex flex-col items-center gap-y-2">
+                    <div v-for="range, index in coverageRanges.data"
+                        class="inline-flex items-center gap-x-2 rounded-full bg-gray-100 px-6 py-1.5">
+                        <p class="font-semibold">{{ range.range_name }}</p>
+                        <p class="font-light">{{ range.radius }} km</p>
+                        <button @click="openEditModal(index)">
+                            <Icon name="fa6-solid:pen-to-square" class="text-primary" />
+                        </button>
                     </div>
                 </div>
                 <CommonButton class="px-5 py-2 bg-secondary" @click="resetModal(); openModal()">
@@ -87,18 +88,18 @@
                             zoom: 13,
                         }">
                             <MapboxSource source-id="circleSource" :source="{
-                            type: 'geojson',
-                            data: circleGeoJSON
-                        }" />
+                                type: 'geojson',
+                                data: circleGeoJSON
+                            }" />
                             <MapboxLayer v-if="circleData.enabled" :layer="{
-                            id: 'circleLayer',
-                            type: 'fill', // or 'line' depending on how you want to style it
-                            source: 'circleSource',
-                            paint: {
-                                'fill-color': circleData.fillColor,
-                                'fill-opacity': circleData.opacity
-                            }
-                        }" />
+                                id: 'circleLayer',
+                                type: 'fill', // or 'line' depending on how you want to style it
+                                source: 'circleSource',
+                                paint: {
+                                    'fill-color': circleData.fillColor,
+                                    'fill-opacity': circleData.opacity
+                                }
+                            }" />
                             <MapboxDefaultMarker @dragstart="onMarkerDragStart" :marker-id="markerID"
                                 :options="{ draggable: true }" :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
                             </MapboxDefaultMarker>
