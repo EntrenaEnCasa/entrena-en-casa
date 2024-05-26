@@ -208,7 +208,7 @@ const initializeCalendarData = () => {
                 const minutes = (i * slotDurationInMinutes.value) % 60;
                 return {
                     time: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`,
-                    event: null, // Initialize with null, you can populate events here
+                    events: [], // Initialize with an empty array
                 };
             }),
         };
@@ -222,11 +222,13 @@ const initializeCalendarData = () => {
 
 const getTimeSlotIndex = (time) => {
     const [hours, minutes] = time.split(':');
-    return (parseInt(hours) * 60 + parseInt(minutes)) / slotDurationInMinutes.value;
+    const totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
+    const slotIndex = Math.floor(totalMinutes / slotDurationInMinutes.value);
+    const slotOffset = totalMinutes % slotDurationInMinutes.value;
+    return { slotIndex, slotOffset };
 };
 
 const populateCalendar = (events) => {
-
     // Get the current date
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Reset time to 00:00
@@ -240,18 +242,21 @@ const populateCalendar = (events) => {
         const dayDiff = (eventDate.getTime() - startOfWeek.getTime()) / (1000 * 60 * 60 * 24);
         const dayIndex = Math.floor(dayDiff);
 
-        console.log(event);
+        const startTime = getTimeSlotIndex(event.start_time);
+        const endTime = getTimeSlotIndex(event.end_time);
 
-        const startTimeSlotIndex = getTimeSlotIndex(event.start_time);
-        const endTimeSlotIndex = getTimeSlotIndex(event.end_time);
-
-        for (let i = startTimeSlotIndex; i < endTimeSlotIndex; i++) {
+        for (let i = startTime.slotIndex; i < endTime.slotIndex; i++) {
             const timeSlot = calendarData.value[dayIndex].timeSlots[i];
-            if (timeSlot.event === null) {
-                timeSlot.event = event;
-            } else {
-                console.warn('Overlapping events detected');
+            if (!timeSlot.events) {
+                timeSlot.events = [];
             }
+            timeSlot.events.push({
+                event,
+                isStartEvent: i === startTime.slotIndex,
+                isEndEvent: i === endTime.slotIndex,
+                startOffset: i === startTime.slotIndex ? startTime.slotOffset : 0,
+                endOffset: i === endTime.slotIndex ? endTime.slotOffset : 0,
+            });
         }
     });
 
