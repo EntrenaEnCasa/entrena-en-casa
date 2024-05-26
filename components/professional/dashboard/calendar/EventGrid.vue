@@ -14,11 +14,8 @@
                         <div class="text-sm font-semibold text-center border-r border-gray-200 py-2 pr-4 text-gray-500">
                             {{ timeSlot.time }}
                         </div>
-                        <div v-for="(day, dayIndex) in calendarData" :key="`day-${dayIndex}-slot-${index}`"
-                            class="h-14 border-r border-gray-200 min-w-[130px]"
-                            :class="{ 'border-b': shouldShowBorder(day.timeSlots, index) }">
-                            <ProfessionalDashboardCalendarTimeSlot :timeSlot="day.timeSlots[index]"
-                                :timeSlots="day.timeSlots" :slotIndex="index" :editMode="editMode"
+                        <div v-for="(day, dayIndex) in calendarData" :key="`day-${dayIndex}-slot-${index}`">
+                            <ProfessionalDashboardCalendarTimeSlot :timeSlot="day.timeSlots[index]" :editMode="editMode"
                                 @emptySlotClick="emptySlotModal.handleClick(day.date, timeSlot.time)"
                                 @eventClick="editEventHandler.handleClick(day.date, timeSlot.time, day.timeSlots[index].event)" />
                         </div>
@@ -41,18 +38,5 @@ const props = defineProps({
     emptySlotModal: Object,
     editEventHandler: Object,
 });
-
-const shouldShowBorder = (timeSlots, index) => {
-    return isLastEventUnique(timeSlots, index);
-};
-
-const isLastEventUnique = (timeSlots, index) => {
-    if (index === timeSlots.length - 1) return true;
-
-    const event = timeSlots[index].event;
-    const nextEvent = timeSlots[index + 1].event;
-
-    return !event || !nextEvent || nextEvent.event_id !== event.event_id;
-};
 
 </script>
