@@ -11,9 +11,18 @@
                 :style="{ height: `${calculateEventHeight(event)}%`, top: `${calculateEventTop(event)}%` }">
                 <button @click="$emit('eventClick', event.event)" :disabled="!event.isStartEvent || !editMode"
                     class="w-full h-full" :class="eventClasses(event)">
-                    <div v-if="shouldShowEventDetails(event)"
+                    <div v-if="shouldShowEventDetails(event)" @mouseover="showPopover = true"
+                        @mouseleave="showPopover = false"
                         class="w-full h-full flex flex-col justify-center items-center text-white">
-                        <ProfessionalDashboardCalendarEventDetails :event="event.event" :timeSlot="timeSlot" />
+                        <Popper :show="showPopover" class="">
+                            <button>
+                                <Icon name="mdi:eye" class="text-xl text-white" />
+                                <span class="ml-1">Ver info</span>
+                            </button>
+                            <template #content>
+                                <ProfessionalDashboardCalendarEventDetails :event="event.event" :timeSlot="timeSlot" />
+                            </template>
+                        </Popper>
                     </div>
                     <div :class="{ hidden: !editMode || !event.isStartEvent }">
                         <Icon name="fa6-solid:pen-to-square" class="text-xl text-white" />
@@ -27,6 +36,7 @@
 <script setup>
 
 const slotDurationInMinutes = ref(60);
+const showPopover = ref(false);
 
 const props = defineProps({
     timeSlot: Object,
@@ -78,3 +88,16 @@ const calculateEventTop = (event) => {
 };
 
 </script>
+
+<style>
+:root {
+    --popper-theme-background-color: #fff;
+    --popper-theme-background-color-hover: #fff;
+    --popper-theme-text-color: #333;
+    --popper-theme-border-width: 0px;
+    --popper-theme-border-style: solid;
+    --popper-theme-border-radius: 6px;
+    --popper-theme-padding: 32px;
+    --popper-theme-box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
+}
+</style>
