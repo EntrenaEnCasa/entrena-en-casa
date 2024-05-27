@@ -86,7 +86,6 @@ const calculateEventHeight = (event) => {
 const calculateEventTop = (event) => {
     return (event.startOffset / slotDurationInMinutes.value) * 100;
 };
-
 </script>
 
 <style>
