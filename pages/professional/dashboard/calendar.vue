@@ -183,7 +183,7 @@ const newDropdown = reactive({
 });
 
 const initializeCalendarData = () => {
-    // Reset the matrix
+    // Reset the array
     calendarData.value = [];
 
     // Get the current date
@@ -198,7 +198,7 @@ const initializeCalendarData = () => {
     // Calculate the number of slots per day
     const slotsPerDay = 24 * (60 / slotDurationInMinutes.value);
 
-    // Populate the matrix with placeholders for each time slot
+    // Populate the array with placeholders for each time slot
     for (let date = startOfWeek; date <= endOfWeek; date.setDate(date.getDate() + 1)) {
         const day = {
             date: new Date(date), // Create a new Date object to avoid mutation
