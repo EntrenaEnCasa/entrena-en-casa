@@ -17,7 +17,8 @@
                         <div v-for="day in calendarData" :key="day.date">
                             <ProfessionalDashboardCalendarTimeSlot :timeSlot="day.timeSlots[index]" :editMode="editMode"
                                 @emptySlotClick="emptySlotModal.handleClick(day.date, timeSlot.time)"
-                                @eventClick="editEventHandler.handleClick(day.date, timeSlot.time, day.timeSlots[index].events)" />
+                                @eventClick="(event) => editEventHandler.handleClick(day.date, timeSlot.time, event)" />
+
                         </div>
                     </template>
                 </template>
@@ -46,4 +47,5 @@ const timeSlots = computed(() => {
     }
     return [];
 });
+
 </script>
