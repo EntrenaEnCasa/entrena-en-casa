@@ -7,19 +7,19 @@
                         class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 mb-8 w-10/12 mx-auto mt-5">
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Nombre</h3>
-                            <p class="text-3xl font-medium text-gray-700" v-if="student?.first_name">{{
+                            <p class="text-2xl font-medium text-gray-700" v-if="student?.first_name">{{
                                 student?.first_name }} {{ student?.last_name }}</p>
-                            <p class="text-3xl font-medium text-gray-700" v-else>Sin datos </p>
+                            <p class="text-2xl font-medium text-gray-700" v-else>Sin datos </p>
                         </div>
 
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Correo electrónico</h3>
-                            <p class="text-3xl font-medium text-gray-700">{{ student?.email }}</p>
+                            <p class="text-2xl font-medium text-gray-700 break-all">{{ student?.email }}</p>
                         </div>
                     </div>
                     <div class="overflow-hidden lg:w-full px-10">
                         <div class="flex justify-between items-center mb-5">
-                            <h3 class=" mx-auto text-3xl">Agregar Plan</h3>
+                            <h3 class="mx-auto text-2xl">Agregar Plan</h3>
                         </div>
                         <div>
                             <form class="flex flex-col items-center justify-center">
@@ -28,8 +28,8 @@
                                     <select v-model="selectedPlan" id="plan"
                                         class="w-full px-5 py-3 border border-gray-200 rounded-lg  outline-none">
                                         <option value="0" disabled selected>Selecciona un plan</option>
-                                        <option v-for="plan in data?.plans" :value="plan.plan_id">{{
-                                formatPlan(plan.credit_type) }} - {{ plan.credit_quantity }} créditos
+                                        <option v-for="plan in plans" :value="plan.plan_id">{{
+                                            formatPlan(plan.credit_type) }} - {{ plan.credit_quantity }} créditos
                                         </option>
                                     </select>
                                 </div>
@@ -171,11 +171,37 @@ defineExpose({
     openModal
 })
 
-const { data, pending: plansLoading, error, refresh: getPlans } = await useFetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${props.student?.user_id}`, {
-    method: 'GET',
-    credentials: 'include',
-    lazy: true
-});
+// const { data, pending: plansLoading, error, refresh: getPlans } = await useFetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${props.student?.user_id}`, {
+//     method: 'GET',
+//     credentials: 'include',
+//     immediate: false,
+// });
+
+const plans = ref<Plan[]>([]);
+const plansLoading = ref<boolean>(false);
+
+const getPlans = async () => {
+    plansLoading.value = true;
+    try {
+        const user_id = props.student?.user_id;
+        const response = await $fetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${user_id}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        if (response.success) {
+            plans.value = response.plans;
+        }
+        else {
+            toast.error(response.message);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+    finally {
+        plansLoading.value = false;
+    }
+}
 
 const addPlan = async () => {
 
@@ -229,7 +255,14 @@ const formatPlan = (creditType: string) => {
 }
 
 watch(selectedPlan, (newSelectedPlan) => {
-    selectedPlanData.value = data.value?.plans.find(plan => plan.plan_id === newSelectedPlan);
+    selectedPlanData.value = plans.value.find(plan => plan.plan_id === newSelectedPlan);
 }, { immediate: true });
+
+watch(() => props.student, async (newStudent) => {
+    if (newStudent) {
+        await getPlans();
+    }
+});
+
 
 </script>
