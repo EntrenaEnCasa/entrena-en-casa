@@ -149,7 +149,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <p>{{ session.professional.first_name }} {{
                                                     session.professional.last_name
-                                                    }}
+                                                }}
                                                 </p>
                                                 <p class="text-sm text-gray-400">{{ session.professional.title }}</p>
                                             </td>
@@ -212,6 +212,7 @@ interface Student {
     last_name: string;
     email: string;
     enabled: boolean;
+    region: number;
 }
 
 interface Session {

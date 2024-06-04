@@ -169,6 +169,8 @@ interface Student {
     first_name: string;
     last_name: string;
     email: string;
+    enabled: boolean;
+    region: number;
 }
 interface Plan {
     transaction_id: number;

@@ -84,6 +84,7 @@ interface Student {
     last_name: string;
     email: string;
     enabled: boolean;
+    region: number;
 }
 
 const runtimeConfig = useRuntimeConfig();

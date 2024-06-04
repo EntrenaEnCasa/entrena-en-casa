@@ -137,6 +137,8 @@ interface Student {
     first_name: string;
     last_name: string;
     email: string;
+    enabled: boolean;
+    region: number;
 }
 
 interface Plan {
@@ -171,20 +173,14 @@ defineExpose({
     openModal
 })
 
-// const { data, pending: plansLoading, error, refresh: getPlans } = await useFetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${props.student?.user_id}`, {
-//     method: 'GET',
-//     credentials: 'include',
-//     immediate: false,
-// });
-
 const plans = ref<Plan[]>([]);
 const plansLoading = ref<boolean>(false);
 
 const getPlans = async () => {
     plansLoading.value = true;
     try {
-        const user_id = props.student?.user_id;
-        const response = await $fetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${user_id}`, {
+        const region = props.student?.region;
+        const response = await $fetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/plans/${region}`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -260,6 +256,7 @@ watch(selectedPlan, (newSelectedPlan) => {
 
 watch(() => props.student, async (newStudent) => {
     if (newStudent) {
+        console.log(newStudent);
         await getPlans();
     }
 });
