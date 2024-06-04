@@ -10,13 +10,13 @@
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
                                 <p class="text-2xl font-medium text-gray-700" v-if="student && student?.first_name">{{
-                        student?.first_name }} {{ student?.last_name }}</p>
+                                    student?.first_name }} {{ student?.last_name }}</p>
                                 <p class="text-2xl font-medium text-gray-700" v-else>Sin datos</p>
                             </div>
 
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Correo electrónico</h3>
-                                <p class="text-2xl font-medium text-gray-700">{{ student?.email }}</p>
+                                <p class="text-2xl font-medium text-gray-700 break-all">{{ student?.email }}</p>
                             </div>
                             <CommonButton @click="disableUser()" bg-color="tertiary"
                                 class="py-2 px-3 text-white  mx-auto mb-5" v-if="student && student.enabled">
@@ -86,7 +86,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <p>
                                                     {{ session.professional?.first_name }} {{
-                        session.professional?.last_name }}
+                                                        session.professional?.last_name }}
                                                 </p>
                                                 <p class="text-sm text-gray-400">{{ session.professional?.title }}</p>
                                             </td>
@@ -148,8 +148,8 @@
 
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <p>{{ session.professional.first_name }} {{
-                        session.professional.last_name
-                    }}
+                                                    session.professional.last_name
+                                                    }}
                                                 </p>
                                                 <p class="text-sm text-gray-400">{{ session.professional.title }}</p>
                                             </td>

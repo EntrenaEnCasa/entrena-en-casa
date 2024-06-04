@@ -2,51 +2,50 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modal">
-                <div class="w-full ">
+                <div class="w-full">
                     <CommonLoading v-if="props.student === null || plansLoading" />
                     <div v-else>
                         <div
-                            class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 mb-8 w-10/12 mx-auto mt-5">
-                            <div class="mb-5 space-y-2 px-1">
+                            class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 my-5 gap-5 w-10/12 mx-auto">
+                            <div class="space-y-2 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
-                                <p class="text-3xl font-medium text-gray-700" v-if="student && student?.first_name">{{
-                        student?.first_name }} {{ student?.last_name }}</p>
-                                <p class="text-3xl font-medium text-gray-700" v-else>Sin datos </p>
+                                <p class="text-2xl font-medium text-gray-700" v-if="student && student?.first_name">{{
+                                    student?.first_name }} {{ student?.last_name }}</p>
+                                <p class="text-2xl font-medium text-gray-700" v-else>Sin datos </p>
                             </div>
 
-                            <div class="mb-5 space-y-2 px-1">
+                            <div class="space-y-2 px-1">
                                 <h3 class="text-gray-500">Correo electrónico</h3>
-                                <p class="text-3xl font-medium text-gray-700">{{ student?.email }}</p>
+                                <p class="text-2xl font-medium text-gray-700 break-all">{{ student?.email }}
+                                </p>
                             </div>
                         </div>
-                        <div class="w-full px-8">
+                        <div class="w-full px-8 mt-8 mb-5">
                             <div class="flex justify-between items-center ">
-                                <h3 class=" mx-auto text-3xl">Planes</h3>
+                                <h3 class="mx-auto text-2xl font-medium mb-1">Planes</h3>
                             </div>
-                            <div class="overflow-x-auto ">
-                                <table class="bg-white table-auto text-sm text-left text-gray-500 mb-7">
+                            <div v-if="plans.length > 0" class="overflow-x-auto">
+                                <table class="bg-white table-auto text-sm text-left text-gray-500 mb-4">
                                     <thead class="text-gray-400">
                                         <tr>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th scope="col" class="py-4 px-6 font-medium">
 
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th scope="col" class="py-4 px-6 font-medium">
                                                 Sesiones restantes
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th scope="col" class="py-4 px-6 font-medium">
                                                 Tipo de Plan
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th scope="col" class="py-4 px-6 font-medium">
                                                 Fecha de expiración
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th scope="col" class="py-4 px-6 font-medium">
 
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
-
                                         <tr class="border-b " v-for="credit in plans">
                                             <td class="px-6 py-4 whitespace-nowrap ">
                                                 <div
@@ -97,7 +96,7 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap ">
                                                 {{ credit.available_credits }} / {{ credit.available_credits +
-                        credit.used_credits }} sesiones
+                                                    credit.used_credits }} sesiones
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap ">
                                                 <div v-if="credit.credit_type === 'PO'">
@@ -127,6 +126,9 @@
 
                                     </tbody>
                                 </table>
+                            </div>
+                            <div v-else>
+                                <h3 class="text-center">Este estudiante no tiene planes contratados</h3>
                             </div>
 
                         </div>

@@ -7,19 +7,19 @@
                         class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 mb-8 w-10/12 mx-auto mt-5">
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Nombre</h3>
-                            <p class="text-3xl font-medium text-gray-700" v-if="student?.first_name">{{
+                            <p class="text-2xl font-medium text-gray-700" v-if="student?.first_name">{{
                                 student?.first_name }} {{ student?.last_name }}</p>
-                            <p class="text-3xl font-medium text-gray-700" v-else>Sin datos </p>
+                            <p class="text-2xl font-medium text-gray-700" v-else>Sin datos </p>
                         </div>
 
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Correo electrónico</h3>
-                            <p class="text-3xl font-medium text-gray-700">{{ student?.email }}</p>
+                            <p class="text-2xl font-medium text-gray-700">{{ student?.email }}</p>
                         </div>
                     </div>
                     <div class="overflow-hidden lg:w-full px-10">
                         <div class="flex justify-between items-center mb-5">
-                            <h3 class=" mx-auto text-3xl">Modificar Plan</h3>
+                            <h3 class=" mx-auto text-2xl">Modificar Plan</h3>
                         </div>
                         <table class="bg-white table-auto text-sm text-center mx-auto mb-7" v-if="plan">
                             <thead class="text-gray-400">
@@ -38,7 +38,7 @@
                                         <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5 ">
                                             <p class="font-light text-right  ">Plan</p>
                                             <p class=" font-bold text-left">{{ getFormattedCreditType(plan.credit_type,
-                                plan.format_credit)
+                                                plan.format_credit)
                                                 }}</p>
                                         </div>
                                     </td>

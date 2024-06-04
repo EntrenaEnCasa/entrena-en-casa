@@ -86,7 +86,6 @@ interface Student {
     enabled: boolean;
 }
 
-const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 
 const studentModal = ref<Modal | null>(null);
@@ -188,10 +187,9 @@ const getFutureSessions = async (student: Student) => {
 
 };
 
-
 const openModalStudent = (student: Student) => {
-    studentModal.value?.openModal();
     currentStudent.value = student;
+    studentModal.value?.openModal();
     getFutureSessions(student);
     getPastSessions(student);
 };
