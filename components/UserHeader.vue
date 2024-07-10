@@ -36,7 +36,8 @@
                                     class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
                                     aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                     <span class="sr-only">Open user menu</span>
-                                    <NuxtImg class="w-12 h-12 rounded-full" src="/icons/woman.png" alt="user photo" />
+                                    <NuxtImg class="w-12 h-12 rounded-full" src="/icons/dumbbell.png"
+                                        alt="user photo" />
                                 </button>
                             </div>
                         </div>
