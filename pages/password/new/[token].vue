@@ -52,6 +52,10 @@
     </div>
 </template>
 <script setup>
+import { useToast } from 'vue-toastification'
+const toast = useToast();
+const router = useRouter();
+const route = useRoute();
 const dataSend = ref(false);
 const success = ref(false);
 const formData = reactive({
@@ -94,14 +98,27 @@ const validatePassword = (password) => {
 };
 
 const resetPassword = async () => {
-    dataSend.value = true;
     try {
-        // Send the reset link
+        const response = await $fetch('/api/auth/update-password', {
+            method: 'POST',
+            body: {
+                token: route.params.token,
+                newPassword: formData.password,
+            },
+        });
 
-        success.value = true;
+        if (response.success) {
+            toast.success('Contraseña actualizada exitosamente. Puedes iniciar sesión.');
+            router.push('/user/auth/login');
+        }
+        else {
+            toast.error(response.message);
+        }
+
     } catch (error) {
-        success.value = false;
-    }
+        console.error(error);
+        toast.error('Ocurrió un error al intentar actualizar la contraseña. Intente nuevamente más tarde.');
+    };
 }
 const goToWhatsapp = async () => {
     await navigateTo('https://wa.me/56971370313?text=Hola%20Jorge,%20necesito%20ayuda%20para%20restablecer%20mi%20contraseña.', {
