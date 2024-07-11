@@ -34,6 +34,11 @@
     </div>
 </template>
 <script setup>
+import { useToast } from 'vue-toastification'
+import { useUserStore } from '~/stores/UserStore';
+
+const userStore = useUserStore();
+const toast = useToast();
 const success = ref(false);
 const formData = reactive({
     email: "",
@@ -54,10 +59,26 @@ const validateEmail = (value) => {
 
 const sendResetLink = async () => {
     try {
-        // Send the reset link
-        success.value = true;
-    } catch (error) {
-        console.error(error);
+        const response = await $fetch('/api/auth/send-reset-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                email: formData.email
+            }
+        })
+
+        if (response.success) {
+            toast.success('Correo de verificación enviado')
+            emailSent.value = true;
+        } else {
+            toast.error(response.message)
+        }
+    }
+    catch (error) {
+        console.log(error)
+        toast.error('No se pudo enviar el correo de verificación')
     }
 }
 </script>
