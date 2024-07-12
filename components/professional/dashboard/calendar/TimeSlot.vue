@@ -19,21 +19,18 @@
                 v-for="(event, index) in timeSlot.events"
                 :key="index"
                 class="absolute left-0 right-0"
-                :style="{
-                    height: `${calculateEventHeight(event)}%`,
-                    top: `${calculateEventTop(event)}%`,
-                }">
+                :style="getEventStyle(event)">
                 <button
                     @click="$emit('eventClick', event.event)"
                     :disabled="!event.isStartEvent || !editMode"
-                    class="w-full h-full"
+                    class="w-full h-full overflow-hidden"
                     :class="eventClasses(event)">
                     <div
                         v-if="shouldShowEventDetails(event)"
                         @mouseover="showPopover = true"
                         @mouseleave="showPopover = false"
                         class="w-full h-full flex flex-col justify-center items-center text-white">
-                        <Popper :show="showPopover" class="">
+                        <Popper :show="showPopover">
                             <button>
                                 <Icon
                                     name="mdi:eye"
@@ -108,6 +105,16 @@ const calculateEventHeight = (event) => {
 
 const calculateEventTop = (event) => {
     return (event.startOffset / props.slotDurationInMinutes) * 100;
+};
+
+const getEventStyle = (event) => {
+    const height = calculateEventHeight(event);
+    const top = calculateEventTop(event);
+
+    return {
+        height: `${height}%`,
+        top: `${top}%`,
+    };
 };
 </script>
 
