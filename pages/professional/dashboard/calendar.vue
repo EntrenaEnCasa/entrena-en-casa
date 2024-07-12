@@ -186,8 +186,15 @@ const slotDurationInMinutesOptions = ref([
 ]);
 
 watch(slotDurationInMinutes, () => {
-    initializeCalendarData();
     getEvents();
+});
+
+// if the events array is empty, set editMode to false
+watch(events, () => {
+    console.log("events changed!");
+    if (events.value.length == 0) {
+        editMode.value = false;
+    }
 });
 
 const calendarData = ref([]);
@@ -320,6 +327,7 @@ const getLocalDateString = (date) => {
 
 const getEvents = async () => {
     fetchingEvents.value = true;
+    initializeCalendarData();
 
     const localDateString = getLocalDateString(currentDate.value);
     const body = {
@@ -998,8 +1006,6 @@ const updateCurrentlySelectedDate = (date, timeString) => {
 /* Lifecycle hooks */
 
 onMounted(() => {
-    // Get the events when the component is mounted
-    initializeCalendarData();
     getEvents();
     //allows for closing the dropdown when clicking outside of it
     document.addEventListener("click", newDropdown.close);
