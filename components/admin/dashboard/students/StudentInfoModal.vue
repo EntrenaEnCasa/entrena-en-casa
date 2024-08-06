@@ -10,7 +10,7 @@
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
                                 <p class="text-2xl font-medium text-gray-700" v-if="student && student?.first_name">{{
-                        student?.first_name }} {{ student?.last_name }}</p>
+                                    student?.first_name }} {{ student?.last_name }}</p>
                                 <p class="text-2xl font-medium text-gray-700" v-else>Sin datos</p>
                             </div>
 
@@ -18,12 +18,21 @@
                                 <h3 class="text-gray-500">Correo electrónico</h3>
                                 <p class="text-2xl font-medium text-gray-700">{{ student?.email }}</p>
                             </div>
-                            <CommonButton @click="disableUser()" bg-color="tertiary"
-                                class="py-2 px-3 text-white  mx-auto mb-5" v-if="student && student.enabled">
-                                Deshabilitar usuario</CommonButton>
-                            <CommonButton @click="enableUser()" bg-color="primary"
-                                class="py-2 px-3 text-white  mx-auto mb-5" v-else-if="student && !student.enabled">
-                                Habilitar usuario</CommonButton>
+                            <div class="flex">
+
+                                <CommonButton @click="disableUser()" bg-color="tertiary"
+                                    class="py-2 px-3 text-white  mx-auto mb-5" v-if="student && student.enabled">
+                                    Deshabilitar usuario</CommonButton>
+                                <CommonButton @click="enableUser()" bg-color="primary"
+                                    class="py-2 px-3 text-white  mx-auto mb-5" v-else-if="student && !student.enabled">
+                                    Habilitar usuario</CommonButton>
+
+                                <!-- Botón para restablecer contraseña -->
+                                <CommonButton @click="resetPassword()" bg-color="secondary"
+                                    class="py-2 px-3 text-white  mx-auto mb-5">
+                                    Restablecer contraseña
+                                </CommonButton>
+                            </div>
                         </div>
 
                         <div class="space-y-6 mb-6">
@@ -86,7 +95,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <p>
                                                     {{ session.professional?.first_name }} {{
-                        session.professional?.last_name }}
+                                                        session.professional?.last_name }}
                                                 </p>
                                                 <p class="text-sm text-gray-400">{{ session.professional?.title }}</p>
                                             </td>
@@ -148,8 +157,8 @@
 
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <p>{{ session.professional.first_name }} {{
-                        session.professional.last_name
-                    }}
+                                                    session.professional.last_name
+                                                }}
                                                 </p>
                                                 <p class="text-sm text-gray-400">{{ session.professional.title }}</p>
                                             </td>
@@ -286,6 +295,33 @@ const openModalPlans = () => {
     modal.value?.closeModal();
 
 }
+
+const resetPassword = async () => {
+    if (!props.student || !props.student.email) return;
+    try {
+        const response = await $fetch('/api/auth/send-reset-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                email: props.student?.email
+            }
+        })
+
+        if (response.success) {
+            toast.success('Correo de verificación enviado. Se ha enviado un correo para restablecer la contraseña a la dirección de correo del estudiante')
+
+        } else {
+            toast.error(response.message)
+        }
+    }
+    catch (error) {
+        console.log(error)
+        toast.error('No se pudo enviar el correo de verificación')
+    }
+}
+
 const disableUser = async () => {
     if (!props.student) return;
     const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/disable-account`, {

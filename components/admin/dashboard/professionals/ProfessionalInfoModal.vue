@@ -19,13 +19,22 @@
                                 <h3 class="text-gray-500">Correo electrónico</h3>
                                 <p class="text-2xl font-medium text-gray-700">{{ professional.email }}</p>
                             </div>
-                            <CommonButton @click="disableUser()" bg-color="tertiary"
-                                class="py-2 px-3 text-white  mx-auto mb-5" v-if="professional && professional.enabled">
-                                Deshabilitar usuario</CommonButton>
-                            <CommonButton @click="enableUser()" bg-color="primary"
-                                class="py-2 px-3 text-white  mx-auto mb-5"
-                                v-else-if="professional && !professional.enabled">
-                                Habilitar usuario</CommonButton>
+                            <div class="flex">
+
+                                <CommonButton @click="disableUser()" bg-color="tertiary"
+                                    class="py-2 px-3 text-white  mx-auto mb-5"
+                                    v-if="professional && professional.enabled">
+                                    Deshabilitar usuario</CommonButton>
+                                <CommonButton @click="enableUser()" bg-color="primary"
+                                    class="py-2 px-3 text-white  mx-auto mb-5"
+                                    v-else-if="professional && !professional.enabled">
+                                    Habilitar usuario</CommonButton>
+                                <!-- Botón para restablecer contraseña -->
+                                <CommonButton @click="resetPassword()" bg-color="secondary"
+                                    class="py-2 px-3 text-white  mx-auto mb-5">
+                                    Restablecer contraseña
+                                </CommonButton>
+                            </div>
                         </div>
                         <div class="space-y-6 mb-6">
                             <div class="px-5 py-3 rounded-lg border flex items-center justify-between"
@@ -245,6 +254,33 @@ const enableUser = async () => {
         reloadNuxtApp();
     } else {
         toast.error('Error al deshabilitar usuario');
+    }
+}
+
+
+const resetPassword = async () => {
+    if (!props.professional || !props.professional.email) return;
+    try {
+        const response = await $fetch('/api/auth/send-reset-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                email: props.professional?.email
+            }
+        })
+
+        if (response.success) {
+            toast.success('Correo de verificación enviado. Se ha enviado un correo para restablecer la contraseña a la dirección de correo del profesional')
+
+        } else {
+            toast.error(response.message)
+        }
+    }
+    catch (error) {
+        console.log(error)
+        toast.error('No se pudo enviar el correo de verificación')
     }
 }
 
