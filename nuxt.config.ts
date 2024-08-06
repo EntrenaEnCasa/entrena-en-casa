@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: false },
+
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -11,6 +12,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     '@pinia-plugin-persistedstate/nuxt',
   ],
+
   runtimeConfig: {
     flowApiKey: process.env.FLOW_API_KEY,
     flowSecretKey: process.env.FLOW_SECRET_KEY,
@@ -25,7 +27,10 @@ export default defineNuxtConfig({
       mapboxApiKey: process.env.MAPBOX_API_KEY,
     }
   },
+
   mapbox: {
     accessToken: process.env.MAPBOX_API_KEY,
   },
+
+  compatibilityDate: '2024-07-11',
 })
