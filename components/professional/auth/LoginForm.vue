@@ -10,7 +10,9 @@
                 <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
                 <label class="text-gray-500" for="remember">Recuérdame</label>
             </div>
-            <p class="text-secondary text-right">Olvidé mi contraseña</p>
+            <router-link to="/password/reset" class="text-secondary">
+                Olvidé mi contraseña
+            </router-link>
         </div>
         <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading" :disabled="!meta.valid">
             Iniciar Sesión
