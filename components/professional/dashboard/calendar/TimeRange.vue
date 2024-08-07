@@ -1,34 +1,73 @@
 <template>
     <div class="flex justify-center">
         <div class="py-2 mb-5 flex max-w-max items-center gap-4">
-            <select v-model="selectedStartTime"
-                class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                <option v-for="time in startTimeOptions" :key="`start-${time}`" :value="time">
-                    {{ time }}
-                </option>
-            </select>
+            <div class="flex items-center gap-2">
+                <select
+                    v-model="selectedStartHour"
+                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary">
+                    <option
+                        v-for="hour in startHourOptions"
+                        :key="`start-hour-${hour}`"
+                        :value="hour">
+                        {{ hour }}
+                    </option>
+                </select>
+                <span>:</span>
+                <select
+                    v-model="selectedStartMinute"
+                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary">
+                    <option
+                        v-for="minute in startMinuteOptions"
+                        :key="`start-minute-${minute}`"
+                        :value="minute">
+                        {{ minute }}
+                    </option>
+                </select>
+            </div>
             <span class="font-semibold">-</span>
-            <select v-show="isManual" v-model="selectedEndTime"
-                class="border text-gray-800 bg-white text-sm rounded-md px-5 py-3.5 outline-primary">
-                <option v-for="time in endTimeOptions" :key="`end-${time}`" :value="time">
-                    {{ time }}
-                </option>
-            </select>
-            <p v-show="!isManual">
-                {{ automaticallySelectedEndTime }}hrs
-            </p>
+            <div v-if="isManual" class="flex items-center gap-2">
+                <select
+                    v-model="selectedEndHour"
+                    class="border text-gray-800 bg-white text-sm rounded-md px-4 py-3 outline-primary">
+                    <option
+                        v-for="hour in endHourOptions"
+                        :key="`end-hour-${hour}`"
+                        :value="hour">
+                        {{ hour }}
+                    </option>
+                </select>
+                <span>:</span>
+                <span
+                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-4 py-3 cursor-not-allowed">
+                    {{ selectedStartMinute }}
+                </span>
+            </div>
+            <div
+                v-else
+                class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-4 py-3 cursor-not-allowed">
+                {{ automaticallySelectedEndTime }}
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-
-import { useTimeRangeStore } from '~/stores/professional/dashboard/calendar/TimeRangeStore';
+import { useTimeRangeStore } from "~/stores/professional/dashboard/calendar/TimeRangeStore";
 
 defineProps({
-    isManual: Boolean,
+    isManual: {
+        type: Boolean,
+        default: false,
+    },
 });
 
-const { selectedStartTime, selectedEndTime, startTimeOptions, endTimeOptions, automaticallySelectedEndTime } = storeToRefs(useTimeRangeStore());
-
+const {
+    selectedStartHour,
+    selectedStartMinute,
+    selectedEndHour,
+    startHourOptions,
+    endHourOptions,
+    startMinuteOptions,
+    automaticallySelectedEndTime,
+} = storeToRefs(useTimeRangeStore());
 </script>

@@ -1,92 +1,129 @@
-import { defineStore } from 'pinia';
-import { useFormatter } from '~/composables/time/useFormatter';
+import { defineStore } from "pinia";
+import { useFormatter } from "~/composables/time/useFormatter";
 
 const { formatHourToTimeString, extractHourFromTimeString } = useFormatter();
 
-const initialStartTime = 9;
-const initialEndTime = 21;
+const initialStartTime = 0;
+const initialEndTime = 23;
 
-const generateTimesList = (startTime: number, endTime: number) : number[] => {
-  const times = [];
-  for (let i = startTime; i <= endTime; i++) {
-    times.push(i);
-  }
-  return times;
+const generateHourOptions = (startTime: number, endTime: number): number[] => {
+    const times = [];
+    for (let i = startTime; i <= endTime; i++) {
+        times.push(i);
+    }
+    return times;
 };
 
-const timesList = generateTimesList(initialStartTime, initialEndTime);
-
-export const useTimeRangeStore = defineStore('timeRangeStore', () => {
-  const selectedStartTime = ref(formatHourToTimeString(timesList[0]));
-  const selectedEndTime = ref(formatHourToTimeString(timesList[1]));
-
-  const startTimeOptions = computed(() => timesList.map(formatHourToTimeString));
-
-  const endTimeOptions = computed(() => {
-    let options = [];
-    let start = extractHourFromTimeString(selectedStartTime.value);
-    let begin = start + 1;
-
-    for (let i = begin; i <= initialEndTime + 1; i++) {
-      options.push(formatHourToTimeString(i));
+const generateMinuteIntervals = (interval: number): string[] => {
+    const minutes = [];
+    for (let i = 0; i < 60; i += interval) {
+        minutes.push(i.toString().padStart(2, "0"));
     }
-    return options;
-  });
+    return minutes;
+};
 
-  const automaticallySelectedEndTime = computed(() => {
-    const startIndex = timesList.findIndex(time => formatHourToTimeString(time) === selectedStartTime.value);
-    if (startIndex === timesList.length - 1) {
-      return formatHourToTimeString(timesList[startIndex] + 1);
-    } else {
-      return formatHourToTimeString(timesList[startIndex + 1]);
-    }
-  });
+const hourOptions = generateHourOptions(initialStartTime, initialEndTime);
+const minuteIntervals = generateMinuteIntervals(15);
 
-  watch(selectedStartTime, (newStartTime) => {
-    const newStartTimeInt = extractHourFromTimeString(newStartTime);
-    const manuallySelectedEndTimeInt = extractHourFromTimeString(selectedEndTime.value);
+export const useTimeRangeStore = defineStore("timeRangeStore", () => {
+    const selectedStartHour = ref(hourOptions[0].toString().padStart(2, "0"));
+    const selectedStartMinute = ref(minuteIntervals[0]);
+    const selectedEndHour = ref(hourOptions[1].toString().padStart(2, "0"));
 
-    if (newStartTimeInt >= manuallySelectedEndTimeInt) {
-      const newEndTimeIndex = timesList.findIndex(time => time === newStartTimeInt) + 1;
+    const startHourOptions = computed(() =>
+        hourOptions.map((hour) => hour.toString().padStart(2, "0"))
+    );
 
-      if (newEndTimeIndex >= timesList.length) {
-        selectedEndTime.value = formatHourToTimeString(timesList[newEndTimeIndex - 1] + 1);
-      } else {
-        selectedEndTime.value = formatHourToTimeString(timesList[newEndTimeIndex]);
-      }
-    }
-  });
+    const endHourOptions = computed(() => {
+        const startHour = parseInt(selectedStartHour.value);
+        const startIndex = hourOptions.findIndex((hour) => hour === startHour);
+        return hourOptions
+            .slice(startIndex + 1)
+            .map((hour) => hour.toString().padStart(2, "0"));
+    });
 
-  const updateSelectedStartTimeFromNumber = (newStartTime: number) => {
-    selectedStartTime.value = formatHourToTimeString(newStartTime);
-  };
+    const startMinuteOptions = computed(() => minuteIntervals);
 
-  const updateSelectedStartTimeFromString = (newStartTime: string) => {
-    selectedStartTime.value = newStartTime;
-  };
+    const selectedStartTime = computed(
+        () => `${selectedStartHour.value}:${selectedStartMinute.value}`
+    );
 
-  const updateSelectedEndTimeFromNumber = (newEndTime: number) => {
-    selectedEndTime.value = formatHourToTimeString(newEndTime);
-  };
+    const automaticallySelectedEndTime = computed(() => {
+        const startHour = parseInt(selectedStartHour.value);
+        const startMinute = parseInt(selectedStartMinute.value);
+        let endHour = startHour + 1;
+        let endMinute = startMinute;
 
-  const updateSelectedEndTimeFromString = (newEndTime: string) => {
-    selectedEndTime.value = newEndTime;
-  };
+        if (endHour > 23) {
+            endHour = 0;
+        }
 
-  const setSelectedStartTimeToFirstAvailableTime = () => {
-    selectedStartTime.value = formatHourToTimeString(timesList[0]);
-  };
+        return `${endHour.toString().padStart(2, "0")}:${endMinute
+            .toString()
+            .padStart(2, "0")}`;
+    });
 
-  return {
-    selectedStartTime,
-    selectedEndTime,
-    startTimeOptions,
-    endTimeOptions,
-    automaticallySelectedEndTime,
-    updateSelectedStartTimeFromNumber,
-    updateSelectedStartTimeFromString,
-    updateSelectedEndTimeFromNumber,
-    updateSelectedEndTimeFromString,
-    setSelectedStartTimeToFirstAvailableTime,
-  };
+    const selectedEndTime = computed(() => {
+        return `${selectedEndHour.value}:${selectedStartMinute.value}`;
+    });
+
+    watch(
+        [selectedStartHour, selectedStartMinute],
+        ([newStartHour, newStartMinute]) => {
+            const startHourInt = parseInt(newStartHour);
+            let endHourInt = startHourInt + 1;
+
+            if (endHourInt > 23) {
+                endHourInt = 0;
+            }
+
+            selectedEndHour.value = endHourInt.toString().padStart(2, "0");
+        }
+    );
+
+    const updateSelectedStartTimeFromNumber = (newStartTime: number) => {
+        const timeString = formatHourToTimeString(newStartTime);
+        const [hour, minute] = timeString.split(":");
+        selectedStartHour.value = hour;
+        selectedStartMinute.value = minute;
+    };
+
+    const updateSelectedStartTimeFromString = (newStartTime: string) => {
+        const [hour, minute] = newStartTime.split(":");
+        selectedStartHour.value = hour;
+        selectedStartMinute.value = minute;
+    };
+
+    const updateSelectedEndTimeFromNumber = (newEndTime: number) => {
+        const timeString = formatHourToTimeString(newEndTime);
+        const [hour] = timeString.split(":");
+        selectedEndHour.value = hour;
+    };
+
+    const updateSelectedEndTimeFromString = (newEndTime: string) => {
+        const [hour] = newEndTime.split(":");
+        selectedEndHour.value = hour;
+    };
+
+    const setSelectedStartTimeToFirstAvailableTime = () => {
+        selectedStartHour.value = hourOptions[0].toString().padStart(2, "0");
+        selectedStartMinute.value = minuteIntervals[0];
+    };
+
+    return {
+        selectedStartHour,
+        selectedStartMinute,
+        selectedEndHour,
+        startHourOptions,
+        endHourOptions,
+        startMinuteOptions,
+        selectedStartTime,
+        selectedEndTime,
+        automaticallySelectedEndTime,
+        updateSelectedStartTimeFromNumber,
+        updateSelectedStartTimeFromString,
+        updateSelectedEndTimeFromNumber,
+        updateSelectedEndTimeFromString,
+        setSelectedStartTimeToFirstAvailableTime,
+    };
 });
