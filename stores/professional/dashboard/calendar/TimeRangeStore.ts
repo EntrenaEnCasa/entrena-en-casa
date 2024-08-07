@@ -64,15 +64,11 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
 
     watch([selectedStartHour], ([newStartHour]) => {
         const startHourInt = parseInt(newStartHour);
-        const currentEndHourInt = parseInt(selectedEndHour.value);
-
-        if (startHourInt >= currentEndHourInt) {
-            let endHourInt = startHourInt + 1;
-            if (endHourInt > 23) {
-                endHourInt = 0;
-            }
-            selectedEndHour.value = endHourInt.toString().padStart(2, "0");
+        let endHourInt = startHourInt + 1;
+        if (endHourInt > 23) {
+            endHourInt = 0;
         }
+        selectedEndHour.value = endHourInt.toString().padStart(2, "0");
     });
 
     const updateSelectedStartTimeFromNumber = (newStartTime: number) => {
