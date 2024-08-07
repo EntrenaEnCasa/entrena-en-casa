@@ -25,8 +25,9 @@
                 </select>
             </div>
             <span class="font-semibold">-</span>
-            <div v-if="isManual" class="flex items-center gap-2">
+            <div class="flex items-center gap-2">
                 <select
+                    v-if="isManual"
                     v-model="selectedEndHour"
                     class="border text-gray-800 bg-white text-sm rounded-md px-4 py-3 outline-primary">
                     <option
@@ -36,16 +37,17 @@
                         {{ hour }}
                     </option>
                 </select>
+                <div
+                    v-else
+                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-6 py-3 cursor-not-allowed">
+                    {{ automaticallySelectedEndHour }}
+                </div>
+
                 <span>:</span>
                 <span
-                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-4 py-3 cursor-not-allowed">
+                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-6 py-3 cursor-not-allowed">
                     {{ selectedEndMinute }}
                 </span>
-            </div>
-            <div
-                v-else
-                class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-4 py-3 cursor-not-allowed">
-                {{ automaticallySelectedEndTime }}
             </div>
         </div>
     </div>
@@ -69,6 +71,6 @@ const {
     startHourOptions,
     endHourOptions,
     startMinuteOptions,
-    automaticallySelectedEndTime,
+    automaticallySelectedEndHour,
 } = storeToRefs(useTimeRangeStore());
 </script>

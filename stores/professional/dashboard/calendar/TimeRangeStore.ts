@@ -29,8 +29,7 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
     const selectedStartHour = ref(hourOptions[0].toString().padStart(2, "0"));
     const selectedStartMinute = ref(minuteIntervals[0]);
     const selectedEndHour = ref(hourOptions[1].toString().padStart(2, "0"));
-
-    const selectedEndMinute = computed(() => selectedStartMinute.value);
+    const selectedEndMinute = computed(() => selectedStartMinute.value); // the end time will always be the same minute as the start time because we only allow 1 hour time slots
 
     const startHourOptions = computed(() =>
         hourOptions.map((hour) => hour.toString().padStart(2, "0"))
@@ -50,19 +49,16 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
         () => `${selectedStartHour.value}:${selectedStartMinute.value}`
     );
 
-    const automaticallySelectedEndTime = computed(() => {
+    const automaticallySelectedEndHour = computed(() => {
         const startHour = parseInt(selectedStartHour.value);
-        const startMinute = parseInt(selectedStartMinute.value);
+
         let endHour = startHour + 1;
-        let endMinute = startMinute;
 
         if (endHour > 23) {
             endHour = 0;
         }
 
-        return `${endHour.toString().padStart(2, "0")}:${endMinute
-            .toString()
-            .padStart(2, "0")}`;
+        return endHour.toString().padStart(2, "0");
     });
 
     const selectedEndTime = computed(() => {
@@ -73,6 +69,10 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
         [selectedStartHour, selectedStartMinute],
         ([newStartHour, newStartMinute]) => {
             const startHourInt = parseInt(newStartHour);
+            const currentEndHourInt = parseInt(selectedEndHour.value);
+
+            if (startHourInt < currentEndHourInt) return;
+
             let endHourInt = startHourInt + 1;
 
             if (endHourInt > 23) {
@@ -122,7 +122,7 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
         startMinuteOptions,
         selectedStartTime,
         selectedEndTime,
-        automaticallySelectedEndTime,
+        automaticallySelectedEndHour,
         updateSelectedStartTimeFromNumber,
         updateSelectedStartTimeFromString,
         updateSelectedEndTimeFromNumber,
