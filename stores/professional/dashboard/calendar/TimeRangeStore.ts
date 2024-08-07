@@ -23,7 +23,7 @@ const generateMinuteIntervals = (interval: number): string[] => {
 };
 
 const hourOptions = generateHourOptions(initialStartTime, initialEndTime);
-const minuteIntervals = generateMinuteIntervals(15);
+const minuteIntervals = generateMinuteIntervals(5);
 
 export const useTimeRangeStore = defineStore("timeRangeStore", () => {
     const selectedStartHour = ref(hourOptions[0].toString().padStart(2, "0"));
