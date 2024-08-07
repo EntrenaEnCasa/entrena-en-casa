@@ -50,7 +50,7 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
     );
 
     const formattedEndTime = computed(() => {
-        return `${selectedEndHour}:${selectedEndMinute.value}`;
+        return `${selectedEndHour.value}:${selectedEndMinute.value}`;
     });
 
     const calculatedEndHour = computed(() => {
