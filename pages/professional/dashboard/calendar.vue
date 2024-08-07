@@ -222,29 +222,23 @@ const newDropdown = reactive({
 });
 
 const initializeCalendarData = () => {
-    // Reset the array
     calendarData.value = [];
-
-    // Get the current date
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset time to 00:00
+    today.setHours(0, 0, 0, 0);
 
-    // Calculate the start and end of the week
     const startOfWeek = new Date(today);
     const endOfWeek = new Date(today);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // Add 6 days to get the end of the week
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
 
-    // Calculate the number of slots per day
     const slotsPerDay = 24 * (60 / slotDurationInMinutes.value);
 
-    // Populate the array with placeholders for each time slot
     for (
-        let date = startOfWeek;
+        let date = new Date(startOfWeek);
         date <= endOfWeek;
         date.setDate(date.getDate() + 1)
     ) {
         const day = {
-            date: new Date(date), // Create a new Date object to avoid mutation
+            date: new Date(date),
             formattedDate: formatDateToWeekdayAndDay(date),
             timeSlots: Array.from({ length: slotsPerDay }, (_, i) => {
                 const hours = Math.floor(
@@ -255,57 +249,54 @@ const initializeCalendarData = () => {
                     time: `${hours.toString().padStart(2, "0")}:${minutes
                         .toString()
                         .padStart(2, "0")}`,
-                    events: [], // Initialize with an empty array
+                    events: [],
                 };
             }),
         };
-
         calendarData.value.push(day);
     }
-
-    console.log("Calendar initalized");
-    console.log(calendarData.value);
 };
 
-const getTimeSlotIndex = (time) => {
-    const [hours, minutes] = time.split(":");
-    const totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
+const getTimeSlotInfo = (time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    const totalMinutes = hours * 60 + minutes;
     const slotIndex = Math.floor(totalMinutes / slotDurationInMinutes.value);
-    const slotOffset = totalMinutes % slotDurationInMinutes.value;
-    return { slotIndex, slotOffset };
+    const offset = totalMinutes % slotDurationInMinutes.value;
+    return { slotIndex, offset };
 };
 
 const populateCalendar = (events) => {
-    // Get the current date
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset time to 00:00
+    const startOfWeek = new Date(calendarData.value[0].date);
 
-    // Calculate the start of the week
-    const startOfWeek = new Date(today);
-
-    // Populate events in the appropriate time slots
     events.forEach((event) => {
         const eventDate = new Date(event.date);
-        const dayDiff =
-            (eventDate.getTime() - startOfWeek.getTime()) /
-            (1000 * 60 * 60 * 24);
-        const dayIndex = Math.floor(dayDiff);
+        const dayIndex = Math.floor(
+            (eventDate - startOfWeek) / (1000 * 60 * 60 * 24)
+        );
 
-        const startTime = getTimeSlotIndex(event.start_time);
-        const endTime = getTimeSlotIndex(event.end_time);
+        const { slotIndex: startSlotIndex, offset: startOffset } =
+            getTimeSlotInfo(event.start_time);
+        const { slotIndex: endSlotIndex, offset: endOffset } = getTimeSlotInfo(
+            event.end_time
+        );
 
-        for (let i = startTime.slotIndex; i < endTime.slotIndex; i++) {
+        const lastSlotIndex = endOffset === 0 ? endSlotIndex - 1 : endSlotIndex;
+
+        for (let i = startSlotIndex; i <= lastSlotIndex; i++) {
             const timeSlot = calendarData.value[dayIndex].timeSlots[i];
-            if (!timeSlot.events) {
-                timeSlot.events = [];
-            }
+            const isStartSlot = i === startSlotIndex;
+            const isEndSlot = i === lastSlotIndex;
+
             timeSlot.events.push({
                 event,
-                isStartEvent: i === startTime.slotIndex,
-                isEndEvent: i === endTime.slotIndex,
-                startOffset:
-                    i === startTime.slotIndex ? startTime.slotOffset : 0,
-                endOffset: i === endTime.slotIndex ? endTime.slotOffset : 0,
+                isStartEvent: isStartSlot,
+                isEndEvent: isEndSlot,
+                startOffset: isStartSlot ? startOffset : 0,
+                endOffset: isEndSlot
+                    ? endOffset === 0
+                        ? 0
+                        : slotDurationInMinutes.value - endOffset
+                    : 0,
             });
         }
     });
