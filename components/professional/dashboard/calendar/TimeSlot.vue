@@ -15,42 +15,37 @@
             </div>
         </button>
         <div v-else class="w-full h-full relative">
-            <div
+            <button
                 v-for="(event, index) in timeSlot.events"
                 :key="index"
-                class="absolute left-0 right-0"
+                @click="$emit('eventClick', event.event)"
+                :disabled="!event.isStartEvent || !editMode"
+                class="absolute left-0 right-0 w-full h-full overflow-hidden"
+                :class="eventClasses(event)"
                 :style="getEventStyle(event)">
-                <button
-                    @click="$emit('eventClick', event.event)"
-                    :disabled="!event.isStartEvent || !editMode"
-                    class="absolute w-full h-full overflow-hidden"
-                    :class="eventClasses(event)">
-                    <div
-                        v-if="shouldShowEventDetails(event)"
-                        @mouseover="showPopover = true"
-                        @mouseleave="showPopover = false"
-                        class="w-full h-full flex flex-col justify-center items-center text-white">
-                        <Popper :show="showPopover">
-                            <button>
-                                <Icon
-                                    name="mdi:eye"
-                                    class="text-xl text-white" />
-                                <span class="ml-1">Ver info</span>
-                            </button>
-                            <template #content>
-                                <ProfessionalDashboardCalendarEventDetails
-                                    :event="event.event"
-                                    :timeSlot="timeSlot" />
-                            </template>
-                        </Popper>
-                    </div>
-                    <div :class="{ hidden: !editMode || !event.isStartEvent }">
-                        <Icon
-                            name="fa6-solid:pen-to-square"
-                            class="text-xl text-white" />
-                    </div>
-                </button>
-            </div>
+                <div
+                    v-if="shouldShowEventDetails(event)"
+                    @mouseover="showPopover = true"
+                    @mouseleave="showPopover = false"
+                    class="w-full h-full flex flex-col justify-center items-center text-white">
+                    <Popper :show="showPopover">
+                        <button>
+                            <Icon name="mdi:eye" class="text-lg text-white" />
+                            <span class="ml-1 text-sm">Ver info</span>
+                        </button>
+                        <template #content>
+                            <ProfessionalDashboardCalendarEventDetails
+                                :event="event.event"
+                                :timeSlot="timeSlot" />
+                        </template>
+                    </Popper>
+                </div>
+                <div :class="{ hidden: !editMode || !event.isStartEvent }">
+                    <Icon
+                        name="fa6-solid:pen-to-square"
+                        class="text-xl text-white" />
+                </div>
+            </button>
         </div>
     </div>
 </template>
