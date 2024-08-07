@@ -159,8 +159,7 @@ const {
     updateSelectedEndTimeFromString,
     setSelectedStartTimeToFirstAvailableTime,
 } = timeRangeStore;
-const { selectedStartTime, automaticallySelectedEndTime, selectedEndTime } =
-    storeToRefs(timeRangeStore);
+const { formattedStartTime, formattedEndTime } = storeToRefs(timeRangeStore);
 
 const events = ref([]); // Array of events
 const fetchingEvents = ref(false); // Loading state of the events
@@ -459,7 +458,7 @@ const newEmptySessionModal = reactive({
         const body = {
             user_id: userStore.user.user_id,
             date: localDateString, // fecha en formato YYYY-MM-DD
-            time: selectedStartTime.value,
+            time: formattedStartTime.value,
             available: true,
             format: newEmptySessionModal.data.selectedFormat,
             modality: newEmptySessionModal.data.selectedModality,
@@ -586,8 +585,8 @@ const newEventModal = reactive({
             const body = {
                 user_id: userStore.user.user_id,
                 date: localDateString, // fecha en formato YYYY-MM-DD
-                start_time: selectedStartTime.value, // hora en formato HH:MM
-                end_time: automaticallySelectedEndTime.value, // hora en formato HH:MM
+                start_time: formattedStartTime.value, // hora en formato HH:MM
+                end_time: formattedEndTime.value, // hora en formato HH:MM
                 format: newEventModal.data.manualSession.selectedFormat, // "Personalizado" o "Grupal"
                 modality: newEventModal.data.manualSession.selectedModality, // "Online" o "Presencial"
                 link: link, // link de la sesión, se pasa como text
@@ -627,8 +626,8 @@ const newEventModal = reactive({
             const body = {
                 user_id: userStore.user.user_id,
                 date: localDateString, // fecha en formato YYYY-MM-DD
-                start_time: selectedStartTime.value, // hora en formato HH:MM
-                end_time: selectedEndTime.value, // hora en formato HH:MM
+                start_time: formattedStartTime.value, // hora en formato HH:MM
+                end_time: formattedEndTime.value, // hora en formato HH:MM
                 info: newEventModal.data.personalEvent.additionalInfo, // información adicional
                 clients: clientsIDs, // array de ids de clientes
                 type: "personal", // "Nuevo entrenamiento" o "Evento personal"
@@ -740,7 +739,7 @@ const editEmptySessionModal = reactive({
             user_id: userStore.user.user_id,
             session_id: event.session_info.session_id,
             date: getLocalDateString(selectedDate.value),
-            time: selectedStartTime.value,
+            time: formattedStartTime.value,
             format: editEmptySessionModal.data.selectedFormat,
             modality: editEmptySessionModal.data.selectedModality,
             clients: clientsIDs,
@@ -841,8 +840,8 @@ const editManualSessionModal = reactive({
             event_id: event.event_id,
             session_id: event.session_info.session_id,
             date: getLocalDateString(selectedDate.value),
-            start_time: selectedStartTime.value,
-            end_time: automaticallySelectedEndTime.value,
+            start_time: formattedStartTime.value,
+            end_time: formattedEndTime.value,
             format: editManualSessionModal.data.selectedFormat,
             modality: editManualSessionModal.data.selectedModality,
             link: editManualSessionModal.data.link,
@@ -937,8 +936,8 @@ const editPersonalEventModal = reactive({
             user_id: userStore.user.user_id,
             event_id: event.event_id,
             date: getLocalDateString(selectedDate.value),
-            start_time: selectedStartTime.value,
-            end_time: selectedEndTime.value,
+            start_time: formattedStartTime.value,
+            end_time: formattedEndTime.value,
             info: editPersonalEventModal.data.additionalInfo,
             clients: editPersonalEventModal.data.clients.map(
                 (client) => client.user_id

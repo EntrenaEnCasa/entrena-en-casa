@@ -40,7 +40,7 @@
                 <div
                     v-else
                     class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-6 py-3 cursor-not-allowed">
-                    {{ automaticallySelectedEndHour }}
+                    {{ calculatedEndHour }}
                 </div>
 
                 <span>:</span>
@@ -71,6 +71,6 @@ const {
     startHourOptions,
     endHourOptions,
     startMinuteOptions,
-    automaticallySelectedEndHour,
+    calculatedEndHour,
 } = storeToRefs(useTimeRangeStore());
 </script>

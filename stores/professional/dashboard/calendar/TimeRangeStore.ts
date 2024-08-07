@@ -29,7 +29,7 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
     const selectedStartHour = ref(hourOptions[0].toString().padStart(2, "0"));
     const selectedStartMinute = ref(minuteIntervals[0]);
     const selectedEndHour = ref(hourOptions[1].toString().padStart(2, "0"));
-    const selectedEndMinute = computed(() => selectedStartMinute.value); // the end time will always be the same minute as the start time because we only allow 1 hour time slots
+    const selectedEndMinute = computed(() => selectedStartMinute.value);
 
     const startHourOptions = computed(() =>
         hourOptions.map((hour) => hour.toString().padStart(2, "0"))
@@ -45,43 +45,35 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
 
     const startMinuteOptions = computed(() => minuteIntervals);
 
-    const selectedStartTime = computed(
+    const formattedStartTime = computed(
         () => `${selectedStartHour.value}:${selectedStartMinute.value}`
     );
 
-    const automaticallySelectedEndHour = computed(() => {
+    const formattedEndTime = computed(() => {
+        return `${selectedEndHour}:${selectedEndMinute.value}`;
+    });
+
+    const calculatedEndHour = computed(() => {
         const startHour = parseInt(selectedStartHour.value);
-
         let endHour = startHour + 1;
-
         if (endHour > 23) {
             endHour = 0;
         }
-
         return endHour.toString().padStart(2, "0");
     });
 
-    const selectedEndTime = computed(() => {
-        return `${selectedEndHour.value}:${selectedStartMinute.value}`;
-    });
+    watch([selectedStartHour], ([newStartHour]) => {
+        const startHourInt = parseInt(newStartHour);
+        const currentEndHourInt = parseInt(selectedEndHour.value);
 
-    watch(
-        [selectedStartHour, selectedStartMinute],
-        ([newStartHour, newStartMinute]) => {
-            const startHourInt = parseInt(newStartHour);
-            const currentEndHourInt = parseInt(selectedEndHour.value);
-
-            if (startHourInt < currentEndHourInt) return;
-
+        if (startHourInt >= currentEndHourInt) {
             let endHourInt = startHourInt + 1;
-
             if (endHourInt > 23) {
                 endHourInt = 0;
             }
-
             selectedEndHour.value = endHourInt.toString().padStart(2, "0");
         }
-    );
+    });
 
     const updateSelectedStartTimeFromNumber = (newStartTime: number) => {
         const timeString = formatHourToTimeString(newStartTime);
@@ -120,9 +112,9 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
         startHourOptions,
         endHourOptions,
         startMinuteOptions,
-        selectedStartTime,
-        selectedEndTime,
-        automaticallySelectedEndHour,
+        formattedStartTime,
+        formattedEndTime,
+        calculatedEndHour,
         updateSelectedStartTimeFromNumber,
         updateSelectedStartTimeFromString,
         updateSelectedEndTimeFromNumber,
