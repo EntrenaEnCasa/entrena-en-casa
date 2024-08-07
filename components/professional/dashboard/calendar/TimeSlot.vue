@@ -23,7 +23,7 @@
                 <button
                     @click="$emit('eventClick', event.event)"
                     :disabled="!event.isStartEvent || !editMode"
-                    class="w-full h-full overflow-hidden"
+                    class="absolute w-full h-full overflow-hidden"
                     :class="eventClasses(event)">
                     <div
                         v-if="shouldShowEventDetails(event)"
