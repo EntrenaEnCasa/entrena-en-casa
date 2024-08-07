@@ -39,7 +39,7 @@
                 <span>:</span>
                 <span
                     class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-4 py-3 cursor-not-allowed">
-                    {{ selectedStartMinute }}
+                    {{ selectedEndMinute }}
                 </span>
             </div>
             <div
@@ -65,6 +65,7 @@ const {
     selectedStartHour,
     selectedStartMinute,
     selectedEndHour,
+    selectedEndMinute,
     startHourOptions,
     endHourOptions,
     startMinuteOptions,

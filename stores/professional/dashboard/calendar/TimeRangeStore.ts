@@ -30,6 +30,8 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
     const selectedStartMinute = ref(minuteIntervals[0]);
     const selectedEndHour = ref(hourOptions[1].toString().padStart(2, "0"));
 
+    const selectedEndMinute = computed(() => selectedStartMinute.value);
+
     const startHourOptions = computed(() =>
         hourOptions.map((hour) => hour.toString().padStart(2, "0"))
     );
@@ -114,6 +116,7 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
         selectedStartHour,
         selectedStartMinute,
         selectedEndHour,
+        selectedEndMinute,
         startHourOptions,
         endHourOptions,
         startMinuteOptions,
