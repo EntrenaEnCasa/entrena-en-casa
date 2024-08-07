@@ -70,8 +70,7 @@ const sendResetLink = async () => {
         })
 
         if (response.success) {
-            toast.success('Correo de verificación enviado')
-            emailSent.value = true;
+            toast.success('Correo de verificación enviado. Revisa la bandeja de entrada del correo ingresado.')
         } else {
             toast.error(response.message)
         }
