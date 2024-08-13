@@ -46,7 +46,6 @@
                                     (event) =>
                                         editEventHandler.handleClick(
                                             day.date,
-                                            timeSlot.time,
                                             event
                                         )
                                 " />

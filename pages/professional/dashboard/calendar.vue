@@ -665,13 +665,14 @@ const infoEventHandler = reactive({
 });
 
 const editEventHandler = reactive({
-    handleClick: (day, time, event) => {
+    handleClick: (day, event) => {
+        console.log("event from edit event handler: ", event);
         if (event.type === "session") {
-            editEmptySessionModal.handleClick(day, time, event);
+            editEmptySessionModal.handleClick(day, event);
         } else if (event.type === "manual_session") {
-            editManualSessionModal.handleClick(day, time, event);
+            editManualSessionModal.handleClick(day, event);
         } else if (event.type === "personal") {
-            editPersonalEventModal.handleClick(day, time, event);
+            editPersonalEventModal.handleClick(day, event);
         }
     },
 });
@@ -698,14 +699,14 @@ const editEmptySessionModal = reactive({
             editEmptySessionModalRef.value.closeModal();
         }
     },
-    handleClick: (day, time, event) => {
+    handleClick: (day, event) => {
         editEmptySessionModal.data.selectedFormat = event.session_info.format;
         editEmptySessionModal.data.selectedModality =
             event.session_info.modality;
         editEmptySessionModal.data.link = event.session_info.link;
         editEmptySessionModal.data.event = event;
         editEmptySessionModal.data.clients = [...event.clients];
-        updateCurrentlySelectedDate(day, time);
+        updateCurrentlySelectedDate(day, event.start_time);
         editEmptySessionModal.openModal();
     },
     updateSession: async () => {
@@ -825,7 +826,7 @@ const editManualSessionModal = reactive({
             editManualSessionModalRef.value.closeModal();
         }
     },
-    handleClick: (day, time, event) => {
+    handleClick: (day, event) => {
         editManualSessionModal.data.selectedEventType = event.type;
         editManualSessionModal.data.clients = [...event.clients]; // Create a new array
         editManualSessionModal.data.selectedFormat = event.session_info.format;
@@ -833,7 +834,7 @@ const editManualSessionModal = reactive({
             event.session_info.modality;
         editManualSessionModal.data.link = event.session_info.link;
         editManualSessionModal.data.event = event;
-        updateCurrentlySelectedDate(day, time);
+        updateCurrentlySelectedDate(day, event.start_time);
         editManualSessionModal.openModal();
     },
     updateSession: async () => {
@@ -925,11 +926,11 @@ const editPersonalEventModal = reactive({
             editPersonalEventModalRef.value.closeModal();
         }
     },
-    handleClick: (day, time, event) => {
+    handleClick: (day, event) => {
         editPersonalEventModal.data.clients = [...event.clients]; // Create a new array
         editPersonalEventModal.data.additionalInfo = event.info;
         editPersonalEventModal.data.event = event;
-        updateCurrentlySelectedDate(day, time);
+        updateCurrentlySelectedDate(day, event.start_time);
         updateSelectedEndTimeFromString(event.end_time);
         editPersonalEventModal.openModal();
     },
@@ -1023,6 +1024,7 @@ const sessionDetailsModal = reactive({
 
 const updateCurrentlySelectedDate = (date, timeString) => {
     updateSelectedDate(date);
+    console.log("time string value: ", timeString);
     updateSelectedStartTimeFromString(timeString);
 };
 
