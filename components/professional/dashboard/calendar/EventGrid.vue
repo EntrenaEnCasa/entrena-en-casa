@@ -38,7 +38,11 @@
                                         timeSlot.time
                                     )
                                 "
-                                @eventClick="
+                                @infoClick="
+                                    (event) =>
+                                        infoEventHandler.handleClick(event)
+                                "
+                                @editClick="
                                     (event) =>
                                         editEventHandler.handleClick(
                                             day.date,
@@ -63,6 +67,7 @@ const props = defineProps({
     calendarData: Array,
     editMode: Boolean,
     emptySlotModal: Object,
+    infoEventHandler: Object,
     editEventHandler: Object,
     slotDurationInMinutes: Number,
 });

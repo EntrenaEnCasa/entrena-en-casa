@@ -83,6 +83,7 @@
             :editMode="editMode"
             :emptySlotModal="emptySlotModal"
             :editEventHandler="editEventHandler"
+            :infoEventHandler="infoEventHandler"
             :slotDurationInMinutes="slotDurationInMinutes" />
 
         <div class="mt-10 mb-4 flex justify-center">
@@ -123,6 +124,9 @@
         <ProfessionalDashboardCalendarModalsEditPersonalEventModal
             ref="editPersonalEventModalRef"
             :modal="editPersonalEventModal" />
+        <ProfessionalDashboardCalendarModalsSessionDetailsModal
+            ref="sessionDetailsModalRef"
+            :modal="sessionDetailsModal" />
     </div>
 </template>
 
@@ -286,10 +290,12 @@ const populateCalendar = (events) => {
             const timeSlot = calendarData.value[dayIndex].timeSlots[i];
             const isStartSlot = i === startSlotIndex;
             const isEndSlot = i === lastSlotIndex;
+            const isSecondSlot = i === startSlotIndex + 1;
 
             timeSlot.events.push({
                 event,
                 isStartEvent: isStartSlot,
+                isSecondEvent: isSecondSlot,
                 isEndEvent: isEndSlot,
                 startOffset: isStartSlot ? startOffset : 0,
                 endOffset: isEndSlot
@@ -339,6 +345,7 @@ const getEvents = async () => {
             // populateCalendarData(response.events)
             populateCalendar(response.events);
             events.value = response.events;
+            console.log("events fetched: ");
             console.log(events.value);
         } else {
             events.value = [];
@@ -362,6 +369,7 @@ const newEventModalRef = ref(null);
 const editEmptySessionModalRef = ref(null);
 const editManualSessionModalRef = ref(null);
 const editPersonalEventModalRef = ref(null);
+const sessionDetailsModalRef = ref(null);
 
 const emptySlotModal = reactive({
     openModal: () => {
@@ -648,6 +656,13 @@ const newEventModal = reactive({
                 newEventModal.closeModal();
             }
         }
+    },
+});
+
+const infoEventHandler = reactive({
+    handleClick: (event) => {
+        console.log("click handled, event: ", event);
+        sessionDetailsModal.handleClick(event);
     },
 });
 
@@ -985,6 +1000,26 @@ const editPersonalEventModal = reactive({
             editPersonalEventModal.data.removeSessionLoading = false;
             editPersonalEventModal.closeModal();
         }
+    },
+});
+
+const sessionDetailsModal = reactive({
+    data: {
+        event: null,
+    },
+    openModal: (event) => {
+        if (sessionDetailsModalRef.value) {
+            sessionDetailsModalRef.value.openModal();
+        }
+    },
+    closeModal: () => {
+        if (sessionDetailsModalRef.value) {
+            sessionDetailsModalRef.value.closeModal();
+        }
+    },
+    handleClick: (event) => {
+        sessionDetailsModal.data.event = event;
+        sessionDetailsModal.openModal();
     },
 });
 
