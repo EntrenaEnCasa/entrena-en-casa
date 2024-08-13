@@ -32,7 +32,7 @@
                         editMode ? 'text-xl text-white' : 'text-lg text-white'
                     " />
                 <span class="ml-1.5 text-sm">{{
-                    editMode ? "Editar" : "Ver info"
+                    editMode ? "Editar" : "Ver detalles"
                 }}</span>
             </div>
         </button>
