@@ -194,7 +194,6 @@ watch(slotDurationInMinutes, () => {
 
 // if the events array is empty, set editMode to false
 watch(events, () => {
-    console.log("events changed!");
     if (events.value.length == 0) {
         editMode.value = false;
     }
@@ -661,7 +660,6 @@ const newEventModal = reactive({
 
 const infoEventHandler = reactive({
     handleClick: (event) => {
-        console.log("click handled, event: ", event);
         sessionDetailsModal.handleClick(event);
     },
 });
