@@ -9,34 +9,27 @@
             </p>
             <p class="mb-4">{{ event?.start_time }} - {{ event?.end_time }}</p>
 
-            <template v-if="event?.type === 'personal'">
+            <template v-if="event">
+                <template
+                    v-if="['session', 'manual_session'].includes(event.type)">
+                    <h5 class="font-medium text-lg">Formato</h5>
+                    <p class="mb-4">{{ event.session_info.format }}</p>
+                    <h5 class="font-medium text-lg">Modalidad</h5>
+                    <p class="mb-4">{{ event.session_info.modality }}</p>
+                </template>
+
                 <h5 class="font-medium text-lg">Clientes</h5>
                 <p v-if="event.clients.length === 0">
                     Aún no hay clientes agendados
                 </p>
                 <ul v-else>
                     <li v-for="client in event.clients" :key="client.id">
-                        {{ client.name }}
+                        <p>
+                            {{ client.first_name }} {{ client.last_name }} -
+                            {{ client.email }}
+                        </p>
                     </li>
                 </ul>
-            </template>
-
-            <template
-                v-else-if="['session', 'manual_session'].includes(event?.type)">
-                <h5 class="font-medium text-lg">Formato</h5>
-                <p class="mb-4">{{ event.session_info.format }}</p>
-                <h5 class="font-medium text-lg">Modalidad</h5>
-                <p>{{ event.session_info.modality }}</p>
-
-                <template
-                    v-if="event.type === 'session' && event.clients.length > 0">
-                    <h5 class="font-medium text-lg">Clientes agendados</h5>
-                    <ul>
-                        <li v-for="client in event.clients" :key="client.id">
-                            {{ client.name }}
-                        </li>
-                    </ul>
-                </template>
             </template>
         </div>
     </CommonModal>
@@ -55,7 +48,7 @@ const eventTypeText = computed(() => {
             return "Evento personal";
         case "session":
             return event.value.clients.length === 0
-                ? "Disponible"
+                ? "Hora disponible"
                 : "Hora agendada";
         case "manual_session":
             return "Sesión manual";
@@ -66,7 +59,10 @@ const eventTypeText = computed(() => {
 
 const modalRef = ref(null);
 
-const openModal = () => modalRef.value?.openModal();
+const openModal = () => {
+    console.log(props.modal.data.event);
+    modalRef.value?.openModal();
+};
 const closeModal = () => modalRef.value?.closeModal();
 
 defineExpose({ openModal, closeModal });
