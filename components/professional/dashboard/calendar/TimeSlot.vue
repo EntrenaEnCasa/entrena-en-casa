@@ -18,32 +18,22 @@
             v-else
             v-for="(event, index) in timeSlot.events"
             :key="index"
-            @click="$emit('eventClick', event.event)"
-            :disabled="!event.isStartEvent || !editMode"
-            class="absolute w-full h-full overflow-hidden"
+            @click="handleClick(event.event)"
+            :disabled="!shouldShowEventDetails(event)"
+            class="absolute w-full overflow-hidden"
             :class="eventClasses(event)"
             :style="getEventStyle(event)">
             <div
                 v-if="shouldShowEventDetails(event)"
-                @mouseover="showPopover = true"
-                @mouseleave="showPopover = false"
-                class="w-full h-full flex flex-col justify-center items-center text-white">
-                <Popper :show="showPopover">
-                    <button>
-                        <Icon name="mdi:eye" class="text-lg text-white" />
-                        <span class="ml-1 text-sm">Ver info</span>
-                    </button>
-                    <template #content>
-                        <ProfessionalDashboardCalendarEventDetails
-                            :event="event.event"
-                            :timeSlot="timeSlot" />
-                    </template>
-                </Popper>
-            </div>
-            <div :class="{ hidden: !editMode || !event.isStartEvent }">
+                class="flex justify-center items-center text-white">
                 <Icon
-                    name="fa6-solid:pen-to-square"
-                    class="text-xl text-white" />
+                    :name="editMode ? 'fa6-solid:pen-to-square' : 'mdi:eye'"
+                    :class="
+                        editMode ? 'text-xl text-white' : 'text-lg text-white'
+                    " />
+                <span class="ml-1.5 text-sm">{{
+                    editMode ? "Editar" : "Ver info"
+                }}</span>
             </div>
         </button>
     </div>
@@ -56,8 +46,15 @@ const props = defineProps({
     slotDurationInMinutes: Number,
 });
 
-const showPopover = ref(false);
-const emit = defineEmits(["emptySlotClick", "eventClick"]);
+const emit = defineEmits(["emptySlotClick", "editClick", "infoClick"]);
+
+const handleClick = (event) => {
+    if (props.editMode) {
+        emit("editClick", event);
+    } else {
+        emit("infoClick", event);
+    }
+};
 
 const eventClasses = (event) => {
     let baseClass;
@@ -71,12 +68,12 @@ const eventClasses = (event) => {
     return [baseClass];
 };
 
-const editClass = reactive({
+const editClass = computed(() => ({
     flex: true,
     "items-center": true,
     "justify-center": true,
     group: true,
-});
+}));
 
 const isTimeSlotEmpty = (timeSlot) => {
     return !timeSlot || !timeSlot.events || timeSlot.events.length === 0;
@@ -87,8 +84,33 @@ const shouldShowBorder = (timeSlot) => {
     return timeSlot.events.some((event) => event.isEndEvent);
 };
 
+const getEventStartMinute = (event) => {
+    const [hours, minutes] = event.event.start_time.split(":");
+    return parseInt(minutes);
+};
+
 const shouldShowEventDetails = (event) => {
-    return !props.editMode && event.isStartEvent;
+    if (event.isStartEvent) {
+        const startMinute = getEventStartMinute(event);
+
+        if (startMinute >= props.slotDurationInMinutes / 2) {
+            return false; // It will be shown in the next slot
+        }
+
+        return true; // Show in the current slot
+    } else {
+        if (event.isSecondEvent) {
+            const startMinute = getEventStartMinute(event);
+
+            if (startMinute < props.slotDurationInMinutes / 2) {
+                return false; // It was shown in the previous slot
+            }
+
+            return true;
+        }
+    }
+
+    return false;
 };
 
 const calculateEventHeight = (event) => {
