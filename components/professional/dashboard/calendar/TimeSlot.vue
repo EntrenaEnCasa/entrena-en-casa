@@ -93,7 +93,7 @@ const shouldShowEventDetails = (event) => {
     if (event.isStartEvent) {
         const startMinute = getEventStartMinute(event);
 
-        if (startMinute >= props.slotDurationInMinutes / 2) {
+        if (startMinute > props.slotDurationInMinutes / 2) {
             return false; // It will be shown in the next slot
         }
 
@@ -102,7 +102,7 @@ const shouldShowEventDetails = (event) => {
         if (event.isSecondEvent) {
             const startMinute = getEventStartMinute(event);
 
-            if (startMinute < props.slotDurationInMinutes / 2) {
+            if (startMinute <= props.slotDurationInMinutes / 2) {
                 return false; // It was shown in the previous slot
             }
 
