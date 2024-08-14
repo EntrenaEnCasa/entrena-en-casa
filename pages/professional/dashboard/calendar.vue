@@ -274,6 +274,7 @@ const populateCalendar = (events) => {
     console.log("start of week: ", startOfWeek);
 
     events.forEach((event) => {
+        console.log("event: ", event);
         const eventDate = new Date(event.date);
         console.log("event date: ", eventDate);
         const dayIndex = Math.floor(
