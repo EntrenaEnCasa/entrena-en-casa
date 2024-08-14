@@ -271,13 +271,11 @@ const getTimeSlotInfo = (time) => {
 const populateCalendar = (events) => {
     const startOfWeek = new Date(calendarData.value[0].date);
 
-    console.log("start of week: ", startOfWeek);
-
     events.forEach((event) => {
         console.log("event: ", event);
-        const eventDate = new Date(event.date);
-        eventDate.setUTCHours(0, 0, 0, 0);
-        console.log("event date: ", eventDate);
+        const eventDate = new Date(Date.parse(event.date));
+        console.log("event date (UTC): ", eventDate.toUTCString());
+
         const dayIndex = Math.floor(
             (eventDate - startOfWeek) / (1000 * 60 * 60 * 24)
         );
