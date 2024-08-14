@@ -325,6 +325,8 @@ const getEvents = async () => {
     initializeCalendarData();
 
     const localDateString = getLocalDateString(currentDate.value);
+
+    console.log("get events local date string: ", localDateString);
     const body = {
         user_id: userStore.user.user_id,
         start_date: localDateString, // fecha en formato YYYY-MM-DD
@@ -1028,7 +1030,6 @@ const sessionDetailsModal = reactive({
 
 const updateCurrentlySelectedDate = (date, timeString) => {
     updateSelectedDate(date);
-    console.log("time string value: ", timeString);
     updateSelectedStartTimeFromString(timeString);
 };
 
