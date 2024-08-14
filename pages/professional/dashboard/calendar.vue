@@ -464,6 +464,8 @@ const newEmptySessionModal = reactive({
             coordinates: coordinates,
         };
 
+        console.log("create new empty session body: ", body);
+
         try {
             const response = await $fetch(
                 `${runtimeConfig.public.apiBase}/professional/session`,
@@ -592,6 +594,8 @@ const newEventModal = reactive({
                 type: "manual_session", // "manual session en caso de Nuevo entrenamiento"
                 coordinates: coordinates,
             };
+
+            console.log("create new manual session body: ", body);
 
             try {
                 const response = await $fetch(
