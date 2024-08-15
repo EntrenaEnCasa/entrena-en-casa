@@ -272,7 +272,6 @@ const populateCalendar = (events) => {
     const startOfWeek = new Date(calendarData.value[0].date);
 
     events.forEach((event) => {
-        console.log("event: ", event);
         const eventDate = new Date(Date.parse(event.date));
         console.log("event date (UTC): ", eventDate.toUTCString());
 
