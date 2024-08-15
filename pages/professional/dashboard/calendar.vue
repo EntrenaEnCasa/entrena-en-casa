@@ -272,7 +272,7 @@ const populateCalendar = (events) => {
     const startOfWeek = new Date(calendarData.value[0].date);
 
     events.forEach((event) => {
-        const eventDate = new Date(Date.parse(event.date));
+        const eventDate = new Date(event.date.slice(0, -1));
         console.log("event date (UTC): ", eventDate.toDateString());
         console.log("start of week (UTC): ", startOfWeek.toDateString());
 
@@ -313,12 +313,8 @@ const populateCalendar = (events) => {
     console.log(calendarData.value);
 };
 
-const getLocalDateString = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based in JavaScript
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
+const getFormattedDateString = (date) => {
+    return date.toISOString().split("T")[0];
 };
 
 /* API calls */
@@ -327,7 +323,7 @@ const getEvents = async () => {
     fetchingEvents.value = true;
     initializeCalendarData();
 
-    const localDateString = getLocalDateString(currentDate.value);
+    const localDateString = getFormattedDateString(currentDate.value);
 
     console.log("get events local date string: ", localDateString);
     const body = {
@@ -431,7 +427,7 @@ const newEmptySessionModal = reactive({
         newEmptySessionModal.openModal();
     },
     addNewEmptySession: async () => {
-        const localDateString = getLocalDateString(selectedDate.value);
+        const localDateString = getFormattedDateString(selectedDate.value);
         newEmptySessionModal.loading = true;
 
         let link;
@@ -553,7 +549,7 @@ const newEventModal = reactive({
     },
     addNewEvent: async () => {
         newEventModal.data.loading = true;
-        const localDateString = getLocalDateString(selectedDate.value);
+        const localDateString = getFormattedDateString(selectedDate.value);
 
         if (newEventModal.data.selectedEventType == "Nuevo entrenamiento") {
             const clientsIDs = newEventModal.data.manualSession.clients.map(
@@ -752,7 +748,7 @@ const editEmptySessionModal = reactive({
         const body = {
             user_id: userStore.user.user_id,
             session_id: event.session_info.session_id,
-            date: getLocalDateString(selectedDate.value),
+            date: getFormattedDateString(selectedDate.value),
             time: formattedStartTime.value,
             format: editEmptySessionModal.data.selectedFormat,
             modality: editEmptySessionModal.data.selectedModality,
@@ -853,7 +849,7 @@ const editManualSessionModal = reactive({
             user_id: userStore.user.user_id,
             event_id: event.event_id,
             session_id: event.session_info.session_id,
-            date: getLocalDateString(selectedDate.value),
+            date: getFormattedDateString(selectedDate.value),
             start_time: formattedStartTime.value,
             end_time: formattedEndTime.value,
             format: editManualSessionModal.data.selectedFormat,
