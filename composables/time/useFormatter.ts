@@ -35,10 +35,16 @@ export const useFormatter = () => {
         return formatter.format(new Date(date));
     };
 
+    const formatISODateToSimpleDate = (isoDateString: string): string => {
+        const date = new Date(isoDateString);
+        return date.toISOString().split("T")[0];
+    };
+
     return {
         formatHourToTimeString,
         extractHourFromTimeString,
         formatDateToAbbreviatedWeekdayAndDay,
         formatDateToFullLongFormat,
+        formatISODateToSimpleDate,
     };
 };
