@@ -272,9 +272,7 @@ const populateCalendar = (events) => {
     const startOfWeek = new Date(calendarData.value[0].date);
 
     events.forEach((event) => {
-        const eventDate = new Date(event.date.slice(0, -1));
-        console.log("event date (UTC): ", eventDate.toDateString());
-        console.log("start of week (UTC): ", startOfWeek.toDateString());
+        const eventDate = new Date(event.date);
 
         const dayIndex = Math.floor(
             (eventDate - startOfWeek) / (1000 * 60 * 60 * 24)
