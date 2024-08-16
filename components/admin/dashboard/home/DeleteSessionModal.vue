@@ -32,9 +32,7 @@ type: Object,
                                         {{
                                             sessionInfo.professional.first_name
                                         }}
-                                        {{
-                                            sessionInfo.professional.last_name
-                                        }}
+                                        {{ sessionInfo.professional.last_name }}
                                         - {{ sessionInfo.professional.title }}
                                     </p>
                                 </div>
