@@ -169,10 +169,13 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { useGeocoding } from "~/composables/maps/useGeocoding";
-import { useMapInteraction } from "~/composables/maps/useMapInteraction";
+import { useGeocoding } from "@/composables/maps/useGeocoding";
+import { useMapInteraction } from "@/composables/maps/useMapInteraction";
 
 import { useToast } from "vue-toastification";
+import { useFormatter } from "@/composables/time/useFormatter";
+
+const { formatISODateToSimpleDate } = useFormatter();
 const toast = useToast();
 
 interface CustomGeocoder {
@@ -292,14 +295,10 @@ const updateSession = async () => {
         modality: props.sessionInfo.modality,
         link: props.sessionInfo.link,
         clients: props.sessionInfo.students.map((student) => student.user_id),
-        coordinates:
-            "[" +
-            markerCoordinates.value[0] +
-            "," +
-            markerCoordinates.value[1] +
-            "]",
+        coordinates: JSON.stringify(markerCoordinates.value),
         type: "session",
     };
+
     try {
         const response = await $fetch<APIResponse>(
             `${runtimeConfig.public.apiBase}/admin/session/`,
