@@ -194,18 +194,15 @@ const markerRef = useMapboxMarkerRef(markerID);
 const currentZoom = computed(() => mapRef.value?.getZoom());
 const getMarkerCoordinates = () => markerCoordinates.value;
 
-const modalRef = ref<Modal | null>(null);
 const geocoderRef = ref<CustomGeocoder | null>(null);
 
 const { getReverseGeocodingData } = useGeocoding();
-const {
-    flyTo,
-    teleportTo,
-    calculateDistance,
-    calculateDurationBasedOnDistance,
-} = useMapInteraction(mapRef);
+const { flyTo, calculateDistance, calculateDurationBasedOnDistance } =
+    useMapInteraction(mapRef);
 
 const onMarkerDragEnd = () => {
+    if (!markerRef.value) return;
+
     const coordinates = markerRef.value.getLngLat().toArray();
     setMarkerCoordinates(coordinates);
     flyToCenter();
