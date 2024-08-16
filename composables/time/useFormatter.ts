@@ -1,5 +1,5 @@
 export const useFormatter = () => {
-    const formatDateToWeekdayAndDay = (date: Date): string => {
+    const formatDateToAbbreviatedWeekdayAndDay = (date: Date): string => {
         const formatter = new Intl.DateTimeFormat("es-CL", {
             weekday: "short", // "short" for abbreviated days, "long" for full names.
             day: "numeric",
@@ -38,7 +38,7 @@ export const useFormatter = () => {
     return {
         formatHourToTimeString,
         extractHourFromTimeString,
-        formatDateToWeekdayAndDay,
+        formatDateToAbbreviatedWeekdayAndDay,
         formatDateToFullLongFormat,
     };
 };

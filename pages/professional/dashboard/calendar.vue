@@ -142,7 +142,7 @@ import { useToast } from "vue-toastification";
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const toast = useToast();
-const { formatDateToWeekdayAndDay } = useFormatter();
+const { formatDateToAbbreviatedWeekdayAndDay } = useFormatter();
 const {
     isStartWeek,
     goToPreviousWeek,
@@ -242,7 +242,7 @@ const initializeCalendarData = () => {
     ) {
         const day = {
             date: new Date(date),
-            formattedDate: formatDateToWeekdayAndDay(date),
+            formattedDate: formatDateToAbbreviatedWeekdayAndDay(date),
             timeSlots: Array.from({ length: slotsPerDay }, (_, i) => {
                 const hours = Math.floor(
                     (i * slotDurationInMinutes.value) / 60
@@ -256,6 +256,7 @@ const initializeCalendarData = () => {
                 };
             }),
         };
+
         calendarData.value.push(day);
     }
 };
