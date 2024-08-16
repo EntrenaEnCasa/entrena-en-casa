@@ -115,21 +115,6 @@ const props = defineProps<{
     sessionInfo: SessionInfo | null;
 }>();
 
-interface SessionInfo {
-    session_id: number | null;
-    date: string;
-    time: string;
-    available: number;
-    format: string;
-    modality: string;
-    link: string;
-    actual_assistant: number;
-    type: string;
-    coordinates: string | null;
-    students: Student[];
-    professional: Professional;
-}
-
 const openModal = () => {
     modal.value?.openModal();
 };

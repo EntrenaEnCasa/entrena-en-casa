@@ -245,35 +245,6 @@ const flyToLocation = (location: any) => {
 const modal = ref<Modal | null>(null);
 const modalDeleteSession = ref<Modal | null>(null);
 const runtimeConfig = useRuntimeConfig();
-interface sessionUpdateResponse extends APIResponse {}
-
-interface SessionInfo {
-    session_id: number | null;
-    date: string;
-    time: string;
-    available: number;
-    format: string;
-    modality: string;
-    link: string;
-    actual_assistant: number;
-    type: string;
-    coordinates: string | null;
-    students: Student[];
-    professional: Professional;
-}
-
-interface Student {
-    user_id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-}
-interface Professional {
-    user_id: number;
-    first_name: string;
-    last_name: string;
-    title: string;
-}
 
 const props = defineProps<{
     sessionInfo: SessionInfo | null;
@@ -296,7 +267,7 @@ const resetModal = () => {
         props.sessionInfo.modality = "";
         props.sessionInfo.link = "";
         props.sessionInfo.students = [];
-        props.sessionInfo.professional = {} as Professional;
+        props.sessionInfo.professional = {} as SessionProfessional;
     }
 };
 const openModal = () => {
@@ -330,7 +301,7 @@ const updateSession = async () => {
         type: "session",
     };
     try {
-        const response = await $fetch<sessionUpdateResponse>(
+        const response = await $fetch<APIResponse>(
             `${runtimeConfig.public.apiBase}/admin/session/`,
             {
                 method: "PUT",
