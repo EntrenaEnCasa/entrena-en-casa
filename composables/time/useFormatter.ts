@@ -1,4 +1,14 @@
 export const useFormatter = () => {
+    /**
+     * Creates a Date object from a string date.
+     * @param {string} date - The date string in the format "YYYY-MM-DD".
+     * @returns {Date} A new Date object representing the input date.
+     */
+    const createDate = (date: string): Date => {
+        const [year, month, day] = date.split("-").map(Number);
+        return new Date(year, month - 1, day);
+    };
+
     const formatDateToAbbreviatedWeekdayAndDay = (date: Date): string => {
         const formatter = new Intl.DateTimeFormat("es-CL", {
             weekday: "short", // "short" for abbreviated days, "long" for full names.
@@ -35,16 +45,11 @@ export const useFormatter = () => {
         return formatter.format(new Date(date));
     };
 
-    const formatISODateToSimpleDate = (isoDateString: string): string => {
-        const date = new Date(isoDateString);
-        return date.toISOString().split("T")[0];
-    };
-
     return {
+        createDate,
         formatHourToTimeString,
         extractHourFromTimeString,
         formatDateToAbbreviatedWeekdayAndDay,
         formatDateToFullLongFormat,
-        formatISODateToSimpleDate,
     };
 };
