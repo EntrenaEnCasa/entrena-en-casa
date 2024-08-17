@@ -1,5 +1,6 @@
 export const useWeekNavigation = () => {
     const currentDate = ref(new Date());
+    currentDate.value.setHours(0, 0, 0, 0);
 
     const getStartOfWeek = (date: Date) => {
         // The start of the week is always the current date
