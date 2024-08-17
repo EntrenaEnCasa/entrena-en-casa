@@ -78,17 +78,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useFormatter } from "@/composables/time/useFormatter";
-
 const runtimeConfig = useRuntimeConfig();
 const sessionInfo = ref<SessionInfo | null>(null);
 const modifySessionModal = ref<Modal | null>(null);
 const sessionInfoLoading = ref<boolean>(false);
-
-onMounted(() => {
-    const date = new Date(2024, 8, 16);
-    console.log(date);
-});
 
 interface SessionInfoResponse extends APIResponse {
     session: SessionInfo;
