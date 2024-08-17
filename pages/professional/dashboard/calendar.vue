@@ -273,12 +273,8 @@ const populateCalendar = (events) => {
     const startOfWeek = new Date(calendarData.value[0].date);
 
     events.forEach((event) => {
-        console.log("event: ", event);
-
         // we use createDate to create a Date object from the string date to avoid timezone issues
         const eventDate = createDate(event.date);
-
-        console.log("event date: ", eventDate);
 
         const dayIndex = Math.floor(
             (eventDate - startOfWeek) / (1000 * 60 * 60 * 24)
@@ -291,8 +287,6 @@ const populateCalendar = (events) => {
         );
 
         const lastSlotIndex = endOffset === 0 ? endSlotIndex - 1 : endSlotIndex;
-
-        console.log("calendarData: ", calendarData.value);
 
         for (let i = startSlotIndex; i <= lastSlotIndex; i++) {
             const timeSlot = calendarData.value[dayIndex].timeSlots[i];
@@ -348,10 +342,11 @@ const getEvents = async () => {
         );
 
         if (response.success) {
-            console.log("events fetched: ");
-            console.log(events.value);
+            // populateCalendarData(response.events)
             populateCalendar(response.events);
             events.value = response.events;
+            console.log("events fetched: ");
+            console.log(events.value);
         } else {
             events.value = [];
             toast.error(response.message);
