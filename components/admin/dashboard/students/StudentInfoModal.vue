@@ -3,33 +3,63 @@
         <Teleport to="body">
             <CommonModal ref="modal">
                 <div class="w-full mt-3">
-                    <CommonLoading v-if="!student || futureSessionsLoading || pastSessionsLoading" />
+                    <CommonLoading
+                        v-if="
+                            !student ||
+                            futureSessionsLoading ||
+                            pastSessionsLoading
+                        " />
                     <div v-else>
-                        <h2 class="text-2xl text-center mb-5 font-semibold">Estudiante</h2>
-                        <div class="text-center space-y-5 mb-10 w-10/12 mx-auto">
+                        <h2 class="text-2xl text-center mb-5 font-semibold">
+                            Estudiante
+                        </h2>
+                        <div
+                            class="text-center space-y-5 mb-10 w-10/12 mx-auto">
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
-                                <p class="text-2xl font-medium text-gray-700" v-if="student && student?.first_name">{{
-                                    student?.first_name }} {{ student?.last_name }}</p>
-                                <p class="text-2xl font-medium text-gray-700" v-else>Sin datos</p>
+                                <p
+                                    class="text-2xl font-medium text-gray-700"
+                                    v-if="student && student?.first_name">
+                                    {{ student?.first_name }}
+                                    {{ student?.last_name }}
+                                </p>
+                                <p
+                                    class="text-2xl font-medium text-gray-700"
+                                    v-else>
+                                    Sin datos
+                                </p>
                             </div>
 
                             <div class="space-y-1 px-1">
-                                <h3 class="text-gray-500">Correo electrónico</h3>
-                                <p class="text-2xl font-medium text-gray-700 break-all">{{ student?.email }}</p>
+                                <h3 class="text-gray-500">
+                                    Correo electrónico
+                                </h3>
+                                <p
+                                    class="text-2xl font-medium text-gray-700 break-all">
+                                    {{ student?.email }}
+                                </p>
                             </div>
                             <div class="flex">
-
-                                <CommonButton @click="disableUser()" bg-color="tertiary"
-                                    class="py-2 px-3 text-white  mx-auto mb-5" v-if="student && student.enabled">
-                                    Deshabilitar usuario</CommonButton>
-                                <CommonButton @click="enableUser()" bg-color="primary"
-                                    class="py-2 px-3 text-white  mx-auto mb-5" v-else-if="student && !student.enabled">
-                                    Habilitar usuario</CommonButton>
+                                <CommonButton
+                                    @click="disableUser()"
+                                    bg-color="tertiary"
+                                    class="py-2 px-3 text-white mx-auto mb-5"
+                                    v-if="student && student.enabled">
+                                    Deshabilitar usuario</CommonButton
+                                >
+                                <CommonButton
+                                    @click="enableUser()"
+                                    bg-color="primary"
+                                    class="py-2 px-3 text-white mx-auto mb-5"
+                                    v-else-if="student && !student.enabled">
+                                    Habilitar usuario</CommonButton
+                                >
 
                                 <!-- Botón para restablecer contraseña -->
-                                <CommonButton @click="resetPassword()" bg-color="secondary"
-                                    class="py-2 px-3 text-white  mx-auto mb-5">
+                                <CommonButton
+                                    @click="resetPassword()"
+                                    bg-color="secondary"
+                                    class="py-2 px-3 text-white mx-auto mb-5">
                                     Restablecer contraseña
                                 </CommonButton>
                             </div>
@@ -37,67 +67,109 @@
 
                         <div class="space-y-6 mb-6">
                             <div class="flex items-center justify-between">
-                                <div class="px-5 py-3 rounded-lg border flex items-center justify-between w-full">
+                                <div
+                                    class="px-5 py-3 rounded-lg border flex items-center justify-between w-full">
                                     <p class="text-lg">Planes comprados</p>
-                                    <CommonButton bg-color="secondary" text-size="sm" class="px-4 py-2"
+                                    <CommonButton
+                                        bg-color="secondary"
+                                        text-size="sm"
+                                        class="px-4 py-2"
                                         @click="openModalPlans">
                                         Ver planes
                                     </CommonButton>
                                 </div>
                             </div>
-                            <div class="px-5 py-3 rounded-lg border flex items-center justify-between"
-                                id="futureSessionsToggle" @click="toggleFutureSessions">
+                            <div
+                                class="px-5 py-3 rounded-lg border flex items-center justify-between"
+                                id="futureSessionsToggle"
+                                @click="toggleFutureSessions">
                                 <!-- //toggle de sesiones próximas -->
                                 <p class="text-lg">Sesiones próximas</p>
                                 <Icon
-                                    :name="isFutureSessionsVisible ? 'fa6-solid:chevron-down' : 'fa6-solid:chevron-right'" />
+                                    :name="
+                                        isFutureSessionsVisible
+                                            ? 'fa6-solid:chevron-down'
+                                            : 'fa6-solid:chevron-right'
+                                    " />
                             </div>
-                            <div class="overflow-x-auto" id="futureSessions" v-show="isFutureSessionsVisible">
+                            <div
+                                class="overflow-x-auto"
+                                id="futureSessions"
+                                v-show="isFutureSessionsVisible">
                                 <div v-if="futureSessionsLoading">
                                     <CommonLoading />
                                 </div>
-                                <table v-else-if="futureSessions.length > 0"
+                                <table
+                                    v-else-if="futureSessions.length > 0"
                                     class="bg-white table-auto text-sm text-left text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Fecha
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Hora
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Modalidad
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Formato
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Profesional
                                             </th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="border-b " v-for="session in futureSessions">
-                                            <td class="px-6 py-4 whitespace-nowrap ">
+                                        <tr
+                                            class="border-b"
+                                            v-for="session in futureSessions">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.date }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap ">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.time }} hrs
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap ">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.format }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.modality }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 <p>
-                                                    {{ session.professional?.first_name }} {{
-                                                        session.professional?.last_name }}
+                                                    {{
+                                                        session.professional
+                                                            ?.first_name
+                                                    }}
+                                                    {{
+                                                        session.professional
+                                                            ?.last_name
+                                                    }}
                                                 </p>
-                                                <p class="text-sm text-gray-400">{{ session.professional?.title }}</p>
+                                                <p
+                                                    class="text-sm text-gray-400">
+                                                    {{
+                                                        session.professional
+                                                            ?.title
+                                                    }}
+                                                </p>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -106,64 +178,100 @@
                                     <p>No hay sesiones próximas</p>
                                 </div>
                             </div>
-                            <div class="px-5 py-3 rounded-lg border flex items-center justify-between"
-                                id="pastSessionsToggle" @click="togglePastSessions">
+                            <div
+                                class="px-5 py-3 rounded-lg border flex items-center justify-between"
+                                id="pastSessionsToggle"
+                                @click="togglePastSessions">
                                 <!-- //toggle de sesiones pasadas -->
                                 <p class="text-lg">Sesiones pasadas</p>
                                 <Icon
-                                    :name="isPastSessionsVisible ? 'fa6-solid:chevron-down' : 'fa6-solid:chevron-right'" />
+                                    :name="
+                                        isPastSessionsVisible
+                                            ? 'fa6-solid:chevron-down'
+                                            : 'fa6-solid:chevron-right'
+                                    " />
                             </div>
-                            <div class="overflow-x-auto" id="pastSessions" v-show="isPastSessionsVisible">
+                            <div
+                                class="overflow-x-auto"
+                                id="pastSessions"
+                                v-show="isPastSessionsVisible">
                                 <div v-if="pastSessionsLoading">
                                     <CommonLoading />
                                 </div>
-                                <table v-else-if="pastSessions.length > 0"
+                                <table
+                                    v-else-if="pastSessions.length > 0"
                                     class="bg-white table-auto text-sm text-left text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Fecha
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Hora
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Modalidad
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Formato
                                             </th>
-                                            <th scope="col" class="p-6 font-medium">
+                                            <th
+                                                scope="col"
+                                                class="p-6 font-medium">
                                                 Profesional
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
-
-                                        <tr class="border-b " v-for="session in pastSessions">
-                                            <td class="px-6 py-4 whitespace-nowrap ">
+                                        <tr
+                                            class="border-b"
+                                            v-for="session in pastSessions">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.date }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap ">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.time }} hrs
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap ">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.format }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.modality }}
                                             </td>
 
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <p>{{ session.professional.first_name }} {{
-                                                    session.professional.last_name
-                                                }}
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap">
+                                                <p>
+                                                    {{
+                                                        session.professional
+                                                            .first_name
+                                                    }}
+                                                    {{
+                                                        session.professional
+                                                            .last_name
+                                                    }}
                                                 </p>
-                                                <p class="text-sm text-gray-400">{{ session.professional.title }}</p>
+                                                <p
+                                                    class="text-sm text-gray-400">
+                                                    {{
+                                                        session.professional
+                                                            .title
+                                                    }}
+                                                </p>
                                             </td>
                                         </tr>
-
                                     </tbody>
                                 </table>
                                 <div v-else class="text-center text-gray-400">
@@ -176,20 +284,23 @@
             </CommonModal>
         </Teleport>
 
-        <AdminDashboardStudentsPlanStudentInfoModal :plansLoading="plansLoading" :student="student" :plans="plans"
+        <AdminDashboardStudentsPlanStudentInfoModal
+            :plansLoading="plansLoading"
+            :student="student"
+            :plans="plans"
             ref="planInfoModal" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { useToast } from 'vue-toastification';
+import { useToast } from "vue-toastification";
+
 const toast = useToast();
 
 const runtimeConfig = useRuntimeConfig();
 interface PlansResponse extends APIResponse {
     credits: Plan[];
 }
-
 
 interface Plan {
     transaction_id: number;
@@ -209,11 +320,10 @@ const plans = ref<Plan[]>([]);
 
 const toggleFutureSessions = () => {
     isFutureSessionsVisible.value = !isFutureSessionsVisible.value;
-}
+};
 const togglePastSessions = () => {
     isPastSessionsVisible.value = !isPastSessionsVisible.value;
-}
-
+};
 
 interface Student {
     user_id: number;
@@ -249,7 +359,7 @@ const modal = ref<Modal | null>(null);
 
 const openModal = () => {
     modal.value?.openModal();
-}
+};
 
 const props = defineProps<{
     student: Student | null;
@@ -260,102 +370,103 @@ const props = defineProps<{
 }>();
 
 defineExpose({
-    openModal
-})
+    openModal,
+});
 
 const getStudentPlans = async (student: Student) => {
-
     plansLoading.value = true;
 
     try {
-        const response = await $fetch<PlansResponse>(`${runtimeConfig.public.apiBase}/admin/students/credits/${student.user_id}`, {
-            method: 'GET',
-            credentials: 'include',
-        });
+        const response = await $fetch<PlansResponse>(
+            `${runtimeConfig.public.apiBase}/admin/students/credits/${student.user_id}`,
+            {
+                method: "GET",
+                credentials: "include",
+            }
+        );
 
         if (response.success) {
             plans.value = response.credits;
-        }
-        else {
+        } else {
             console.error(response.message);
         }
-
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-    }
-    finally {
+    } finally {
         plansLoading.value = false;
     }
-
 };
 
 const openModalPlans = () => {
     planInfoModal.value?.openModal();
     getStudentPlans(props.student!);
     modal.value?.closeModal();
-
-}
+};
 
 const resetPassword = async () => {
     if (!props.student || !props.student.email) return;
     try {
-        const response = await $fetch('/api/auth/send-reset-password', {
-            method: 'POST',
+        const response = await $fetch("/api/auth/send-reset-password", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
             body: {
-                email: props.student?.email
-            }
-        })
+                email: props.student?.email,
+            },
+        });
 
         if (response.success) {
-            toast.success('Correo de verificación enviado. Se ha enviado un correo para restablecer la contraseña a la dirección de correo del estudiante')
-
+            toast.success(
+                "Correo de verificación enviado. Se ha enviado un correo para restablecer la contraseña a la dirección de correo del estudiante"
+            );
         } else {
-            toast.error(response.message)
+            toast.error(response.message);
         }
+    } catch (error) {
+        console.log(error);
+        toast.error("No se pudo enviar el correo de verificación");
     }
-    catch (error) {
-        console.log(error)
-        toast.error('No se pudo enviar el correo de verificación')
-    }
-}
+};
 
 const disableUser = async () => {
     if (!props.student) return;
-    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/disable-account`, {
-        method: 'POST',
-        credentials: 'include',
-        body: {
-            user_id: props.student.user_id
+    const response = await $fetch<APIResponse>(
+        `${runtimeConfig.public.apiBase}/admin/disable-account`,
+        {
+            method: "POST",
+            credentials: "include",
+            body: {
+                user_id: props.student.user_id,
+            },
         }
-    });
+    );
     if (response.success) {
-        toast.success('Usuario deshabilitado');
+        toast.success("Usuario deshabilitado");
         modal.value?.closeModal();
         reloadNuxtApp();
     } else {
-        toast.error('Error al deshabilitar usuario');
+        toast.error("Error al deshabilitar usuario");
     }
-}
+};
 const enableUser = async () => {
     if (!props.student) return;
-    const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/enable-account`, {
-        method: 'POST',
-        credentials: 'include',
-        body: {
-            user_id: props.student.user_id
+    const response = await $fetch<APIResponse>(
+        `${runtimeConfig.public.apiBase}/admin/enable-account`,
+        {
+            method: "POST",
+            credentials: "include",
+            body: {
+                user_id: props.student.user_id,
+            },
         }
-    });
+    );
     if (response.success) {
-        toast.success('Usuario habilitado');
+        toast.success("Usuario habilitado");
         modal.value?.closeModal();
         reloadNuxtApp();
     } else {
-        toast.error('Error al habilitar usuario');
+        toast.error("Error al habilitar usuario");
     }
-}
-
+};
 </script>
