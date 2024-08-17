@@ -3,23 +3,9 @@
         <div class="max-w-6xl mx-auto w-11/12">
             <h2 class="text-4xl tellural text-center font-bold mb-10">Nuestros planes</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mx-auto mb-10">
-                <CommonSelect
-                    label="Región"
-                    v-model="region"
-                    name="region"
-                    id="region"
-                    :options="regionOptions" />
-                <CommonSelect
-                    label="Formato"
-                    v-model="format"
-                    name="format"
-                    id="format"
-                    :options="sessionFormats" />
-                <CommonSelect
-                    label="Modalidad"
-                    v-model="modality"
-                    name="modality"
-                    id="modality"
+                <CommonSelect label="Región" v-model="region" name="region" id="region" :options="regionOptions" />
+                <CommonSelect label="Formato" v-model="format" name="format" id="format" :options="sessionFormats" />
+                <CommonSelect label="Modalidad" v-model="modality" name="modality" id="modality"
                     :options="sessionModalities" />
             </div>
             <div v-if="plansLoading">
@@ -30,8 +16,7 @@
                 No hay planes disponibles para la región, formato y modalidad seleccionada
             </div>
             <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div
-                    v-for="plan in plansResponse.plans"
+                <div v-for="plan in plansResponse.plans"
                     class="bg-white p-8 rounded-xl shadow flex flex-col items-center space-y-5">
                     <h3 class="text-3xl text-secondary font-semibold">
                         {{ plan.formattedPrice }}
@@ -42,8 +27,8 @@
                             format === "Individual"
                                 ? "individuales"
                                 : format === "Dupla"
-                                ? "dupla"
-                                : "grupales"
+                                    ? "dupla"
+                                    : "grupales"
                         }}
                     </h4>
                     <p class="font-medium text-center">
@@ -74,13 +59,14 @@
                                     format === "Individual"
                                         ? "Formato personalizado, un tiempo solo para ti"
                                         : format === "Dupla"
-                                        ? "Formato en dupla, siempre con alguien de confianza"
-                                        : "Formato grupal, entrena junto a la comunidad de Entrena en Casa"
+                                            ? "Formato en dupla, siempre con alguien de confianza"
+                                            : "Formato grupal, entrena junto a la comunidad de Entrena en Casa"
                                 }}
                             </p>
                         </li>
                     </ul>
-                    <CommonButton class="w-full px-4 py-2 bg-primary-500" rounded-size="full">
+                    <CommonButton @click="goToWhatsapp(plan.format_credit, plan.credit_type, plan.credit_quantity)"
+                        class="w-full px-4 py-2 bg-primary-500" rounded-size="full">
                         Hablar con ventas
                     </CommonButton>
                 </div>
@@ -91,6 +77,7 @@
 
 <script setup>
 const config = useRuntimeConfig();
+
 
 const region = ref(13);
 const format = ref("Individual");
@@ -114,7 +101,7 @@ const regionOptions = ref([
     { value: 14, label: "Los Ríos" },
     { value: 12, label: "Magallanes y de la Antártica Chilena" },
     { value: 7, label: "Maule" },
-    { value: 13, label: "Región Metropolitana de Santiago" },
+    { value: 13, label: "Metropolitana de Santiago" },
     { value: 16, label: "Ñuble" },
     { value: 1, label: "Tarapacá" },
     { value: 5, label: "Valparaíso" },
@@ -130,6 +117,55 @@ const sessionModalities = ref([
     { value: "P", label: "Presencial" },
     { value: "O", label: "Online" },
 ]);
+
+const formatPlan = (creditType) => {
+    if (creditType === "PP") {
+        return "Personalizado Presencial";
+    } else if (creditType === "GP") {
+        return "Grupal Presencial";
+    } else if (creditType === "PO") {
+        return "Personalizado Online";
+    } else if (creditType === "GO") {
+        return "Grupal Online";
+    }
+};
+
+const goToWhatsapp = async (planFormat, planType, planCreditQuantity) => {
+    if (!planFormat || !planType || !planCreditQuantity) return;
+    const modality = formatPlan(planType);
+    const planRegion = formatRegion(region.value);
+    if (planRegion === "") {
+        const link = 'https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20' + modality + '%20' + planFormat + '%20' + planCreditQuantity + '%20sesiones.';
+        await navigateTo(
+            link,
+            {
+                external: true,
+                open: {
+                    target: "_blank",
+                },
+            }
+        );
+    }
+    else {
+        const link = 'https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20' + modality + '%20' + planFormat + '%20' + planCreditQuantity + '%20sesiones%20en%20la%20región%20de%20' + planRegion + '.';
+        await navigateTo(
+            link,
+            {
+                external: true,
+                open: {
+                    target: "_blank",
+                },
+            }
+        );
+    }
+    return;
+};
+
+const formatRegion = (region) => {
+    if (!region) return "";
+    const selectedRegion = regionOptions.value.find((r) => r.value === region);
+    return selectedRegion ? selectedRegion.label : "";
+};
 
 const {
     data: plansResponse,
