@@ -173,9 +173,7 @@ import { useGeocoding } from "@/composables/maps/useGeocoding";
 import { useMapInteraction } from "@/composables/maps/useMapInteraction";
 
 import { useToast } from "vue-toastification";
-import { useFormatter } from "@/composables/time/useFormatter";
 
-const { formatISODateToSimpleDate } = useFormatter();
 const toast = useToast();
 
 interface CustomGeocoder {
