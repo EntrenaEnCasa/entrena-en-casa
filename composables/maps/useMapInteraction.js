@@ -1,20 +1,17 @@
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
 
 export const useMapInteraction = (mapRef) => {
-
     const zoomLevels = [
         { maxRadius: 1, zoom: 13 },
         { maxRadius: 2, zoom: 12 },
         { maxRadius: 5, zoom: 11 },
         { maxRadius: 11, zoom: 10 },
         { maxRadius: 21, zoom: 9 },
-        { maxRadius: Infinity, zoom: 8 }
+        { maxRadius: Infinity, zoom: 8 },
     ];
 
     const easeInOutCubic = (t) => {
-        return t < 0.5
-            ? 4 * t * t * t
-            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     };
 
     const prepareFlyTo = (fromCoordinates, toCoordinates, inputRadius) => {
@@ -24,7 +21,7 @@ export const useMapInteraction = (mapRef) => {
 
         return {
             duration: newDuration,
-            zoom: newZoom
+            zoom: newZoom,
         };
     };
 
@@ -33,14 +30,14 @@ export const useMapInteraction = (mapRef) => {
             essential: true,
             speed: 1,
             curve: 1,
-            easing: easeInOutCubic
+            easing: easeInOutCubic,
         };
 
         const flyOptions = {
             center,
             zoom,
             ...defaultOptions,
-            ...options
+            ...options,
         };
 
         mapRef.value?.flyTo(flyOptions);
@@ -52,9 +49,10 @@ export const useMapInteraction = (mapRef) => {
 
     const debounce = (func, wait, immediate) => {
         let timeout;
-        return function() {
-            const context = this, args = arguments;
-            const later = function() {
+        return function () {
+            const context = this,
+                args = arguments;
+            const later = function () {
                 timeout = null;
                 if (!immediate) func.apply(context, args);
             };
@@ -64,11 +62,10 @@ export const useMapInteraction = (mapRef) => {
             if (callNow) func.apply(context, args);
         };
     };
-    
 
     const debounceFlyTo = debounce((center, zoom, options) => {
         flyTo(center, zoom, options);
-    }, 250); // Adjust debounce time as needed    
+    }, 250); // Adjust debounce time as needed
 
     const calculateZoomLevel = (radiusInKm) => {
         const level = zoomLevels.find((level) => radiusInKm <= level.maxRadius);
@@ -79,10 +76,13 @@ export const useMapInteraction = (mapRef) => {
         return Math.abs(currentZoom - newZoom);
     };
 
-    const calculateTransitionSpeedBasedOnZoomDifference = (fromZoom, toZoom) => {
+    const calculateTransitionSpeedBasedOnZoomDifference = (
+        fromZoom,
+        toZoom
+    ) => {
         const zoomDifference = calculateZoomDifference(fromZoom, toZoom);
         return zoomDifference <= 1 ? 0.5 : 1.2;
-    } 
+    };
 
     const calculateDurationBasedOnDistance = (distance) => {
         const minDistance = 0;
@@ -92,12 +92,14 @@ export const useMapInteraction = (mapRef) => {
 
         if (distance <= 1) {
             return 800;
-        }
-        else if(distance <= 2){
+        } else if (distance <= 2) {
             return 1000;
-        }
-        else if (distance <= maxDistance) {
-            return minDuration + (distance - minDistance) / (maxDistance - minDistance) * (maxDuration - minDuration);
+        } else if (distance <= maxDistance) {
+            return (
+                minDuration +
+                ((distance - minDistance) / (maxDistance - minDistance)) *
+                    (maxDuration - minDuration)
+            );
         } else {
             return maxDuration;
         }
@@ -105,7 +107,16 @@ export const useMapInteraction = (mapRef) => {
 
     const calculateDistance = (fromCoordinates, toCoordinates) => {
         return turf.distance(fromCoordinates, toCoordinates);
-    }
+    };
 
-    return { flyTo, teleportTo, prepareFlyTo, calculateZoomLevel, calculateTransitionSpeedBasedOnZoomDifference, calculateDurationBasedOnDistance, calculateDistance, debounceFlyTo };
-}
+    return {
+        flyTo,
+        teleportTo,
+        prepareFlyTo,
+        calculateZoomLevel,
+        calculateTransitionSpeedBasedOnZoomDifference,
+        calculateDurationBasedOnDistance,
+        calculateDistance,
+        debounceFlyTo,
+    };
+};

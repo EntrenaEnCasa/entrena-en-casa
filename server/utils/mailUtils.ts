@@ -1,5 +1,9 @@
-export function contactFormTemplate (email: string, subject: string, message: string): string {
-  return (`
+export function contactFormTemplate(
+    email: string,
+    subject: string,
+    message: string
+): string {
+    return `
     <div style="width: 100%; background-color: #F6F6F6; padding-top: 2.5rem; padding-bottom: 2.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; text-align: center;">
       <div style="margin-bottom: 2.5rem;">
         <img src="https://res.cloudinary.com/deg11anix/image/upload/v1710952923/logo-horizontal_rrgbm0.png" width="200" />
@@ -10,11 +14,11 @@ export function contactFormTemplate (email: string, subject: string, message: st
         <p>${message}</p>
       </div>
     </div>
-  `);
+  `;
 }
 
-export function emailVerificationTemplate (link: string) {
-  return (`
+export function emailVerificationTemplate(link: string) {
+    return `
   <html>
   <head>
     <meta charset="UTF-8">
@@ -39,11 +43,11 @@ export function emailVerificationTemplate (link: string) {
     </div>
   </body>
 </html>
-`);
+`;
 }
 
 export function passwordResetTemplate(link: string) {
-  return (`
+    return `
   <html>
   <head>
     <meta charset="UTF-8">
@@ -68,5 +72,5 @@ export function passwordResetTemplate(link: string) {
     </div>
   </body>
 </html>
-  `);
+  `;
 }

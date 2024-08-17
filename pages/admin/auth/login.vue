@@ -9,15 +9,13 @@
     </div>
 </template>
 <script setup>
-
 definePageMeta({
     layout: "auth",
 });
 
 const login = () => {
     console.log("login");
-}
-
+};
 </script>
 <style scoped lang="scss">
 svg {
@@ -26,7 +24,6 @@ svg {
 }
 
 *:focus {
-
     outline: none !important;
     box-shadow: none;
 }

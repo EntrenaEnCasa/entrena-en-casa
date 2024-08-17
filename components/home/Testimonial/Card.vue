@@ -18,11 +18,10 @@
     </div>
 </template>
 <script setup lang="ts">
-
 defineProps({
     title: String,
     description: String,
     name: String,
-    profession: String
-})
+    profession: String,
+});
 </script>

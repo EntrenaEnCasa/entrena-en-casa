@@ -1,23 +1,32 @@
 <template>
     <div class="py-10 flex flex-col items-center w-11/12 sm:w-10/12 mx-auto">
         <p class="text-sm tracking-[.15rem]">SOBRE NOSOTROS</p>
-        <h2 class="font-medium text-3xl md:text-4xl">¿Qué es Entrena en Casa?</h2>
+        <h2 class="font-medium text-3xl md:text-4xl">
+            ¿Qué es Entrena en Casa?
+        </h2>
         <div class="mt-10">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center  mx-auto">
+            <div
+                class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center mx-auto">
                 <div class="lg:col-span-2">
                     <div class="contenedor">
-                        <iframe class="responsive-iframe rounded-3xl" width="560" height="315"
+                        <iframe
+                            class="responsive-iframe rounded-3xl"
+                            width="560"
+                            height="315"
                             src="https://www.youtube.com/embed/o_HHBh3WxX0?si=vNy-Qjjoql13hFW4&vq=hd1080&amp;controls=0"
-                            title="YouTube video player" frameborder="0"
+                            title="YouTube video player"
+                            frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="w-full lg:w-11/12 mx-auto leading-tight font-light">
                     <p>
-                        Elige localidad y si quieres entrenar en tu casa, al aire libre o de manera Online. Nuestros
-                        entrenamientos están pensados en hacer de la actividad física una experiencia agradable y junto
-                        con ello consigas los resultados.
+                        Elige localidad y si quieres entrenar en tu casa, al
+                        aire libre o de manera Online. Nuestros entrenamientos
+                        están pensados en hacer de la actividad física una
+                        experiencia agradable y junto con ello consigas los
+                        resultados.
                     </p>
                 </div>
             </div>

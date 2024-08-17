@@ -1,6 +1,5 @@
 // server/api/auth/student/log-in.post.ts
 export default defineEventHandler(async (event) => {
-
     interface Body {
         email: string;
         password: string;
@@ -9,7 +8,7 @@ export default defineEventHandler(async (event) => {
     interface Response {
         success: boolean;
         message: string;
-        user: User
+        user: User;
         token: string;
     }
 
@@ -34,26 +33,30 @@ export default defineEventHandler(async (event) => {
 
     let response;
     try {
-        response = await $fetch<Response>(`${config.public.apiBase}/student/log-in`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        });
+        response = await $fetch<Response>(
+            `${config.public.apiBase}/student/log-in`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+            }
+        );
 
-        
         if (response.success) {
-            
-            const domain = config.public.nodeEnv === 'production' ? '.entrenaencasa.cl' : 'localhost';
+            const domain =
+                config.public.nodeEnv === "production"
+                    ? ".entrenaencasa.cl"
+                    : "localhost";
             const maxAge = 60 * 60 * 24 * 14; // 14 days of expiration
 
             // Set HttpOnly cookie
-            setCookie(event, 'auth_token', response.token, {
-                path: '/',
+            setCookie(event, "auth_token", response.token, {
+                path: "/",
                 domain: domain,
                 httpOnly: true,
                 secure: true, // Ensure the cookie is only sent over HTTPS
@@ -61,8 +64,8 @@ export default defineEventHandler(async (event) => {
             });
 
             // Set client-accessible cookie
-            setCookie(event, 'is_authenticated', 'true', {
-                path: '/',
+            setCookie(event, "is_authenticated", "true", {
+                path: "/",
                 domain: domain,
                 secure: true,
                 maxAge: maxAge,
@@ -70,24 +73,22 @@ export default defineEventHandler(async (event) => {
 
             const newResponse = {
                 success: true,
-                message: 'Inicio de sesión correcto',
-                user: response.user
-            }
+                message: "Inicio de sesión correcto",
+                user: response.user,
+            };
 
             return newResponse;
-        }
-        else {
+        } else {
             return {
                 success: false,
-                message: response.message
-            }
+                message: response.message,
+            };
         }
     } catch (error) {
-        console.error('Error al intentar iniciar sesión:', error);
+        console.error("Error al intentar iniciar sesión:", error);
         throw createError({
             statusCode: 401,
             message: "Error al iniciar sesión",
         });
     }
-
 });

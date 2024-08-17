@@ -5,7 +5,9 @@
         </div>
         <CommonLoading v-if="professionalsDataPending" />
         <div class="overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="bg-white w-full table-auto text-sm text-left text-gray-500" v-if="professionalsData">
+            <table
+                class="bg-white w-full table-auto text-sm text-left text-gray-500"
+                v-if="professionalsData">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                     <tr>
                         <th scope="col" class="p-6">Nombre</th>
@@ -16,32 +18,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="professional in professionalsData.professionals" class="border-b"
+                    <tr
+                        v-for="professional in professionalsData.professionals"
+                        class="border-b"
                         :key="professional.user_id">
-                        <td class="px-6 py-4 whitespace-nowrap ">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div v-if="professional.first_name">
                                 {{ professional.first_name }}
                             </div>
-                            <div v-else>
-                                Sin datos
-                            </div>
+                            <div v-else>Sin datos</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap ">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div v-if="professional.last_name">
                                 {{ professional.last_name }}
                             </div>
-                            <div v-else>
-                                Sin datos
-                            </div>
+                            <div v-else>Sin datos</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ professional.email }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap ">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             {{ professional.title }}
                         </td>
                         <td class="px-6 py-4">
-                            <button class="px-4 py-2 bg-primary text-white rounded-md font-medium"
+                            <button
+                                class="px-4 py-2 bg-primary text-white rounded-md font-medium"
                                 @click="openProfessionalModal(professional)">
                                 Ver Detalles
                             </button>
@@ -50,15 +51,17 @@
                 </tbody>
             </table>
         </div>
-        <AdminDashboardProfessionalsProfessionalInfoModal :professional="currentProfessional"
-            :pastSessions="pastSessions" :futureSessions="futureSessions" :futureSessionsLoading="futureSessionsLoading"
-            :pastSessionsLoading="pastSessionsLoading
-            " ref="professionalModal" />
+        <AdminDashboardProfessionalsProfessionalInfoModal
+            :professional="currentProfessional"
+            :pastSessions="pastSessions"
+            :futureSessions="futureSessions"
+            :futureSessionsLoading="futureSessionsLoading"
+            :pastSessionsLoading="pastSessionsLoading"
+            ref="professionalModal" />
     </div>
 </template>
 
 <script setup lang="ts">
-
 const runtimeConfig = useRuntimeConfig();
 const currentProfessional = ref<Professional | null>(null);
 
@@ -103,11 +106,18 @@ const pastSessions = ref<Session[]>([]);
 const futureSessionsLoading = ref<boolean>(false);
 const pastSessionsLoading = ref<boolean>(false);
 
-const { data: professionalsData, pending: professionalsDataPending, error } = await useFetch<ProfessionalsDataResponse>(`${runtimeConfig.public.apiBase}/admin/professionals`, {
-    method: "GET",
-    credentials: "include",
-    lazy: true
-});
+const {
+    data: professionalsData,
+    pending: professionalsDataPending,
+    error,
+} = await useFetch<ProfessionalsDataResponse>(
+    `${runtimeConfig.public.apiBase}/admin/professionals`,
+    {
+        method: "GET",
+        credentials: "include",
+        lazy: true,
+    }
+);
 
 const getPastSessions = async (professional: Professional) => {
     pastSessionsLoading.value = true;
@@ -139,7 +149,7 @@ const getPastSessions = async (professional: Professional) => {
 
 const getFutureSessions = async (professional: Professional) => {
     futureSessionsLoading.value = true;
-    console.log(professional.user_id)
+    console.log(professional.user_id);
     try {
         const response = await $fetch<FutureSessionsResponse>(
             `${runtimeConfig.public.apiBase}/admin/professional/sessions/future/${professional.user_id}`,

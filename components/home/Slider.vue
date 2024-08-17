@@ -3,8 +3,10 @@
         <Vue3Marquee :duration="40">
             <template v-for="image in images" :key="image.id">
                 <div class="p-5">
-                    <NuxtImg class="shadow-lg border border-gray-100 h-[300px] lg:h-[420px] rounded-2xl"
-                        :src="image.src" :alt="image.alt" />
+                    <NuxtImg
+                        class="shadow-lg border border-gray-100 h-[300px] lg:h-[420px] rounded-2xl"
+                        :src="image.src"
+                        :alt="image.alt" />
                 </div>
             </template>
         </Vue3Marquee>
@@ -12,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-
 const generateArrayOfImages = () => {
     const images = [];
     for (let i = 0; i < 7; i++) {
@@ -24,8 +25,7 @@ const generateArrayOfImages = () => {
         images.push(img);
     }
     return images;
-}
+};
 
 const images = generateArrayOfImages();
-
 </script>

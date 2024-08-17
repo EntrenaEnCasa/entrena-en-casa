@@ -1,15 +1,25 @@
 <template>
     <div class="relative">
-        <div class="border text-gray-800 text-sm rounded-md px-5 py-3.5 max-w-2xl box-border"
+        <div
+            class="border text-gray-800 text-sm rounded-md px-5 py-3.5 max-w-2xl box-border"
             :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
             <div class="flex items-center flex-wrap gap-y-4 gap-x-2">
-                <input type="text" v-model="searchTerm" :placeholder="placeholder" class="outline-none w-full"
-                    @focus="inputFocused = true" @blur="inputFocused = false" @input="delayedFetchResults"
-                    @keydown="handleKeydown">
+                <input
+                    type="text"
+                    v-model="searchTerm"
+                    :placeholder="placeholder"
+                    class="outline-none w-full"
+                    @focus="inputFocused = true"
+                    @blur="inputFocused = false"
+                    @input="delayedFetchResults"
+                    @keydown="handleKeydown" />
                 <div v-for="(chip, index) in chips" :key="chip.user_id">
                     <span
                         class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium bg-secondary text-white">
-                        <Icon @click="removeChip(index)" class="text-lg mr-1" name="fa6-solid:circle-xmark" />
+                        <Icon
+                            @click="removeChip(index)"
+                            class="text-lg mr-1"
+                            name="fa6-solid:circle-xmark" />
                         <span v-if="chip.first_name">
                             {{ chip.first_name }} {{ chip.last_name }}
                         </span>
@@ -19,20 +29,38 @@
                     </span>
                 </div>
             </div>
-            <div class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3"
+            <div
+                class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3"
                 v-if="inputFocused && searchTerm">
                 <CommonLoading v-if="isLoading" text="Buscando" />
                 <ul v-else>
-                    <li v-show="(isSearchPending || isLoading) && filteredResults.length === 0" class="px-3 py-2">
+                    <li
+                        v-show="
+                            (isSearchPending || isLoading) &&
+                            filteredResults.length === 0
+                        "
+                        class="px-3 py-2">
                         Se buscará {{ searchTerm }}
                     </li>
-                    <li class="px-3 py-2"
-                        v-if="filteredResults.length === 0 && !isLoading && hasFetched && !isSearchPending">
+                    <li
+                        class="px-3 py-2"
+                        v-if="
+                            filteredResults.length === 0 &&
+                            !isLoading &&
+                            hasFetched &&
+                            !isSearchPending
+                        ">
                         No se encontraron resultados
                     </li>
-                    <li class="px-3 py-2 rounded hover:bg-gray-100" v-show="filteredResults.length > 0"
-                        v-for="(result, index) in filteredResults" :key="result.user_id" @mousedown="addChip(result)"
-                        :class="{ 'bg-gray-200': index === selectedResultIndex }">
+                    <li
+                        class="px-3 py-2 rounded hover:bg-gray-100"
+                        v-show="filteredResults.length > 0"
+                        v-for="(result, index) in filteredResults"
+                        :key="result.user_id"
+                        @mousedown="addChip(result)"
+                        :class="{
+                            'bg-gray-200': index === selectedResultIndex,
+                        }">
                         <p v-if="result.first_name" class="font-medium">
                             {{ result.first_name }} {{ result.last_name }}
                         </p>
@@ -50,9 +78,8 @@
 </template>
 
 <script setup>
-
-import { useUserStore } from '~/stores/UserStore';
-import { useToast } from 'vue-toastification';
+import { useUserStore } from "~/stores/UserStore";
+import { useToast } from "vue-toastification";
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
@@ -61,21 +88,21 @@ const toast = useToast();
 const props = defineProps({
     selectedFormat: {
         type: String,
-        default: ''
+        default: "",
     },
     clients: {
         type: Array,
-        default: () => []
-    }
+        default: () => [],
+    },
 });
 
-const chips = defineModel('clients', {
+const chips = defineModel("clients", {
     type: Array,
-    default: () => []
+    default: () => [],
 });
 
-const placeholder = 'Ingresa el correo electrónico o nombre';
-const searchTerm = ref('');
+const placeholder = "Ingresa el correo electrónico o nombre";
+const searchTerm = ref("");
 const inputFocused = ref(false);
 const results = ref([]);
 const isLoading = ref(false);
@@ -85,7 +112,7 @@ const selectedResultIndex = ref(-1);
 let timeoutId = null;
 
 const maxChips = computed(() => {
-    return props.selectedFormat === 'Personalizado' ? 1 : Infinity;
+    return props.selectedFormat === "Personalizado" ? 1 : Infinity;
 });
 
 const fetchResults = async () => {
@@ -96,24 +123,24 @@ const fetchResults = async () => {
         results.value = [];
 
         try {
-
-            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/student/search`, {
-                method: 'POST',
-                credentials: 'include',
-                body: {
-                    searchTerm: searchTerm.value
+            const response = await $fetch(
+                `${runtimeConfig.public.apiBase}/professional/student/search`,
+                {
+                    method: "POST",
+                    credentials: "include",
+                    body: {
+                        searchTerm: searchTerm.value,
+                    },
                 }
-            });
+            );
 
             if (response.success) {
                 results.value = response.students;
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.log("Fetch error: ", error);
-            toast.error('Ocurrió un error al buscar el estudiante');
-        }
-        finally {
+            toast.error("Ocurrió un error al buscar el estudiante");
+        } finally {
             isLoading.value = false;
             hasFetched.value = true;
         }
@@ -124,7 +151,7 @@ const delayedFetchResults = () => {
     clearTimeout(timeoutId);
     isSearchPending.value = true; // Set this when a new search is initiated
     timeoutId = setTimeout(() => {
-        if (searchTerm.value.trim() !== '') {
+        if (searchTerm.value.trim() !== "") {
             fetchResults();
         } else {
             results.value = [];
@@ -135,34 +162,44 @@ const delayedFetchResults = () => {
 };
 
 const filteredResults = computed(() => {
-    const chipIds = chips.value.map(chip => chip.user_id);
+    const chipIds = chips.value.map((chip) => chip.user_id);
 
-    if (!searchTerm.value && chips.value.length === 0) return results.value.slice(0, 5);
+    if (!searchTerm.value && chips.value.length === 0)
+        return results.value.slice(0, 5);
 
-    if (!searchTerm.value && chips.value.length > 0) return results.value.filter(student =>
-        !chipIds.includes(student.user_id)
-    );
+    if (!searchTerm.value && chips.value.length > 0)
+        return results.value.filter(
+            (student) => !chipIds.includes(student.user_id)
+        );
 
-    return results.value.filter(student =>
-        ((student.first_name && student.first_name.toLowerCase().includes(searchTerm.value.toLowerCase())) ||
-            student.email.toLowerCase().includes(searchTerm.value.toLowerCase())) &&
-        !chipIds.includes(student.user_id)
-    ).slice(0, 5);
+    return results.value
+        .filter(
+            (student) =>
+                ((student.first_name &&
+                    student.first_name
+                        .toLowerCase()
+                        .includes(searchTerm.value.toLowerCase())) ||
+                    student.email
+                        .toLowerCase()
+                        .includes(searchTerm.value.toLowerCase())) &&
+                !chipIds.includes(student.user_id)
+        )
+        .slice(0, 5);
 });
 
 const handleKeydown = (event) => {
     switch (event.key) {
-        case 'ArrowUp':
+        case "ArrowUp":
             if (selectedResultIndex.value > 0) {
                 selectedResultIndex.value--;
             }
             break;
-        case 'ArrowDown':
+        case "ArrowDown":
             if (selectedResultIndex.value < filteredResults.value.length - 1) {
                 selectedResultIndex.value++;
             }
             break;
-        case 'Enter':
+        case "Enter":
             if (selectedResultIndex.value >= 0) {
                 addChip(filteredResults.value[selectedResultIndex.value]);
             }
@@ -172,13 +209,15 @@ const handleKeydown = (event) => {
 
 const addChip = (student) => {
     if (chips.value.length >= maxChips.value) {
-        toast.error("Las sesiones personalizadas solo pueden tener un estudiante");
-        searchTerm.value = '';
+        toast.error(
+            "Las sesiones personalizadas solo pueden tener un estudiante"
+        );
+        searchTerm.value = "";
         results.value = [];
         return;
     }
     chips.value.unshift(student);
-    searchTerm.value = '';
+    searchTerm.value = "";
     results.value = [];
 };
 
@@ -190,15 +229,17 @@ watch([searchTerm, filteredResults], () => {
     selectedResultIndex.value = -1;
 });
 
-watch(() => props.selectedFormat, (newFormat) => {
-    if (newFormat === 'Personalizado' && chips.value.length > 1) {
-        alert("Algunos de los estudiantes añadidos serán eliminados");
-        chips.value = chips.value.slice(0, 1);
+watch(
+    () => props.selectedFormat,
+    (newFormat) => {
+        if (newFormat === "Personalizado" && chips.value.length > 1) {
+            alert("Algunos de los estudiantes añadidos serán eliminados");
+            chips.value = chips.value.slice(0, 1);
+        }
     }
-});
+);
 
 onMounted(() => {
     console.log(props.selectedFormat);
 });
-
 </script>

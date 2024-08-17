@@ -1,10 +1,17 @@
 <template>
     <Transition name="modal">
-        <div ref="scrollableContentRef" v-show="isOpen"
-            class="fixed grid place-items-center inset-0 z-50 p-4 bg-black/30 overflow-y-auto" @mousedown.self="closeModal">
-            <div @click.stop class="p-4 bg-white rounded-xl max-w-[calc(100vw_-_50px)] w-full lg:w-fit">
+        <div
+            ref="scrollableContentRef"
+            v-show="isOpen"
+            class="fixed grid place-items-center inset-0 z-50 p-4 bg-black/30 overflow-y-auto"
+            @mousedown.self="closeModal">
+            <div
+                @click.stop
+                class="p-4 bg-white rounded-xl max-w-[calc(100vw_-_50px)] w-full lg:w-fit">
                 <div>
-                    <button type="button" class="p-1 transition duration-75 bg-transparent rounded-lg hover:bg-gray-100"
+                    <button
+                        type="button"
+                        class="p-1 transition duration-75 bg-transparent rounded-lg hover:bg-gray-100"
                         @click="closeModal">
                         <div class="flex items-center gap-x-1 text-primary">
                             <Icon name="ic:round-close" class="text-3xl" />
@@ -47,17 +54,15 @@
 </style>
 
 <script setup>
-
 const isOpen = ref(false);
 const scrollableContentRef = ref(null);
-
 
 const openModal = () => {
     // document.body.classList.add('overflow-hidden');
     isOpen.value = true;
 
     // Add the event listener
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 };
 
 const closeModal = () => {
@@ -65,38 +70,40 @@ const closeModal = () => {
     // document.body.classList.remove('overflow-hidden');
 
     // Remove the event listener
-    window.removeEventListener('keydown', handleKeyDown);
+    window.removeEventListener("keydown", handleKeyDown);
 };
 
 const handleKeyDown = (event) => {
-    if (event.key === 'Escape') {
+    if (event.key === "Escape") {
         closeModal();
     }
 };
 
 const scrollToTop = () => {
-    scrollableContentRef.value.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollableContentRef.value.scrollTo({ top: 0, behavior: "smooth" });
 };
 
 const scrollToBottom = () => {
     nextTick(() => {
-        scrollableContentRef.value.scrollTo({ top: scrollableContentRef.value.offsetHeight, behavior: 'smooth' });
+        scrollableContentRef.value.scrollTo({
+            top: scrollableContentRef.value.offsetHeight,
+            behavior: "smooth",
+        });
     });
 };
 
 onMounted(() => {
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 });
 
 onUnmounted(() => {
-    window.removeEventListener('keydown', handleKeyDown);
+    window.removeEventListener("keydown", handleKeyDown);
 });
 
 defineExpose({
     openModal,
     closeModal,
     scrollToTop,
-    scrollToBottom
-})
-
+    scrollToBottom,
+});
 </script>

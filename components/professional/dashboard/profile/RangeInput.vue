@@ -1,8 +1,13 @@
 <template>
     <div class="relative w-10/12 mx-auto mt-8 mb-10">
-        <input type="range" class="slider w-full h-2 bg-secondary rounded-lg appearance-none cursor-pointer"
-            :min="inputMinValue" :max="inputMaxValue" v-model="sliderValue" />
-        <div class="absolute top-[-40px] -translate-x-1/2 whitespace-nowrap bg-secondary text-white py-1 px-5 rounded-md"
+        <input
+            type="range"
+            class="slider w-full h-2 bg-secondary rounded-lg appearance-none cursor-pointer"
+            :min="inputMinValue"
+            :max="inputMaxValue"
+            v-model="sliderValue" />
+        <div
+            class="absolute top-[-40px] -translate-x-1/2 whitespace-nowrap bg-secondary text-white py-1 px-5 rounded-md"
             :style="{ left: `${tooltipPosition}%` }">
             {{ sliderValue }} km
         </div>
@@ -18,21 +23,20 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
     inputMinValue: {
         type: Number,
-        required: true
+        required: true,
     },
     inputMaxValue: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 });
 
-const sliderValue = defineModel('sliderValue', {
+const sliderValue = defineModel("sliderValue", {
     type: String,
-    defaultValue: 1
+    defaultValue: 1,
 });
 
 const tooltipPosition = computed(() => {
@@ -41,13 +45,11 @@ const tooltipPosition = computed(() => {
     let offset = 0; // Offset to center the tooltip
     if (sliderValue.value < 10) {
         offset = 0.1;
-    }
-    else if (sliderValue.value > 10) {
+    } else if (sliderValue.value > 10) {
         offset = -0.1;
     }
     return ((value + offset) / max) * 100;
 });
-
 </script>
 
 <style scoped>

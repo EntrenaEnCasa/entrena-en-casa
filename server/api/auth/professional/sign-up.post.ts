@@ -1,5 +1,4 @@
 export default defineEventHandler(async (event) => {
-
     interface Body {
         email: string;
         password: string;
@@ -23,7 +22,8 @@ export default defineEventHandler(async (event) => {
         };
     }
 
-    const { email, password, first_name, last_name, title } = await readBody<Body>(event);
+    const { email, password, first_name, last_name, title } =
+        await readBody<Body>(event);
 
     // Validate email, password region
     if (!email || !password || !first_name || !last_name || !title) {
@@ -37,28 +37,33 @@ export default defineEventHandler(async (event) => {
 
     let response;
     try {
-        response = await $fetch<Response>(`${config.public.apiBase}/professional/sign-up`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                first_name,
-                last_name,
-                email,
-                password,
-                title,
-            })
-        });
+        response = await $fetch<Response>(
+            `${config.public.apiBase}/professional/sign-up`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    first_name,
+                    last_name,
+                    email,
+                    password,
+                    title,
+                }),
+            }
+        );
 
         if (response.success) {
-
-            const domain = config.public.nodeEnv === 'production' ? '.entrenaencasa.cl' : 'localhost';
+            const domain =
+                config.public.nodeEnv === "production"
+                    ? ".entrenaencasa.cl"
+                    : "localhost";
             const maxAge = 60 * 60 * 24 * 14; // 14 days of expiration
 
             // Set HttpOnly cookie
-            setCookie(event, 'auth_token', response.token, {
-                path: '/',
+            setCookie(event, "auth_token", response.token, {
+                path: "/",
                 httpOnly: true,
                 domain: domain,
                 secure: true, // Ensure the cookie is only sent over HTTPS
@@ -66,8 +71,8 @@ export default defineEventHandler(async (event) => {
             });
 
             // Set client-accessible cookie
-            setCookie(event, 'is_authenticated', 'true', {
-                path: '/',
+            setCookie(event, "is_authenticated", "true", {
+                path: "/",
                 domain: domain,
                 secure: true,
                 maxAge: maxAge,
@@ -75,25 +80,22 @@ export default defineEventHandler(async (event) => {
 
             const newResponse = {
                 success: true,
-                message: 'Usuario registrado correctamente',
-                user: response.user
-            }
+                message: "Usuario registrado correctamente",
+                user: response.user,
+            };
 
             return newResponse;
-        }
-        else {
+        } else {
             return {
                 success: false,
-                message: response.message
-            }
-        
+                message: response.message,
+            };
         }
     } catch (error) {
-        console.error('Error al intentar registrarse: ', error);
+        console.error("Error al intentar registrarse: ", error);
         throw createError({
             statusCode: 401,
             message: "Error al intentar registrarse",
         });
     }
-
 });

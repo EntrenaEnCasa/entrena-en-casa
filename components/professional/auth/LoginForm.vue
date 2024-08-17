@@ -1,29 +1,49 @@
 <template>
     <Form class="w-4/5 space-y-5" @submit="login" v-slot="{ meta }">
-        <CommonInput label="Correo Electrónico" v-model="formData.email" name="email" type="email" id="email"
-            icon="fa6-solid:envelope" placeholder="Ingresa tu correo electrónico" :rules="validateEmail" />
-        <CommonInput label="Contraseña" v-model="formData.password" name="password" type="password" id="password"
-            icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePassword" />
+        <CommonInput
+            label="Correo Electrónico"
+            v-model="formData.email"
+            name="email"
+            type="email"
+            id="email"
+            icon="fa6-solid:envelope"
+            placeholder="Ingresa tu correo electrónico"
+            :rules="validateEmail" />
+        <CommonInput
+            label="Contraseña"
+            v-model="formData.password"
+            name="password"
+            type="password"
+            id="password"
+            icon="fa6-solid:lock"
+            placeholder="* * * * * * * *"
+            :rules="validatePassword" />
 
         <div class="flex justify-between">
             <div class="flex items-center space-x-1">
-                <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
+                <input
+                    class="h-5 w-5 rounded-full shadow"
+                    id="remember"
+                    type="checkbox" />
                 <label class="text-gray-500" for="remember">Recuérdame</label>
             </div>
             <router-link to="/password/reset" class="text-secondary">
                 Olvidé mi contraseña
             </router-link>
         </div>
-        <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading" :disabled="!meta.valid">
+        <CommonButton
+            class="py-2 w-full font-medium"
+            text-size="xl"
+            :loading="loading"
+            :disabled="!meta.valid">
             Iniciar Sesión
         </CommonButton>
     </Form>
 </template>
 
 <script setup>
-
-import { useAuthStore } from '~/stores/AuthStore'
-import { useToast } from 'vue-toastification'
+import { useAuthStore } from "~/stores/AuthStore";
+import { useToast } from "vue-toastification";
 
 const router = useRouter();
 const runtimeConfig = useRuntimeConfig();
@@ -32,7 +52,7 @@ const toast = useToast();
 
 const formData = reactive({
     email: "",
-    password: ""
+    password: "",
 });
 
 const loading = ref(false);
@@ -40,33 +60,31 @@ const loading = ref(false);
 const validateEmail = (value) => {
     // if the field is empty
     if (!value) {
-        return 'El email es requerido';
+        return "El email es requerido";
     }
     // if the field is not a valid email
     const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     if (!regex.test(value)) {
-        return 'El email no es válido';
+        return "El email no es válido";
     }
     // All is good
     return true;
-}
+};
 
 const validatePassword = (password) => {
-
     if (!password) {
-        return 'La contraseña es requerida';
+        return "La contraseña es requerida";
     }
 
     return true;
 };
 
 const login = async () => {
-
     loading.value = true;
 
     try {
-        const response = await $fetch('/api/auth/professional/log-in', {
-            method: 'POST',
+        const response = await $fetch("/api/auth/professional/log-in", {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -78,20 +96,16 @@ const login = async () => {
 
         if (response.success) {
             authStore.logIn(response.user);
-            router.push('/professional/dashboard/home');
-            toast.success('Inicio de sesión exitoso');
-        }
-        else {
+            router.push("/professional/dashboard/home");
+            toast.success("Inicio de sesión exitoso");
+        } else {
             toast.error(response.message);
         }
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        toast.error('Ocurrió un error al iniciar sesión');
-    }
-    finally {
+        toast.error("Ocurrió un error al iniciar sesión");
+    } finally {
         loading.value = false;
     }
-}
-
+};
 </script>

@@ -1,24 +1,28 @@
 <template>
-    <button :class="[
-        `rounded-${roundedSize}`,
-        `bg-${bgColor}`,
-        `text-${textColor}`,
-        `disabled:bg-${bgColor}-100`,
-        'disabled:cursor-not-allowed',
-        `text-${textSize}`
-    ]" :disabled="disabled || loading">
+    <button
+        :class="[
+            `rounded-${roundedSize}`,
+            `bg-${bgColor}`,
+            `text-${textColor}`,
+            `disabled:bg-${bgColor}-100`,
+            'disabled:cursor-not-allowed',
+            `text-${textSize}`,
+        ]"
+        :disabled="disabled || loading">
         <span v-if="!loading">
             <slot></slot>
         </span>
         <div v-else>
             <span>{{ loadingText }}</span>
             <span>
-                <Icon :class="[
-        'animate-spin',
-        'ml-2',
-        `text-${textColor}`,
-        `text-${iconSize}`
-    ]" name="fa6-solid:circle-notch" />
+                <Icon
+                    :class="[
+                        'animate-spin',
+                        'ml-2',
+                        `text-${textColor}`,
+                        `text-${iconSize}`,
+                    ]"
+                    name="fa6-solid:circle-notch" />
             </span>
         </div>
     </button>
@@ -28,35 +32,35 @@
 const props = defineProps({
     loading: {
         type: Boolean,
-        default: false
+        default: false,
     },
     loadingText: {
         type: String,
-        default: 'Cargando'
+        default: "Cargando",
     },
     textSize: {
         type: String,
-        default: 'base'
+        default: "base",
     },
     disabled: {
         type: Boolean,
-        default: false
+        default: false,
     },
     bgColor: {
         type: String,
-        default: 'primary'
+        default: "primary",
     },
     textColor: {
         type: String,
-        default: 'white'
+        default: "white",
     },
     iconSize: {
         type: String,
-        default: '2xl'
+        default: "2xl",
     },
     roundedSize: {
         type: String,
-        default: 'md'
+        default: "md",
     },
 });
 </script>

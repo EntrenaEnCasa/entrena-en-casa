@@ -1,5 +1,4 @@
 export default defineEventHandler(async (event) => {
-
     interface Body {
         email: string;
         password: string;
@@ -35,35 +34,40 @@ export default defineEventHandler(async (event) => {
 
     let response;
     try {
-        response = await $fetch<Response>(`${config.public.apiBase}/student/sign-up`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email,
-                password,
-                region,
-            }),
-        });
+        response = await $fetch<Response>(
+            `${config.public.apiBase}/student/sign-up`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    region,
+                }),
+            }
+        );
 
         if (response.success) {
-
-            const domain = config.public.nodeEnv === 'production' ? '.entrenaencasa.cl' : 'localhost';
+            const domain =
+                config.public.nodeEnv === "production"
+                    ? ".entrenaencasa.cl"
+                    : "localhost";
             const maxAge = 60 * 60 * 24 * 14; // 14 days of expiration
 
             // Set HttpOnly cookie
-            setCookie(event, 'auth_token', response.token, {
-                path: '/',
+            setCookie(event, "auth_token", response.token, {
+                path: "/",
                 httpOnly: true,
                 domain: domain,
                 secure: true, // Ensure the cookie is only sent over HTTPS
-                maxAge: maxAge
+                maxAge: maxAge,
             });
 
             // Set client-accessible cookie
-            setCookie(event, 'is_authenticated', 'true', {
-                path: '/',
+            setCookie(event, "is_authenticated", "true", {
+                path: "/",
                 domain: domain,
                 secure: true,
                 maxAge: maxAge,
@@ -71,25 +75,22 @@ export default defineEventHandler(async (event) => {
 
             const newResponse = {
                 success: true,
-                message: 'Usuario registrado correctamente',
-                user: response.user
-            }
+                message: "Usuario registrado correctamente",
+                user: response.user,
+            };
 
             return newResponse;
-        }
-        else {
+        } else {
             return {
                 success: false,
-                message: response.message
-            }
-        
+                message: response.message,
+            };
         }
     } catch (error) {
-        console.error('Error al intentar registrarse: ', error);
+        console.error("Error al intentar registrarse: ", error);
         throw createError({
             statusCode: 401,
             message: "Error al intentar registrarse",
         });
     }
-
 });
