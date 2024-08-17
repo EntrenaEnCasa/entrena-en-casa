@@ -185,7 +185,7 @@ interface CustomGeocoder {
 const DEFAULT_COORDINATES = [-70.6506, -33.4372];
 const DEFAULT_ZOOM = 13;
 
-const markerCoordinates = ref(DEFAULT_COORDINATES) ?? null;
+const markerCoordinates = ref(DEFAULT_COORDINATES);
 const isDraggable = ref(false);
 
 const mapID = "editEmptySessionMap";
