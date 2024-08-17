@@ -142,7 +142,7 @@ import { useToast } from "vue-toastification";
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const toast = useToast();
-const { formatDateToAbbreviatedWeekdayAndDay } = useFormatter();
+const { createDate, formatDateToAbbreviatedWeekdayAndDay } = useFormatter();
 const {
     isStartWeek,
     goToPreviousWeek,
@@ -273,7 +273,8 @@ const populateCalendar = (events) => {
     const startOfWeek = new Date(calendarData.value[0].date);
 
     events.forEach((event) => {
-        const eventDate = new Date(event.date);
+        // we use createDate to create a Date object from the string date to avoid timezone issues
+        const eventDate = createDate(event.date);
 
         const dayIndex = Math.floor(
             (eventDate - startOfWeek) / (1000 * 60 * 60 * 24)
