@@ -3,33 +3,24 @@
         <h3 class="text-xl font-semibold">Compra de sesiones</h3>
         <div class="grid gap-2">
             <div class="text-secondary flex justify-end items-center">
-                <p class="text-sm mr-1 font-medium">
-                    ¿Qué significa cada sesión?
-                </p>
+                <p class="text-sm mr-1 font-medium">¿Qué significa cada sesión?</p>
                 <Icon name="fa6-solid:circle-info" />
             </div>
             <div
                 class="bg-white flex flex-col items-center py-6 px-8 rounded-xl border"
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
-                <h5 class="text-xl font-medium text-center mb-5">
-                    Sesiones compradas
-                </h5>
+                <h5 class="text-xl font-medium text-center mb-5">Sesiones compradas</h5>
                 <div>
                     <CommonLoading v-show="getCreditsLoading" />
                     <div
-                        v-show="
-                            !getCreditsLoading &&
-                            creditsData &&
-                            creditsData.credits.length > 0
-                        "
+                        v-show="!getCreditsLoading && creditsData && creditsData.credits.length > 0"
                         class="grid grid-cols-1 xl:grid-cols-2 gap-2">
                         <div
                             v-for="credit in creditsData?.credits"
                             class="flex flex-col md:flex-row items-center justify-between border rounded-xl p-5 gap-2 text-gray-400 font-medium w-full">
                             <template
                                 v-if="
-                                    credit.credit_type === 'PP' &&
-                                    credit.format_credit === 'Dupla'
+                                    credit.credit_type === 'PP' && credit.format_credit === 'Dupla'
                                 ">
                                 <div class="text-secondary whitespace-nowrap">
                                     <Icon
@@ -40,43 +31,36 @@
                                         class="text-3xl" />
                                 </div>
                                 <p>
-                                    {{ credit.available_credits }} sesiones
-                                    restantes - Personalizado Presencial Dupla
+                                    {{ credit.available_credits }} sesiones restantes -
+                                    Personalizado Presencial Dupla
                                 </p>
                             </template>
 
                             <template v-else-if="credit.credit_type === 'PP'">
                                 <div class="text-secondary whitespace-nowrap">
                                     <Icon name="ion:person" class="text-2xl" />
-                                    <Icon
-                                        name="mdi:weight-lifter"
-                                        class="text-3xl" />
+                                    <Icon name="mdi:weight-lifter" class="text-3xl" />
                                 </div>
                                 <p>
-                                    {{ credit.available_credits }} sesiones
-                                    restantes - Personalizado Presencial
+                                    {{ credit.available_credits }} sesiones restantes -
+                                    Personalizado Presencial
                                 </p>
                             </template>
 
                             <template v-else-if="credit.credit_type === 'GP'">
                                 <div class="text-secondary whitespace-nowrap">
-                                    <Icon
-                                        name="mdi:account-multiple-plus"
-                                        class="text-2xl" />
-                                    <Icon
-                                        name="mdi:weight-lifter"
-                                        class="text-3xl" />
+                                    <Icon name="mdi:account-multiple-plus" class="text-2xl" />
+                                    <Icon name="mdi:weight-lifter" class="text-3xl" />
                                 </div>
                                 <p>
-                                    {{ credit.available_credits }} sesiones
-                                    restantes - Grupal Presencial
+                                    {{ credit.available_credits }} sesiones restantes - Grupal
+                                    Presencial
                                 </p>
                             </template>
 
                             <template
                                 v-else-if="
-                                    credit.credit_type === 'PO' &&
-                                    credit.format_credit === 'Dupla'
+                                    credit.credit_type === 'PO' && credit.format_credit === 'Dupla'
                                 ">
                                 <div class="text-secondary whitespace-nowrap">
                                     <Icon
@@ -87,8 +71,8 @@
                                         class="text-3xl" />
                                 </div>
                                 <p>
-                                    {{ credit.available_credits }} sesiones
-                                    restantes - Personalizado Online Dupla
+                                    {{ credit.available_credits }} sesiones restantes -
+                                    Personalizado Online Dupla
                                 </p>
                             </template>
 
@@ -100,23 +84,21 @@
                                         class="text-3xl" />
                                 </div>
                                 <p>
-                                    {{ credit.available_credits }} sesiones
-                                    restantes - Personalizado Online
+                                    {{ credit.available_credits }} sesiones restantes -
+                                    Personalizado Online
                                 </p>
                             </template>
 
                             <template v-else-if="credit.credit_type === 'GO'">
                                 <div class="text-secondary whitespace-nowrap">
-                                    <Icon
-                                        name="mdi:account-multiple-plus"
-                                        class="text-2xl" />
+                                    <Icon name="mdi:account-multiple-plus" class="text-2xl" />
                                     <Icon
                                         name="material-symbols:laptop-mac-outline"
                                         class="text-3xl" />
                                 </div>
                                 <p>
-                                    {{ credit.available_credits }} sesiones
-                                    restantes - Grupal Online
+                                    {{ credit.available_credits }} sesiones restantes - Grupal
+                                    Online
                                 </p>
                             </template>
                             <button
@@ -129,17 +111,14 @@
                     </div>
                     <div
                         v-show="
-                            !getCreditsLoading &&
-                            creditsData &&
-                            creditsData.credits.length === 0
+                            !getCreditsLoading && creditsData && creditsData.credits.length === 0
                         ">
                         <p>No tienes sesiones compradas</p>
                     </div>
                 </div>
             </div>
         </div>
-        <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
             <CommonButton
                 @click="changeSelectedInformation('PP')"
                 class="px-4 py-2 rounded-lg font-medium w-full outline"
@@ -169,9 +148,7 @@
                 ">
                 <div class="flex items-center justify-center gap-2">
                     <div>
-                        <Icon
-                            name="mdi:account-multiple-plus"
-                            class="text-3xl" />
+                        <Icon name="mdi:account-multiple-plus" class="text-3xl" />
                         <Icon name="mdi:weight-lifter" class="text-3xl" />
                     </div>
                     <div class="flex flex-col items-start">
@@ -192,9 +169,7 @@
                 <div class="flex items-center justify-center gap-2">
                     <div class="space-x-2">
                         <Icon name="ion:person" class="text-2xl" />
-                        <Icon
-                            name="material-symbols:laptop-mac-outline"
-                            class="text-3xl" />
+                        <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
                     </div>
                     <div class="flex flex-col items-start">
                         <span> Personalizado </span>
@@ -213,12 +188,8 @@
                 ">
                 <div class="flex items-center justify-center gap-2">
                     <div class="space-x-1">
-                        <Icon
-                            name="mdi:account-multiple-plus"
-                            class="text-3xl" />
-                        <Icon
-                            name="material-symbols:laptop-mac-outline"
-                            class="text-3xl" />
+                        <Icon name="mdi:account-multiple-plus" class="text-3xl" />
+                        <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
                     </div>
                     <div class="flex flex-col items-start">
                         <span> Grupal </span>
@@ -260,9 +231,7 @@
                         </button>
                     </div>
                 </div>
-                <div
-                    v-show="plansInformation.plans.length === 0"
-                    class="col-span-6 mt-10">
+                <div v-show="plansInformation.plans.length === 0" class="col-span-6 mt-10">
                     <h3 class="col-span-6 text-lg text-center text-gray-700">
                         No hay información disponible
                     </h3>
@@ -272,9 +241,7 @@
         <Teleport to="body">
             <CommonModal ref="confirmationModal">
                 <div class="px-5 py-2">
-                    <h3 class="text-xl font-semibold mb-6 text-center">
-                        Detalles del tu compra
-                    </h3>
+                    <h3 class="text-xl font-semibold mb-6 text-center">Detalles del tu compra</h3>
                     <div class="text-center">
                         <div
                             v-if="selectedPlan"
@@ -297,20 +264,15 @@
                                 {{ selectedPlan.expiration_time }}
                             </p>
 
-                            <template
-                                v-if="selectedPlan.format_credit === 'Dupla'">
+                            <template v-if="selectedPlan.format_credit === 'Dupla'">
                                 <p>Condiciones extra</p>
                                 <p class="font-semibold">
-                                    Ambas personas deberán entrenar juntas todas
-                                    las sesiones.
+                                    Ambas personas deberán entrenar juntas todas las sesiones.
                                 </p>
                                 <p>Beneficiario plan dupla</p>
-                                <StudentDashboardCreditsStudentSearch
-                                    v-model:clients="dupla" />
+                                <StudentDashboardCreditsStudentSearch v-model:clients="dupla" />
                             </template>
-                            <p class="text-xl font-semibold mt-3">
-                                Valor a pagar
-                            </p>
+                            <p class="text-xl font-semibold mt-3">Valor a pagar</p>
                             <h4 class="text-secondary font-bold text-2xl mt-3">
                                 {{ selectedPlan.formattedPrice }}
                             </h4>
@@ -337,9 +299,7 @@
         <Teleport to="body">
             <CommonModal ref="detailsModal">
                 <div class="px-5 py-2">
-                    <h3 class="text-xl font-semibold mb-6 text-center">
-                        Detalles
-                    </h3>
+                    <h3 class="text-xl font-semibold mb-6 text-center">Detalles</h3>
                     <div class="text-center">
                         <h4 class="font-semibold text-lg mb-4">Tu compra</h4>
                         <div
@@ -356,10 +316,7 @@
                             </p>
                             <p>Cantidad de sesiones compradas</p>
                             <p class="font-semibold">
-                                {{
-                                    selectedCredit.available_credits +
-                                    selectedCredit.used_credits
-                                }}
+                                {{ selectedCredit.available_credits + selectedCredit.used_credits }}
                             </p>
                             <p>Cantidad de créditos restantes disponibles</p>
                             <p class="font-semibold">
@@ -493,14 +450,11 @@ const changeSelectedInformation = async (selected: string) => {
 
 const setPlansInformation = (plans: Plan[]) => {
     const selected = plansInformation.selected;
-    plansInformation.plans = plans.filter(
-        (plan) => plan.credit_type === selected
-    );
+    plansInformation.plans = plans.filter((plan) => plan.credit_type === selected);
 };
 
 const handleOpenConfirmationModal = (plan_id: number) => {
-    selectedPlan.value =
-        plansInformation.plans.find((plan) => plan.plan_id === plan_id) || null;
+    selectedPlan.value = plansInformation.plans.find((plan) => plan.plan_id === plan_id) || null;
     confirmationModal.value?.openModal();
 };
 
@@ -562,10 +516,7 @@ const buyPlan = async () => {
 
     if (selectedPlan.value == null) return;
 
-    if (
-        selectedPlan.value.format_credit === "Dupla" &&
-        dupla.value.length < 1
-    ) {
+    if (selectedPlan.value.format_credit === "Dupla" && dupla.value.length < 1) {
         toast.error("Debes seleccionar un beneficiario para el plan dupla");
         buyPlanLoading.value = false;
         return;
@@ -586,13 +537,10 @@ const buyPlan = async () => {
             plan_id: plan_id,
         };
 
-        const response = await $fetch<APIPaymentCreateResponse>(
-            `/api/payment/createPayment`,
-            {
-                method: "POST",
-                body: body,
-            }
-        );
+        const response = await $fetch<APIPaymentCreateResponse>(`/api/payment/createPayment`, {
+            method: "POST",
+            body: body,
+        });
 
         if (response.success) {
             const flowTransaction = {

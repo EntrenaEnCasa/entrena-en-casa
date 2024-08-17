@@ -4,14 +4,10 @@
             <CommonModal ref="modal">
                 <CommonLoading v-if="loadingData" />
                 <div v-else>
-                    <h2 class="text-2xl text-center mb-5 font-semibold">
-                        Detalle Plan
-                    </h2>
+                    <h2 class="text-2xl text-center mb-5 font-semibold">Detalle Plan</h2>
                     <form v-if="newPlan" class="grid gap-5">
                         <div class="grid grid-cols-3 gap-10 items-center">
-                            <label class="col-span-1 text-right" for=""
-                                >Cantidad</label
-                            >
+                            <label class="col-span-1 text-right" for="">Cantidad</label>
                             <div class="flex items-center col-span-2 space-x-2">
                                 <CommonInput
                                     type=" text"
@@ -22,9 +18,7 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-10 items-center">
-                            <label class="col-span-1 text-right" for=""
-                                >Tipo de sesión</label
-                            >
+                            <label class="col-span-1 text-right" for="">Tipo de sesión</label>
                             <CommonSelect
                                 v-model="newPlan.credit_type"
                                 name="tipo"
@@ -32,9 +26,7 @@
                                 :options="creditTypeOptions" />
                         </div>
                         <div class="grid grid-cols-3 gap-10 items-center">
-                            <label class="col-span-1 text-right" for=""
-                                >Formato</label
-                            >
+                            <label class="col-span-1 text-right" for="">Formato</label>
                             <CommonSelect
                                 v-model="newPlan.format_credit"
                                 name="format"
@@ -42,9 +34,7 @@
                                 :options="formatOptions" />
                         </div>
                         <div class="grid grid-cols-3 gap-10 items-center">
-                            <label class="col-span-1 text-right" for=""
-                                >Expiración</label
-                            >
+                            <label class="col-span-1 text-right" for="">Expiración</label>
                             <div class="flex items-center col-span-2 space-x-2">
                                 <CommonInput
                                     type=" text"
@@ -55,9 +45,7 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-10 items-center">
-                            <label class="col-span-1 text-right" for=""
-                                >Precio</label
-                            >
+                            <label class="col-span-1 text-right" for="">Precio</label>
                             <div class="flex items-center col-span-2 space-x-2">
                                 <span class="text-gray-500">$</span>
                                 <CommonInput
@@ -68,9 +56,7 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-10 items-center pb-5">
-                            <label class="col-span-1 text-right" for=""
-                                >Descripción</label
-                            >
+                            <label class="col-span-1 text-right" for="">Descripción</label>
                             <CommonTextarea
                                 type=" text"
                                 name="description"
@@ -78,9 +64,7 @@
                                 v-model="newPlan.description"></CommonTextarea>
                         </div>
                         <div class="grid grid-cols-3 gap-10 items-start pb-5">
-                            <label class="col-span-1 text-right pt-3" for=""
-                                >Region</label
-                            >
+                            <label class="col-span-1 text-right pt-3" for="">Region</label>
 
                             <div class="col-span-2 grid gap-2">
                                 <CommonSelect
@@ -90,9 +74,7 @@
                                     id="region"
                                     :options="regionOptions"
                                     @change="handleRegionChange" />
-                                <div
-                                    v-for="chip in chipsRegion"
-                                    class="flex items-center">
+                                <div v-for="chip in chipsRegion" class="flex items-center">
                                     <span
                                         class="inline-flex items-left px-3 py-2 rounded-full text-xs font-medium bg-secondary text-white">
                                         <Icon
@@ -124,9 +106,7 @@
                     </div>
                 </div>
             </CommonModal>
-            <AdminDashboardPlansDeletePlanModal
-                ref="deletePlanModal"
-                :plan_id="plan_id" />
+            <AdminDashboardPlansDeletePlanModal ref="deletePlanModal" :plan_id="plan_id" />
         </Teleport>
     </div>
 </template>
@@ -237,9 +217,7 @@ const addChip = (region: chip) => {
 };
 
 const removeChip = (region: chip) => {
-    const index = chipsRegion.value.findIndex(
-        (chip) => chip.value === region.value
-    );
+    const index = chipsRegion.value.findIndex((chip) => chip.value === region.value);
     if (index !== -1) {
         chipsRegion.value.splice(index, 1);
     }
@@ -302,17 +280,14 @@ const updatePlan = async () => {
     };
 
     try {
-        const response = await $fetch<APIResponse>(
-            `${runtimeConfig.public.apiBase}/admin/plan`,
-            {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: planModified,
-            }
-        );
+        const response = await $fetch<APIResponse>(`${runtimeConfig.public.apiBase}/admin/plan`, {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: planModified,
+        });
 
         if (response.success) {
             closeModal();

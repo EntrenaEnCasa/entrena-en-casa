@@ -36,25 +36,20 @@ export default defineEventHandler(async (event) => {
 
     let response;
     try {
-        response = await $fetch<Response>(
-            `${config.public.apiBase}/professional/log-in`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
-            }
-        );
+        response = await $fetch<Response>(`${config.public.apiBase}/professional/log-in`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                password,
+            }),
+        });
 
         if (response.success) {
             const domain =
-                config.public.nodeEnv === "production"
-                    ? ".entrenaencasa.cl"
-                    : "localhost";
+                config.public.nodeEnv === "production" ? ".entrenaencasa.cl" : "localhost";
             const maxAge = 60 * 60 * 24 * 14; // 14 days of expiration
 
             // Set HttpOnly cookie

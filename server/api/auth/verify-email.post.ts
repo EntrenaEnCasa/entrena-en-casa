@@ -17,18 +17,15 @@ export default defineEventHandler(async (event) => {
         const apiKey = config.backendApiKey; // Retrieve the API key from environment variables
         const encryptedApiKey = encryptApiKey(apiKey);
 
-        const response = await $fetch<APIResponse>(
-            `${config.public.apiBase}/user/verify-email`,
-            {
-                method: "POST",
-                headers: {
-                    "x-api-key": encryptedApiKey,
-                },
-                body: {
-                    user_id: user_id,
-                },
-            }
-        );
+        const response = await $fetch<APIResponse>(`${config.public.apiBase}/user/verify-email`, {
+            method: "POST",
+            headers: {
+                "x-api-key": encryptedApiKey,
+            },
+            body: {
+                user_id: user_id,
+            },
+        });
 
         if (response.success) {
             return {
@@ -59,8 +56,7 @@ export default defineEventHandler(async (event) => {
         } else if (error.message === "invalid signature") {
             setResponseStatus(event, 400);
             return {
-                message:
-                    "Error al verificar el correo electrónico: Token inválido",
+                message: "Error al verificar el correo electrónico: Token inválido",
                 success: false,
             };
         } else {

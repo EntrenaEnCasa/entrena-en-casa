@@ -3,12 +3,8 @@
         <Teleport to="body">
             <CommonModal ref="modal">
                 <div class="w-full p-5 text-center">
-                    <h1 class="text-2xl font-bold">
-                        ¿De verdad quieres eliminar este plan?
-                    </h1>
-                    <p class="text-gray-500 mt-2">
-                        Esta acción no puede ser revertida
-                    </p>
+                    <h1 class="text-2xl font-bold">¿De verdad quieres eliminar este plan?</h1>
+                    <p class="text-gray-500 mt-2">Esta acción no puede ser revertida</p>
                 </div>
                 <div class="flex justify-center items-center p-5">
                     <CommonButton

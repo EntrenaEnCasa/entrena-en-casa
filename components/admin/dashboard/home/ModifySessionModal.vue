@@ -6,16 +6,12 @@
                     <CommonLoading v-if="props.loading" />
                     <form class="grid gap-y-5" v-if="sessionInfo">
                         <div>
-                            <h2 class="text-2xl font-medium mb-2">
-                                Modificar sesión
-                            </h2>
+                            <h2 class="text-2xl font-medium mb-2">Modificar sesión</h2>
                         </div>
                         <div class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
                             <div>
                                 <label class="w-full flex flex-col">
-                                    <span class="font-medium text-sm mb-2"
-                                        >Fecha</span
-                                    >
+                                    <span class="font-medium text-sm mb-2">Fecha</span>
                                     <input
                                         v-model="sessionInfo.date"
                                         type="date"
@@ -24,9 +20,7 @@
                             </div>
                             <div>
                                 <label class="w-full flex flex-col">
-                                    <span class="font-medium text-sm mb-2"
-                                        >Hora</span
-                                    >
+                                    <span class="font-medium text-sm mb-2">Hora</span>
                                     <input
                                         v-model="sessionInfo.time"
                                         type="time"
@@ -36,46 +30,34 @@
                         </div>
                         <div class="">
                             <label class="w-full flex flex-col">
-                                <span class="font-medium text-sm mb-2"
-                                    >Profesional</span
-                                >
+                                <span class="font-medium text-sm mb-2">Profesional</span>
                                 <AdminDashboardProfessionalSearchInput
                                     v-model:professionals="professionals" />
                             </label>
                         </div>
                         <div class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
                             <label class="w-full flex flex-col">
-                                <span class="font-medium text-sm mb-2"
-                                    >Formato</span
-                                >
+                                <span class="font-medium text-sm mb-2">Formato</span>
                                 <select
                                     v-model="sessionInfo.format"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option value="Personalizado">
-                                        Personalizado
-                                    </option>
+                                    <option value="Personalizado">Personalizado</option>
                                     <option value="Grupal">Grupal</option>
                                 </select>
                             </label>
                             <label class="w-full flex flex-col">
-                                <span class="font-medium text-sm mb-2"
-                                    >Modalidad</span
-                                >
+                                <span class="font-medium text-sm mb-2">Modalidad</span>
                                 <select
                                     v-model="sessionInfo.modality"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                     <option value="Online">Online</option>
-                                    <option value="Presencial">
-                                        Presencial
-                                    </option>
+                                    <option value="Presencial">Presencial</option>
                                 </select>
                             </label>
                         </div>
                         <div class="">
                             <label class="w-full flex flex-col">
-                                <span class="font-medium text-sm mb-2"
-                                    >Clientes</span
-                                >
+                                <span class="font-medium text-sm mb-2">Clientes</span>
                                 <AdminDashboardStudentSearchInput
                                     v-model:clients="sessionInfo.students"
                                     :selectedFormat="sessionInfo.format" />
@@ -85,9 +67,7 @@
                             <div
                                 v-show="sessionInfo.modality === 'Online'"
                                 class="flex flex-col col-span-full">
-                                <span class="font-medium text-sm mb-2"
-                                    >Link</span
-                                >
+                                <span class="font-medium text-sm mb-2">Link</span>
                                 <input
                                     v-model="sessionInfo.link"
                                     type="text"
@@ -97,9 +77,7 @@
                             <div
                                 v-show="sessionInfo.modality === 'Presencial'"
                                 class="flex flex-col col-span-full">
-                                <span class="font-medium text-sm mb-2"
-                                    >Ubicación</span
-                                >
+                                <span class="font-medium text-sm mb-2">Ubicación</span>
                                 <MapsMapboxGeocoder
                                     ref="geocoderRef"
                                     @locationSelected="flyToLocation" />
@@ -163,9 +141,7 @@
                 </div>
             </CommonModal>
         </Teleport>
-        <AdminDashboardHomeDeleteSessionModal
-            ref="modalDeleteSession"
-            :sessionInfo="sessionInfo" />
+        <AdminDashboardHomeDeleteSessionModal ref="modalDeleteSession" :sessionInfo="sessionInfo" />
     </div>
 </template>
 <script lang="ts" setup>
@@ -198,8 +174,7 @@ const getMarkerCoordinates = () => markerCoordinates.value;
 const geocoderRef = ref<CustomGeocoder | null>(null);
 
 const { getReverseGeocodingData } = useGeocoding();
-const { flyTo, calculateDistance, calculateDurationBasedOnDistance } =
-    useMapInteraction(mapRef);
+const { flyTo, calculateDistance, calculateDurationBasedOnDistance } = useMapInteraction(mapRef);
 
 const onMarkerDragEnd = () => {
     if (!markerRef.value) return;

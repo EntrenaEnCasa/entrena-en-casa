@@ -7,9 +7,7 @@
             <div
                 class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
-                <div class="text-lg text-center font-semibold">
-                    No hay sesiones en curso
-                </div>
+                <div class="text-lg text-center font-semibold">No hay sesiones en curso</div>
             </div>
             <h3 class="text-xl font-medium">Sesiones reservadas</h3>
             <CommonLoading v-if="futureSessionsLoading" />
@@ -19,9 +17,7 @@
                         v-for="session in futureSessions.sessions"
                         :key="session.session_id"
                         class="rounded-2xl items-center shadow-lg"
-                        :class="
-                            session.confirmed ? 'bg-primary' : 'bg-secondary'
-                        ">
+                        :class="session.confirmed ? 'bg-primary' : 'bg-secondary'">
                         <div class="bg-white rounded-2xl px-6 py-4">
                             <div class="flex justify-between gap-1">
                                 <div class="text-gray-400">
@@ -42,9 +38,7 @@
                                 <p class="font-light text-gray-700">
                                     {{ session.professional.title }}
                                 </p>
-                                <p
-                                    v-if="session.link == ''"
-                                    class="text-gray-700">
+                                <p v-if="session.link == ''" class="text-gray-700">
                                     Aún no hay link de acceso
                                 </p>
                                 <a
@@ -52,8 +46,7 @@
                                     :href="session.link || ''"
                                     target="_blank"
                                     class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline underline-offset-2">
-                                    <Icon
-                                        name="icon-park-outline:new-computer" />
+                                    <Icon name="icon-park-outline:new-computer" />
                                     <p>Online</p>
                                 </a>
                                 <a
@@ -66,8 +59,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div
-                            class="py-2 px-5 text-white flex justify-center items-center">
+                        <div class="py-2 px-5 text-white flex justify-center items-center">
                             <button
                                 v-show="!session.confirmed"
                                 class=""
@@ -100,9 +92,7 @@
                         v-for="session in pastSessions.sessions"
                         :key="session.session_id"
                         class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3 opacity-60 hover:opacity-100 transition-opacity"
-                        style="
-                            box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1);
-                        ">
+                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
                         <div class="px-3">
                             <div class="grid grid-cols-2 gap-1">
                                 <div class="text-[#949494] text-sm text-left">
@@ -132,25 +122,14 @@
                                     }}
                                 </p>
                             </div>
-                            <div
-                                class="text-[#949494] text-base text-center gap-2">
+                            <div class="text-[#949494] text-base text-center gap-2">
                                 <p>Calificar sesión</p>
                                 <div class="flex place-content-center">
-                                    <Icon
-                                        class="text-[#949494]"
-                                        name="heroicons:star-20-solid" />
-                                    <Icon
-                                        class="text-[#949494]"
-                                        name="heroicons:star-20-solid" />
-                                    <Icon
-                                        class="text-[#949494]"
-                                        name="heroicons:star-20-solid" />
-                                    <Icon
-                                        class="text-[#949494]"
-                                        name="heroicons:star-20-solid" />
-                                    <Icon
-                                        class="text-[#949494]"
-                                        name="heroicons:star-20-solid" />
+                                    <Icon class="text-[#949494]" name="heroicons:star-20-solid" />
+                                    <Icon class="text-[#949494]" name="heroicons:star-20-solid" />
+                                    <Icon class="text-[#949494]" name="heroicons:star-20-solid" />
+                                    <Icon class="text-[#949494]" name="heroicons:star-20-solid" />
+                                    <Icon class="text-[#949494]" name="heroicons:star-20-solid" />
                                 </div>
                             </div>
                         </div>
@@ -202,18 +181,14 @@
                             <h3 class="text-xl font-semibold text-center mb-4">
                                 Detalles de la sesión
                             </h3>
-                            <div
-                                class="space-y-2"
-                                v-if="detailsModalSession != null">
+                            <div class="space-y-2" v-if="detailsModalSession != null">
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Profesional:</h4>
                                     <p class="font-semibold">
                                         {{
-                                            detailsModalSession.professional
-                                                .first_name +
+                                            detailsModalSession.professional.first_name +
                                             " " +
-                                            detailsModalSession.professional
-                                                .last_name
+                                            detailsModalSession.professional.last_name
                                         }}
                                     </p>
                                 </div>
@@ -238,9 +213,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-xl font-semibold text-center mb-3">
-                                Sobre ti
-                            </h3>
+                            <h3 class="text-xl font-semibold text-center mb-3">Sobre ti</h3>
                             <div
                                 class="space-y-2"
                                 v-if="
@@ -253,20 +226,14 @@
                                     <h4 class="place-self-end">Alumno:</h4>
                                     <p class="font-semibold">
                                         {{
-                                            userData.info.first_name +
-                                            " " +
-                                            userData.info.last_name
+                                            userData.info.first_name + " " + userData.info.last_name
                                         }}
                                     </p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Edad:</h4>
                                     <p class="font-semibold">
-                                        {{
-                                            calculateAge(
-                                                userData.info.birth_date ?? ""
-                                            )
-                                        }}
+                                        {{ calculateAge(userData.info.birth_date ?? "") }}
                                     </p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-x-4">
@@ -290,9 +257,7 @@
                             </div>
                             <div
                                 v-else-if="
-                                    userData &&
-                                    !userData.success &&
-                                    professionalWillFillUserData
+                                    userData && !userData.success && professionalWillFillUserData
                                 ">
                                 <p class="text-center">
                                     Aún no has rellenado tus datos de estudiante
@@ -302,14 +267,12 @@
                     </div>
                     <div class="mt-4">
                         <p class="max-w-xl mx-auto text-xs text-center">
-                            * Se te enviará el link de acceso a la reunión vía
-                            Google Meet por correo electrónico para que logres
-                            entrar a la sesión de forma online. También puedes
-                            acceder desde la pestaña de reservas.
+                            * Se te enviará el link de acceso a la reunión vía Google Meet por
+                            correo electrónico para que logres entrar a la sesión de forma online.
+                            También puedes acceder desde la pestaña de reservas.
                         </p>
                     </div>
-                    <div
-                        class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
+                    <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
                         <CommonButton
                             class="px-4 py-2 bg-tertiary"
                             @click="detailsModal?.closeModal()">
@@ -333,19 +296,17 @@
                             Aún no has rellenados tus datos de estudiante
                         </h3>
                         <p>
-                            Para poder agendar una sesión, es recomendable que
-                            rellenes tus datos de estudiante. De esta manera, el
-                            profesional podrá contactarte en caso de ser
-                            necesario, y podrá conocer datos que serán
-                            necesarios para realizar los entrenamientos.
+                            Para poder agendar una sesión, es recomendable que rellenes tus datos de
+                            estudiante. De esta manera, el profesional podrá contactarte en caso de
+                            ser necesario, y podrá conocer datos que serán necesarios para realizar
+                            los entrenamientos.
                         </p>
                         <p class="font-medium mt-4">
-                            Si así lo prefieres, puedes dejar que el profesional
-                            rellene tus datos por ti.
+                            Si así lo prefieres, puedes dejar que el profesional rellene tus datos
+                            por ti.
                         </p>
                     </div>
-                    <div
-                        class="mt-6 flex flex-col items-center gap-5 lg:flex-row">
+                    <div class="mt-6 flex flex-col items-center gap-5 lg:flex-row">
                         <div class="text-center w-full">
                             <CommonButton
                                 class="w-full px-5 py-2"
@@ -353,22 +314,17 @@
                                 @click="handleProfessionalWillFillUserData">
                                 Dejar que el profesional rellene mis datos
                             </CommonButton>
-                            <p
-                                class="max-w-64 mx-auto text-xs font-medium mt-1.5">
-                                El profesional se encargará de rellenar tus
-                                datos al momento de realizar la sesión
+                            <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
+                                El profesional se encargará de rellenar tus datos al momento de
+                                realizar la sesión
                             </p>
                         </div>
                         <div class="text-center w-full">
-                            <CommonButton
-                                class="w-full px-5 py-2"
-                                @click="goToFillUserData">
+                            <CommonButton class="w-full px-5 py-2" @click="goToFillUserData">
                                 Rellenar mis datos
                             </CommonButton>
-                            <p
-                                class="max-w-64 mx-auto text-xs font-medium mt-1.5">
-                                Te llevaremos a la sección de rellenar datos de
-                                estudiante
+                            <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
+                                Te llevaremos a la sección de rellenar datos de estudiante
                             </p>
                         </div>
                     </div>
@@ -410,15 +366,14 @@ const formatDate = (date: string): string => {
     return d.toLocaleString("es-ES", { day: "2-digit", month: "long" });
 };
 
-const { data: userData, pending: userDataLoading } =
-    await useFetch<APIUserResponseType>(
-        `${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`,
-        {
-            method: "GET",
-            credentials: "include",
-            lazy: true,
-        }
-    );
+const { data: userData, pending: userDataLoading } = await useFetch<APIUserResponseType>(
+    `${runtimeConfig.public.apiBase}/student/info/${userStore.user?.user_id}`,
+    {
+        method: "GET",
+        credentials: "include",
+        lazy: true,
+    }
+);
 
 const viewSessionDetails = (session: Session) => {
     detailsModalSession.value = session;
@@ -447,10 +402,7 @@ const calculateAge = (dob: string): number => {
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDifference = today.getMonth() - birthDate.getMonth();
 
-    if (
-        monthDifference < 0 ||
-        (monthDifference === 0 && today.getDate() < birthDate.getDate())
-    ) {
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
         age--;
     }
 

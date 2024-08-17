@@ -16,9 +16,7 @@
         </div>
         <div
             class="absolute top-1/2 right-3 transform -translate-y-1/2 rounded-full p-2 bg-gray-300 w-8 h-8 flex items-center justify-center">
-            <Icon
-                name="fa6-solid:magnifying-glass"
-                class="text-lg text-white" />
+            <Icon name="fa6-solid:magnifying-glass" class="text-lg text-white" />
         </div>
         <div
             class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3 text-sm"
@@ -26,19 +24,13 @@
             <CommonLoading v-if="searchState === 'loading'" text="Buscando" />
             <ul v-else>
                 <li
-                    v-show="
-                        searchState === 'pending' &&
-                        filteredResults.length === 0
-                    "
+                    v-show="searchState === 'pending' && filteredResults.length === 0"
                     class="px-3 py-2">
                     Se buscará {{ searchTerm }}
                 </li>
                 <li
                     class="px-3 py-2"
-                    v-if="
-                        filteredResults.length === 0 &&
-                        searchState === 'success'
-                    ">
+                    v-if="filteredResults.length === 0 && searchState === 'success'">
                     No se encontraron resultados
                 </li>
                 <li
@@ -79,13 +71,10 @@ const fetchResults = async () => {
             const response = await $fetch(
                 `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
                     searchTerm.value
-                )}.json?language=ES&country=CL&access_token=${
-                    runtimeConfig.public.mapboxApiKey
-                }`
+                )}.json?language=ES&country=CL&access_token=${runtimeConfig.public.mapboxApiKey}`
             );
 
-            searchState.value =
-                response && response.features ? "success" : "failure";
+            searchState.value = response && response.features ? "success" : "failure";
 
             if (searchState.value === "success") {
                 results.value = response.features;
@@ -107,9 +96,7 @@ const delayedFetchResults = () => {
 const filteredResults = computed(() => {
     if (!searchTerm.value) return results.value.slice(0, 5);
 
-    return results.value
-        .filter((place) => place.place_name.toLowerCase())
-        .slice(0, 5);
+    return results.value.filter((place) => place.place_name.toLowerCase()).slice(0, 5);
 });
 
 const handleKeydown = (event) => {

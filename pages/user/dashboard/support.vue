@@ -22,15 +22,12 @@
                             class="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. Ut et massa mi. Aliquam in
-                                hendrerit urna. Pellentesque sit amet sapien
-                                fringilla, mattis ligula consectetur, ultrices
-                                mauris. Curabitur pellentesque nibh nibh, at
-                                maximus ante fermentum sit amet. Pellentesque
-                                commodo lacus at sodales sodales. Quisque
-                                sagittis orci ut diam condimentum, vel euismod
-                                erat placerat.
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                                mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien
+                                fringilla, mattis ligula consectetur, ultrices mauris. Curabitur
+                                pellentesque nibh nibh, at maximus ante fermentum sit amet.
+                                Pellentesque commodo lacus at sodales sodales. Quisque sagittis orci
+                                ut diam condimentum, vel euismod erat placerat.
                             </div>
                         </div>
                     </div>
@@ -51,15 +48,12 @@
                             class="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. Ut et massa mi. Aliquam in
-                                hendrerit urna. Pellentesque sit amet sapien
-                                fringilla, mattis ligula consectetur, ultrices
-                                mauris. Curabitur pellentesque nibh nibh, at
-                                maximus ante fermentum sit amet. Pellentesque
-                                commodo lacus at sodales sodales. Quisque
-                                sagittis orci ut diam condimentum, vel euismod
-                                erat placerat.
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                                mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien
+                                fringilla, mattis ligula consectetur, ultrices mauris. Curabitur
+                                pellentesque nibh nibh, at maximus ante fermentum sit amet.
+                                Pellentesque commodo lacus at sodales sodales. Quisque sagittis orci
+                                ut diam condimentum, vel euismod erat placerat.
                             </div>
                         </div>
                     </div>
@@ -80,23 +74,18 @@
                             class="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. Ut et massa mi. Aliquam in
-                                hendrerit urna. Pellentesque sit amet sapien
-                                fringilla, mattis ligula consectetur, ultrices
-                                mauris. Curabitur pellentesque nibh nibh, at
-                                maximus ante fermentum sit amet. Pellentesque
-                                commodo lacus at sodales sodales. Quisque
-                                sagittis orci ut diam condimentum, vel euismod
-                                erat placerat.
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                                mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien
+                                fringilla, mattis ligula consectetur, ultrices mauris. Curabitur
+                                pellentesque nibh nibh, at maximus ante fermentum sit amet.
+                                Pellentesque commodo lacus at sodales sodales. Quisque sagittis orci
+                                ut diam condimentum, vel euismod erat placerat.
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 extraSoporte">
-                ¿Necesitas ayuda personalizada?
-            </div>
+            <div class="col-lg-12 extraSoporte">¿Necesitas ayuda personalizada?</div>
             <div class="col-lg-12 contactoSoporte">
                 <a class="contacSoporte" href="#">Contáctanos ></a>
             </div>

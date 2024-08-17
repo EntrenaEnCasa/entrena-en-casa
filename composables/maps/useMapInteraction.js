@@ -76,10 +76,7 @@ export const useMapInteraction = (mapRef) => {
         return Math.abs(currentZoom - newZoom);
     };
 
-    const calculateTransitionSpeedBasedOnZoomDifference = (
-        fromZoom,
-        toZoom
-    ) => {
+    const calculateTransitionSpeedBasedOnZoomDifference = (fromZoom, toZoom) => {
         const zoomDifference = calculateZoomDifference(fromZoom, toZoom);
         return zoomDifference <= 1 ? 0.5 : 1.2;
     };

@@ -1,8 +1,4 @@
-export function contactFormTemplate(
-    email: string,
-    subject: string,
-    message: string
-): string {
+export function contactFormTemplate(email: string, subject: string, message: string): string {
     return `
     <div style="width: 100%; background-color: #F6F6F6; padding-top: 2.5rem; padding-bottom: 2.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; text-align: center;">
       <div style="margin-bottom: 2.5rem;">

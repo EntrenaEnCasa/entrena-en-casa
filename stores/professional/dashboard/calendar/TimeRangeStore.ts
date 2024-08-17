@@ -38,9 +38,7 @@ export const useTimeRangeStore = defineStore("timeRangeStore", () => {
     const endHourOptions = computed(() => {
         const startHour = parseInt(selectedStartHour.value);
         const startIndex = hourOptions.findIndex((hour) => hour === startHour);
-        return hourOptions
-            .slice(startIndex + 1)
-            .map((hour) => hour.toString().padStart(2, "0"));
+        return hourOptions.slice(startIndex + 1).map((hour) => hour.toString().padStart(2, "0"));
     });
 
     const startMinuteOptions = computed(() => minuteIntervals);

@@ -9,9 +9,7 @@
                         class="text-lg mr-2 my-auto"
                         name="fa6-solid:circle-xmark" />
                     <span v-if="chip.first_name">
-                        <span class="text-sm">
-                            {{ chip.first_name }} {{ chip.last_name }}
-                        </span>
+                        <span class="text-sm"> {{ chip.first_name }} {{ chip.last_name }} </span>
                         <span v-if="chip.title">
                             <br />
                             <span class="text-xs pr-2">{{ chip.title }}</span>
@@ -43,10 +41,7 @@
                 <CommonLoading v-if="isLoading" text="Buscando" />
                 <ul v-else>
                     <li
-                        v-show="
-                            (isSearchPending || isLoading) &&
-                            filteredResults.length === 0
-                        "
+                        v-show="(isSearchPending || isLoading) && filteredResults.length === 0"
                         class="px-3 py-2">
                         Se buscará {{ searchTerm }}
                     </li>
@@ -163,16 +158,11 @@ const delayedFetchResults = () => {
 };
 
 const filteredResults = computed(() => {
-    const chipIds = Array.isArray(chips.value)
-        ? chips.value.map((chip) => chip.user_id)
-        : [];
-    if (!searchTerm.value && chips.value.length === 0)
-        return results.value.slice(0, 5);
+    const chipIds = Array.isArray(chips.value) ? chips.value.map((chip) => chip.user_id) : [];
+    if (!searchTerm.value && chips.value.length === 0) return results.value.slice(0, 5);
 
     if (!searchTerm.value && chips.value.length > 0)
-        return results.value.filter(
-            (student) => !chipIds.includes(student.user_id)
-        );
+        return results.value.filter((student) => !chipIds.includes(student.user_id));
 
     return results.value
         .filter(
@@ -181,9 +171,7 @@ const filteredResults = computed(() => {
                     professional.first_name
                         .toLowerCase()
                         .includes(searchTerm.value.toLowerCase())) ||
-                    professional.email
-                        .toLowerCase()
-                        .includes(searchTerm.value.toLowerCase())) &&
+                    professional.email.toLowerCase().includes(searchTerm.value.toLowerCase())) &&
                 !chipIds.includes(professional.user_id)
         )
         .slice(0, 5);

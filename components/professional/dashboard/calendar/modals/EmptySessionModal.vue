@@ -5,26 +5,19 @@
                 <div class="px-6 py-4">
                     <ProfessionalDashboardCalendarDayNavigation />
                     <form action="">
-                        <ProfessionalDashboardCalendarTimeRange
-                            :isManual="false" />
+                        <ProfessionalDashboardCalendarTimeRange :isManual="false" />
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <label class="flex flex-col">
-                                <span class="font-medium text-sm mb-2"
-                                    >Formato</span
-                                >
+                                <span class="font-medium text-sm mb-2">Formato</span>
                                 <select
                                     v-model="modal.data.selectedFormat"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                    <option value="Personalizado">
-                                        Personalizado
-                                    </option>
+                                    <option value="Personalizado">Personalizado</option>
                                     <option value="Grupal">Grupal</option>
                                 </select>
                             </label>
                             <label class="flex flex-col">
-                                <span class="font-medium text-sm mb-2"
-                                    >Modalidad</span
-                                >
+                                <span class="font-medium text-sm mb-2">Modalidad</span>
                                 <select
                                     v-model="modal.data.selectedModality"
                                     class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
@@ -33,13 +26,9 @@
                                 </select>
                             </label>
                             <label
-                                v-show="
-                                    modal.data.selectedModality === 'Online'
-                                "
+                                v-show="modal.data.selectedModality === 'Online'"
                                 class="flex flex-col col-span-full">
-                                <span class="font-medium text-sm mb-2"
-                                    >Link</span
-                                >
+                                <span class="font-medium text-sm mb-2">Link</span>
                                 <input
                                     v-model="modal.data.link"
                                     type="text"
@@ -52,9 +41,7 @@
                                     modal.data.selectedModality === 'Presencial'
                                 "
                                 class="flex flex-col col-span-full">
-                                <span class="font-medium text-sm mb-2"
-                                    >Ubicación</span
-                                >
+                                <span class="font-medium text-sm mb-2">Ubicación</span>
                                 <MapsMapboxGeocoder
                                     ref="geocoderRef"
                                     @locationSelected="flyToLocation" />
@@ -102,16 +89,12 @@
                         </div>
                     </form>
                     <div>
-                        <p
-                            class="text-sm text-gray-500 mb-4 text-center max-w-xl">
-                            * Para sesiones presenciales personalizadas se
-                            aplicarán los rangos de cobertura propuestos en la
-                            sección "Mi perfil"
+                        <p class="text-sm text-gray-500 mb-4 text-center max-w-xl">
+                            * Para sesiones presenciales personalizadas se aplicarán los rangos de
+                            cobertura propuestos en la sección "Mi perfil"
                         </p>
                         <div class="flex justify-between">
-                            <CommonButton
-                                @click="modal.closeModal"
-                                class="px-4 py-2 bg-tertiary">
+                            <CommonButton @click="modal.closeModal" class="px-4 py-2 bg-tertiary">
                                 Cancelar
                             </CommonButton>
                             <CommonButton
@@ -170,8 +153,7 @@ const modalRef = ref<Modal | null>(null);
 const geocoderRef = ref<CustomGeocoder | null>(null);
 
 const { getReverseGeocodingData } = useGeocoding();
-const { flyTo, calculateDistance, calculateDurationBasedOnDistance } =
-    useMapInteraction(mapRef);
+const { flyTo, calculateDistance, calculateDurationBasedOnDistance } = useMapInteraction(mapRef);
 
 const onMarkerDragEnd = () => {
     const coordinates = markerRef.value.getLngLat().toArray();
@@ -215,10 +197,7 @@ const props = defineProps<{
 }>();
 
 watch(
-    [
-        () => props.modal.data.selectedModality,
-        () => props.modal.data.selectedFormat,
-    ],
+    [() => props.modal.data.selectedModality, () => props.modal.data.selectedFormat],
     ([newModality, newFormat]) => {
         if (newModality === "Presencial" && newFormat === "Grupal") {
             modalRef.value?.scrollToBottom();

@@ -4,14 +4,11 @@
             <NuxtLink to="/">
                 <NuxtImg class="mx-auto w-28 h-28" src="/logo.png" alt="logo" />
             </NuxtLink>
-            <p class="text-secondary text-lg font-semibold">
-                Cuéntanos un poco sobre ti
-            </p>
+            <p class="text-secondary text-lg font-semibold">Cuéntanos un poco sobre ti</p>
         </div>
 
         <Form v-slot="{ meta }" @submit="saveUserData">
-            <div
-                class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center lg:px-10">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center lg:px-10">
                 <CommonInput
                     label="¿Cual es tu nombre?"
                     v-model="formData.firstName"
@@ -81,11 +78,10 @@
 
             <div class="mt-10">
                 <p class="text-center mb-3">
-                    Estos datos son necesarios para informar al profesor durante
-                    la sesión agendada e ir midiendo tu avance.
+                    Estos datos son necesarios para informar al profesor durante la sesión agendada
+                    e ir midiendo tu avance.
                 </p>
-                <div
-                    class="flex flex-col lg:flex-row lg:justify-center gap-4 px-5">
+                <div class="flex flex-col lg:flex-row lg:justify-center gap-4 px-5">
                     <CommonButton
                         type="button"
                         class="px-4 py-2"
@@ -107,16 +103,12 @@
             <CommonModal ref="modal">
                 <div class="p-4 text-center">
                     <div class="mb-4">
-                        <h3 class="font-semibold text-2xl mb-2">
-                            ¿Estar seguro/a?
-                        </h3>
+                        <h3 class="font-semibold text-2xl mb-2">¿Estar seguro/a?</h3>
                         <p class="text-lg max-w-2xl">
-                            Si no rellenas estos datos, no podrás agendar
-                            ninguna sesión.
+                            Si no rellenas estos datos, no podrás agendar ninguna sesión.
                         </p>
                     </div>
-                    <div
-                        class="flex flex-col lg:flex-row lg:justify-center gap-4">
+                    <div class="flex flex-col lg:flex-row lg:justify-center gap-4">
                         <div>
                             <CommonButton
                                 bg-color="tertiary"
@@ -262,14 +254,11 @@ const saveUserData = async () => {
     };
 
     try {
-        const data = await $fetch(
-            `${runtimeConfig.public.apiBase}/student/info`,
-            {
-                method: "PUT",
-                credentials: "include",
-                body: body,
-            }
-        );
+        const data = await $fetch(`${runtimeConfig.public.apiBase}/student/info`, {
+            method: "PUT",
+            credentials: "include",
+            body: body,
+        });
 
         if (data.success) {
             const user = userStore.user;

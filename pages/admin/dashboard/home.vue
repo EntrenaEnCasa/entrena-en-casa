@@ -7,10 +7,8 @@
                 </div>
                 <CommonLoading v-if="futureSessionsLoading" />
                 <div v-else class="overflow-x-auto shadow-md sm:rounded-lg">
-                    <table
-                        class="bg-white w-full table-auto text-sm text-left text-gray-500">
-                        <thead
-                            class="text-xs text-gray-700 uppercase bg-gray-200">
+                    <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                             <tr>
                                 <th scope="col" class="p-6">Fecha</th>
                                 <th scope="col" class="p-6">Hora</th>
@@ -44,21 +42,15 @@
                                     <br />
                                     {{ session.professional.title }}
                                 </td>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
-                                    <div
-                                        class="flex items-center justify-center">
+                                <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
+                                    <div class="flex items-center justify-center">
                                         {{ session.actual_assistant }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <button
                                         class="px-4 py-2 bg-primary text-white rounded-md font-medium"
-                                        @click="
-                                            openModalModifySession(
-                                                session.session_id
-                                            )
-                                        ">
+                                        @click="openModalModifySession(session.session_id)">
                                         Ver Detalles
                                     </button>
                                 </td>
@@ -134,14 +126,11 @@ const {
     pending: futureSessionsLoading,
     error,
     refresh: getFutureSessions,
-} = await useFetch<SessionsResponse>(
-    `${runtimeConfig.public.apiBase}/admin/sessions/future`,
-    {
-        method: "GET",
-        credentials: "include",
-        lazy: true,
-    }
-);
+} = await useFetch<SessionsResponse>(`${runtimeConfig.public.apiBase}/admin/sessions/future`, {
+    method: "GET",
+    credentials: "include",
+    lazy: true,
+});
 
 const refreshData = () => {
     getFutureSessions();

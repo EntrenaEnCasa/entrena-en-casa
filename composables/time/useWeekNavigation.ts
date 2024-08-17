@@ -57,10 +57,7 @@ export const useWeekNavigation = () => {
             day: "2-digit",
             month: "long",
         };
-        const formattedDate = new Intl.DateTimeFormat(
-            "default",
-            options
-        ).format(date);
+        const formattedDate = new Intl.DateTimeFormat("default", options).format(date);
         const [day, ...month] = formattedDate.split(" ");
         const monthWithoutDe = month.join(" ").replace("de ", "");
         return { day, month: monthWithoutDe };

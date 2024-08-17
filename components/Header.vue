@@ -2,8 +2,7 @@
     <nav class="bg-gradiente">
         <div class="mx-auto max-w-7xl px-2 lg:px-8">
             <div class="relative flex h-20 items-center justify-between z-30">
-                <div
-                    class="absolute inset-y-0 left-0 flex items-center lg:hidden">
+                <div class="absolute inset-y-0 left-0 flex items-center lg:hidden">
                     <!-- Mobile menu button-->
                     <button
                         type="button"
@@ -50,9 +49,7 @@
                 </div>
                 <div
                     class="flex flex-1 items-center justify-center lg:items-stretch lg:justify-between">
-                    <NuxtLink
-                        to="/"
-                        class="flex flex-shrink-0 items-center !bg-transparent">
+                    <NuxtLink to="/" class="flex flex-shrink-0 items-center !bg-transparent">
                         <NuxtImg
                             class="h-12 w-auto"
                             src="/logo-horizontal.png"
@@ -74,11 +71,8 @@
                             >
                         </div>
                     </div>
-                    <div
-                        class="hidden lg:flex items-center font-medium text-gray-500 space-x-2">
-                        <nuxt-link
-                            to="/user/auth/register"
-                            class="px-3 py-2 rounded-xl">
+                    <div class="hidden lg:flex items-center font-medium text-gray-500 space-x-2">
+                        <nuxt-link to="/user/auth/register" class="px-3 py-2 rounded-xl">
                             Registrarse
                         </nuxt-link>
                         <nuxt-link
@@ -92,10 +86,7 @@
         </div>
 
         <!-- Mobile menu, show/hide based on menu state. -->
-        <div
-            class="lg:hidden bg-[#E1F7FF]"
-            id="mobile-menu"
-            :class="menuOpen ? 'block' : 'hidden'">
+        <div class="lg:hidden bg-[#E1F7FF]" id="mobile-menu" :class="menuOpen ? 'block' : 'hidden'">
             <div class="space-y-1 px-2 pb-3 pt-2">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                 <nuxt-link

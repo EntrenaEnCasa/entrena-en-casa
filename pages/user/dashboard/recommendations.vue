@@ -15,8 +15,8 @@
                             <b>Tips para alimentarse de forma soludable</b>
                         </div>
                         <div class="col-lg-12 Texto">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Ut et massa mi.....
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                            mi.....
                         </div>
                         <div class="col-lg-12 method">
                             <a href="#">Ver más</a>
@@ -37,8 +37,8 @@
                             <b>No te sobreexijas</b>
                         </div>
                         <div class="col-lg-12 Texto">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Ut et massa mi.....
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                            mi.....
                         </div>
                         <div class="col-lg-12 method">
                             <a href="#">Ver más</a>
@@ -59,8 +59,8 @@
                             <b>La forma correcta de relajarse</b>
                         </div>
                         <div class="col-lg-12 Texto">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Ut et massa mi.....
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                            mi.....
                         </div>
                         <div class="col-lg-12 method">
                             <a href="#">Ver más</a>
@@ -78,14 +78,11 @@
                             <p>🏋🏽</p>
                         </div>
                         <div class="col-lg-12 titulo">
-                            <b
-                                >Como recuperarse correctamente después de un
-                                día de ejercicio</b
-                            >
+                            <b>Como recuperarse correctamente después de un día de ejercicio</b>
                         </div>
                         <div class="col-lg-12 Texto">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Ut et massa mi.....
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                            mi.....
                         </div>
                         <div class="col-lg-12 method">
                             <a href="#">Ver más</a>
@@ -103,8 +100,8 @@
                             <b>Comidas post entrenamiento</b>
                         </div>
                         <div class="col-lg-12 Texto">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Ut et massa mi.....
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                            mi.....
                         </div>
                         <div class="col-lg-12 method">
                             <a href="#">Ver más</a>
@@ -122,8 +119,8 @@
                             <b>Otro punto importante</b>
                         </div>
                         <div class="col-lg-12 Texto">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Ut et massa mi.....
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
+                            mi.....
                         </div>
                         <div class="col-lg-12 method">
                             <a href="#">Ver más</a>

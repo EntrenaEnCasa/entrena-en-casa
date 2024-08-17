@@ -4,17 +4,10 @@
             <CommonModal ref="modal">
                 <div class="w-full mt-3">
                     <CommonLoading
-                        v-if="
-                            !student ||
-                            futureSessionsLoading ||
-                            pastSessionsLoading
-                        " />
+                        v-if="!student || futureSessionsLoading || pastSessionsLoading" />
                     <div v-else>
-                        <h2 class="text-2xl text-center mb-5 font-semibold">
-                            Estudiante
-                        </h2>
-                        <div
-                            class="text-center space-y-5 mb-10 w-10/12 mx-auto">
+                        <h2 class="text-2xl text-center mb-5 font-semibold">Estudiante</h2>
+                        <div class="text-center space-y-5 mb-10 w-10/12 mx-auto">
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
                                 <p
@@ -23,19 +16,12 @@
                                     {{ student?.first_name }}
                                     {{ student?.last_name }}
                                 </p>
-                                <p
-                                    class="text-2xl font-medium text-gray-700"
-                                    v-else>
-                                    Sin datos
-                                </p>
+                                <p class="text-2xl font-medium text-gray-700" v-else>Sin datos</p>
                             </div>
 
                             <div class="space-y-1 px-1">
-                                <h3 class="text-gray-500">
-                                    Correo electrónico
-                                </h3>
-                                <p
-                                    class="text-2xl font-medium text-gray-700 break-all">
+                                <h3 class="text-gray-500">Correo electrónico</h3>
+                                <p class="text-2xl font-medium text-gray-700 break-all">
                                     {{ student?.email }}
                                 </p>
                             </div>
@@ -104,71 +90,34 @@
                                     class="bg-white table-auto text-sm text-left text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Fecha
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Hora
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Modalidad
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Formato
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Profesional
-                                            </th>
+                                            <th scope="col" class="p-6 font-medium">Fecha</th>
+                                            <th scope="col" class="p-6 font-medium">Hora</th>
+                                            <th scope="col" class="p-6 font-medium">Modalidad</th>
+                                            <th scope="col" class="p-6 font-medium">Formato</th>
+                                            <th scope="col" class="p-6 font-medium">Profesional</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            class="border-b"
-                                            v-for="session in futureSessions">
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                        <tr class="border-b" v-for="session in futureSessions">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.date }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.time }} hrs
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.format }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.modality }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 <p>
-                                                    {{
-                                                        session.professional
-                                                            ?.first_name
-                                                    }}
-                                                    {{
-                                                        session.professional
-                                                            ?.last_name
-                                                    }}
+                                                    {{ session.professional?.first_name }}
+                                                    {{ session.professional?.last_name }}
                                                 </p>
-                                                <p
-                                                    class="text-sm text-gray-400">
-                                                    {{
-                                                        session.professional
-                                                            ?.title
-                                                    }}
+                                                <p class="text-sm text-gray-400">
+                                                    {{ session.professional?.title }}
                                                 </p>
                                             </td>
                                         </tr>
@@ -203,72 +152,35 @@
                                     class="bg-white table-auto text-sm text-left text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Fecha
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Hora
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Modalidad
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Formato
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="p-6 font-medium">
-                                                Profesional
-                                            </th>
+                                            <th scope="col" class="p-6 font-medium">Fecha</th>
+                                            <th scope="col" class="p-6 font-medium">Hora</th>
+                                            <th scope="col" class="p-6 font-medium">Modalidad</th>
+                                            <th scope="col" class="p-6 font-medium">Formato</th>
+                                            <th scope="col" class="p-6 font-medium">Profesional</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            class="border-b"
-                                            v-for="session in pastSessions">
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                        <tr class="border-b" v-for="session in pastSessions">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.date }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.time }} hrs
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.format }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ session.modality }}
                                             </td>
 
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 <p>
-                                                    {{
-                                                        session.professional
-                                                            .first_name
-                                                    }}
-                                                    {{
-                                                        session.professional
-                                                            .last_name
-                                                    }}
+                                                    {{ session.professional.first_name }}
+                                                    {{ session.professional.last_name }}
                                                 </p>
-                                                <p
-                                                    class="text-sm text-gray-400">
-                                                    {{
-                                                        session.professional
-                                                            .title
-                                                    }}
+                                                <p class="text-sm text-gray-400">
+                                                    {{ session.professional.title }}
                                                 </p>
                                             </td>
                                         </tr>

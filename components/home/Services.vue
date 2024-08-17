@@ -11,35 +11,26 @@
                     src="/home/online-training.jpeg"
                     class="h-[250px] w-full object-cover rounded-xl"
                     alt="online training" />
-                <div
-                    class="flex flex-col items-center justify-center text-center gap-5">
-                    <div
-                        class="h-16 w-16 flex justify-center items-center bg-primary rounded-2xl">
-                        <Icon
-                            name="ic:twotone-computer"
-                            class="text-3xl text-white" />
+                <div class="flex flex-col items-center justify-center text-center gap-5">
+                    <div class="h-16 w-16 flex justify-center items-center bg-primary rounded-2xl">
+                        <Icon name="ic:twotone-computer" class="text-3xl text-white" />
                     </div>
                     <h4 class="text-xl font-semibold">Planes Online</h4>
                     <p class="text-sm tellural">
-                        Nos conectamos contigo y guiamos tu entrenamiento el
-                        100% de la sesión
+                        Nos conectamos contigo y guiamos tu entrenamiento el 100% de la sesión
                     </p>
                 </div>
             </div>
             <div
                 class="border border-sky-100 rounded-xl shadow-xl shadow-indigo-50 p-8 grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div
-                    class="flex flex-col items-center justify-center text-center gap-5">
+                <div class="flex flex-col items-center justify-center text-center gap-5">
                     <div
                         class="h-16 w-16 flex justify-center items-center bg-secondary rounded-2xl">
-                        <Icon
-                            name="game-icons:weight-lifting-up"
-                            class="text-3xl text-white" />
+                        <Icon name="game-icons:weight-lifting-up" class="text-3xl text-white" />
                     </div>
                     <h4 class="text-xl font-semibold">Planes Presenciales</h4>
                     <p class="text-sm tellural">
-                        Puede ser a domicilio, al aire libre o en el gimnasio de
-                        tu edificio.
+                        Puede ser a domicilio, al aire libre o en el gimnasio de tu edificio.
                     </p>
                 </div>
                 <NuxtImg

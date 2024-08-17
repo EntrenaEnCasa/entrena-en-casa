@@ -3,10 +3,7 @@ import { defineEventHandler } from "h3";
 
 export default defineEventHandler((event) => {
     const config = useRuntimeConfig(event);
-    const domain =
-        config.public.nodeEnv === "production"
-            ? ".entrenaencasa.cl"
-            : "localhost";
+    const domain = config.public.nodeEnv === "production" ? ".entrenaencasa.cl" : "localhost";
 
     // Clear the HttpOnly cookie by setting its expiration date in the past or setting its value to empty
     deleteCookie(event, "auth_token", {

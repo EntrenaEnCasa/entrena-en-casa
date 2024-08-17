@@ -3,30 +3,20 @@
         <div>
             <div class="flex flex-col items-center pt-10 mx-3">
                 <NuxtLink to="/">
-                    <NuxtImg
-                        class="mx-auto w-28 h-28"
-                        src="/logo.png"
-                        alt="logo" />
+                    <NuxtImg class="mx-auto w-28 h-28" src="/logo.png" alt="logo" />
                 </NuxtLink>
             </div>
             <div class="py-12 w-4/5 mx-auto">
-                <h1 class="text-2xl font-bold text-center mb-2">
-                    Registro de profesionales
-                </h1>
+                <h1 class="text-2xl font-bold text-center mb-2">Registro de profesionales</h1>
                 <p class="text-center text-gray-500">
-                    ¡Únete a la comunidad de profesionales de la salud y el
-                    deporte!
+                    ¡Únete a la comunidad de profesionales de la salud y el deporte!
                 </p>
             </div>
-            <Form
-                v-slot="{ meta }"
-                @submit="register"
-                class="h-full w-full pb-10">
+            <Form v-slot="{ meta }" @submit="register" class="h-full w-full pb-10">
                 <div
                     class="grid grid-cols-1 lg:grid-cols-2 gap-6 justify-items-center items-center lg:px-10 w-full lg:space-x-4">
                     <div class="lg:justify-self-end space-y-6 w-4/5">
-                        <div
-                            class="grid lg:grid-cols-2 w-full gap-2 grid-cols-1">
+                        <div class="grid lg:grid-cols-2 w-full gap-2 grid-cols-1">
                             <CommonInput
                                 label="¿Cual es tu nombre?"
                                 v-model="formData.firstName"
@@ -66,8 +56,7 @@
                             icon="fa6-solid:envelope"
                             placeholder="Ingresa tu correo electrónico"
                             :rules="validateEmail" />
-                        <div
-                            class="grid lg:grid-cols-2 w-full gap-2 grid-cols-1">
+                        <div class="grid lg:grid-cols-2 w-full gap-2 grid-cols-1">
                             <CommonInput
                                 label="Contraseña"
                                 v-model="formData.password"
@@ -191,22 +180,19 @@ const register = async () => {
     saveUserDataLoading.value = true;
 
     try {
-        const response = await $fetch<UserAPIResponse>(
-            `/api/auth/professional/sign-up`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    first_name: formData.firstName,
-                    last_name: formData.lastName,
-                    email: formData.email,
-                    password: formData.password,
-                    title: formData.title,
-                }),
-            }
-        );
+        const response = await $fetch<UserAPIResponse>(`/api/auth/professional/sign-up`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                email: formData.email,
+                password: formData.password,
+                title: formData.title,
+            }),
+        });
 
         if (response.success) {
             toast.success(response.message);

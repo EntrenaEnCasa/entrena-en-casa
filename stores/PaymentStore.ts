@@ -11,9 +11,7 @@ export const usePaymentStore = defineStore(
     () => {
         const flowTransaction: Ref<FlowTransaction | null> = ref(null);
 
-        const setFlowTransaction = (
-            newFlowTransaction: FlowTransaction | null
-        ) => {
+        const setFlowTransaction = (newFlowTransaction: FlowTransaction | null) => {
             flowTransaction.value = newFlowTransaction;
         };
 

@@ -1,13 +1,9 @@
 <template>
     <div class="">
-        <h2 class="text-xl text-center font-semibold text-gray-600 mb-4">
-            Sesión en curso
-        </h2>
+        <h2 class="text-xl text-center font-semibold text-gray-600 mb-4">Sesión en curso</h2>
         <CommonLoading v-if="currentSessionLoading" />
         <div v-else-if="currentSessionError">
-            <div class="text-center text-red-500">
-                Error al obtener la sesión en curso
-            </div>
+            <div class="text-center text-red-500">Error al obtener la sesión en curso</div>
         </div>
         <div v-else-if="!currentSessionData?.success">
             <p class="text-center">
@@ -16,13 +12,8 @@
         </div>
         <div v-else class="bg-white rounded-xl divide-y">
             <div class="p-5">
-                <h3
-                    class="text-center font-semibold text-lg first-letter:uppercase">
-                    {{
-                        formatDateToFullLongFormat(
-                            currentSessionData.sessionInfo.date
-                        )
-                    }}
+                <h3 class="text-center font-semibold text-lg first-letter:uppercase">
+                    {{ formatDateToFullLongFormat(currentSessionData.sessionInfo.date) }}
                     - {{ currentSessionData.sessionInfo.time }}hrs
                 </h3>
             </div>
@@ -41,8 +32,7 @@
                         <div class="flex gap-x-2">
                             <h4 class="text-xl font-semibold">
                                 {{
-                                    currentSessionData.sessionInfo.modality ===
-                                    "Online"
+                                    currentSessionData.sessionInfo.modality === "Online"
                                         ? "Reunión"
                                         : "Lugar"
                                 }}
@@ -57,10 +47,7 @@
                         </div>
                         <p>
                             {{
-                                currentSessionData.sessionInfo.modality ===
-                                "Online"
-                                    ? "Online"
-                                    : ""
+                                currentSessionData.sessionInfo.modality === "Online" ? "Online" : ""
                             }}
                         </p>
                     </div>
@@ -71,32 +58,21 @@
                         <table class="mt-6 min-w-max w-full table-auto">
                             <thead>
                                 <tr class="text-gray-600 leading-normal">
-                                    <th class="py-3 px-6 text-center">
-                                        Confirmado
-                                    </th>
+                                    <th class="py-3 px-6 text-center">Confirmado</th>
                                     <th class="py-3 px-6 text-left">Nombre</th>
-                                    <th class="py-3 px-6 text-left">
-                                        Teléfono
-                                    </th>
+                                    <th class="py-3 px-6 text-left">Teléfono</th>
                                     <th class="py-3 px-6 text-left">Edad</th>
                                     <th class="py-3 px-6 text-left">Género</th>
                                     <th class="py-3 px-6 text-left">Peso</th>
-                                    <th class="py-3 px-6 text-left">
-                                        Estatura
-                                    </th>
+                                    <th class="py-3 px-6 text-left">Estatura</th>
                                     <th
-                                        v-if="
-                                            studentsWithoutData &&
-                                            studentsWithoutData.length > 0
-                                        "
+                                        v-if="studentsWithoutData && studentsWithoutData.length > 0"
                                         class="py-3 px-6 text-left"></th>
                                 </tr>
                             </thead>
                             <tbody class="">
                                 <tr
-                                    v-for="(
-                                        student, index
-                                    ) in currentSessionData?.students"
+                                    v-for="(student, index) in currentSessionData?.students"
                                     :key="index">
                                     <td class="py-3 px-6 text-center">
                                         <Icon
@@ -107,9 +83,7 @@
                                             "
                                             class="text-2xl"
                                             :class="
-                                                student.confirmed
-                                                    ? 'text-primary'
-                                                    : 'text-tertiary'
+                                                student.confirmed ? 'text-primary' : 'text-tertiary'
                                             " />
                                     </td>
                                     <td class="py-3 px-6 text-left">
@@ -133,43 +107,26 @@
                                         {{ student.phone || "Sin datos" }}
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        {{
-                                            student.age
-                                                ? student.age + " años"
-                                                : "Sin datos"
-                                        }}
+                                        {{ student.age ? student.age + " años" : "Sin datos" }}
                                     </td>
                                     <td class="py-3 px-6 text-left">
                                         {{ student.gender || "Sin datos" }}
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        {{
-                                            student.weight
-                                                ? student.weight + " kg"
-                                                : "Sin datos"
-                                        }}
+                                        {{ student.weight ? student.weight + " kg" : "Sin datos" }}
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        {{
-                                            student.height
-                                                ? student.height + " cm"
-                                                : "Sin datos"
-                                        }}
+                                        {{ student.height ? student.height + " cm" : "Sin datos" }}
                                     </td>
                                     <td
-                                        v-if="
-                                            studentsWithoutData &&
-                                            studentsWithoutData.length > 0
-                                        "
+                                        v-if="studentsWithoutData && studentsWithoutData.length > 0"
                                         class="py-3 px-6 text-left">
                                         <CommonButton
                                             v-if="student.first_name === null"
                                             class="px-4 py-2"
                                             bg-color="secondary"
                                             @click="handleOpenModal(student)">
-                                            <Icon
-                                                name="fa6-solid:user-pen"
-                                                class="text-2xl" />
+                                            <Icon name="fa6-solid:user-pen" class="text-2xl" />
                                         </CommonButton>
                                     </td>
                                 </tr>
@@ -340,9 +297,7 @@ const {
 );
 
 const studentsWithoutData = computed(() => {
-    return currentSessionData.value?.students.filter(
-        (student) => student.first_name === null
-    );
+    return currentSessionData.value?.students.filter((student) => student.first_name === null);
 });
 
 const validateFirstName = () => {
@@ -422,9 +377,7 @@ const updateStudentInfo = async () => {
     addDataLoading.value = true;
 
     if (selectedStudent.value === null) {
-        toast.error(
-            "Hubo un error al intentar actualizar la información del alumno"
-        );
+        toast.error("Hubo un error al intentar actualizar la información del alumno");
         addDataLoading.value = false;
         return;
     }
@@ -459,9 +412,7 @@ const updateStudentInfo = async () => {
             toast.error(response.message);
         }
     } catch (error) {
-        toast.error(
-            "Hubo un error al intentar actualizar la información del alumno"
-        );
+        toast.error("Hubo un error al intentar actualizar la información del alumno");
         console.log(error);
     } finally {
         addDataLoading.value = false;

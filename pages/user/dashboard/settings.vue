@@ -3,9 +3,7 @@
         <div class="row row-gap-4 mb-5">
             <h3 class="text-xl font-medium mb-4">Configuración</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div
-                    v-if="userStore.user.name"
-                    class="bg-white border py-4 px-7 rounded-xl">
+                <div v-if="userStore.user.name" class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex items-center justify-between">
                         <p class="text-sm text-gray-500">Nombre de usuario</p>
                         <button
@@ -14,14 +12,11 @@
                             Editar
                         </button>
                     </div>
-                    <h3
-                        class="font-medium text-2xl text-ellipsis overflow-hidden">
+                    <h3 class="font-medium text-2xl text-ellipsis overflow-hidden">
                         {{ userStore.user.name }}
                     </h3>
                 </div>
-                <div
-                    v-if="userStore.user.email"
-                    class="bg-white border py-4 px-7 rounded-xl">
+                <div v-if="userStore.user.email" class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex justify-between items-center">
                         <p class="text-sm text-gray-500">Correo electrónico</p>
                         <button
@@ -30,14 +25,11 @@
                             Editar
                         </button>
                     </div>
-                    <h3
-                        class="font-medium text-2xl text-ellipsis overflow-hidden">
+                    <h3 class="font-medium text-2xl text-ellipsis overflow-hidden">
                         {{ userStore.user.email }}
                     </h3>
                 </div>
-                <div
-                    v-if="userStore.user.bornDate"
-                    class="bg-white border py-4 px-7 rounded-xl">
+                <div v-if="userStore.user.bornDate" class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex justify-between items-center">
                         <p class="text-sm text-gray-500">Fecha de nacimiento</p>
                         <button
@@ -46,8 +38,7 @@
                             Editar
                         </button>
                     </div>
-                    <h3
-                        class="font-medium text-2xl text-ellipsis overflow-hidden">
+                    <h3 class="font-medium text-2xl text-ellipsis overflow-hidden">
                         {{ userStore.user.bornDate }}
                     </h3>
                 </div>
@@ -60,10 +51,7 @@
                             Editar
                         </button>
                     </div>
-                    <h3
-                        class="font-medium text-2xl text-ellipsis overflow-hidden">
-                        ************
-                    </h3>
+                    <h3 class="font-medium text-2xl text-ellipsis overflow-hidden">************</h3>
                 </div>
             </div>
         </div>
@@ -100,10 +88,7 @@
                             placeholder="1234@entrenaencasa.cl"
                             :rules="validateEmailRepeat" />
                     </div>
-                    <CommonButton
-                        class="py-2 w-full font-medium"
-                        text-size="xl"
-                        :loading="loading">
+                    <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading">
                         Confirmar
                     </CommonButton>
                 </Form>
@@ -132,10 +117,7 @@
                             placeholder="* * * * * * * *"
                             :rules="validatePasswordRepeat" />
                     </div>
-                    <CommonButton
-                        class="py-2 w-full font-medium"
-                        text-size="xl"
-                        :loading="loading">
+                    <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading">
                         Confirmar
                     </CommonButton>
                 </Form>
@@ -243,17 +225,14 @@ const changePassword = async () => {
     loading.value = true;
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/user/update-password`,
-            {
-                method: "PATCH",
-                credentials: "include",
-                body: JSON.stringify({
-                    user_id: userStore.user.user_id,
-                    newPassword: password.value,
-                }),
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
+            method: "PATCH",
+            credentials: "include",
+            body: JSON.stringify({
+                user_id: userStore.user.user_id,
+                newPassword: password.value,
+            }),
+        });
 
         if (response.success) {
             toast.success("Contraseña cambiada con éxito");
@@ -272,17 +251,14 @@ const changeEmail = async () => {
     loading.value = true;
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/user/update-email`,
-            {
-                method: "PATCH",
-                credentials: "include",
-                body: JSON.stringify({
-                    user_id: userStore.user.user_id,
-                    newEmail: email.value,
-                }),
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/user/update-email`, {
+            method: "PATCH",
+            credentials: "include",
+            body: JSON.stringify({
+                user_id: userStore.user.user_id,
+                newEmail: email.value,
+            }),
+        });
 
         if (response.success) {
             toast.success("Correo electrónico cambiado con éxito");

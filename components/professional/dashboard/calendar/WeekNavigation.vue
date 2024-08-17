@@ -6,9 +6,7 @@
         <div
             v-show="!isFetchingData"
             class="flex items-center justify-self-center md:justify-self-start text-2xl">
-            <button
-                @click="goToPreviousWeek"
-                :disabled="isStartWeek || isFetchingData">
+            <button @click="goToPreviousWeek" :disabled="isStartWeek || isFetchingData">
                 <Icon
                     :class="{
                         'text-gray-300': isStartWeek || isFetchingData,

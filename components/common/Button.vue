@@ -16,12 +16,7 @@
             <span>{{ loadingText }}</span>
             <span>
                 <Icon
-                    :class="[
-                        'animate-spin',
-                        'ml-2',
-                        `text-${textColor}`,
-                        `text-${iconSize}`,
-                    ]"
+                    :class="['animate-spin', 'ml-2', `text-${textColor}`, `text-${iconSize}`]"
                     name="fa6-solid:circle-notch" />
             </span>
         </div>

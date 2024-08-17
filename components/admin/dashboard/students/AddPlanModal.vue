@@ -13,17 +13,12 @@
                                 {{ student?.first_name }}
                                 {{ student?.last_name }}
                             </p>
-                            <p
-                                class="text-2xl font-medium text-gray-700"
-                                v-else>
-                                Sin datos
-                            </p>
+                            <p class="text-2xl font-medium text-gray-700" v-else>Sin datos</p>
                         </div>
 
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Correo electrónico</h3>
-                            <p
-                                class="text-2xl font-medium text-gray-700 break-all">
+                            <p class="text-2xl font-medium text-gray-700 break-all">
                                 {{ student?.email }}
                             </p>
                         </div>
@@ -33,13 +28,9 @@
                             <h3 class="mx-auto text-2xl">Agregar Plan</h3>
                         </div>
                         <div>
-                            <form
-                                class="flex flex-col items-center justify-center">
-                                <div
-                                    class="flex flex-col items-center w-full py-5">
-                                    <label
-                                        for="plan"
-                                        class="text-gray-500 text-left w-full mb-2"
+                            <form class="flex flex-col items-center justify-center">
+                                <div class="flex flex-col items-center w-full py-5">
+                                    <label for="plan" class="text-gray-500 text-left w-full mb-2"
                                         >Tipo de Plan</label
                                     >
                                     <select
@@ -49,9 +40,7 @@
                                         <option value="0" disabled selected>
                                             Selecciona un plan
                                         </option>
-                                        <option
-                                            v-for="plan in plans"
-                                            :value="plan.plan_id">
+                                        <option v-for="plan in plans" :value="plan.plan_id">
                                             {{ formatPlan(plan.credit_type) }} -
                                             {{ plan.credit_quantity }} créditos
                                         </option>
@@ -59,16 +48,11 @@
                                 </div>
                             </form>
                             <div v-show="selectedPlan !== 0">
-                                <table
-                                    class="bg-white table-auto text-sm text-center mx-auto mb-7">
+                                <table class="bg-white table-auto text-sm text-center mx-auto mb-7">
                                     <thead class="text-gray-400">
                                         <tr>
-                                            <th
-                                                scope="col"
-                                                class="font-medium"></th>
-                                            <th
-                                                scope="col"
-                                                class="font-medium"></th>
+                                            <th scope="col" class="font-medium"></th>
+                                            <th scope="col" class="font-medium"></th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="selectedPlanData">
@@ -76,16 +60,10 @@
                                             <td class="px-6 py-2">
                                                 <div
                                                     class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5 items-center">
-                                                    <p
-                                                        class="font-light text-right">
-                                                        Plan
-                                                    </p>
-                                                    <p
-                                                        class="font-bold text-left">
+                                                    <p class="font-light text-right">Plan</p>
+                                                    <p class="font-bold text-left">
                                                         {{
-                                                            formatPlan(
-                                                                selectedPlanData.credit_type
-                                                            )
+                                                            formatPlan(selectedPlanData.credit_type)
                                                         }}
                                                     </p>
                                                 </div>
@@ -95,18 +73,15 @@
                                         <tr>
                                             <td
                                                 class="grid grid-cols-2 w-4/6 mx-auto gap-5 items-center mb-5">
-                                                <p
-                                                    class="font-light text-right">
+                                                <p class="font-light text-right">
                                                     Cantidad de sesiones
                                                 </p>
                                                 <div class="flex items-center">
                                                     <div
                                                         v-if="
-                                                            selectedPlanData.credit_type ===
-                                                            'PP'
+                                                            selectedPlanData.credit_type === 'PP'
                                                         ">
-                                                        <div
-                                                            class="text-primary whitespace-nowrap">
+                                                        <div class="text-primary whitespace-nowrap">
                                                             <Icon
                                                                 name="ion:person"
                                                                 class="text-2xl" />
@@ -117,11 +92,9 @@
                                                     </div>
                                                     <div
                                                         v-else-if="
-                                                            selectedPlanData.credit_type ===
-                                                            'GP'
+                                                            selectedPlanData.credit_type === 'GP'
                                                         ">
-                                                        <div
-                                                            class="text-primary whitespace-nowrap">
+                                                        <div class="text-primary whitespace-nowrap">
                                                             <Icon
                                                                 name="mdi:account-multiple-plus"
                                                                 class="text-2xl" />
@@ -132,11 +105,9 @@
                                                     </div>
                                                     <div
                                                         v-else-if="
-                                                            selectedPlanData.credit_type ===
-                                                            'PO'
+                                                            selectedPlanData.credit_type === 'PO'
                                                         ">
-                                                        <div
-                                                            class="text-primary whitespace-nowrap">
+                                                        <div class="text-primary whitespace-nowrap">
                                                             <Icon
                                                                 name="ion:person"
                                                                 class="text-2xl" />
@@ -147,11 +118,9 @@
                                                     </div>
                                                     <div
                                                         v-else-if="
-                                                            selectedPlanData.credit_type ===
-                                                            'GO'
+                                                            selectedPlanData.credit_type === 'GO'
                                                         ">
-                                                        <div
-                                                            class="text-primary whitespace-nowrap">
+                                                        <div class="text-primary whitespace-nowrap">
                                                             <Icon
                                                                 name="mdi:account-multiple-plus"
                                                                 class="text-2xl" />
@@ -161,9 +130,7 @@
                                                         </div>
                                                     </div>
                                                     <p class="font-bold ml-3">
-                                                        {{
-                                                            selectedPlanData?.credit_quantity
-                                                        }}
+                                                        {{ selectedPlanData?.credit_quantity }}
                                                     </p>
                                                 </div>
                                             </td>
@@ -172,16 +139,11 @@
                                             <td class="px-6 py-2">
                                                 <div
                                                     class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5 items-center">
-                                                    <p
-                                                        class="font-light text-right">
-                                                        Tiempo máximo para
-                                                        utilizar sesiones
+                                                    <p class="font-light text-right">
+                                                        Tiempo máximo para utilizar sesiones
                                                     </p>
-                                                    <p
-                                                        class="font-bold text-left">
-                                                        {{
-                                                            selectedPlanData?.expiration_time
-                                                        }}
+                                                    <p class="font-bold text-left">
+                                                        {{ selectedPlanData?.expiration_time }}
                                                         días
                                                     </p>
                                                 </div>
@@ -193,15 +155,10 @@
                         </div>
                     </div>
                     <div class="flex justify-between">
-                        <CommonButton
-                            bg-color="tertiary"
-                            class="px-4 py-2"
-                            @click="closeModal()">
+                        <CommonButton bg-color="tertiary" class="px-4 py-2" @click="closeModal()">
                             Cancelar
                         </CommonButton>
-                        <CommonButton class="px-4 py-2" @click="addPlan">
-                            Confirmar
-                        </CommonButton>
+                        <CommonButton class="px-4 py-2" @click="addPlan"> Confirmar </CommonButton>
                     </div>
                 </div>
             </CommonModal>
@@ -332,9 +289,7 @@ const formatPlan = (creditType: string) => {
 watch(
     selectedPlan,
     (newSelectedPlan) => {
-        selectedPlanData.value = plans.value.find(
-            (plan) => plan.plan_id === newSelectedPlan
-        );
+        selectedPlanData.value = plans.value.find((plan) => plan.plan_id === newSelectedPlan);
     },
     { immediate: true }
 );

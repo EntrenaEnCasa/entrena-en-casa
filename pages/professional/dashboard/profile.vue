@@ -5,18 +5,13 @@
                 <div
                     class="bg-white rounded-lg p-6 shadow-lg border flex flex-col items-center h-full">
                     <!-- Circle image container -->
-                    <div
-                        class="w-52 h-52 rounded-full bg-white mb-4 -mt-40 p-4">
-                        <NuxtImg
-                            src="/icons/dumbbell.png"
-                            class="w-full h-full object-cover" />
+                    <div class="w-52 h-52 rounded-full bg-white mb-4 -mt-40 p-4">
+                        <NuxtImg src="/icons/dumbbell.png" class="w-full h-full object-cover" />
                     </div>
                     <!-- Content container -->
                     <div class="text-center flex flex-col gap-4">
                         <div v-if="userStore.user.first_name">
-                            <p class="text-sm text-gray-500">
-                                Nombre profesional
-                            </p>
+                            <p class="text-sm text-gray-500">Nombre profesional</p>
                             <p class="font-semibold text-2xl">
                                 {{ userStore.user.first_name }}
                                 {{ userStore.user.last_name }}
@@ -35,9 +30,7 @@
                             </p>
                         </div>
                         <div v-if="userStore.user.phone">
-                            <p class="text-sm text-gray-500">
-                                Número de teléfono de contacto
-                            </p>
+                            <p class="text-sm text-gray-500">Número de teléfono de contacto</p>
                             <p class="text-lg font-medium">
                                 {{ userStore.user.phone }}
                             </p>
@@ -52,9 +45,7 @@
                     v-if="getCoverageRangesLoading"
                     text="cargando rangos de cobertura" />
                 <div v-else-if="getCoverageRangesError">
-                    <p class="text-red-500">
-                        Hubo un error al cargar los rangos de cobertura
-                    </p>
+                    <p class="text-red-500">Hubo un error al cargar los rangos de cobertura</p>
                 </div>
                 <div v-else-if="!coverageRanges.success">
                     No hay rangos de cobertura actualmente
@@ -66,9 +57,7 @@
                         <p class="font-semibold">{{ range.range_name }}</p>
                         <p class="font-light">{{ range.radius }} km</p>
                         <button @click="openEditModal(index)">
-                            <Icon
-                                name="fa6-solid:pen-to-square"
-                                class="text-primary" />
+                            <Icon name="fa6-solid:pen-to-square" class="text-primary" />
                         </button>
                     </div>
                 </div>
@@ -86,23 +75,17 @@
             <CommonModal ref="mapModal">
                 <div class="text-center mt-2 mb-10">
                     <h2 class="text-2xl font-bold">
-                        {{
-                            !editMode
-                                ? "Nuevo rango de cobertura"
-                                : "Edita un rango de cobertura"
-                        }}
+                        {{ !editMode ? "Nuevo rango de cobertura" : "Edita un rango de cobertura" }}
                     </h2>
                     <p v-show="!editMode" class="text-sm text-gray-500">
-                        Selecciona tu ubicación para que los clientes puedan
-                        encontrarte más fácilmente.
+                        Selecciona tu ubicación para que los clientes puedan encontrarte más
+                        fácilmente.
                     </p>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 p-5">
                     <div class="lg:pr-6 relative space-y-7">
                         <label class="w-full flex flex-col">
-                            <span class="font-medium mb-2"
-                                >Nombre del rango</span
-                            >
+                            <span class="font-medium mb-2">Nombre del rango</span>
                             <input
                                 v-model="rangeName"
                                 type="text"
@@ -113,12 +96,9 @@
                             ref="geocoderComponent"
                             @locationSelected="flyToLocation" />
                         <label class="w-full flex flex-col">
-                            <span class="font-medium text"
-                                >Radio de cobertura</span
-                            >
+                            <span class="font-medium text">Radio de cobertura</span>
                             <p class="text-sm text-gray-500 mb-3">
-                                Selecciona el radio de cobertura que deseas
-                                tener.
+                                Selecciona el radio de cobertura que deseas tener.
                             </p>
                             <ProfessionalDashboardProfileRangeInput
                                 :inputMinValue="inputRadiusMinValue"
@@ -179,9 +159,7 @@
                     </CommonButton>
                 </div>
                 <div v-show="!editMode" class="flex justify-between p-5 pb-2">
-                    <CommonButton
-                        @click="closeModal"
-                        class="px-5 py-2 bg-tertiary">
+                    <CommonButton @click="closeModal" class="px-5 py-2 bg-tertiary">
                         Cancelar
                     </CommonButton>
                     <CommonButton
@@ -291,14 +269,11 @@ const addCoverage = async () => {
     };
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/professional/range`,
-            {
-                method: "POST",
-                credentials: "include",
-                body: body,
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/range`, {
+            method: "POST",
+            credentials: "include",
+            body: body,
+        });
 
         if (response.success) {
             toast.success(response.message);
@@ -328,14 +303,11 @@ const saveEditChanges = async () => {
     };
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/professional/range`,
-            {
-                method: "PUT",
-                credentials: "include",
-                body: body,
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/range`, {
+            method: "PUT",
+            credentials: "include",
+            body: body,
+        });
 
         if (response.success) {
             toast.success("Rango de cobertura actualizado exitosamente");
@@ -400,11 +372,7 @@ const openEditModal = (index) => {
 
 const createGeojsonCircle = (center, radiusInKm) => {
     if (!center || center.length !== 2 || !radiusInKm) {
-        throw new Error(
-            "Invalid inputs for creating a circle:",
-            center,
-            radiusInKm
-        );
+        throw new Error("Invalid inputs for creating a circle:", center, radiusInKm);
     }
     return turf.circle(center, radiusInKm, { steps: 80, units: "kilometers" });
 };
@@ -416,10 +384,7 @@ const circleGeoJSON = computed(() => {
 const flyToCenter = () => {
     const zoom = calculateZoomLevel(inputRadius.value);
     const currentZoom = mapZoom.value;
-    const transitionSpeed = calculateTransitionSpeedBasedOnZoomDifference(
-        currentZoom,
-        zoom
-    );
+    const transitionSpeed = calculateTransitionSpeedBasedOnZoomDifference(currentZoom, zoom);
 
     debounceFlyTo(circleData.center, zoom, {
         speed: transitionSpeed,
@@ -438,11 +403,7 @@ const flyToLocation = (location) => {
     setCircleOpacity(0);
     const newCoordinates = location.center;
     const currentLocation = mapRef.value?.getCenter().toArray();
-    const { duration, zoom } = prepareFlyTo(
-        currentLocation,
-        newCoordinates,
-        inputRadius.value
-    );
+    const { duration, zoom } = prepareFlyTo(currentLocation, newCoordinates, inputRadius.value);
 
     debounceFlyTo(newCoordinates, zoom, { duration });
 
@@ -455,11 +416,7 @@ const flyToLocation = (location) => {
 
 const setMarkerCoordinates = (coordinates) => {
     const currentCoordinates = marker.value.getLngLat().toArray();
-    const { duration, zoom } = prepareFlyTo(
-        currentCoordinates,
-        coordinates,
-        inputRadius.value
-    );
+    const { duration, zoom } = prepareFlyTo(currentCoordinates, coordinates, inputRadius.value);
     markerCoordinates.value = coordinates;
     updateInputValue();
     debounceFlyTo(coordinates, zoom, { duration });
@@ -483,9 +440,7 @@ const setCircleOpacity = (opacity) => {
 
 //updates geocoder input value
 const updateInputValue = async () => {
-    const geocodingData = await getReverseGeocodingData(
-        markerCoordinates.value
-    );
+    const geocodingData = await getReverseGeocodingData(markerCoordinates.value);
     const address = geocodingData.place_name;
     geocoderComponent.value.updateSearchTerm(address);
 };

@@ -1,17 +1,14 @@
 <template>
     <div class="relative">
         <div>
-            <div
-                class="flex flex-col lg:flex-row justify-between items-center mb-4 gap-5">
+            <div class="flex flex-col lg:flex-row justify-between items-center mb-4 gap-5">
                 <h3 class="text-xl font-medium">Agendar sesión</h3>
                 <div class="flex flex-col items-center">
                     <button
                         @click="openLocationModal"
                         class="rounded-md px-4 py-2 flex bg-gray-200 text-gray-500 gap-x-2"
                         :class="{ invisible: isOnline }">
-                        <Icon
-                            name="heroicons:map-pin"
-                            class="text-2xl flex-shrink-0" />
+                        <Icon name="heroicons:map-pin" class="text-2xl flex-shrink-0" />
                         <div class="max-w-xs">
                             <p v-show="!selectedLocation">Ubicación</p>
                             <p v-show="selectedLocation" class="line-clamp-1">
@@ -23,18 +20,12 @@
                     <div
                         class="flex items-center gap-x-1 text-secondary mt-2"
                         :class="{ invisible: isOnline }">
-                        <p class="text-sm font-semibold">
-                            ¿Por qué necesitan mi ubicación?
-                        </p>
-                        <Icon
-                            name="ion:information-circle-outline"
-                            class="text-xl" />
+                        <p class="text-sm font-semibold">¿Por qué necesitan mi ubicación?</p>
+                        <Icon name="ion:information-circle-outline" class="text-xl" />
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span :class="{ 'text-gray-400': isOnline }"
-                        >Presencial</span
-                    >
+                    <span :class="{ 'text-gray-400': isOnline }">Presencial</span>
                     <!-- Toggle container -->
                     <button
                         class="relative w-14 h-8 rounded-full p-1"
@@ -67,25 +58,17 @@
                         class="rounded-md py-2 px-4 flex flex-col items-center text-gray-700 min-w-32 outline cursor-pointer"
                         :class="{
                             'bg-secondary text-white outline-secondary opacity-100':
-                                day.toISOString() ===
-                                selectedDate.toISOString(),
+                                day.toISOString() === selectedDate.toISOString(),
                             'outline-gray-500 outline-dashed bg-gray-200 opacity-50':
                                 !hasSessionsOnDay(day) &&
-                                ((!isOnline && selectedLocation !== null) ||
-                                    isOnline),
+                                ((!isOnline && selectedLocation !== null) || isOnline),
                             'outline-transparent bg-gray-200':
                                 (!isOnline && selectedLocation == null) ||
-                                (!isOnline &&
-                                    selectedLocation != null &&
-                                    hasSessionsOnDay(day)) ||
+                                (!isOnline && selectedLocation != null && hasSessionsOnDay(day)) ||
                                 (isOnline && hasSessionsOnDay(day)),
                         }">
-                        <span class="text-2xl font-semibold">{{
-                            formatDate(day).day
-                        }}</span>
-                        <span class="capitalize">{{
-                            formatDate(day).month
-                        }}</span>
+                        <span class="text-2xl font-semibold">{{ formatDate(day).day }}</span>
+                        <span class="capitalize">{{ formatDate(day).month }}</span>
                     </span>
                 </div>
 
@@ -94,58 +77,44 @@
                 </div>
 
                 <button @click="goToNextWeekAndUpdateSelectedDate">
-                    <Icon
-                        class="text-5xl text-secondary"
-                        name="heroicons:chevron-right-20-solid" />
+                    <Icon class="text-5xl text-secondary" name="heroicons:chevron-right-20-solid" />
                 </button>
             </div>
             <div v-show="!sessionsLoading" class="my-10">
                 <div
-                    v-show="
-                        (!selectedLocation && !isOnline) ||
-                        filteredProfessionals.length === 0
-                    "
+                    v-show="(!selectedLocation && !isOnline) || filteredProfessionals.length === 0"
                     class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
                     <div v-show="!selectedLocation && !isOnline">
                         <h2 class="text-3xl font-semibold text-primary mb-5">
                             No se ha ingresado ubicación
                         </h2>
                         <p class="max-w-2xl mx-auto text-gray-700">
-                            No podemos mostrarte sesiones presenciales si no
-                            ingresas la
-                            <span class="font-bold">
-                                ubicación aproximada
-                            </span>
-                            , ya que no sabemos si el profesional tendrá
-                            cobertura. Puedes ingresar
+                            No podemos mostrarte sesiones presenciales si no ingresas la
+                            <span class="font-bold"> ubicación aproximada </span>
+                            , ya que no sabemos si el profesional tendrá cobertura. Puedes ingresar
                             <span class="font-bold"> “Online” </span>
                             como opción si no deseas que sea presencial.
                         </p>
                     </div>
                     <div
                         v-show="
-                            selectedLocation &&
-                            !isOnline &&
-                            filteredProfessionals.length === 0
+                            selectedLocation && !isOnline && filteredProfessionals.length === 0
                         ">
                         <h2 class="text-3xl font-semibold text-primary mb-5">
                             No hay profesionales
                         </h2>
                         <p class="max-w-2xl mx-auto text-gray-700">
-                            No encontramos ninguna hora con nuestros
-                            profesionales para la ubicación y fecha ingresada.
-                            Prueba otra fecha o prueba otra ubicación.
+                            No encontramos ninguna hora con nuestros profesionales para la ubicación
+                            y fecha ingresada. Prueba otra fecha o prueba otra ubicación.
                         </p>
                     </div>
-                    <div
-                        v-show="isOnline && filteredProfessionals.length === 0">
+                    <div v-show="isOnline && filteredProfessionals.length === 0">
                         <h2 class="text-3xl font-semibold text-primary mb-5">
                             No hay profesionales
                         </h2>
                         <p class="max-w-2xl mx-auto text-gray-700">
-                            No encontramos ninguna hora con nuestros
-                            profesionales para la fecha ingresada. Prueba otra
-                            fecha.
+                            No encontramos ninguna hora con nuestros profesionales para la fecha
+                            ingresada. Prueba otra fecha.
                         </p>
                     </div>
                 </div>
@@ -156,18 +125,15 @@
                     "
                     class="inline-flex flex-col items-center w-full text-center">
                     <p class="max-w-xl mx-auto text-gray-700 mt-6 mb-3">
-                        Puedes ponerte en contacto directamente con el
-                        administrador para coordinar una sesión a través de
-                        whatsapp
+                        Puedes ponerte en contacto directamente con el administrador para coordinar
+                        una sesión a través de whatsapp
                     </p>
                     <NuxtLink
                         to="https://wa.me/56971370313?text=Hola%20Entrena%20En%20Casa,%20tengo%20una%20duda."
                         target="_blank"
                         class="rounded px-4 py-1.5 text-primary space-x-1">
                         <Icon name="logos:whatsapp-icon" class="text-4xl" />
-                        <span class="underline underline-offset-4"
-                            >Contactar</span
-                        >
+                        <span class="underline underline-offset-4">Contactar</span>
                     </NuxtLink>
                 </div>
                 <div
@@ -179,48 +145,26 @@
                         class="border rounded-xl bg-white py-10 px-8 grid grid-cols-1 xl:grid-cols-3 gap-4 place-items-center">
                         <div class="col-span-1 text-center">
                             <h3 class="text-2xl font-semibold">
-                                {{
-                                    professional.first_name +
-                                    " " +
-                                    professional.last_name
-                                }}
+                                {{ professional.first_name + " " + professional.last_name }}
                             </h3>
                             <p class="text-sm">{{ professional.title }}</p>
                         </div>
-                        <div
-                            class="col-span-1 xl:col-span-2 px-5 text-center xl:text-left">
+                        <div class="col-span-1 xl:col-span-2 px-5 text-center xl:text-left">
                             <div class="space-y-5">
-                                <div
-                                    v-if="
-                                        professional.customSessions.length > 0
-                                    ">
-                                    <h3 class="font-medium mb-2">
-                                        Personalizada
-                                    </h3>
+                                <div v-if="professional.customSessions.length > 0">
+                                    <h3 class="font-medium mb-2">Personalizada</h3>
                                     <div
                                         class="flex flex-wrap justify-center xl:justify-start gap-2 items-center">
                                         <button
                                             v-for="session in professional.customSessions"
-                                            :key="
-                                                session.session_info.session_id
-                                            "
-                                            @click="
-                                                openConfirmationModal(
-                                                    professional,
-                                                    session
-                                                )
-                                            "
+                                            :key="session.session_info.session_id"
+                                            @click="openConfirmationModal(professional, session)"
                                             class="border rounded-full px-4 py-1.5 bg-secondary text-white">
-                                            <p class="text">
-                                                {{ session.start_time }}hrs
-                                            </p>
+                                            <p class="text">{{ session.start_time }}hrs</p>
                                         </button>
                                     </div>
                                 </div>
-                                <div
-                                    v-if="
-                                        professional.groupSessions.length > 0
-                                    ">
+                                <div v-if="professional.groupSessions.length > 0">
                                     <h3 class="font-medium mb-2">Grupal</h3>
                                     <div
                                         class="flex flex-wrap justify-center xl:justify-start items-center"
@@ -231,9 +175,7 @@
                                             <a
                                                 v-if="!isOnline"
                                                 target="__blank"
-                                                :href="
-                                                    session.session_info.link
-                                                "
+                                                :href="session.session_info.link"
                                                 class="text-secondary">
                                                 <Icon
                                                     name="fa6-solid:location-dot"
@@ -245,15 +187,10 @@
                                             </a>
                                             <button
                                                 @click="
-                                                    openConfirmationModal(
-                                                        professional,
-                                                        session
-                                                    )
+                                                    openConfirmationModal(professional, session)
                                                 "
                                                 class="border rounded-full px-4 py-1.5 bg-secondary text-white text-center">
-                                                <p class="text">
-                                                    {{ session.start_time }}hrs
-                                                </p>
+                                                <p class="text">{{ session.start_time }}hrs</p>
                                             </button>
                                         </div>
                                     </div>
@@ -267,12 +204,8 @@
         <Teleport to="body">
             <CommonModal ref="locationModal">
                 <div class="px-2 py-4">
-                    <h2 class="text-xl font-semibold text-center mb-6">
-                        Ingresa tu dirección
-                    </h2>
-                    <MapsMapboxGeocoder
-                        ref="geocoderRef"
-                        @locationSelected="flyToLocation" />
+                    <h2 class="text-xl font-semibold text-center mb-6">Ingresa tu dirección</h2>
+                    <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
                     <div>
                         <div
                             class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px] mt-5">
@@ -298,30 +231,22 @@
                         v-show="!isDraggable"
                         class="flex flex-col items-center text-secondary mt-3">
                         <p>¿El pin no coincide con la ubicación?</p>
-                        <button
-                            class="underline font-medium"
-                            @click="isDraggable = true">
+                        <button class="underline font-medium" @click="isDraggable = true">
                             Ajustar ubicación
                         </button>
                     </div>
                     <div
                         v-show="isDraggable"
                         class="flex flex-col items-center text-secondary mt-3">
-                        <button
-                            class="underline font-medium"
-                            @click="isDraggable = false">
+                        <button class="underline font-medium" @click="isDraggable = false">
                             Dejar de ajustar ubicación
                         </button>
                     </div>
                     <div class="flex justify-between mt-5">
-                        <CommonButton
-                            @click="closeLocationModal"
-                            class="px-5 py-2 bg-tertiary">
+                        <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
                             Cancelar
                         </CommonButton>
-                        <CommonButton
-                            @click="confirmLocation"
-                            class="px-5 py-2 bg-primary">
+                        <CommonButton @click="confirmLocation" class="px-5 py-2 bg-primary">
                             Confirmar ubicación
                         </CommonButton>
                     </div>
@@ -331,9 +256,7 @@
         <Teleport to="body">
             <CommonModal ref="confirmationModal">
                 <div class="px-2 py-4">
-                    <h3 class="text-center text-2xl font-semibold mb-10">
-                        Confirmación de datos
-                    </h3>
+                    <h3 class="text-center text-2xl font-semibold mb-10">Confirmación de datos</h3>
                     <div class="grid grid-cols-2 gap-3">
                         <p class="justify-self-end">Profesional:</p>
                         <p class="font-semibold">
@@ -352,12 +275,8 @@
                             {{ selectedSession?.session.modality }}
                         </p>
                         <template v-if="selectedSession?.session.location">
-                            <p class="justify-self-end">
-                                Ubicación de la sesión:
-                            </p>
-                            <p
-                                v-if="!selectedSession?.isGroup"
-                                class="font-semibold max-w-60">
+                            <p class="justify-self-end">Ubicación de la sesión:</p>
+                            <p v-if="!selectedSession?.isGroup" class="font-semibold max-w-60">
                                 {{ selectedSession?.session.location }}
                             </p>
                             <a
@@ -365,20 +284,13 @@
                                 :href="selectedSession?.session.location"
                                 target="__blank"
                                 class="font-medium max-w-60 text-secondary flex items-center">
-                                <Icon
-                                    name="fa6-solid:location-dot"
-                                    class="text-xl mr-1" />
-                                <span class="underline underline-offset-4"
-                                    >Ver ubicación</span
-                                >
+                                <Icon name="fa6-solid:location-dot" class="text-xl mr-1" />
+                                <span class="underline underline-offset-4">Ver ubicación</span>
                             </a>
                         </template>
                     </div>
-                    <div
-                        class="flex flex-col md:flex-row gap-2 justify-between mt-6">
-                        <CommonButton
-                            @click="closeLocationModal"
-                            class="px-5 py-2 bg-tertiary">
+                    <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
+                        <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
                             Cancelar
                         </CommonButton>
                         <CommonButton
@@ -418,10 +330,8 @@ const markerCoordinates = ref(DEFAULT_COORDINATES);
 const getMarkerCoordinates = () => markerCoordinates.value;
 
 const { getReverseGeocodingData } = useGeocoding();
-const { weekDays, isStartWeek, goToPreviousWeek, goToNextWeek, formatDate } =
-    useWeekNavigation();
-const { flyTo, calculateDurationBasedOnDistance, calculateDistance } =
-    useMapInteraction(mapRef);
+const { weekDays, isStartWeek, goToPreviousWeek, goToNextWeek, formatDate } = useWeekNavigation();
+const { flyTo, calculateDurationBasedOnDistance, calculateDistance } = useMapInteraction(mapRef);
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
 const toast = useToast();
@@ -453,8 +363,7 @@ const filteredProfessionals = computed(() => {
         })
         .filter(
             (professional) =>
-                professional.customSessions.length > 0 ||
-                professional.groupSessions.length > 0
+                professional.customSessions.length > 0 || professional.groupSessions.length > 0
         );
 
     return filteredData;
@@ -571,15 +480,9 @@ const confirmSessionLoading = ref(false);
 
 const openConfirmationModal = (professionalData, sessionData) => {
     let location;
-    if (
-        !isOnline.value &&
-        sessionData.session_info.format === "Personalizado"
-    ) {
+    if (!isOnline.value && sessionData.session_info.format === "Personalizado") {
         location = selectedLocation.value.place_name;
-    } else if (
-        !isOnline.value &&
-        sessionData.session_info.format === "Grupal"
-    ) {
+    } else if (!isOnline.value && sessionData.session_info.format === "Grupal") {
         location = sessionData.session_info.link;
     } else {
         location = null;
@@ -587,8 +490,7 @@ const openConfirmationModal = (professionalData, sessionData) => {
 
     const newSession = {
         professional: {
-            name:
-                professionalData.first_name + " " + professionalData.last_name,
+            name: professionalData.first_name + " " + professionalData.last_name,
             title: professionalData.title,
         },
         session: {
@@ -613,14 +515,11 @@ const confirmSession = async () => {
     };
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/student/session`,
-            {
-                method: "POST",
-                credentials: "include",
-                body: body,
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/student/session`, {
+            method: "POST",
+            credentials: "include",
+            body: body,
+        });
 
         if (response.success) {
             toast.success(response.message);
@@ -687,14 +586,11 @@ const getOnlineSessions = async () => {
     };
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/student/sessions/online`,
-            {
-                method: "POST",
-                credentials: "include",
-                body: body,
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/student/sessions/online`, {
+            method: "POST",
+            credentials: "include",
+            body: body,
+        });
 
         if (response.success) {
             professionals.value = response.professionals;

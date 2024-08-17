@@ -5,17 +5,14 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex items-center justify-between">
-                        <p class="text-sm text-gray-500">
-                            Nombre de profesional
-                        </p>
+                        <p class="text-sm text-gray-500">Nombre de profesional</p>
                         <button
                             disabled
                             class="px-8 py-1 rounded-lg bg-primary text-white disabled:bg-primary-100 disabled:cursor-not-allowed">
                             Editar
                         </button>
                     </div>
-                    <h3
-                        class="font-medium text-2xl text-ellipsis overflow-hidden">
+                    <h3 class="font-medium text-2xl text-ellipsis overflow-hidden">
                         Nombre de usuario
                     </h3>
                 </div>
@@ -28,8 +25,7 @@
                             Editar
                         </button>
                     </div>
-                    <h3
-                        class="font-medium text-2xl text-ellipsis overflow-hidden">
+                    <h3 class="font-medium text-2xl text-ellipsis overflow-hidden">
                         nombre.apellido@gmail.com
                     </h3>
                 </div>
@@ -42,10 +38,7 @@
                             Editar
                         </button>
                     </div>
-                    <h3
-                        class="font-medium text-2xl text-ellipsis overflow-hidden">
-                        12/04/2000
-                    </h3>
+                    <h3 class="font-medium text-2xl text-ellipsis overflow-hidden">12/04/2000</h3>
                 </div>
                 <div class="bg-white border py-4 px-7 rounded-xl">
                     <div class="flex justify-between items-center">
@@ -56,10 +49,7 @@
                             Editar
                         </button>
                     </div>
-                    <h3
-                        class="font-medium text-2xl text-ellipsis overflow-hidden">
-                        ************
-                    </h3>
+                    <h3 class="font-medium text-2xl text-ellipsis overflow-hidden">************</h3>
                 </div>
             </div>
         </div>
@@ -96,10 +86,7 @@
                             placeholder="1234@entrenaencasa.cl"
                             :rules="validateEmailRepeat" />
                     </div>
-                    <CommonButton
-                        class="py-2 w-full font-medium"
-                        text-size="xl"
-                        :loading="loading">
+                    <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading">
                         Confirmar
                     </CommonButton>
                 </Form>
@@ -128,10 +115,7 @@
                             placeholder="* * * * * * * *"
                             :rules="validatePasswordRepeat" />
                     </div>
-                    <CommonButton
-                        class="py-2 w-full font-medium"
-                        text-size="xl"
-                        :loading="loading">
+                    <CommonButton class="py-2 w-full font-medium" text-size="xl" :loading="loading">
                         Confirmar
                     </CommonButton>
                 </Form>
@@ -238,17 +222,14 @@ const changePassword = async () => {
     loading.value = true;
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/user/update-password`,
-            {
-                method: "PATCH",
-                credentials: "include",
-                body: {
-                    user_id: userStore.user.user_id,
-                    newPassword: password.value,
-                },
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/user/update-password`, {
+            method: "PATCH",
+            credentials: "include",
+            body: {
+                user_id: userStore.user.user_id,
+                newPassword: password.value,
+            },
+        });
 
         if (response.success) {
             toast.success(response.message);
@@ -267,17 +248,14 @@ const changeEmail = async () => {
     loading.value = true;
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/user/update-email`,
-            {
-                method: "PATCH",
-                credentials: "include",
-                body: {
-                    user_id: userStore.user.user_id,
-                    newEmail: email.value,
-                },
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/user/update-email`, {
+            method: "PATCH",
+            credentials: "include",
+            body: {
+                user_id: userStore.user.user_id,
+                newEmail: email.value,
+            },
+        });
 
         if (response.success) {
             toast.success(response.message);

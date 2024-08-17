@@ -6,13 +6,9 @@
             <div
                 class="grid"
                 style="
-                    grid-template-columns: minmax(60px, max-content) repeat(
-                            7,
-                            minmax(130px, 1fr)
-                        );
+                    grid-template-columns: minmax(60px, max-content) repeat(7, minmax(130px, 1fr));
                 ">
-                <div
-                    class="text-sm font-semibold text-center border-gray-200"></div>
+                <div class="text-sm font-semibold text-center border-gray-200"></div>
                 <div
                     v-for="day in calendarData"
                     :key="day.date"
@@ -20,9 +16,7 @@
                     {{ day.formattedDate }}
                 </div>
                 <template v-if="calendarData.length > 0">
-                    <template
-                        v-for="(timeSlot, index) in timeSlots"
-                        :key="timeSlot.time">
+                    <template v-for="(timeSlot, index) in timeSlots" :key="timeSlot.time">
                         <div
                             class="text-sm font-semibold text-center border-r border-gray-200 py-2 pr-4 text-gray-500">
                             {{ timeSlot.time }}
@@ -33,21 +27,11 @@
                                 :editMode="editMode"
                                 :slotDurationInMinutes="slotDurationInMinutes"
                                 @emptySlotClick="
-                                    emptySlotModal.handleClick(
-                                        day.date,
-                                        timeSlot.time
-                                    )
+                                    emptySlotModal.handleClick(day.date, timeSlot.time)
                                 "
-                                @infoClick="
-                                    (event) =>
-                                        infoEventHandler.handleClick(event)
-                                "
+                                @infoClick="(event) => infoEventHandler.handleClick(event)"
                                 @editClick="
-                                    (event) =>
-                                        editEventHandler.handleClick(
-                                            day.date,
-                                            event
-                                        )
+                                    (event) => editEventHandler.handleClick(day.date, event)
                                 " />
                         </div>
                     </template>

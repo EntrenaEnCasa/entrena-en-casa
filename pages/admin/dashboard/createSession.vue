@@ -4,8 +4,7 @@
             <h3 class="text-xl font-medium">Nueva sesión</h3>
         </div>
         <form v-if="sessionInfo" class="px-5 mx-auto">
-            <div
-                class="flex flex-col sm:flex-row justify-between items-start gap-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                 <div>
                     <span class="font-medium text-sm mb-2">Fecha</span>
                     <input
@@ -17,9 +16,7 @@
                 </div>
                 <div>
                     <span class="font-medium text-sm mb-2">Horario</span>
-                    <ProfessionalDashboardCalendarTimeRange
-                        class="min-w-max"
-                        :isManual="false" />
+                    <ProfessionalDashboardCalendarTimeRange class="min-w-max" :isManual="false" />
                 </div>
             </div>
             <div class="grid space-y-5">
@@ -73,9 +70,7 @@
                         v-show="sessionInfo.modality === 'Presencial'"
                         class="flex flex-col w-full col-span-full">
                         <span class="font-medium text-sm mb-2">Ubicación</span>
-                        <MapsMapboxGeocoder
-                            ref="geocoderRef"
-                            @locationSelected="flyToLocation" />
+                        <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
                         <div
                             class="relative flex justify-center w-full h-full min-h-[250px] lg:min-w-100 mt-5">
                             <MapboxMap
@@ -118,17 +113,11 @@
                 </div>
             </div>
             <div class="flex justify-between my-8">
-                <CommonButton
-                    @click="resetForm"
-                    bg-color="secondary"
-                    class="px-4 py-2">
+                <CommonButton @click="resetForm" bg-color="secondary" class="px-4 py-2">
                     Reiniciar
                 </CommonButton>
 
-                <CommonButton
-                    @click="createSession"
-                    :loading="loadingResponse"
-                    class="px-4 py-2">
+                <CommonButton @click="createSession" :loading="loadingResponse" class="px-4 py-2">
                     Crear sesión
                 </CommonButton>
             </div>
@@ -168,12 +157,8 @@ const getMarkerCoordinates = () => markerCoordinates.value;
 const geocoderRef = ref<CustomGeocoder | null>(null);
 
 const { getReverseGeocodingData } = useGeocoding();
-const {
-    flyTo,
-    teleportTo,
-    calculateDistance,
-    calculateDurationBasedOnDistance,
-} = useMapInteraction(mapRef);
+const { flyTo, teleportTo, calculateDistance, calculateDurationBasedOnDistance } =
+    useMapInteraction(mapRef);
 
 const defaultCoordinates = [-70.6506, -33.4372];
 const onMarkerDragEnd = () => {
@@ -271,19 +256,14 @@ const resetForm = () => {
 
 const validateForm = () => {
     if (!sessionInfo || !sessionInfo.value) return false;
-    const requiredFields: (keyof SessionInfo)[] = [
-        "date",
-        "format",
-        "modality",
-    ];
+    const requiredFields: (keyof SessionInfo)[] = ["date", "format", "modality"];
     for (const field of requiredFields) {
         if (!sessionInfo.value[field]) {
             return false;
         }
     }
 
-    if (professionals.value.length < 1 || !professionals.value[0].user_id)
-        return false;
+    if (professionals.value.length < 1 || !professionals.value[0].user_id) return false;
     return true;
 };
 
@@ -333,17 +313,9 @@ const createSession = async () => {
 };
 
 const setLinkCoordinates = async () => {
-    if (
-        sessionInfo &&
-        sessionInfo.value !== null &&
-        sessionInfo.value.modality === "Presencial"
-    ) {
+    if (sessionInfo && sessionInfo.value !== null && sessionInfo.value.modality === "Presencial") {
         sessionInfo.value.coordinates =
-            "[" +
-            markerCoordinates.value[0] +
-            "," +
-            markerCoordinates.value[1] +
-            "]";
+            "[" + markerCoordinates.value[0] + "," + markerCoordinates.value[1] + "]";
         const link = createGoogleMapsLink(markerCoordinates.value);
         sessionInfo.value.link = link;
     } else {

@@ -1,11 +1,8 @@
 <template>
     <div>
-        <label
-            v-if="label"
-            class="font-medium text-sm mb-2 inline-block"
-            :for="id"
-            >{{ label }}</label
-        >
+        <label v-if="label" class="font-medium text-sm mb-2 inline-block" :for="id">{{
+            label
+        }}</label>
         <div class="flex items-center w-full">
             <div v-if="icon" class="mr-2">
                 <Icon :name="icon" class="text-secondary text-lg" />
@@ -21,17 +18,12 @@
                 <option v-if="placeholder" disabled value="">
                     {{ placeholder }}
                 </option>
-                <option
-                    v-for="option in options"
-                    :key="option.value"
-                    :value="option.value">
+                <option v-for="option in options" :key="option.value" :value="option.value">
                     {{ option.label }}
                 </option>
             </Field>
         </div>
-        <ErrorMessage
-            :name="name"
-            class="block mt-1 rounded-lg text-red-500 text-sm" />
+        <ErrorMessage :name="name" class="block mt-1 rounded-lg text-red-500 text-sm" />
     </div>
 </template>
 

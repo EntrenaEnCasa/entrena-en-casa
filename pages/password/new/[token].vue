@@ -1,21 +1,15 @@
 <template>
     <div class="min-h-screen flex items-center max-w-3xl mx-auto">
-        <div
-            class="w-full flex flex-col justify-center items-center mb-12 gap-6">
+        <div class="w-full flex flex-col justify-center items-center mb-12 gap-6">
             <NuxtLink to="/">
                 <NuxtImg src="/logo.png" class="w-36" alt="logo" />
             </NuxtLink>
             <div
                 v-if="!dataSend"
                 class="w-full flex flex-col justify-center items-center mb-12 gap-4">
-                <h1 class="text-2xl font-bold text-center">
-                    Restablece tu contraseña
-                </h1>
+                <h1 class="text-2xl font-bold text-center">Restablece tu contraseña</h1>
 
-                <Form
-                    class="w-full space-y-5"
-                    @submit="resetPassword"
-                    v-slot="{ meta }">
+                <Form class="w-full space-y-5" @submit="resetPassword" v-slot="{ meta }">
                     <CommonInput
                         label="Contraseña"
                         v-model="formData.password"
@@ -45,18 +39,14 @@
             <div
                 v-else-if="success"
                 class="w-full flex flex-col justify-center items-center mb-12 gap-4">
-                <h1 class="text-2xl font-bold text-center">
-                    ¡Cambio de contraseña exitoso!
-                </h1>
+                <h1 class="text-2xl font-bold text-center">¡Cambio de contraseña exitoso!</h1>
                 <p class="text-gray-500 text-center">
-                    Se ha establecido tu nueva contraseña correctamente, ahora
-                    puedes ingresar a tu cuenta con esta.
+                    Se ha establecido tu nueva contraseña correctamente, ahora puedes ingresar a tu
+                    cuenta con esta.
                 </p>
 
                 <div class="inline-flex bg-primary-50/30 p-12 rounded-full">
-                    <Icon
-                        name="fa6-solid:circle-check"
-                        class="text-primary text-9xl" />
+                    <Icon name="fa6-solid:circle-check" class="text-primary text-9xl" />
                 </div>
                 <CommonButton
                     @click="() => $router.push('/user/auth/login')"
@@ -65,33 +55,20 @@
                     Ir a Inicio de sesión
                 </CommonButton>
             </div>
-            <div
-                v-else
-                class="w-full flex flex-col justify-center items-center mb-12 gap-4">
-                <h1 class="text-2xl font-bold text-center">
-                    ¡Ocurrió un error!
-                </h1>
+            <div v-else class="w-full flex flex-col justify-center items-center mb-12 gap-4">
+                <h1 class="text-2xl font-bold text-center">¡Ocurrió un error!</h1>
                 <p class="text-gray-500 text-center">
-                    No se ha podido establecer tu nueva contraseña. Inténtalo
-                    nuevamente más tarde.
+                    No se ha podido establecer tu nueva contraseña. Inténtalo nuevamente más tarde.
                 </p>
 
                 <div class="inline-flex bg-tertiary-50/30 p-12 rounded-full">
-                    <Icon
-                        name="fa6-solid:circle-exclamation"
-                        class="text-tertiary text-9xl" />
+                    <Icon name="fa6-solid:circle-exclamation" class="text-tertiary text-9xl" />
                 </div>
-                <div
-                    class="w-full inline-flex flex-row justify-center gap-4 mt-6">
-                    <CommonButton
-                        @click="() => $router.push('/')"
-                        class="bg-gray-500 px-4 py-2">
+                <div class="w-full inline-flex flex-row justify-center gap-4 mt-6">
+                    <CommonButton @click="() => $router.push('/')" class="bg-gray-500 px-4 py-2">
                         Volver a Inicio
                     </CommonButton>
-                    <CommonButton
-                        @click="goToWhatsapp"
-                        bg-color="primary"
-                        class="px-4 py-2">
+                    <CommonButton @click="goToWhatsapp" bg-color="primary" class="px-4 py-2">
                         Comunicarse con el administrador
                     </CommonButton>
                 </div>
@@ -155,9 +132,7 @@ const resetPassword = async () => {
         });
 
         if (response.success) {
-            toast.success(
-                "Contraseña actualizada exitosamente. Puedes iniciar sesión."
-            );
+            toast.success("Contraseña actualizada exitosamente. Puedes iniciar sesión.");
             router.push("/user/auth/login");
         } else {
             toast.error(response.message);

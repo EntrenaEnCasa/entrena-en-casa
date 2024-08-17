@@ -1,7 +1,6 @@
 <template>
     <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-        <div
-            class="flex flex-col justify-center items-center mb-12 w-4/5 mx-auto">
+        <div class="flex flex-col justify-center items-center mb-12 w-4/5 mx-auto">
             <NuxtLink to="/">
                 <NuxtImg src="/logo.png" class="mb-4 w-36" alt="logo" />
             </NuxtLink>
@@ -20,13 +19,7 @@
         </div>
         <div
             class="hidden lg:flex items-center justify-center text-center"
-            style="
-                background: linear-gradient(
-                    135deg,
-                    #99d0dfcc 0%,
-                    rgba(0, 129, 183, 0.8) 100%
-                );
-            ">
+            style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.8) 100%)">
             <div class="space-y-10">
                 <div class="mb-4">
                     <h1 class="font-bold text-white text-7xl">
@@ -34,10 +27,7 @@
                         preparado?
                     </h1>
                 </div>
-                <NuxtImg
-                    src="/emoji/runners.svg"
-                    class="w-1/2 mx-auto"
-                    alt="runners" />
+                <NuxtImg src="/emoji/runners.svg" class="w-1/2 mx-auto" alt="runners" />
             </div>
         </div>
     </div>

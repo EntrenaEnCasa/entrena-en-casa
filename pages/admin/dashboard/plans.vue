@@ -26,26 +26,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="plan in data?.plans"
-                        class="border-b"
-                        :key="plan.plan_id">
+                    <tr v-for="plan in data?.plans" class="border-b" :key="plan.plan_id">
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ plan.credit_quantity }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div v-if="plan.credit_type === 'PP'">
-                                Personalizado Presencial
-                            </div>
-                            <div v-else-if="plan.credit_type === 'PO'">
-                                Personalizado Online
-                            </div>
-                            <div v-else-if="plan.credit_type === 'GP'">
-                                Grupal Presencial
-                            </div>
-                            <div v-else-if="plan.credit_type === 'GO'">
-                                Grupal Online
-                            </div>
+                            <div v-if="plan.credit_type === 'PP'">Personalizado Presencial</div>
+                            <div v-else-if="plan.credit_type === 'PO'">Personalizado Online</div>
+                            <div v-else-if="plan.credit_type === 'GP'">Grupal Presencial</div>
+                            <div v-else-if="plan.credit_type === 'GO'">Grupal Online</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ plan.format_credit }}
@@ -55,9 +44,7 @@
                                 {{ formatRegion(region) }}
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {{ plan.expiration_time }} días
-                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ plan.expiration_time }} días</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ plan.formattedPrice }}
                         </td>
@@ -154,12 +141,9 @@ const {
     data,
     pending: plansDataPending,
     error,
-} = await useFetch<planAPIResponse>(
-    `${runtimeConfig.public.apiBase}/admin/plans`,
-    {
-        method: "GET",
-        credentials: "include",
-        lazy: true,
-    }
-);
+} = await useFetch<planAPIResponse>(`${runtimeConfig.public.apiBase}/admin/plans`, {
+    method: "GET",
+    credentials: "include",
+    lazy: true,
+});
 </script>

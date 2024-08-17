@@ -1,7 +1,6 @@
 <template>
     <div>
-        <div
-            class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
             <ProfessionalDashboardCalendarWeekNavigation
                 :currentMonth="currentMonth"
                 :isFetchingData="fetchingEvents"
@@ -14,8 +13,7 @@
                 <p class="font-semibold">Semanal</p>
             </div>
 
-            <div
-                class="flex gap-2 items-center justify-self-center md:justify-self-end">
+            <div class="flex gap-2 items-center justify-self-center md:justify-self-end">
                 <button
                     v-show="!editMode"
                     :disabled="events.length == 0"
@@ -45,9 +43,7 @@
                         <ul class="divide-y divide-gray-200">
                             <li>
                                 <button
-                                    @click="
-                                        newEmptySessionModal.handleClickFromButton
-                                    "
+                                    @click="newEmptySessionModal.handleClickFromButton"
                                     class="w-full px-4 py-2 rounded-t text-sm bg-primary hover:bg-primary-600"
                                     role="menuitem">
                                     Disponibilidad
@@ -67,9 +63,7 @@
             </div>
         </div>
         <div class="my-6 flex items-center">
-            <Icon
-                name="ic:outline-access-time"
-                class="text-2xl text-gray-600 mr-2" />
+            <Icon name="ic:outline-access-time" class="text-2xl text-gray-600 mr-2" />
             <CommonSelect
                 v-model="slotDurationInMinutes"
                 name="duration"
@@ -143,14 +137,8 @@ const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const toast = useToast();
 const { createDate, formatDateToAbbreviatedWeekdayAndDay } = useFormatter();
-const {
-    isStartWeek,
-    goToPreviousWeek,
-    goToNextWeek,
-    currentYear,
-    currentMonth,
-    currentDate,
-} = useWeekNavigation();
+const { isStartWeek, goToPreviousWeek, goToNextWeek, currentYear, currentMonth, currentDate } =
+    useWeekNavigation();
 const { getReverseGeocodingData } = useGeocoding();
 
 const dayNavigationStore = useDayNavigationStore();
@@ -235,18 +223,12 @@ const initializeCalendarData = () => {
 
     const slotsPerDay = 24 * (60 / slotDurationInMinutes.value);
 
-    for (
-        let date = new Date(startOfWeek);
-        date <= endOfWeek;
-        date.setDate(date.getDate() + 1)
-    ) {
+    for (let date = new Date(startOfWeek); date <= endOfWeek; date.setDate(date.getDate() + 1)) {
         const day = {
             date: new Date(date),
             formattedDate: formatDateToAbbreviatedWeekdayAndDay(date),
             timeSlots: Array.from({ length: slotsPerDay }, (_, i) => {
-                const hours = Math.floor(
-                    (i * slotDurationInMinutes.value) / 60
-                );
+                const hours = Math.floor((i * slotDurationInMinutes.value) / 60);
                 const minutes = (i * slotDurationInMinutes.value) % 60;
                 return {
                     time: `${hours.toString().padStart(2, "0")}:${minutes
@@ -276,15 +258,12 @@ const populateCalendar = (events) => {
         // we use createDate to create a Date object from the string date to avoid timezone issues
         const eventDate = createDate(event.date);
 
-        const dayIndex = Math.floor(
-            (eventDate - startOfWeek) / (1000 * 60 * 60 * 24)
-        );
+        const dayIndex = Math.floor((eventDate - startOfWeek) / (1000 * 60 * 60 * 24));
 
-        const { slotIndex: startSlotIndex, offset: startOffset } =
-            getTimeSlotInfo(event.start_time);
-        const { slotIndex: endSlotIndex, offset: endOffset } = getTimeSlotInfo(
-            event.end_time
+        const { slotIndex: startSlotIndex, offset: startOffset } = getTimeSlotInfo(
+            event.start_time
         );
+        const { slotIndex: endSlotIndex, offset: endOffset } = getTimeSlotInfo(event.end_time);
 
         const lastSlotIndex = endOffset === 0 ? endSlotIndex - 1 : endSlotIndex;
 
@@ -332,14 +311,11 @@ const getEvents = async () => {
     };
 
     try {
-        const response = await $fetch(
-            `${runtimeConfig.public.apiBase}/professional/calendar`,
-            {
-                method: "POST",
-                credentials: "include",
-                body: body,
-            }
-        );
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
+            method: "POST",
+            credentials: "include",
+            body: body,
+        });
 
         if (response.success) {
             // populateCalendarData(response.events)
@@ -437,12 +413,8 @@ const newEmptySessionModal = reactive({
             newEmptySessionModal.data.selectedFormat === "Grupal" &&
             newEmptySessionModal.data.selectedModality === "Presencial"
         ) {
-            link = await createGoogleMapsLink(
-                newEmptySessionModal.data.locationCoordinates
-            );
-            coordinates = JSON.stringify(
-                newEmptySessionModal.data.locationCoordinates
-            );
+            link = await createGoogleMapsLink(newEmptySessionModal.data.locationCoordinates);
+            coordinates = JSON.stringify(newEmptySessionModal.data.locationCoordinates);
         } else if (
             newEmptySessionModal.data.selectedFormat === "Personalizado" &&
             newEmptySessionModal.data.selectedModality === "Presencial"
@@ -468,14 +440,11 @@ const newEmptySessionModal = reactive({
         console.log("create new empty session body: ", body);
 
         try {
-            const response = await $fetch(
-                `${runtimeConfig.public.apiBase}/professional/session`,
-                {
-                    method: "POST",
-                    credentials: "include",
-                    body: body,
-                }
-            );
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session`, {
+                method: "POST",
+                credentials: "include",
+                body: body,
+            });
 
             if (response.success) {
                 getEvents();
@@ -561,20 +530,15 @@ const newEventModal = reactive({
 
             if (
                 newEventModal.data.manualSession.selectedFormat === "Grupal" &&
-                newEventModal.data.manualSession.selectedModality ===
-                    "Presencial"
+                newEventModal.data.manualSession.selectedModality === "Presencial"
             ) {
                 link = await createGoogleMapsLink(
                     newEventModal.data.manualSession.locationCoordinates
                 );
-                coordinates = JSON.stringify(
-                    newEventModal.data.manualSession.locationCoordinates
-                );
+                coordinates = JSON.stringify(newEventModal.data.manualSession.locationCoordinates);
             } else if (
-                newEventModal.data.manualSession.selectedFormat ===
-                    "Personalizado" &&
-                newEventModal.data.manualSession.selectedModality ===
-                    "Presencial"
+                newEventModal.data.manualSession.selectedFormat === "Personalizado" &&
+                newEventModal.data.manualSession.selectedModality === "Presencial"
             ) {
                 link = "";
                 coordinates = null;
@@ -706,8 +670,7 @@ const editEmptySessionModal = reactive({
     },
     handleClick: (day, event) => {
         editEmptySessionModal.data.selectedFormat = event.session_info.format;
-        editEmptySessionModal.data.selectedModality =
-            event.session_info.modality;
+        editEmptySessionModal.data.selectedModality = event.session_info.modality;
         editEmptySessionModal.data.link = event.session_info.link;
         editEmptySessionModal.data.event = event;
         editEmptySessionModal.data.clients = [...event.clients];
@@ -717,9 +680,7 @@ const editEmptySessionModal = reactive({
     updateSession: async () => {
         editEmptySessionModal.data.updateSessionLoading = true;
         const event = editEmptySessionModal.data.event;
-        const clientsIDs = editEmptySessionModal.data.clients.map(
-            (client) => client.user_id
-        );
+        const clientsIDs = editEmptySessionModal.data.clients.map((client) => client.user_id);
 
         let link;
         let coordinates;
@@ -728,12 +689,8 @@ const editEmptySessionModal = reactive({
             editEmptySessionModal.data.selectedFormat === "Grupal" &&
             editEmptySessionModal.data.selectedModality === "Presencial"
         ) {
-            link = await createGoogleMapsLink(
-                editEmptySessionModal.data.locationCoordinates
-            );
-            coordinates = JSON.stringify(
-                editEmptySessionModal.data.locationCoordinates
-            );
+            link = await createGoogleMapsLink(editEmptySessionModal.data.locationCoordinates);
+            coordinates = JSON.stringify(editEmptySessionModal.data.locationCoordinates);
         } else if (
             editEmptySessionModal.data.selectedFormat === "Personalizado" &&
             editEmptySessionModal.data.selectedModality === "Presencial"
@@ -758,14 +715,11 @@ const editEmptySessionModal = reactive({
         };
 
         try {
-            const response = await $fetch(
-                `${runtimeConfig.public.apiBase}/professional/session`,
-                {
-                    method: "PUT",
-                    credentials: "include",
-                    body: body,
-                }
-            );
+            const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session`, {
+                method: "PUT",
+                credentials: "include",
+                body: body,
+            });
 
             if (response.success) {
                 toast.success(response.message);
@@ -835,8 +789,7 @@ const editManualSessionModal = reactive({
         editManualSessionModal.data.selectedEventType = event.type;
         editManualSessionModal.data.clients = [...event.clients]; // Create a new array
         editManualSessionModal.data.selectedFormat = event.session_info.format;
-        editManualSessionModal.data.selectedModality =
-            event.session_info.modality;
+        editManualSessionModal.data.selectedModality = event.session_info.modality;
         editManualSessionModal.data.link = event.session_info.link;
         editManualSessionModal.data.event = event;
         updateCurrentlySelectedDate(day, event.start_time);
@@ -855,9 +808,7 @@ const editManualSessionModal = reactive({
             format: editManualSessionModal.data.selectedFormat,
             modality: editManualSessionModal.data.selectedModality,
             link: editManualSessionModal.data.link,
-            clients: editManualSessionModal.data.clients.map(
-                (client) => client.user_id
-            ),
+            clients: editManualSessionModal.data.clients.map((client) => client.user_id),
         };
 
         try {
@@ -949,9 +900,7 @@ const editPersonalEventModal = reactive({
             start_time: formattedStartTime.value,
             end_time: formattedEndTime.value,
             info: editPersonalEventModal.data.additionalInfo,
-            clients: editPersonalEventModal.data.clients.map(
-                (client) => client.user_id
-            ),
+            clients: editPersonalEventModal.data.clients.map((client) => client.user_id),
             type: "personal",
         };
 

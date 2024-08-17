@@ -22,17 +22,12 @@ export const useDayNavigationStore = defineStore({
             });
         },
         isFirstDayOfWeek(state) {
-            return (
-                state.selectedDate.toDateString() === state.today.toDateString()
-            );
+            return state.selectedDate.toDateString() === state.today.toDateString();
         },
         isLastDayOfWeek(state) {
             const lastDayOfWeek = new Date(state.today);
             lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
-            return (
-                state.selectedDate.toDateString() ===
-                lastDayOfWeek.toDateString()
-            );
+            return state.selectedDate.toDateString() === lastDayOfWeek.toDateString();
         },
     },
     actions: {

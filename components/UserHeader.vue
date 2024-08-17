@@ -26,10 +26,7 @@
                 </div>
                 <div class="hidden lg:block">
                     <router-link to="/" class="flex ml-3">
-                        <NuxtImg
-                            src="/logo-horizontal.png"
-                            class="h-8"
-                            alt="Logo" />
+                        <NuxtImg src="/logo-horizontal.png" class="h-8" alt="Logo" />
                     </router-link>
                 </div>
                 <div class="flex items-center">
@@ -38,19 +35,11 @@
                             <div class="text-right hidden sm:block">
                                 <p class="font-medium">{{ user.email }}</p>
 
-                                <p
-                                    v-if="user.user_type == 2"
-                                    class="font-light text-sm">
-                                    Alumno
-                                </p>
-                                <p
-                                    v-if="user.user_type == 1"
-                                    class="font-light text-sm">
+                                <p v-if="user.user_type == 2" class="font-light text-sm">Alumno</p>
+                                <p v-if="user.user_type == 1" class="font-light text-sm">
                                     Profesional
                                 </p>
-                                <p
-                                    v-if="user.user_type == 0"
-                                    class="font-light text-sm">
+                                <p v-if="user.user_type == 0" class="font-light text-sm">
                                     Administrador
                                 </p>
                             </div>
@@ -74,9 +63,7 @@
                             :class="{ hidden: !userMenuOpen }"
                             id="dropdown-user">
                             <div class="px-4 py-3" role="none">
-                                <p
-                                    class="text-sm font-medium text-gray-900 truncate"
-                                    role="none">
+                                <p class="text-sm font-medium text-gray-900 truncate" role="none">
                                     {{ user.email }}
                                 </p>
                             </div>

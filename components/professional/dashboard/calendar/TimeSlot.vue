@@ -9,9 +9,7 @@
             :disabled="editMode"
             @click="$emit('emptySlotClick')">
             <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
-                <Icon
-                    name="fa6-solid:square-plus"
-                    class="text-3xl text-gray-300" />
+                <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
             </div>
         </button>
         <button
@@ -28,12 +26,8 @@
                 class="flex justify-center items-center text-white">
                 <Icon
                     :name="editMode ? 'fa6-solid:pen-to-square' : 'mdi:eye'"
-                    :class="
-                        editMode ? 'text-xl text-white' : 'text-lg text-white'
-                    " />
-                <span class="ml-1.5 text-sm">{{
-                    editMode ? "Editar" : "Ver detalles"
-                }}</span>
+                    :class="editMode ? 'text-xl text-white' : 'text-lg text-white'" />
+                <span class="ml-1.5 text-sm">{{ editMode ? "Editar" : "Ver detalles" }}</span>
             </div>
         </button>
     </div>

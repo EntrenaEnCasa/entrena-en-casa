@@ -30,10 +30,7 @@
                     v-if="isManual"
                     v-model="selectedEndHour"
                     class="border text-gray-800 bg-white text-sm rounded-md px-4 py-3 outline-primary">
-                    <option
-                        v-for="hour in endHourOptions"
-                        :key="`end-hour-${hour}`"
-                        :value="hour">
+                    <option v-for="hour in endHourOptions" :key="`end-hour-${hour}`" :value="hour">
                         {{ hour }}
                     </option>
                 </select>

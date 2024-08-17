@@ -1,15 +1,13 @@
 <template>
-    <div
-        class="flex flex-col items-center justify-center text-center min-h-[calc(100vh_-_5.0rem)]">
+    <div class="flex flex-col items-center justify-center text-center min-h-[calc(100vh_-_5.0rem)]">
         <div v-if="!userStore.user.verified" class="max-w-3xl px-6">
             <template v-if="!emailSent">
                 <h2 class="font-semibold text-3xl text-zinc-700 mb-2">
-                    Para disfrutar de todas las características de Entrena en
-                    Casa, ¡Debes verificar tu email!
+                    Para disfrutar de todas las características de Entrena en Casa, ¡Debes verificar
+                    tu email!
                 </h2>
                 <p class="mb-5 max-w-xl mx-auto">
-                    Cuando presiones el botón, te enviarémos un correo de
-                    verificación.
+                    Cuando presiones el botón, te enviarémos un correo de verificación.
                 </p>
                 <div class="inline-flex flex-col gap-2">
                     <CommonButton
@@ -23,9 +21,7 @@
                         v-if="sendVerificationEmailError"
                         @click="goToWhatsapp"
                         class="px-4 py-2">
-                        <Icon
-                            name="ic:baseline-whatsapp"
-                            class="mb-0.5 text-2xl" />
+                        <Icon name="ic:baseline-whatsapp" class="mb-0.5 text-2xl" />
                         Hablar con soporte
                     </CommonButton>
                 </div>
@@ -36,8 +32,7 @@
                     ¡Correo de verificación enviado!
                 </h2>
                 <p class="mb-5 max-w-xl mx-auto">
-                    Revisa tu bandeja de entrada y sigue las instrucciones para
-                    verificar tu correo.
+                    Revisa tu bandeja de entrada y sigue las instrucciones para verificar tu correo.
                 </p>
             </template>
         </div>
@@ -46,12 +41,9 @@
                 ¡Tu cuenta ya ha sido verificada!
             </h2>
             <p class="mb-5 max-w-xl mx-auto">
-                ¡Ya puedes disfrutar de todas las características de Entrena en
-                Casa!
+                ¡Ya puedes disfrutar de todas las características de Entrena en Casa!
             </p>
-            <CommonButton
-                @click="() => $router.push('/user/dashboard/home')"
-                class="px-5 py-2">
+            <CommonButton @click="() => $router.push('/user/dashboard/home')" class="px-5 py-2">
                 Ir a inicio
             </CommonButton>
         </div>

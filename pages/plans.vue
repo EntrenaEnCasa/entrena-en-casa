@@ -1,9 +1,7 @@
 <template>
     <div class="min-h-[calc(100vh_-_5rem)] py-10 bg-gradiente">
         <div class="max-w-6xl mx-auto w-11/12">
-            <h2 class="text-4xl tellural text-center font-bold mb-10">
-                Nuestros planes
-            </h2>
+            <h2 class="text-4xl tellural text-center font-bold mb-10">Nuestros planes</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mx-auto mb-10">
                 <CommonSelect
                     label="Región"
@@ -29,20 +27,16 @@
             </div>
             <div v-else-if="error">Hubo un error al obtener los planes</div>
             <div v-else-if="plansResponse.plans.length === 0">
-                No hay planes disponibles para la región, formato y modalidad
-                seleccionada
+                No hay planes disponibles para la región, formato y modalidad seleccionada
             </div>
-            <div
-                v-else
-                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div
                     v-for="plan in plansResponse.plans"
                     class="bg-white p-8 rounded-xl shadow flex flex-col items-center space-y-5">
                     <h3 class="text-3xl text-secondary font-semibold">
                         {{ plan.formattedPrice }}
                     </h3>
-                    <h4
-                        class="text-2xl text-gray-800 font-semibold text-center">
+                    <h4 class="text-2xl text-gray-800 font-semibold text-center">
                         Plan de {{ plan.credit_quantity }} sesiones
                         {{
                             format === "Individual"
@@ -59,30 +53,21 @@
                         <li class="flex gap-2">
                             <div
                                 class="min-w-6 min-h-6 w-6 h-6 rounded-full bg-secondary-50/40 flex items-center justify-center">
-                                <Icon
-                                    name="mingcute:check-fill"
-                                    class="text-secondary" />
+                                <Icon name="mingcute:check-fill" class="text-secondary" />
                             </div>
-                            <p>
-                                Entrenamiento con Personal Trainer el 100% de la
-                                sesión
-                            </p>
+                            <p>Entrenamiento con Personal Trainer el 100% de la sesión</p>
                         </li>
                         <li class="flex gap-2">
                             <div
                                 class="min-w-6 min-h-6 w-6 h-6 rounded-full bg-secondary-50/40 flex items-center justify-center">
-                                <Icon
-                                    name="mingcute:check-fill"
-                                    class="text-secondary" />
+                                <Icon name="mingcute:check-fill" class="text-secondary" />
                             </div>
                             <p>Horario a convenir</p>
                         </li>
                         <li class="flex gap-2">
                             <div
                                 class="min-w-6 min-h-6 w-6 h-6 rounded-full bg-secondary-50/40 flex items-center justify-center">
-                                <Icon
-                                    name="mingcute:check-fill"
-                                    class="text-secondary" />
+                                <Icon name="mingcute:check-fill" class="text-secondary" />
                             </div>
                             <p>
                                 {{
@@ -95,9 +80,7 @@
                             </p>
                         </li>
                     </ul>
-                    <CommonButton
-                        class="w-full px-4 py-2 bg-primary-500"
-                        rounded-size="full">
+                    <CommonButton class="w-full px-4 py-2 bg-primary-500" rounded-size="full">
                         Hablar con ventas
                     </CommonButton>
                 </div>

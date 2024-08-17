@@ -6,13 +6,9 @@
                     <ProfessionalDashboardCalendarDayNavigation />
                     <form action="">
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
-                            <label
-                                class="flex flex-col items-center col-span-2">
-                                <span class="font-medium text-sm mb-2"
-                                    >Horario</span
-                                >
-                                <ProfessionalDashboardCalendarTimeRange
-                                    :isManual="true" />
+                            <label class="flex flex-col items-center col-span-2">
+                                <span class="font-medium text-sm mb-2">Horario</span>
+                                <ProfessionalDashboardCalendarTimeRange :isManual="true" />
                             </label>
                             <label class="w-full flex flex-col col-span-2">
                                 <label class="w-full flex flex-col col-span-2">
@@ -21,9 +17,7 @@
                                     >
                                     <ProfessionalDashboardCalendarClientSearchInput
                                         v-model:clients="modal.data.clients"
-                                        :selectedFormat="
-                                            modal.data.selectedFormat
-                                        " />
+                                        :selectedFormat="modal.data.selectedFormat" />
                                 </label>
                             </label>
 

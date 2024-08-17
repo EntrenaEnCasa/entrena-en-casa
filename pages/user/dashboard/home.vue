@@ -7,15 +7,11 @@
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
                 <div class="mb-5 flex justify-between items-center">
                     <h5 class="text-lg text-[#949494]">Últimas sesiones</h5>
-                    <p class="text-right text-sm font-medium text-gray-800">
-                        Ver todas
-                    </p>
+                    <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
                 <CommonLoading v-if="futureSessionsLoading" />
                 <div v-else-if="futureSessions && futureSessions.success">
-                    <div
-                        v-for="session in futureSessions.sessions"
-                        :key="session.session_id">
+                    <div v-for="session in futureSessions.sessions" :key="session.session_id">
                         <hr class="my-5" />
                         <div class="grid grid-cols-3 items-center">
                             <div>{{ session.time }}hrs</div>
@@ -31,9 +27,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="text-[#949494]">
-                        No tienes ninguna sesión a futuro.
-                    </div>
+                    <div class="text-[#949494]">No tienes ninguna sesión a futuro.</div>
                 </div>
             </div>
             <!-- </div> -->
@@ -42,15 +36,11 @@
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
                 <div class="mb-5 flex justify-between items-center">
                     <h5 class="text-lg text-[#949494]">Próximas sesiones</h5>
-                    <p class="text-right text-sm font-medium text-gray-800">
-                        Ver todas
-                    </p>
+                    <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
                 <CommonLoading v-if="pastSessionsLoading" />
                 <div v-else-if="pastSessions && pastSessions.success">
-                    <div
-                        v-for="session in pastSessions.sessions"
-                        :key="session.session_id">
+                    <div v-for="session in pastSessions.sessions" :key="session.session_id">
                         <hr class="my-5" />
                         <div class="grid grid-cols-3 items-center">
                             <div>{{ session.time }}hrs</div>
@@ -66,9 +56,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="text-[#949494]">
-                        No has participado de ninguna sesión.
-                    </div>
+                    <div class="text-[#949494]">No has participado de ninguna sesión.</div>
                 </div>
             </div>
         </div>
@@ -80,9 +68,7 @@
                     <h5 class="text-lg text-[#949494]">Estadísticas</h5>
                 </div>
                 <div class="mt-5">
-                    <p class="text-[#949494]">
-                        No hay estadísticas disponibles actualmente.
-                    </p>
+                    <p class="text-[#949494]">No hay estadísticas disponibles actualmente.</p>
                 </div>
             </div>
         </div>

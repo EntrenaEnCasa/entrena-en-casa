@@ -9,10 +9,9 @@
                         class="text-4xl text-black mb-4 tellural font-bold w-full mx-auto lg:mx-0 lg:w-4/5">
                         Personal Trainers Online, Domicilio y al aire libre
                     </h1>
-                    <p
-                        class="text-center lg:text-left text-gray-500 mb-4 w-full lg:w-4/5">
-                        Entrenando donde y cuando quieras, un entrenamiento y
-                        nutrición personalizada. ¿Listo para un cambio?
+                    <p class="text-center lg:text-left text-gray-500 mb-4 w-full lg:w-4/5">
+                        Entrenando donde y cuando quieras, un entrenamiento y nutrición
+                        personalizada. ¿Listo para un cambio?
                     </p>
 
                     <div>
@@ -29,9 +28,7 @@
                                 class="flex items-center space-x-2">
                                 <div
                                     class="rounded-full shadow-lg text-secondary h-12 w-12 font-medium bg-white flex justify-center items-center">
-                                    <Icon
-                                        name="fa6-solid:play"
-                                        class="ml-1 text-xl" />
+                                    <Icon name="fa6-solid:play" class="ml-1 text-xl" />
                                 </div>
                                 <span class="text-secondary">Ver video</span>
                             </NuxtLink>
@@ -66,29 +63,22 @@
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                     <div class="w-full flex items-center gap-2">
                         <div>
-                            <Icon
-                                name="fa6-solid:location-dot"
-                                class="text-3xl w-16 min-w-16" />
+                            <Icon name="fa6-solid:location-dot" class="text-3xl w-16 min-w-16" />
                         </div>
                         <div class="flex flex-col leading-tight">
                             <h4 class="font-semibold mb-1">Modalidad</h4>
-                            <p class="text-sm">
-                                Online o presencial, tu escoges
-                            </p>
+                            <p class="text-sm">Online o presencial, tu escoges</p>
                         </div>
                     </div>
                     <div class="w-full flex items-center gap-2">
                         <div>
-                            <Icon
-                                name="fa6-solid:dumbbell"
-                                class="text-3xl w-16" />
+                            <Icon name="fa6-solid:dumbbell" class="text-3xl w-16" />
                         </div>
 
                         <div class="flex flex-col leading-tight">
                             <p class="font-semibold mb-1">Modalidad</p>
                             <p class="text-sm">
-                                Programa tus propias sesiones, ve a tu propio
-                                ritmo
+                                Programa tus propias sesiones, ve a tu propio ritmo
                             </p>
                         </div>
                     </div>
@@ -99,9 +89,7 @@
 
                         <div class="flex flex-col leading-tight">
                             <p class="font-semibold mb-1">Modalidad</p>
-                            <p class="text-sm">
-                                Entrena tanto individual como grupal
-                            </p>
+                            <p class="text-sm">Entrena tanto individual como grupal</p>
                         </div>
                     </div>
                     <div class="flex items-center justify-center mx-auto">

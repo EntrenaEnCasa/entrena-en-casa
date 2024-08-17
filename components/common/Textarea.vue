@@ -1,11 +1,8 @@
 <template>
     <div>
-        <label
-            v-if="label"
-            class="font-medium text-sm mb-2 inline-block"
-            :for="id"
-            >{{ label }}</label
-        >
+        <label v-if="label" class="font-medium text-sm mb-2 inline-block" :for="id">{{
+            label
+        }}</label>
         <div class="flex items-center w-full">
             <div
                 class="border text-gray-800 text-sm rounded-md w-full flex px-5 py-3.5 focus-within:ring-2 focus-within:ring-primary">
@@ -29,9 +26,7 @@
                 </div>
             </div>
         </div>
-        <ErrorMessage
-            :name="name"
-            class="block mt-1 rounded-lg text-red-500 text-sm" />
+        <ErrorMessage :name="name" class="block mt-1 rounded-lg text-red-500 text-sm" />
     </div>
 </template>
 

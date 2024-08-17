@@ -23,16 +23,13 @@ export default defineEventHandler(async (event) => {
     );
 
     try {
-        const response = await $fetch(
-            `${config.flowHosting}/api/payment/getStatusByFlowOrder`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                query: queryParams,
-            }
-        );
+        const response = await $fetch(`${config.flowHosting}/api/payment/getStatusByFlowOrder`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            query: queryParams,
+        });
 
         console.log("get status response");
         console.log(response);

@@ -51,8 +51,7 @@ export default defineEventHandler(async (event) => {
         setResponseStatus(event, 400);
         return {
             success: false,
-            message:
-                "Hubo un error al la información del plan. Intente nuevamente.",
+            message: "Hubo un error al la información del plan. Intente nuevamente.",
         };
     }
 
@@ -77,14 +76,11 @@ export default defineEventHandler(async (event) => {
     console.log(formData);
 
     try {
-        const response = await $fetch<FlowResponse>(
-            `${config.flowHosting}/api/payment/create`,
-            {
-                method: "POST",
-                body: formData,
-                redirect: "follow",
-            }
-        );
+        const response = await $fetch<FlowResponse>(`${config.flowHosting}/api/payment/create`, {
+            method: "POST",
+            body: formData,
+            redirect: "follow",
+        });
 
         const redirectUrl = `${response.url}?token=${response.token}`;
 

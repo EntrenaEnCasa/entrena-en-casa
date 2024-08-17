@@ -3,26 +3,18 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 w-11/12 mx-auto">
             <div class="order-last lg:order-none col-span-2">
                 <div class="flex flex-col gap-8 w-11/12 mx-auto">
-                    <div
-                        class="px-6 py-4 border mx-auto bg-white relative w-full">
-                        <p class="font-semibold tracking-[.2rem]">
-                            ENTRENAMIENTO FUNCIONAL
-                        </p>
-                        <p
-                            class="font-semibold text-sm"
-                            style="letter-spacing: 0.15rem">
+                    <div class="px-6 py-4 border mx-auto bg-white relative w-full">
+                        <p class="font-semibold tracking-[.2rem]">ENTRENAMIENTO FUNCIONAL</p>
+                        <p class="font-semibold text-sm" style="letter-spacing: 0.15rem">
                             BORDE COSTERO
                         </p>
                         <p class="text-center my-3">
-                            Entrenamiento una vez por semana de forma grupal por
-                            un mes
+                            Entrenamiento una vez por semana de forma grupal por un mes
                             <br />
                             Cada sábado a las 12:00hrs
                         </p>
-                        <div
-                            class="flex flex-col items-center md:flex-row md:justify-between">
-                            <p
-                                class="italic text-center md:text-left text-secondary mb-3">
+                        <div class="flex flex-col items-center md:flex-row md:justify-between">
+                            <p class="italic text-center md:text-left text-secondary mb-3">
                                 Apto para todo tipo de personas
                             </p>
                             <CommonButton class="tellural py-1 px-3 rounded-md">
@@ -37,11 +29,8 @@
                             </span>
                         </div>
                     </div>
-                    <div
-                        class="px-4 py-3 border mx-auto bg-white relative w-full">
-                        <p class="font-semibold tracking-[.2rem]">
-                            PLAN PERSONALIZADO ONLINE
-                        </p>
+                    <div class="px-4 py-3 border mx-auto bg-white relative w-full">
+                        <p class="font-semibold tracking-[.2rem]">PLAN PERSONALIZADO ONLINE</p>
                         <p class="text-center my-3">
                             Entrenamiento dos veces por semana por un mes
                             <br />
@@ -49,8 +38,7 @@
                             <br />
                             Modalidad <span class="text-secondary">online</span>
                         </p>
-                        <div
-                            class="flex justify-center md:justify-end text-secondary">
+                        <div class="flex justify-center md:justify-end text-secondary">
                             <CommonButton class="tellural py-1 px-3 rounded-md">
                                 Contratar
                             </CommonButton>
@@ -64,19 +52,12 @@
                         </div>
                         <div
                             class="text-center mt-2 md:mt-0 md:absolute md:top-[15%] md:right-[8px] md:translate-y-full">
-                            <span class="tellural text-secondary">
-                                $14.000/sesión
-                            </span>
+                            <span class="tellural text-secondary"> $14.000/sesión </span>
                         </div>
                     </div>
-                    <div
-                        class="px-4 py-3 border mx-auto bg-white relative w-full">
-                        <p class="font-semibold tracking-[.2rem]">
-                            PLAN PERSONALIZADO INDIVIDUAL
-                        </p>
-                        <p
-                            class="font-semibold text-sm"
-                            style="letter-spacing: 0.15rem">
+                    <div class="px-4 py-3 border mx-auto bg-white relative w-full">
+                        <p class="font-semibold tracking-[.2rem]">PLAN PERSONALIZADO INDIVIDUAL</p>
+                        <p class="font-semibold text-sm" style="letter-spacing: 0.15rem">
                             VIÑA DEL MAR
                         </p>
                         <p class="text-center my-3">
@@ -87,8 +68,7 @@
                             Modalidad
                             <span class="text-secondary">presencial</span>
                         </p>
-                        <div
-                            class="flex justify-center md:justify-end text-secondary">
+                        <div class="flex justify-center md:justify-end text-secondary">
                             <CommonButton class="tellural py-1 px-3 rounded-md">
                                 Contratar
                             </CommonButton>
@@ -102,9 +82,7 @@
                         </div>
                         <div
                             class="text-center mt-2 md:mt-0 md:absolute md:top-[15%] md:right-[8px] md:translate-y-full">
-                            <span class="tellural text-secondary">
-                                $17.500/sesión
-                            </span>
+                            <span class="tellural text-secondary"> $17.500/sesión </span>
                         </div>
                     </div>
                 </div>
@@ -115,9 +93,7 @@
                 <h5 class="text-4xl font-medium">Nuestros planes</h5>
                 <p class="text-sm tracking-[.2rem]">MÁS VENDIDOS</p>
                 <NuxtImg src=" /home/runner.png" alt="" width="350" />
-                <router-link
-                    to="/"
-                    class="bg-primary text-white px-2 py-2 tellural"
+                <router-link to="/" class="bg-primary text-white px-2 py-2 tellural"
                     >Ver todos los planes</router-link
                 >
             </div>

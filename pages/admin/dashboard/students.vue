@@ -7,8 +7,7 @@
         <div
             v-show="!studentsLoading && data && data.success"
             class="overflow-x-auto shadow-md sm:rounded-lg">
-            <table
-                class="bg-white w-full table-auto text-sm text-left text-gray-500">
+            <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                     <tr>
                         <th scope="col" class="p-6">Nombre</th>
@@ -18,10 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="student in data?.students"
-                        class="border-b"
-                        :key="student.user_id">
+                    <tr v-for="student in data?.students" class="border-b" :key="student.user_id">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div v-if="student.first_name">
                                 {{ student.first_name }}
@@ -123,14 +119,11 @@ const {
     pending: studentsLoading,
     error,
     refresh: getStudents,
-} = await useFetch<StudentResponse>(
-    `${runtimeConfig.public.apiBase}/admin/students`,
-    {
-        method: "GET",
-        credentials: "include",
-        lazy: true,
-    }
-);
+} = await useFetch<StudentResponse>(`${runtimeConfig.public.apiBase}/admin/students`, {
+    method: "GET",
+    credentials: "include",
+    lazy: true,
+});
 
 const getPastSessions = async (student: Student) => {
     pastSessionsLoading.value = true;

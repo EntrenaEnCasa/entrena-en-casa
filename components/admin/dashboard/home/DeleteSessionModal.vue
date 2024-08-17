@@ -4,12 +4,8 @@ type: Object,
         <Teleport to="body">
             <CommonModal ref="modal">
                 <div class="w-full p-5 text-center">
-                    <h1 class="text-2xl font-bold">
-                        ¿De verdad quieres eliminar esta sesión?
-                    </h1>
-                    <p class="text-gray-500 mt-2">
-                        Esta acción no puede ser revertida
-                    </p>
+                    <h1 class="text-2xl font-bold">¿De verdad quieres eliminar esta sesión?</h1>
+                    <p class="text-gray-500 mt-2">Esta acción no puede ser revertida</p>
                 </div>
                 <table
                     class="bg-white table-auto text-sm text-center mx-auto mb-2"
@@ -23,44 +19,31 @@ type: Object,
                     <tbody>
                         <tr>
                             <td class="px-6 py-2">
-                                <div
-                                    class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
-                                    <p class="font-light text-right">
-                                        Profesional
-                                    </p>
+                                <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
+                                    <p class="font-light text-right">Profesional</p>
                                     <p class="font-bold text-left">
-                                        {{
-                                            sessionInfo.professional.first_name
-                                        }}
+                                        {{ sessionInfo.professional.first_name }}
                                         {{ sessionInfo.professional.last_name }}
                                         - {{ sessionInfo.professional.title }}
                                     </p>
                                 </div>
-                                <div
-                                    class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
+                                <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
                                     <p class="font-light text-right">Fecha</p>
                                     <p class="font-bold text-left">
                                         {{ sessionInfo.date }}
                                     </p>
                                 </div>
-                                <div
-                                    class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
+                                <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
                                     <p class="font-light text-right">Hora</p>
-                                    <p class="font-bold text-left">
-                                        {{ sessionInfo.time }} hrs
-                                    </p>
+                                    <p class="font-bold text-left">{{ sessionInfo.time }} hrs</p>
                                 </div>
-                                <div
-                                    class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
-                                    <p class="font-light text-right">
-                                        Modalidad
-                                    </p>
+                                <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
+                                    <p class="font-light text-right">Modalidad</p>
                                     <p class="font-bold text-left">
                                         {{ sessionInfo.modality }}
                                     </p>
                                 </div>
-                                <div
-                                    class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
+                                <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
                                     <p class="font-light text-right">Formato</p>
                                     <p class="font-bold text-left">
                                         {{ sessionInfo.format }}
@@ -69,9 +52,7 @@ type: Object,
                                 <div
                                     class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5"
                                     v-if="sessionInfo.students.length > 0">
-                                    <p class="font-light text-right">
-                                        Estudiante(s)
-                                    </p>
+                                    <p class="font-light text-right">Estudiante(s)</p>
                                     <div>
                                         <p
                                             v-for="student in sessionInfo.students"

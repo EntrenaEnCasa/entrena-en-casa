@@ -6,63 +6,43 @@
                     <ProfessionalDashboardCalendarDayNavigation />
                     <form action="">
                         <div class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
-                            <label
-                                class="flex flex-col items-center col-span-2">
-                                <span class="font-medium text-sm mb-2"
-                                    >Horario</span
-                                >
-                                <ProfessionalDashboardCalendarTimeRange
-                                    :isManual="false" />
+                            <label class="flex flex-col items-center col-span-2">
+                                <span class="font-medium text-sm mb-2">Horario</span>
+                                <ProfessionalDashboardCalendarTimeRange :isManual="false" />
                             </label>
                             <div class="col-span-2">
                                 <label class="w-full flex flex-col">
-                                    <span class="font-medium text-sm mb-2"
-                                        >Clientes</span
-                                    >
+                                    <span class="font-medium text-sm mb-2">Clientes</span>
                                     <ProfessionalDashboardCalendarClientSearchInput
                                         v-model:clients="modal.data.clients"
-                                        :selectedFormat="
-                                            modal.data.selectedFormat
-                                        " />
+                                        :selectedFormat="modal.data.selectedFormat" />
                                 </label>
                             </div>
 
                             <div class="grid gap-6 md:grid-cols-2 col-span-2">
                                 <label class="flex flex-col">
-                                    <span class="font-medium text-sm mb-2"
-                                        >Formato</span
-                                    >
+                                    <span class="font-medium text-sm mb-2">Formato</span>
                                     <select
                                         v-model="modal.data.selectedFormat"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
-                                        <option value="Personalizado">
-                                            Personalizado
-                                        </option>
+                                        <option value="Personalizado">Personalizado</option>
                                         <option value="Grupal">Grupal</option>
                                     </select>
                                 </label>
                                 <label class="flex flex-col">
-                                    <span class="font-medium text-sm mb-2"
-                                        >Modalidad</span
-                                    >
+                                    <span class="font-medium text-sm mb-2">Modalidad</span>
                                     <select
                                         v-model="modal.data.selectedModality"
                                         class="border text-gray-800 bg-white text-sm rounded-md w-full px-5 py-3.5 outline-primary">
                                         <option value="Online">Online</option>
-                                        <option value="Presencial">
-                                            Presencial
-                                        </option>
+                                        <option value="Presencial">Presencial</option>
                                     </select>
                                 </label>
                             </div>
                             <label
-                                v-show="
-                                    modal.data.selectedModality === 'Online'
-                                "
+                                v-show="modal.data.selectedModality === 'Online'"
                                 class="w-full flex flex-col col-span-2">
-                                <span class="font-medium text-sm mb-2"
-                                    >Link</span
-                                >
+                                <span class="font-medium text-sm mb-2">Link</span>
                                 <input
                                     v-model="modal.data.link"
                                     type="text"
@@ -70,13 +50,9 @@
                                     class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary" />
                             </label>
                             <div
-                                v-show="
-                                    modal.data.selectedModality === 'Presencial'
-                                "
+                                v-show="modal.data.selectedModality === 'Presencial'"
                                 class="flex flex-col col-span-full">
-                                <span class="font-medium text-sm mb-2"
-                                    >Ubicación</span
-                                >
+                                <span class="font-medium text-sm mb-2">Ubicación</span>
                                 <MapsMapboxGeocoder
                                     ref="geocoderRef"
                                     @locationSelected="flyToLocation" />
@@ -196,12 +172,8 @@ const modalRef = ref<Modal | null>(null);
 const geocoderRef = ref<CustomGeocoder | null>(null);
 
 const { getReverseGeocodingData } = useGeocoding();
-const {
-    flyTo,
-    teleportTo,
-    calculateDistance,
-    calculateDurationBasedOnDistance,
-} = useMapInteraction(mapRef);
+const { flyTo, teleportTo, calculateDistance, calculateDurationBasedOnDistance } =
+    useMapInteraction(mapRef);
 
 const onMarkerDragEnd = () => {
     const coordinates = markerRef.value.getLngLat().toArray();

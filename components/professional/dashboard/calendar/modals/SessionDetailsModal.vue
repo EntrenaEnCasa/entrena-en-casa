@@ -1,17 +1,14 @@
 <template>
     <CommonModal ref="modalRef">
         <div class="p-6 text-center">
-            <h2 class="text-2xl font-semibold mb-4">
-                Información de la sesión
-            </h2>
+            <h2 class="text-2xl font-semibold mb-4">Información de la sesión</h2>
             <p class="text-lg font-medium">
                 {{ eventTypeText }}
             </p>
             <p class="mb-4">{{ event?.start_time }} - {{ event?.end_time }}</p>
 
             <template v-if="event">
-                <template
-                    v-if="['session', 'manual_session'].includes(event.type)">
+                <template v-if="['session', 'manual_session'].includes(event.type)">
                     <h5 class="font-medium text-lg">Formato</h5>
                     <p class="mb-4">{{ event.session_info.format }}</p>
                     <h5 class="font-medium text-lg">Modalidad</h5>
@@ -19,9 +16,7 @@
                 </template>
 
                 <h5 class="font-medium text-lg">Clientes</h5>
-                <p v-if="event.clients.length === 0">
-                    Aún no hay clientes agendados
-                </p>
+                <p v-if="event.clients.length === 0">Aún no hay clientes agendados</p>
                 <ul v-else>
                     <li v-for="client in event.clients" :key="client.id">
                         <p>
@@ -47,9 +42,7 @@ const eventTypeText = computed(() => {
         case "personal":
             return "Evento personal";
         case "session":
-            return event.value.clients.length === 0
-                ? "Hora disponible"
-                : "Hora agendada";
+            return event.value.clients.length === 0 ? "Hora disponible" : "Hora agendada";
         case "manual_session":
             return "Sesión manual";
         default:

@@ -68,9 +68,7 @@ export default defineEventHandler(async (event) => {
         console.log(response);
 
         if (!response.optional) {
-            throw new Error(
-                "No se puede realizar la compra de créditos. Intente nuevamente."
-            );
+            throw new Error("No se puede realizar la compra de créditos. Intente nuevamente.");
         }
 
         const { user_ids, plan_id } = response.optional;
@@ -109,20 +107,16 @@ export default defineEventHandler(async (event) => {
             } catch (error) {
                 setResponseStatus(event, 400);
                 console.log(error);
-                console.log(
-                    "Ocurrió un error al intentar cargar los créditos."
-                );
+                console.log("Ocurrió un error al intentar cargar los créditos.");
                 return {
                     success: false,
-                    message:
-                        "Ocurrió un error al intentar cargar los créditos.",
+                    message: "Ocurrió un error al intentar cargar los créditos.",
                 };
             }
         } else {
             return {
                 success: false,
-                message:
-                    "El pago no ha sido confirmado. No se han cargado créditos.",
+                message: "El pago no ha sido confirmado. No se han cargado créditos.",
             };
         }
     } catch (error: any) {
