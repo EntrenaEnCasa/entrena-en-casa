@@ -100,10 +100,6 @@
                 </button>
             </div>
             <div v-show="!sessionsLoading" class="my-10">
-                <!-- <div v-if="!selectedLocation && !isOnline"
-                    class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
-
-                </div> -->
                 <div
                     v-show="
                         (!selectedLocation && !isOnline) ||
@@ -342,6 +338,10 @@
                         <p class="justify-self-end">Profesional:</p>
                         <p class="font-semibold">
                             {{ selectedSession?.professional.name }}
+                        </p>
+                        <p class="justify-self-end">Fecha:</p>
+                        <p class="font-semibold">
+                            {{ selectedSession?.session.date }}
                         </p>
                         <p class="justify-self-end">Hora:</p>
                         <p class="font-semibold">
