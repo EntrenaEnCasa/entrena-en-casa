@@ -2,7 +2,7 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modalRef">
-                <div class="flex flex-col gap-5 p-10">
+                <div class="flex flex-col gap-5 py-6 px-2 md:px-8">
                     <button
                         @click="modal.addNewSession"
                         class="px-10 py-4 bg-primary text-white rounded">
