@@ -1,7 +1,7 @@
 <template>
     <aside
         id="logo-sidebar"
-        class="fixed top-0 left-0 z-40 w-64 h-screen pt-24 transition-transform -translate-x-full bg-white border-r border-gray-200 lg:translate-x-0"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-24 duration-300 transition-transform -translate-x-full bg-white border-r border-gray-200 lg:translate-x-0"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
         aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
