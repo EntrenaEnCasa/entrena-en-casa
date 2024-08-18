@@ -34,7 +34,8 @@
                         </div>
                     </form>
                     <div>
-                        <div class="flex justify-between">
+                        <div
+                            class="flex flex-col-reverse sm:flex-row gap-y-2 gap-x-4 justify-between">
                             <CommonButton
                                 @click="modal.removeSession"
                                 class="px-4 py-2 bg-tertiary"

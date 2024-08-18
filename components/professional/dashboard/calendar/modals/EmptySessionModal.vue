@@ -93,7 +93,8 @@
                             * Para sesiones presenciales personalizadas se aplicarán los rangos de
                             cobertura propuestos en la sección "Mi perfil"
                         </p>
-                        <div class="flex justify-between">
+                        <div
+                            class="flex flex-col-reverse sm:flex-row gap-y-2 gap-x-4 justify-between">
                             <CommonButton @click="modal.closeModal" class="px-4 py-2 bg-tertiary">
                                 Cancelar
                             </CommonButton>
