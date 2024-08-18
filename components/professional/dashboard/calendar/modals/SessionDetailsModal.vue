@@ -1,6 +1,6 @@
 <template>
     <CommonModal ref="modalRef">
-        <div class="p-6 text-center">
+        <div class="px-4 py-4 sm:px-6 text-center">
             <h2 class="text-2xl font-semibold mb-4">Información de la sesión</h2>
             <p class="text-lg font-medium">
                 {{ eventTypeText }}

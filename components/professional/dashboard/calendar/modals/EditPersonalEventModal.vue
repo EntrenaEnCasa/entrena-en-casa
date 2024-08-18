@@ -2,7 +2,7 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modalRef">
-                <div class="px-6 py-4">
+                <div class="px-4 py-4 sm:px-6">
                     <ProfessionalDashboardCalendarDayNavigation />
                     <form action="">
                         <div class="grid gap-6 mb-6 md:grid-cols-2">

@@ -2,7 +2,7 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modalRef">
-                <div class="px-6 py-4">
+                <div class="px-4 py-4 sm:px-6">
                     <ProfessionalDashboardCalendarDayNavigation />
                     <form action="">
                         <div class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2">
@@ -98,11 +98,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="flex items-center my-10">
-                            <input id="checkbox" type="checkbox" class="w-4 h-4 accent-primary-600 rounded">
-                            <label for="checkbox" class="ms-2 text-sm text-gray-500">Enviar
-                                notificación del evento</label>
-                        </div> -->
                     </form>
                     <div>
                         <div
