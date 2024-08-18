@@ -2,15 +2,15 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modalRef">
-                <div class="flex flex-col gap-5 py-6 px-2 md:px-8">
+                <div class="flex flex-col gap-y-3 py-4 px-2 md:py-6 md:px-8">
                     <button
                         @click="modal.addNewSession"
-                        class="px-10 py-4 bg-primary text-white rounded">
+                        class="px-6 py-4 bg-primary text-white rounded">
                         <p class="font-semibold">Agregar bloque disponible para sesión</p>
                     </button>
                     <button
                         @click="modal.addNewEvent"
-                        class="px-10 py-4 bg-secondary text-white rounded">
+                        class="px-6 py-4 bg-secondary text-white rounded">
                         <p class="font-semibold">Agregar nuevo evento manualmente</p>
                         <p class="text-sm italic">Evento personal - Entrenamiento</p>
                     </button>
