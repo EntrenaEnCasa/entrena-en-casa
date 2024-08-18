@@ -1,10 +1,10 @@
 <template>
     <div class="flex justify-center">
-        <div class="py-2 mb-5 flex max-w-max items-center gap-4">
+        <div class="py-2 mb-5 flex flex-col sm:flex-row max-w-max items-center gap-y-2 gap-x-4">
             <div class="flex items-center gap-2">
                 <select
                     v-model="selectedStartHour"
-                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary">
+                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary min-w-max">
                     <option
                         v-for="hour in startHourOptions"
                         :key="`start-hour-${hour}`"
@@ -15,7 +15,7 @@
                 <span>:</span>
                 <select
                     v-model="selectedStartMinute"
-                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary">
+                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary min-w-max">
                     <option
                         v-for="minute in startMinuteOptions"
                         :key="`start-minute-${minute}`"
@@ -29,7 +29,7 @@
                 <select
                     v-if="isManual"
                     v-model="selectedEndHour"
-                    class="border text-gray-800 bg-white text-sm rounded-md px-4 py-3 outline-primary">
+                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary min-w-max">
                     <option v-for="hour in endHourOptions" :key="`end-hour-${hour}`" :value="hour">
                         {{ hour }}
                     </option>
