@@ -36,13 +36,13 @@
                 </select>
                 <div
                     v-else
-                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-6 py-3 cursor-not-allowed">
+                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-7 py-3 cursor-not-allowed">
                     {{ calculatedEndHour }}
                 </div>
 
                 <span>:</span>
                 <span
-                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-6 py-3 cursor-not-allowed">
+                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-7 py-3 cursor-not-allowed">
                     {{ selectedEndMinute }}
                 </span>
             </div>
