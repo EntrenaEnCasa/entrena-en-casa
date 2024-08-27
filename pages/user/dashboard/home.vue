@@ -17,7 +17,8 @@
                             <div class="text-sm">
                                 {{ session.format + " - " + session.modality }}
                             </div>
-                            <button class="text-secondary font-semibold place-self-end flex items-center">
+                            <button @click="openSessionModal(session)"
+                                class="text-secondary font-semibold place-self-end flex items-center">
                                 <p class="hidden md:block mr-1">Ver más</p>
                                 <Icon name="fa6-solid:chevron-right" />
                             </button>
@@ -44,7 +45,8 @@
                             <div class="text-sm">
                                 {{ session.format + " - " + session.modality }}
                             </div>
-                            <button class="text-secondary font-semibold place-self-end flex items-center">
+                            <button @click="openSessionModal(session)"
+                                class="text-secondary font-semibold place-self-end flex items-center">
                                 <p class="hidden md:block mr-1">Ver más</p>
                                 <Icon name="fa6-solid:chevron-right" />
                             </button>
@@ -68,17 +70,37 @@
                 </div>
             </div>
         </div> -->
+        <StudentDashboardSessionInfoModal ref="sessionInfoModal" :session="actualSession" />
+
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useUserStore } from "~/stores/UserStore";
+interface Session {
+    session_id: number;
+    date: string;
+    time: string;
+    available: boolean;
+    modality: string;
+    format: string;
+    link: string;
+    coordinates: string | null;
+    professional: Professional;
+}
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
+const actualSession = ref < Session | null > (null);
 
-const userId = userStore.user.user_id;
+const userId = userStore.user?.user_id;
 const headers = useRequestHeaders(["cookie"]);
+const sessionInfoModal = ref < Modal | null > (null);
+
+const openSessionModal = (session: Session) => {
+    actualSession.value = session;
+    sessionInfoModal.value?.openModal();
+};
 
 // Fetch future sessions
 const { data: futureSessions, pending: futureSessionsLoading } = await useFetch(
@@ -89,6 +111,7 @@ const { data: futureSessions, pending: futureSessionsLoading } = await useFetch(
         lazy: true,
     }
 );
+
 
 // Fetch past sessions
 const { data: pastSessions, pending: pastSessionsLoading } = await useFetch(
