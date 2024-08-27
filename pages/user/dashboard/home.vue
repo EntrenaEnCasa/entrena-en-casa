@@ -6,7 +6,8 @@
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
                 <div class="mb-5 flex justify-between items-center">
                     <h5 class="text-lg text-[#949494]">Últimas sesiones</h5>
-                    <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
+                    <button @click="goToScheduledSessions()" class="text-right text-sm font-medium text-gray-800">Ver
+                        todas</button>
                 </div>
                 <CommonLoading v-if="pastSessionsLoading" />
                 <div v-else-if="pastSessions && pastSessions.success">
@@ -41,7 +42,8 @@
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
                 <div class="mb-5 flex justify-between items-center">
                     <h5 class="text-lg text-[#949494]">Próximas sesiones</h5>
-                    <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
+                    <button @click="goToScheduledSessions()" class="text-right text-sm font-medium text-gray-800">Ver
+                        todas</button>
                 </div>
                 <CommonLoading v-if="futureSessionsLoading" />
                 <div v-else-if="futureSessions && futureSessions.success">
@@ -83,7 +85,10 @@
 </template>
 
 <script setup lang="ts">
+
 import { useUserStore } from "~/stores/UserStore";
+const router = useRouter();
+
 interface Session {
     session_id: number;
     date: string;
@@ -104,6 +109,12 @@ const formatDate = (date: string): string => {
         month: "long",
         year: "numeric",
     });
+};
+
+const goToScheduledSessions = () => {
+    //route push to sessions.vue
+    router.push("/user/dashboard/sessions");
+
 };
 
 const userStore = useUserStore();
