@@ -8,12 +8,19 @@
                     <h5 class="text-lg text-[#949494]">Últimas sesiones</h5>
                     <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
-                <CommonLoading v-if="futureSessionsLoading" />
-                <div v-else-if="futureSessions && futureSessions.success">
-                    <div v-for="session in futureSessions.sessions" :key="session.session_id">
+                <CommonLoading v-if="pastSessionsLoading" />
+                <div v-else-if="pastSessions && pastSessions.success">
+                    <div v-for="session in pastSessions.sessions" :key="session.session_id">
                         <hr class="my-5" />
                         <div class="grid grid-cols-3 items-center">
-                            <div>{{ session.time }}hrs</div>
+                            <div>
+                                <div class="text-xs">
+                                    {{ formatDate(session.date) }}
+                                </div>
+                                <div>
+                                    {{ session.time }}hrs
+                                </div>
+                            </div>
                             <div class="text-sm">
                                 {{ session.format + " - " + session.modality }}
                             </div>
@@ -36,12 +43,12 @@
                     <h5 class="text-lg text-[#949494]">Próximas sesiones</h5>
                     <p class="text-right text-sm font-medium text-gray-800">Ver todas</p>
                 </div>
-                <CommonLoading v-if="pastSessionsLoading" />
-                <div v-else-if="pastSessions && pastSessions.success">
-                    <div v-for="session in pastSessions.sessions" :key="session.session_id">
+                <CommonLoading v-if="futureSessionsLoading" />
+                <div v-else-if="futureSessions && futureSessions.success">
+                    <div v-for="session in futureSessions.sessions" :key="session.session_id">
                         <hr class="my-5" />
                         <div class="grid grid-cols-3 items-center">
-                            <div>{{ session.time }}hrs</div>
+                            <div>{{ formatDate(session.date) }} {{ session.time }}hrs</div>
                             <div class="text-sm">
                                 {{ session.format + " - " + session.modality }}
                             </div>
@@ -88,6 +95,16 @@ interface Session {
     coordinates: string | null;
     professional: Professional;
 }
+
+const formatDate = (date: string): string => {
+    const [year, month, day] = date.split("-").map(Number);
+    const d = new Date(year, month - 1, day);
+    return d.toLocaleString("es-ES", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+    });
+};
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
