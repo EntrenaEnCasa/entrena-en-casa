@@ -1,0 +1,7 @@
+{
+    "bracketSameLine": false,
+    "tabWidth": 4,
+    "printWidth": 100,
+    "proseWrap": "preserve",
+    "plugins": ["prettier-plugin-tailwindcss"]
+}
