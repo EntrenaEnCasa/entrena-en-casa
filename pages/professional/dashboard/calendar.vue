@@ -231,32 +231,40 @@ const newDropdown = reactive({
 
 const initializeCalendarData = () => {
     calendarData.value = [];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = new Date().setHours(0, 0, 0, 0);
 
     const startOfWeek = new Date(today);
     const endOfWeek = new Date(today);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
 
     const slotsPerDay = 24 * (60 / slotDurationInMinutes.value);
+    const daysToShow = 7;
 
-    for (let date = new Date(startOfWeek); date <= endOfWeek; date.setDate(date.getDate() + 1)) {
-        const day = {
-            date: new Date(date),
-            formattedDate: formatDateToAbbreviatedWeekdayAndDay(date),
-            timeSlots: Array.from({ length: slotsPerDay }, (_, i) => {
-                const hours = Math.floor((i * slotDurationInMinutes.value) / 60);
-                const minutes = (i * slotDurationInMinutes.value) % 60;
-                return {
-                    time: `${hours.toString().padStart(2, "0")}:${minutes
-                        .toString()
-                        .padStart(2, "0")}`,
-                    events: [],
-                };
-            }),
-        };
+    try {
+        for (let i = 0; i < daysToShow; i++) {
+            const currentDate = new Date(startOfWeek);
+            currentDate.setDate(startOfWeek.getDate() + i);
 
-        calendarData.value.push(day);
+            const day = {
+                date: currentDate,
+                formattedDate: formatDateToAbbreviatedWeekdayAndDay(currentDate),
+                timeSlots: Array.from({ length: slotsPerDay }, (_, j) => {
+                    const totalMinutes = j * slotDurationInMinutes.value;
+                    const hours = Math.floor(totalMinutes / 60);
+                    const minutes = totalMinutes % 60;
+                    return {
+                        time: `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`,
+                        events: [],
+                    };
+                }),
+            };
+
+            calendarData.value.push(day);
+        }
+
+        console.log("Calendar data initialized: ", calendarData.value);
+    } catch (error) {
+        console.error("Error initializing calendar data:", error);
     }
 };
 
