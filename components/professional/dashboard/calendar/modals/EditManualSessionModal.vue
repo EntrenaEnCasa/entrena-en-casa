@@ -166,10 +166,10 @@ interface CustomGeocoder {
     updateSearchTerm: (term: string) => void;
 }
 
-const DEFAULT_COORDINATES = [-70.6506, -33.4372];
+const DEFAULT_COORDINATES: TupleCoordinate = [-70.6506, -33.4372];
 const DEFAULT_ZOOM = 13;
 
-const markerCoordinates = ref(DEFAULT_COORDINATES);
+const markerCoordinates = ref<TupleCoordinate>(DEFAULT_COORDINATES);
 const isDraggable = ref(false);
 
 const mapID = "editManualSessionMap";
@@ -189,13 +189,14 @@ const { flyTo, teleportTo, calculateDistance, calculateDurationBasedOnDistance }
     useMapInteraction(mapRef);
 
 const onMarkerDragEnd = () => {
+    if (!markerRef.value) return;
     const coordinates = markerRef.value.getLngLat().toArray();
     setMarkerCoordinates(coordinates);
     flyToCenter();
     updateInputValue();
 };
 
-const setMarkerCoordinates = (coordinates: number[]) => {
+const setMarkerCoordinates = (coordinates: TupleCoordinate) => {
     markerCoordinates.value = coordinates;
 };
 

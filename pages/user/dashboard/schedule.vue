@@ -414,6 +414,7 @@ const sessionsLoading = ref(false);
 // Mapbox map methods
 
 const onMarkerDragEnd = () => {
+    if (!markerRef.value) return;
     const coordinates = markerRef.value.getLngLat().toArray();
     setMarkerCoordinates(coordinates);
     flyToCenter();

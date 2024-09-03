@@ -443,6 +443,7 @@ const onMarkerDragStart = () => {
 };
 
 const onMarkerDragEnd = () => {
+    if (!marker.value) return;
     const newCoordinates = marker.value.getLngLat().toArray();
     markerCoordinates.value = newCoordinates;
     setCircleOpacity(CIRCLE_OPACITY);
