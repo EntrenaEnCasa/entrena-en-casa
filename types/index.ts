@@ -92,4 +92,13 @@ declare global {
         scrollToTop: () => void;
         scrollToBottom: () => void;
     }
+
+    interface NamedCoordinate {
+        lat: number;
+        lng: number;
+    }
+
+    type TupleCoordinate = [number, number];
+
+    type Coordinate = NamedCoordinate | TupleCoordinate;
 }
