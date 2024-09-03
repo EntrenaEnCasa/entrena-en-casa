@@ -6,9 +6,10 @@
         <CommonLoading v-if="professionalsDataPending" />
         <div class="overflow-x-auto shadow-md sm:rounded-lg">
             <table
-                class="bg-white w-full table-auto text-sm text-left text-gray-500"
-                v-if="professionalsData">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                class="w-full table-auto bg-white text-left text-sm text-gray-500"
+                v-if="professionalsData"
+            >
+                <thead class="bg-gray-200 text-xs uppercase text-gray-700">
                     <tr>
                         <th scope="col" class="p-6">Nombre</th>
                         <th scope="col" class="p-6">Apellido</th>
@@ -21,29 +22,31 @@
                     <tr
                         v-for="professional in professionalsData.professionals"
                         class="border-b"
-                        :key="professional.user_id">
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        :key="professional.user_id"
+                    >
+                        <td class="whitespace-nowrap px-6 py-4">
                             <div v-if="professional.first_name">
                                 {{ professional.first_name }}
                             </div>
                             <div v-else>Sin datos</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             <div v-if="professional.last_name">
                                 {{ professional.last_name }}
                             </div>
                             <div v-else>Sin datos</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             {{ professional.email }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             {{ professional.title }}
                         </td>
                         <td class="px-6 py-4">
                             <button
-                                class="px-4 py-2 bg-primary text-white rounded-md font-medium"
-                                @click="openProfessionalModal(professional)">
+                                class="rounded-md bg-primary px-4 py-2 font-medium text-white"
+                                @click="openProfessionalModal(professional)"
+                            >
                                 Ver Detalles
                             </button>
                         </td>
@@ -57,7 +60,8 @@
             :futureSessions="futureSessions"
             :futureSessionsLoading="futureSessionsLoading"
             :pastSessionsLoading="pastSessionsLoading"
-            ref="professionalModal" />
+            ref="professionalModal"
+        />
     </div>
 </template>
 
@@ -116,7 +120,7 @@ const {
         method: "GET",
         credentials: "include",
         lazy: true,
-    }
+    },
 );
 
 const getPastSessions = async (professional: Professional) => {
@@ -128,7 +132,7 @@ const getPastSessions = async (professional: Professional) => {
             {
                 method: "GET",
                 credentials: "include",
-            }
+            },
         );
 
         if (response.success) {
@@ -156,7 +160,7 @@ const getFutureSessions = async (professional: Professional) => {
             {
                 method: "GET",
                 credentials: "include",
-            }
+            },
         );
 
         if (response.success) {

@@ -1,33 +1,39 @@
 <template>
     <div class="relative">
-        <div class="py-10 lg:pb-32 bg-gradiente">
+        <div class="bg-gradiente py-10 lg:pb-32">
             <div
-                class="tellural grid grid-cols-1 lg:grid-cols-3 place-items-center justify center w-full mt-5 lg:mt-0 h-full">
+                class="tellural justify center mt-5 grid h-full w-full grid-cols-1 place-items-center lg:mt-0 lg:grid-cols-3"
+            >
                 <div
-                    class="lg:col-span-2 grid items-center justify-center w-4/5 lg:w-2/3 text-center lg:text-left lg:ml-10 mb-10 lg:mt-10">
+                    class="mb-10 grid w-4/5 items-center justify-center text-center lg:col-span-2 lg:ml-10 lg:mt-10 lg:w-2/3 lg:text-left"
+                >
                     <h1
-                        class="text-4xl text-black mb-4 tellural font-bold w-full mx-auto lg:mx-0 lg:w-4/5">
+                        class="tellural mx-auto mb-4 w-full text-4xl font-bold text-black lg:mx-0 lg:w-4/5"
+                    >
                         Personal Trainers Online, Domicilio y al aire libre
                     </h1>
-                    <p class="text-center lg:text-left text-gray-500 mb-4 w-full lg:w-4/5">
+                    <p class="mb-4 w-full text-center text-gray-500 lg:w-4/5 lg:text-left">
                         Entrenando donde y cuando quieras, un entrenamiento y nutrición
                         personalizada. ¿Listo para un cambio?
                     </p>
 
                     <div>
                         <div
-                            class="flex items-center justify-center lg:justify-start mx-auto mt-6 space-x-4">
+                            class="mx-auto mt-6 flex items-center justify-center space-x-4 lg:justify-start"
+                        >
                             <NuxtLink
                                 to="/user/auth/register"
-                                class="border-0 rounded-full text-white px-6 py-3 font-medium bg-secondary"
+                                class="rounded-full border-0 bg-secondary px-6 py-3 font-medium text-white"
                                 >Registrarse
                             </NuxtLink>
                             <NuxtLink
                                 to="https://www.youtube.com/watch?v=o_HHBh3WxX0&ab_channel=JorgeSierraEntrenaenCasa"
                                 target="_blank"
-                                class="flex items-center space-x-2">
+                                class="flex items-center space-x-2"
+                            >
                                 <div
-                                    class="rounded-full shadow-lg text-secondary h-12 w-12 font-medium bg-white flex justify-center items-center">
+                                    class="flex h-12 w-12 items-center justify-center rounded-full bg-white font-medium text-secondary shadow-lg"
+                                >
                                     <Icon name="fa6-solid:play" class="ml-1 text-xl" />
                                 </div>
                                 <span class="text-secondary">Ver video</span>
@@ -39,19 +45,22 @@
                     <NuxtImg
                         src="/home/banner-img-min.png"
                         alt="Banner"
-                        class="absolute h-screen -top-24 right-0 lg:right-16 w-auto object-cover" />
+                        class="absolute -top-24 right-0 h-screen w-auto object-cover lg:right-16"
+                    />
                     <div
-                        class="absolute top-20 right-24 bg-white px-4 py-3 rounded-lg space-x-2 flex items-center shadow-xl">
+                        class="absolute right-24 top-20 flex items-center space-x-2 rounded-lg bg-white px-4 py-3 shadow-xl"
+                    >
                         <h3 class="text-2xl font-bold">60+</h3>
-                        <p class="text-gray-500 text-sm leading-tight">
+                        <p class="text-sm leading-tight text-gray-500">
                             Clases <br />
                             grupales
                         </p>
                     </div>
                     <div
-                        class="absolute top-72 right-1/3 bg-white px-4 py-3 rounded-lg space-x-2 flex items-center shadow-xl">
+                        class="absolute right-1/3 top-72 flex items-center space-x-2 rounded-lg bg-white px-4 py-3 shadow-xl"
+                    >
                         <h3 class="text-2xl font-bold">50+</h3>
-                        <p class="text-gray-500 text-sm leading-tight">
+                        <p class="text-sm leading-tight text-gray-500">
                             Alumnos <br />
                             activos
                         </p>
@@ -59,43 +68,45 @@
                 </div>
             </div>
             <div
-                class="mt-3 lg:mt-12 mx-auto rounded-xl shadow-lg bg-white w-10/12 px-4 py-6 lg:absolute lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-1/2">
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                    <div class="w-full flex items-center gap-2">
+                class="mx-auto mt-3 w-10/12 rounded-xl bg-white px-4 py-6 shadow-lg lg:absolute lg:bottom-0 lg:left-1/2 lg:mt-12 lg:-translate-x-1/2 lg:translate-y-1/2"
+            >
+                <div class="grid grid-cols-1 gap-4 lg:grid-cols-4">
+                    <div class="flex w-full items-center gap-2">
                         <div>
-                            <Icon name="fa6-solid:location-dot" class="text-3xl w-16 min-w-16" />
+                            <Icon name="fa6-solid:location-dot" class="w-16 min-w-16 text-3xl" />
                         </div>
                         <div class="flex flex-col leading-tight">
-                            <h4 class="font-semibold mb-1">Modalidad</h4>
+                            <h4 class="mb-1 font-semibold">Modalidad</h4>
                             <p class="text-sm">Online o presencial, tu escoges</p>
                         </div>
                     </div>
-                    <div class="w-full flex items-center gap-2">
+                    <div class="flex w-full items-center gap-2">
                         <div>
-                            <Icon name="fa6-solid:dumbbell" class="text-3xl w-16" />
+                            <Icon name="fa6-solid:dumbbell" class="w-16 text-3xl" />
                         </div>
 
                         <div class="flex flex-col leading-tight">
-                            <p class="font-semibold mb-1">Modalidad</p>
+                            <p class="mb-1 font-semibold">Modalidad</p>
                             <p class="text-sm">
                                 Programa tus propias sesiones, ve a tu propio ritmo
                             </p>
                         </div>
                     </div>
-                    <div class="w-full flex items-center gap-2">
+                    <div class="flex w-full items-center gap-2">
                         <div>
-                            <Icon name="fa6-solid:user" class="text-3xl w-16" />
+                            <Icon name="fa6-solid:user" class="w-16 text-3xl" />
                         </div>
 
                         <div class="flex flex-col leading-tight">
-                            <p class="font-semibold mb-1">Modalidad</p>
+                            <p class="mb-1 font-semibold">Modalidad</p>
                             <p class="text-sm">Entrena tanto individual como grupal</p>
                         </div>
                     </div>
-                    <div class="flex items-center justify-center mx-auto">
+                    <div class="mx-auto flex items-center justify-center">
                         <NuxtLink
                             to="/user/auth/register"
-                            class="border-0 rounded-lg text-white px-3 py-2 font-medium bg-secondary cursor-pointer">
+                            class="cursor-pointer rounded-lg border-0 bg-secondary px-3 py-2 font-medium text-white"
+                        >
                             Registrarse ahora
                         </NuxtLink>
                     </div>

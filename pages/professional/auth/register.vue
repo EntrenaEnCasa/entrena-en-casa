@@ -1,22 +1,23 @@
 <template>
-    <div class="min-h-screen grid items-center">
+    <div class="grid min-h-screen items-center">
         <div>
-            <div class="flex flex-col items-center pt-10 mx-3">
+            <div class="mx-3 flex flex-col items-center pt-10">
                 <NuxtLink to="/">
-                    <NuxtImg class="mx-auto w-28 h-28" src="/logo.png" alt="logo" />
+                    <NuxtImg class="mx-auto h-28 w-28" src="/logo.png" alt="logo" />
                 </NuxtLink>
             </div>
-            <div class="py-12 w-4/5 mx-auto">
-                <h1 class="text-2xl font-bold text-center mb-2">Registro de profesionales</h1>
+            <div class="mx-auto w-4/5 py-12">
+                <h1 class="mb-2 text-center text-2xl font-bold">Registro de profesionales</h1>
                 <p class="text-center text-gray-500">
                     ¡Únete a la comunidad de profesionales de la salud y el deporte!
                 </p>
             </div>
             <Form v-slot="{ meta }" @submit="register" class="h-full w-full pb-10">
                 <div
-                    class="grid grid-cols-1 lg:grid-cols-2 gap-6 justify-items-center items-center lg:px-10 w-full lg:space-x-4">
-                    <div class="lg:justify-self-end space-y-6 w-4/5">
-                        <div class="grid lg:grid-cols-2 w-full gap-2 grid-cols-1">
+                    class="grid w-full grid-cols-1 items-center justify-items-center gap-6 lg:grid-cols-2 lg:space-x-4 lg:px-10"
+                >
+                    <div class="w-4/5 space-y-6 lg:justify-self-end">
+                        <div class="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
                             <CommonInput
                                 label="¿Cual es tu nombre?"
                                 v-model="formData.firstName"
@@ -25,7 +26,8 @@
                                 id="firstName"
                                 placeholder="Ingresa tu nombre"
                                 :rules="validateFirstName"
-                                class="w-full" />
+                                class="w-full"
+                            />
                             <CommonInput
                                 label="¿Cual es tu apellido?"
                                 v-model="formData.lastName"
@@ -34,7 +36,8 @@
                                 id="lastName"
                                 placeholder="Ingresa tu apellido"
                                 :rules="validateLastName"
-                                class="w-full" />
+                                class="w-full"
+                            />
                         </div>
                         <CommonInput
                             label="¿Cuál es tu título o especialidad?"
@@ -44,9 +47,10 @@
                             id="title"
                             placeholder="Entrenador físico"
                             :rules="validateTitle"
-                            class="w-full" />
+                            class="w-full"
+                        />
                     </div>
-                    <div class="lg:justify-self-start space-y-6 w-4/5">
+                    <div class="w-4/5 space-y-6 lg:justify-self-start">
                         <CommonInput
                             label="Correo Electrónico"
                             v-model="formData.email"
@@ -55,8 +59,9 @@
                             id="email"
                             icon="fa6-solid:envelope"
                             placeholder="Ingresa tu correo electrónico"
-                            :rules="validateEmail" />
-                        <div class="grid lg:grid-cols-2 w-full gap-2 grid-cols-1">
+                            :rules="validateEmail"
+                        />
+                        <div class="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
                             <CommonInput
                                 label="Contraseña"
                                 v-model="formData.password"
@@ -65,7 +70,8 @@
                                 id="password"
                                 icon="fa6-solid:lock"
                                 placeholder="* * * * * * * *"
-                                :rules="validatePassword" />
+                                :rules="validatePassword"
+                            />
 
                             <CommonInput
                                 label="Confirma tu contraseña"
@@ -76,7 +82,8 @@
                                 id="repassword"
                                 placeholder="* * * * * * * *"
                                 :rules="validateRePassword"
-                                class="w-full" />
+                                class="w-full"
+                            />
                         </div>
                     </div>
                 </div>
@@ -87,7 +94,8 @@
                             type="submit"
                             :loading="saveUserDataLoading"
                             :disabled="!meta.valid"
-                            class="px-8 py-2">
+                            class="px-8 py-2"
+                        >
                             Registrarse
                         </CommonButton>
                     </div>

@@ -1,12 +1,29 @@
 <template>
-    <div class="min-h-[calc(100vh_-_5rem)] py-10 bg-gradiente">
-        <div class="max-w-6xl mx-auto w-11/12">
-            <h2 class="text-4xl tellural text-center font-bold mb-10">Nuestros planes</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mx-auto mb-10">
-                <CommonSelect label="Región" v-model="region" name="region" id="region" :options="regionOptions" />
-                <CommonSelect label="Formato" v-model="format" name="format" id="format" :options="sessionFormats" />
-                <CommonSelect label="Modalidad" v-model="modality" name="modality" id="modality"
-                    :options="sessionModalities" />
+    <div class="bg-gradiente min-h-[calc(100vh_-_5rem)] py-10">
+        <div class="mx-auto w-11/12 max-w-6xl">
+            <h2 class="tellural mb-10 text-center text-4xl font-bold">Nuestros planes</h2>
+            <div class="mx-auto mb-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
+                <CommonSelect
+                    label="Región"
+                    v-model="region"
+                    name="region"
+                    id="region"
+                    :options="regionOptions"
+                />
+                <CommonSelect
+                    label="Formato"
+                    v-model="format"
+                    name="format"
+                    id="format"
+                    :options="sessionFormats"
+                />
+                <CommonSelect
+                    label="Modalidad"
+                    v-model="modality"
+                    name="modality"
+                    id="modality"
+                    :options="sessionModalities"
+                />
             </div>
             <div v-if="plansLoading">
                 <CommonLoading />
@@ -15,43 +32,48 @@
             <div v-else-if="plansResponse.plans.length === 0">
                 No hay planes disponibles para la región, formato y modalidad seleccionada
             </div>
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div v-for="plan in plansResponse.plans"
-                    class="bg-white p-8 rounded-xl shadow flex flex-col items-center space-y-5">
-                    <h3 class="text-3xl text-secondary font-semibold">
+            <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div
+                    v-for="plan in plansResponse.plans"
+                    class="flex flex-col items-center space-y-5 rounded-xl bg-white p-8 shadow"
+                >
+                    <h3 class="text-3xl font-semibold text-secondary">
                         {{ plan.formattedPrice }}
                     </h3>
-                    <h4 class="text-2xl text-gray-800 font-semibold text-center">
+                    <h4 class="text-center text-2xl font-semibold text-gray-800">
                         Plan de {{ plan.credit_quantity }} sesiones
                         {{
                             format === "Individual"
                                 ? "individuales"
                                 : format === "Dupla"
-                                    ? "dupla"
-                                    : "grupales"
+                                  ? "dupla"
+                                  : "grupales"
                         }}
                     </h4>
-                    <p class="font-medium text-center">
+                    <p class="text-center font-medium">
                         {{ plan.description }}
                     </p>
                     <ul class="space-y-3">
                         <li class="flex gap-2">
                             <div
-                                class="min-w-6 min-h-6 w-6 h-6 rounded-full bg-secondary-50/40 flex items-center justify-center">
+                                class="flex h-6 min-h-6 w-6 min-w-6 items-center justify-center rounded-full bg-secondary-50/40"
+                            >
                                 <Icon name="mingcute:check-fill" class="text-secondary" />
                             </div>
                             <p>Entrenamiento con Personal Trainer el 100% de la sesión</p>
                         </li>
                         <li class="flex gap-2">
                             <div
-                                class="min-w-6 min-h-6 w-6 h-6 rounded-full bg-secondary-50/40 flex items-center justify-center">
+                                class="flex h-6 min-h-6 w-6 min-w-6 items-center justify-center rounded-full bg-secondary-50/40"
+                            >
                                 <Icon name="mingcute:check-fill" class="text-secondary" />
                             </div>
                             <p>Horario a convenir</p>
                         </li>
                         <li class="flex gap-2">
                             <div
-                                class="min-w-6 min-h-6 w-6 h-6 rounded-full bg-secondary-50/40 flex items-center justify-center">
+                                class="flex h-6 min-h-6 w-6 min-w-6 items-center justify-center rounded-full bg-secondary-50/40"
+                            >
                                 <Icon name="mingcute:check-fill" class="text-secondary" />
                             </div>
                             <p>
@@ -59,14 +81,19 @@
                                     format === "Individual"
                                         ? "Formato personalizado, un tiempo solo para ti"
                                         : format === "Dupla"
-                                            ? "Formato en dupla, siempre con alguien de confianza"
-                                            : "Formato grupal, entrena junto a la comunidad de Entrena en Casa"
+                                          ? "Formato en dupla, siempre con alguien de confianza"
+                                          : "Formato grupal, entrena junto a la comunidad de Entrena en Casa"
                                 }}
                             </p>
                         </li>
                     </ul>
-                    <CommonButton @click="goToWhatsapp(plan.format_credit, plan.credit_type, plan.credit_quantity)"
-                        class="w-full px-4 py-2 bg-primary-500" rounded-size="full">
+                    <CommonButton
+                        @click="
+                            goToWhatsapp(plan.format_credit, plan.credit_type, plan.credit_quantity)
+                        "
+                        class="w-full bg-primary-500 px-4 py-2"
+                        rounded-size="full"
+                    >
                         Hablar con ventas
                     </CommonButton>
                 </div>
@@ -77,7 +104,6 @@
 
 <script setup>
 const config = useRuntimeConfig();
-
 
 const region = ref(13);
 const format = ref("Individual");
@@ -135,28 +161,37 @@ const goToWhatsapp = async (planFormat, planType, planCreditQuantity) => {
     const modality = formatPlan(planType);
     const planRegion = formatRegion(region.value);
     if (planRegion === "") {
-        const link = 'https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20' + modality + '%20' + planFormat + '%20' + planCreditQuantity + '%20sesiones.';
-        await navigateTo(
-            link,
-            {
-                external: true,
-                open: {
-                    target: "_blank",
-                },
-            }
-        );
-    }
-    else {
-        const link = 'https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20' + modality + '%20' + planFormat + '%20' + planCreditQuantity + '%20sesiones%20en%20la%20región%20de%20' + planRegion + '.';
-        await navigateTo(
-            link,
-            {
-                external: true,
-                open: {
-                    target: "_blank",
-                },
-            }
-        );
+        const link =
+            "https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20" +
+            modality +
+            "%20" +
+            planFormat +
+            "%20" +
+            planCreditQuantity +
+            "%20sesiones.";
+        await navigateTo(link, {
+            external: true,
+            open: {
+                target: "_blank",
+            },
+        });
+    } else {
+        const link =
+            "https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20" +
+            modality +
+            "%20" +
+            planFormat +
+            "%20" +
+            planCreditQuantity +
+            "%20sesiones%20en%20la%20región%20de%20" +
+            planRegion +
+            ".";
+        await navigateTo(link, {
+            external: true,
+            open: {
+                target: "_blank",
+            },
+        });
     }
     return;
 };

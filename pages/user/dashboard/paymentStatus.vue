@@ -10,14 +10,14 @@
         <div v-else-if="!data">
             <p>No se encontró información del pago</p>
         </div>
-        <div v-else-if="data" class="flex justify-center text-center max-w-2xl mx-auto">
+        <div v-else-if="data" class="mx-auto flex max-w-2xl justify-center text-center">
             <div v-if="data.response.status == 1" class="space-y-5">
                 <div>
-                    <h3 class="font-bold text-4xl mb-2">¡Esperando!</h3>
+                    <h3 class="mb-2 text-4xl font-bold">¡Esperando!</h3>
                     <p>El pago está pendiente de ser procesado.</p>
                 </div>
-                <div class="inline-flex bg-yellow-50 p-12 rounded-full">
-                    <Icon name="fa6-solid:circle-exclamation" class="text-yellow-500 text-9xl" />
+                <div class="inline-flex rounded-full bg-yellow-50 p-12">
+                    <Icon name="fa6-solid:circle-exclamation" class="text-9xl text-yellow-500" />
                 </div>
                 <div>
                     <p class="mb-4">
@@ -26,18 +26,19 @@
                     <CommonButton
                         @click="() => $router.push('/user/dashboard/credits')"
                         bg-color="primary"
-                        class="px-4 py-2">
+                        class="px-4 py-2"
+                    >
                         Ir a creditos
                     </CommonButton>
                 </div>
             </div>
             <div v-else-if="data.response.status == 2" class="space-y-5">
                 <div>
-                    <h3 class="font-bold text-4xl mb-2">¡Pago exitoso!</h3>
+                    <h3 class="mb-2 text-4xl font-bold">¡Pago exitoso!</h3>
                     <p>Tu pago se ha procesado correctamente.</p>
                 </div>
-                <div class="inline-flex bg-primary-50/30 p-12 rounded-full">
-                    <Icon name="fa6-solid:circle-check" class="text-primary text-9xl" />
+                <div class="inline-flex rounded-full bg-primary-50/30 p-12">
+                    <Icon name="fa6-solid:circle-check" class="text-9xl text-primary" />
                 </div>
                 <div>
                     <p class="mb-4">
@@ -47,23 +48,25 @@
                     <CommonButton
                         @click="() => $router.push('/user/dashboard/credits')"
                         bg-color="primary"
-                        class="px-4 py-2">
+                        class="px-4 py-2"
+                    >
                         Ir a créditos
                     </CommonButton>
                 </div>
             </div>
             <div
                 v-else-if="data.response.status == 3 || data.response.status == 4"
-                class="space-y-5">
+                class="space-y-5"
+            >
                 <div>
-                    <h3 class="font-bold text-4xl mb-2">¡Oops!</h3>
+                    <h3 class="mb-2 text-4xl font-bold">¡Oops!</h3>
                     <p>
                         El pago no ha concluido correctamente o se ha sobrepasado el tiempo de
                         espera para efectuar transacción.
                     </p>
                 </div>
-                <div class="inline-flex bg-tertiary-50/30 p-12 rounded-full">
-                    <Icon name="fa6-solid:circle-check" class="text-tertiary text-9xl" />
+                <div class="inline-flex rounded-full bg-tertiary-50/30 p-12">
+                    <Icon name="fa6-solid:circle-check" class="text-9xl text-tertiary" />
                 </div>
                 <div>
                     <p class="mb-4">
@@ -75,7 +78,8 @@
                         <CommonButton
                             @click="() => $router.push('/user/dashboard/credits')"
                             bg-color="tertiary"
-                            class="px-4 py-2">
+                            class="px-4 py-2"
+                        >
                             Volver a créditos
                         </CommonButton>
                         <CommonButton @click="goToWhatsapp" bg-color="secondary" class="px-4 py-2">
@@ -112,7 +116,7 @@ const { data, error, pending } = await useFetch<PaymentStatusResponse>(
             flowOrder: paymentStore.flowTransaction?.flowOrder,
         },
         lazy: true,
-    }
+    },
 );
 
 const getStatus = (status: number) => {
@@ -138,7 +142,7 @@ const goToWhatsapp = async () => {
             open: {
                 target: "_blank",
             },
-        }
+        },
     );
 };
 </script>

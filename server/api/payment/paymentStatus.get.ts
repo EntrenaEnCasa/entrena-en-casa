@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
             apiKey: config.flowApiKey,
             flowOrder,
         },
-        config.flowSecretKey
+        config.flowSecretKey,
     );
 
     try {

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-center gap-x-2 mb-6">
+    <div class="mb-6 flex items-center justify-center gap-x-2">
         <button @click="goToPreviousDay" :disabled="isFirstDayOfWeek">
             <Icon
                 class="text-xl"
@@ -7,9 +7,10 @@
                     'text-gray-300': isFirstDayOfWeek,
                     'text-gray-800': !isFirstDayOfWeek,
                 }"
-                name="fa6-solid:chevron-left"></Icon>
+                name="fa6-solid:chevron-left"
+            ></Icon>
         </button>
-        <h3 class="text-center font-semibold text-xl w-60">
+        <h3 class="w-60 text-center text-xl font-semibold">
             <span class="capitalize">
                 {{ selectedDayName }}
             </span>
@@ -25,7 +26,8 @@
                     'text-gray-300': isLastDayOfWeek,
                     'text-gray-800': !isLastDayOfWeek,
                 }"
-                name="fa6-solid:chevron-right"></Icon>
+                name="fa6-solid:chevron-right"
+            ></Icon>
         </button>
     </div>
 </template>

@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
                     email,
                     newPassword,
                 },
-            }
+            },
         );
 
         if (response.success) {

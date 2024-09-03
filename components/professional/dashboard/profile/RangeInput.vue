@@ -1,17 +1,19 @@
 <template>
-    <div class="relative w-10/12 mx-auto mt-8 mb-10">
+    <div class="relative mx-auto mb-10 mt-8 w-10/12">
         <input
             type="range"
-            class="slider w-full h-2 bg-secondary rounded-lg appearance-none cursor-pointer"
+            class="slider h-2 w-full cursor-pointer appearance-none rounded-lg bg-secondary"
             :min="inputMinValue"
             :max="inputMaxValue"
-            v-model="sliderValue" />
+            v-model="sliderValue"
+        />
         <div
-            class="absolute top-[-40px] -translate-x-1/2 whitespace-nowrap bg-secondary text-white py-1 px-5 rounded-md"
-            :style="{ left: `${tooltipPosition}%` }">
+            class="absolute top-[-40px] -translate-x-1/2 whitespace-nowrap rounded-md bg-secondary px-5 py-1 text-white"
+            :style="{ left: `${tooltipPosition}%` }"
+        >
             {{ sliderValue }} km
         </div>
-        <div class="flex justify-between text-xs mt-2 px-1">
+        <div class="mt-2 flex justify-between px-1 text-xs">
             <span>
                 {{ inputMinValue }}
             </span>

@@ -4,67 +4,73 @@
             <CommonModal ref="modal">
                 <CommonLoading v-if="loadingData" />
                 <div v-else>
-                    <h2 class="text-2xl text-center mb-5 font-semibold">Detalle Plan</h2>
+                    <h2 class="mb-5 text-center text-2xl font-semibold">Detalle Plan</h2>
                     <form v-if="newPlan" class="grid gap-5">
-                        <div class="grid grid-cols-3 gap-10 items-center">
+                        <div class="grid grid-cols-3 items-center gap-10">
                             <label class="col-span-1 text-right" for="">Cantidad</label>
-                            <div class="flex items-center col-span-2 space-x-2">
+                            <div class="col-span-2 flex items-center space-x-2">
                                 <CommonInput
                                     type=" text"
                                     class="text-left"
                                     name="quantity"
-                                    v-model="newPlan.credit_quantity" />
+                                    v-model="newPlan.credit_quantity"
+                                />
                                 <span class="text-gray-500">sesiones</span>
                             </div>
                         </div>
-                        <div class="grid grid-cols-3 gap-10 items-center">
+                        <div class="grid grid-cols-3 items-center gap-10">
                             <label class="col-span-1 text-right" for="">Tipo de sesión</label>
                             <CommonSelect
                                 v-model="newPlan.credit_type"
                                 name="tipo"
                                 id="tipo"
-                                :options="creditTypeOptions" />
+                                :options="creditTypeOptions"
+                            />
                         </div>
-                        <div class="grid grid-cols-3 gap-10 items-center">
+                        <div class="grid grid-cols-3 items-center gap-10">
                             <label class="col-span-1 text-right" for="">Formato</label>
                             <CommonSelect
                                 v-model="newPlan.format_credit"
                                 name="format"
                                 id="format"
-                                :options="formatOptions" />
+                                :options="formatOptions"
+                            />
                         </div>
-                        <div class="grid grid-cols-3 gap-10 items-center">
+                        <div class="grid grid-cols-3 items-center gap-10">
                             <label class="col-span-1 text-right" for="">Expiración</label>
-                            <div class="flex items-center col-span-2 space-x-2">
+                            <div class="col-span-2 flex items-center space-x-2">
                                 <CommonInput
                                     type=" text"
                                     name="expiration"
                                     class="text-left"
-                                    v-model="newPlan.expiration_time" />
+                                    v-model="newPlan.expiration_time"
+                                />
                                 <span class="text-gray-500">días</span>
                             </div>
                         </div>
-                        <div class="grid grid-cols-3 gap-10 items-center">
+                        <div class="grid grid-cols-3 items-center gap-10">
                             <label class="col-span-1 text-right" for="">Precio</label>
-                            <div class="flex items-center col-span-2 space-x-2">
+                            <div class="col-span-2 flex items-center space-x-2">
                                 <span class="text-gray-500">$</span>
                                 <CommonInput
                                     type=" text"
                                     class="text-left"
                                     name="price"
-                                    v-model="newPlan.price" />
+                                    v-model="newPlan.price"
+                                />
                             </div>
                         </div>
-                        <div class="grid grid-cols-3 gap-10 items-center pb-5">
+                        <div class="grid grid-cols-3 items-center gap-10 pb-5">
                             <label class="col-span-1 text-right" for="">Descripción</label>
                             <CommonTextarea
                                 type=" text"
                                 name="description"
-                                class="w-4/5 h-12 col-span-2"
-                                v-model="newPlan.description"></CommonTextarea>
+                                class="col-span-2 h-12 w-4/5"
+                                v-model="newPlan.description"
+                            ></CommonTextarea>
                         </div>
-                        <div class="grid grid-cols-3 gap-10 items-start pb-5">
-                            <label class="col-span-1 text-right pt-3" for="">Region</label>
+                        <div class="grid grid-cols-3 items-start gap-10 pb-5">
+                            <label class="col-span-1 pt-3 text-right" for="">Region</label>
 
                             <div class="col-span-2 grid gap-2">
                                 <CommonSelect
@@ -73,14 +79,17 @@
                                     name="region"
                                     id="region"
                                     :options="regionOptions"
-                                    @change="handleRegionChange" />
+                                    @change="handleRegionChange"
+                                />
                                 <div v-for="chip in chipsRegion" class="flex items-center">
                                     <span
-                                        class="inline-flex items-left px-3 py-2 rounded-full text-xs font-medium bg-secondary text-white">
+                                        class="items-left inline-flex rounded-full bg-secondary px-3 py-2 text-xs font-medium text-white"
+                                    >
                                         <Icon
                                             @click="removeChip(chip)"
-                                            class="text-lg mr-2 my-auto"
-                                            name="fa6-solid:circle-xmark" />
+                                            class="my-auto mr-2 text-lg"
+                                            name="fa6-solid:circle-xmark"
+                                        />
 
                                         <span class="text-xs">
                                             {{ chip.label }}
@@ -90,17 +99,17 @@
                             </div>
                         </div>
                     </form>
-                    <div class="flex justify-between gap-4 mt-5">
+                    <div class="mt-5 flex justify-between gap-4">
                         <CommonButton
                             @click="openModalDeletePlan"
                             bg-color="tertiary"
-                            class="px-4 py-2 rounded-lg text-white font-medium outline"
+                            class="rounded-lg px-4 py-2 font-medium text-white outline"
                             >Borrar plan</CommonButton
                         >
                         <CommonButton
                             @click="updatePlan"
                             bg-color="primary"
-                            class="px-4 py-2 rounded-lg text-white font-medium outline"
+                            class="rounded-lg px-4 py-2 font-medium text-white outline"
                             >Modificar plan
                         </CommonButton>
                     </div>
@@ -260,7 +269,7 @@ watch(
         if (plan) {
             addInitialRegion();
         }
-    }
+    },
 );
 
 const updatePlan = async () => {

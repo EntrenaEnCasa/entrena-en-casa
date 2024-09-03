@@ -1,18 +1,19 @@
 <template>
     <div class="h-full">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 h-full">
+        <div class="grid h-full grid-cols-1 gap-5 lg:grid-cols-2">
             <div class="mt-32">
                 <div
-                    class="bg-white rounded-lg p-6 shadow-lg border flex flex-col items-center h-full">
+                    class="flex h-full flex-col items-center rounded-lg border bg-white p-6 shadow-lg"
+                >
                     <!-- Circle image container -->
-                    <div class="w-52 h-52 rounded-full bg-white mb-4 -mt-40 p-4">
-                        <NuxtImg src="/icons/dumbbell.png" class="w-full h-full object-cover" />
+                    <div class="-mt-40 mb-4 h-52 w-52 rounded-full bg-white p-4">
+                        <NuxtImg src="/icons/dumbbell.png" class="h-full w-full object-cover" />
                     </div>
                     <!-- Content container -->
-                    <div class="text-center flex flex-col gap-4">
+                    <div class="flex flex-col gap-4 text-center">
                         <div v-if="userStore.user.first_name">
                             <p class="text-sm text-gray-500">Nombre profesional</p>
-                            <p class="font-semibold text-2xl">
+                            <p class="text-2xl font-semibold">
                                 {{ userStore.user.first_name }}
                                 {{ userStore.user.last_name }}
                             </p>
@@ -39,11 +40,13 @@
                 </div>
             </div>
             <div
-                class="bg-white rounded-lg p-8 shadow-lg border flex flex-col items-center justify-between gap-6 h-full">
-                <h3 class="font-semibold text-2xl">Tus rangos de cobertura</h3>
+                class="flex h-full flex-col items-center justify-between gap-6 rounded-lg border bg-white p-8 shadow-lg"
+            >
+                <h3 class="text-2xl font-semibold">Tus rangos de cobertura</h3>
                 <CommonLoading
                     v-if="getCoverageRangesLoading"
-                    text="cargando rangos de cobertura" />
+                    text="cargando rangos de cobertura"
+                />
                 <div v-else-if="getCoverageRangesError">
                     <p class="text-red-500">Hubo un error al cargar los rangos de cobertura</p>
                 </div>
@@ -53,7 +56,8 @@
                 <div v-else class="flex flex-col items-center gap-y-2">
                     <div
                         v-for="(range, index) in coverageRanges.data"
-                        class="inline-flex items-center gap-x-2 rounded-full bg-gray-100 px-6 py-1.5">
+                        class="inline-flex items-center gap-x-2 rounded-full bg-gray-100 px-6 py-1.5"
+                    >
                         <p class="font-semibold">{{ range.range_name }}</p>
                         <p class="font-light">{{ range.radius }} km</p>
                         <button @click="openEditModal(index)">
@@ -62,18 +66,19 @@
                     </div>
                 </div>
                 <CommonButton
-                    class="px-5 py-2 bg-secondary"
+                    class="bg-secondary px-5 py-2"
                     @click="
                         resetModal();
                         openModal();
-                    ">
+                    "
+                >
                     Añadir rango de cobertura
                 </CommonButton>
             </div>
         </div>
         <Teleport to="body">
             <CommonModal ref="mapModal">
-                <div class="text-center mt-2 mb-10">
+                <div class="mb-10 mt-2 text-center">
                     <h2 class="text-2xl font-bold">
                         {{ !editMode ? "Nuevo rango de cobertura" : "Edita un rango de cobertura" }}
                     </h2>
@@ -82,46 +87,52 @@
                         fácilmente.
                     </p>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 p-5">
-                    <div class="lg:pr-6 relative space-y-7">
-                        <label class="w-full flex flex-col">
-                            <span class="font-medium mb-2">Nombre del rango</span>
+                <div class="grid grid-cols-1 p-5 lg:grid-cols-2">
+                    <div class="relative space-y-7 lg:pr-6">
+                        <label class="flex w-full flex-col">
+                            <span class="mb-2 font-medium">Nombre del rango</span>
                             <input
                                 v-model="rangeName"
                                 type="text"
                                 placeholder="Escribe un nombre intuitivo..."
-                                class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary" />
+                                class="w-full rounded-md border px-5 py-3.5 text-sm text-gray-800 outline-none ring-primary focus:ring-2"
+                            />
                         </label>
                         <MapsMapboxGeocoder
                             ref="geocoderComponent"
-                            @locationSelected="flyToLocation" />
-                        <label class="w-full flex flex-col">
-                            <span class="font-medium text">Radio de cobertura</span>
-                            <p class="text-sm text-gray-500 mb-3">
+                            @locationSelected="flyToLocation"
+                        />
+                        <label class="flex w-full flex-col">
+                            <span class="text font-medium">Radio de cobertura</span>
+                            <p class="mb-3 text-sm text-gray-500">
                                 Selecciona el radio de cobertura que deseas tener.
                             </p>
                             <ProfessionalDashboardProfileRangeInput
                                 :inputMinValue="inputRadiusMinValue"
                                 :inputMaxValue="inputRadiusMaxValue"
-                                v-model:sliderValue="inputRadius" />
+                                v-model:sliderValue="inputRadius"
+                            />
                         </label>
                     </div>
                     <div
-                        class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px]">
+                        class="relative flex h-full min-h-[300px] w-full justify-center lg:min-w-[400px]"
+                    >
                         <MapboxMap
                             :map-id="mapID"
-                            class="w-full h-full rounded-xl"
+                            class="h-full w-full rounded-xl"
                             :options="{
                                 style: 'mapbox://styles/mapbox/streets-v12',
                                 center: DEFAULT_COORDINATES,
                                 zoom: 13,
-                            }">
+                            }"
+                        >
                             <MapboxSource
                                 source-id="circleSource"
                                 :source="{
                                     type: 'geojson',
                                     data: circleGeoJSON,
-                                }" />
+                                }"
+                            />
                             <MapboxLayer
                                 v-if="circleData.enabled"
                                 :layer="{
@@ -132,13 +143,15 @@
                                         'fill-color': circleData.fillColor,
                                         'fill-opacity': circleData.opacity,
                                     },
-                                }" />
+                                }"
+                            />
                             <MapboxDefaultMarker
                                 @dragstart="onMarkerDragStart"
                                 :marker-id="markerID"
                                 :options="{ draggable: true }"
                                 :lnglat="markerCoordinates"
-                                @dragend="onMarkerDragEnd">
+                                @dragend="onMarkerDragEnd"
+                            >
                             </MapboxDefaultMarker>
                             <MapboxNavigationControl />
                         </MapboxMap>
@@ -147,25 +160,28 @@
                 <div v-show="editMode" class="flex justify-between p-5 pb-2">
                     <CommonButton
                         @click="deleteCoverage"
-                        class="px-5 py-2 bg-tertiary"
-                        :loading="deleteCoverageRangeLoading">
+                        class="bg-tertiary px-5 py-2"
+                        :loading="deleteCoverageRangeLoading"
+                    >
                         Eliminar rango
                     </CommonButton>
                     <CommonButton
                         @click="saveEditChanges"
-                        class="px-5 py-2 mr-2"
-                        :loading="updateCoverageRangeLoading">
+                        class="mr-2 px-5 py-2"
+                        :loading="updateCoverageRangeLoading"
+                    >
                         Guardar cambios
                     </CommonButton>
                 </div>
                 <div v-show="!editMode" class="flex justify-between p-5 pb-2">
-                    <CommonButton @click="closeModal" class="px-5 py-2 bg-tertiary">
+                    <CommonButton @click="closeModal" class="bg-tertiary px-5 py-2">
                         Cancelar
                     </CommonButton>
                     <CommonButton
                         @click="addCoverage"
                         class="px-5 py-2"
-                        :loading="addCoverageRangeLoading">
+                        :loading="addCoverageRangeLoading"
+                    >
                         Añadir rango
                     </CommonButton>
                 </div>
@@ -251,7 +267,7 @@ const {
         method: "GET",
         credentials: "include",
         lazy: true,
-    }
+    },
 );
 
 const addCoverage = async () => {
@@ -334,7 +350,7 @@ const deleteCoverage = async () => {
             {
                 method: "DELETE",
                 credentials: "include",
-            }
+            },
         );
 
         if (response.success) {
@@ -396,7 +412,7 @@ watch(
     () => {
         flyToCenter();
     },
-    { immediate: true }
+    { immediate: true },
 );
 
 const flyToLocation = (location) => {

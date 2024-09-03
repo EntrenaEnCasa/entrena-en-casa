@@ -2,13 +2,13 @@
     <div class="h-full">
         <div class="relative">
             <div name="content">
-                <div class="flex items-center justify-between mb-4">
+                <div class="mb-4 flex items-center justify-between">
                     <h3 class="text-xl font-medium">Sesiones futuras</h3>
                 </div>
                 <CommonLoading v-if="futureSessionsLoading" />
                 <div v-else class="overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                    <table class="w-full table-auto bg-white text-left text-sm text-gray-500">
+                        <thead class="bg-gray-200 text-xs uppercase text-gray-700">
                             <tr>
                                 <th scope="col" class="p-6">Fecha</th>
                                 <th scope="col" class="p-6">Hora</th>
@@ -23,34 +23,36 @@
                             <tr
                                 v-for="session in futureSessionsData?.sessions"
                                 class="border-b"
-                                :key="session.session_id">
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                :key="session.session_id"
+                            >
+                                <td class="whitespace-nowrap px-6 py-4">
                                     {{ session.date }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="whitespace-nowrap px-6 py-4">
                                     {{ session.time }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="whitespace-nowrap px-6 py-4">
                                     {{ session.modality }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="whitespace-nowrap px-6 py-4">
                                     {{ session.format }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="whitespace-nowrap px-6 py-4">
                                     {{ session.professional.first_name }}
                                     {{ session.professional.last_name }}
                                     <br />
                                     {{ session.professional.title }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap md:whitespace-normal">
+                                <td class="whitespace-nowrap px-6 py-4 md:whitespace-normal">
                                     <div class="flex items-center justify-center">
                                         {{ session.actual_assistant }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <button
-                                        class="px-4 py-2 bg-primary text-white rounded-md font-medium"
-                                        @click="openModalModifySession(session.session_id)">
+                                        class="rounded-md bg-primary px-4 py-2 font-medium text-white"
+                                        @click="openModalModifySession(session.session_id)"
+                                    >
                                         Ver Detalles
                                     </button>
                                 </td>
@@ -65,7 +67,8 @@
             @refresh-data="refreshData"
             :loading="sessionInfoLoading"
             :sessionInfo="sessionInfo"
-            ref="modifySessionModal" />
+            ref="modifySessionModal"
+        />
     </div>
 </template>
 
@@ -149,7 +152,7 @@ const getSessionInfo = async (session_id: number) => {
             {
                 method: "GET",
                 credentials: "include",
-            }
+            },
         );
 
         if (response.success) {

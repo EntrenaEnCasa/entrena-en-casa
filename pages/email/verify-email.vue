@@ -1,46 +1,48 @@
 <template>
-    <div class="flex flex-col items-center justify-center text-center min-h-[calc(100vh_-_5.0rem)]">
+    <div class="flex min-h-[calc(100vh_-_5.0rem)] flex-col items-center justify-center text-center">
         <div v-if="!userStore.user.verified" class="max-w-3xl px-6">
             <template v-if="!emailSent">
-                <h2 class="font-semibold text-3xl text-zinc-700 mb-2">
+                <h2 class="mb-2 text-3xl font-semibold text-zinc-700">
                     Para disfrutar de todas las características de Entrena en Casa, ¡Debes verificar
                     tu email!
                 </h2>
-                <p class="mb-5 max-w-xl mx-auto">
+                <p class="mx-auto mb-5 max-w-xl">
                     Cuando presiones el botón, te enviarémos un correo de verificación.
                 </p>
                 <div class="inline-flex flex-col gap-2">
                     <CommonButton
                         class="px-5 py-2"
                         @click="sendVerificationEmail"
-                        :loading="sendVerificationEmailLoading">
+                        :loading="sendVerificationEmailLoading"
+                    >
                         <Icon name="fa6-solid:envelope" class="mr-2" />
                         Enviar correo de verificación
                     </CommonButton>
                     <CommonButton
                         v-if="sendVerificationEmailError"
                         @click="goToWhatsapp"
-                        class="px-4 py-2">
+                        class="px-4 py-2"
+                    >
                         <Icon name="ic:baseline-whatsapp" class="mb-0.5 text-2xl" />
                         Hablar con soporte
                     </CommonButton>
                 </div>
             </template>
             <template v-if="emailSent">
-                <Icon name="fxemoji:openmailboxlowered" class="text-8xl mb-6" />
-                <h2 class="font-semibold text-3xl text-zinc-700 mb-2">
+                <Icon name="fxemoji:openmailboxlowered" class="mb-6 text-8xl" />
+                <h2 class="mb-2 text-3xl font-semibold text-zinc-700">
                     ¡Correo de verificación enviado!
                 </h2>
-                <p class="mb-5 max-w-xl mx-auto">
+                <p class="mx-auto mb-5 max-w-xl">
                     Revisa tu bandeja de entrada y sigue las instrucciones para verificar tu correo.
                 </p>
             </template>
         </div>
         <div v-else class="max-w-3xl px-6">
-            <h2 class="font-semibold text-3xl text-zinc-700 mb-2">
+            <h2 class="mb-2 text-3xl font-semibold text-zinc-700">
                 ¡Tu cuenta ya ha sido verificada!
             </h2>
-            <p class="mb-5 max-w-xl mx-auto">
+            <p class="mx-auto mb-5 max-w-xl">
                 ¡Ya puedes disfrutar de todas las características de Entrena en Casa!
             </p>
             <CommonButton @click="() => $router.push('/user/dashboard/home')" class="px-5 py-2">
@@ -97,7 +99,7 @@ const goToWhatsapp = async () => {
             open: {
                 target: "_blank",
             },
-        }
+        },
     );
 };
 </script>

@@ -1,9 +1,9 @@
 <template>
-    <div class="py-10 flex flex-col items-center w-11/12 sm:w-10/12 mx-auto">
+    <div class="mx-auto flex w-11/12 flex-col items-center py-10 sm:w-10/12">
         <p class="text-sm tracking-[.15rem]">SOBRE NOSOTROS</p>
-        <h2 class="font-medium text-3xl md:text-4xl">¿Qué es Entrena en Casa?</h2>
+        <h2 class="text-3xl font-medium md:text-4xl">¿Qué es Entrena en Casa?</h2>
         <div class="mt-10">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center mx-auto">
+            <div class="mx-auto grid grid-cols-1 items-center gap-6 lg:grid-cols-3">
                 <div class="lg:col-span-2">
                     <div class="contenedor">
                         <iframe
@@ -14,10 +14,11 @@
                             title="YouTube video player"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen></iframe>
+                            allowfullscreen
+                        ></iframe>
                     </div>
                 </div>
-                <div class="w-full lg:w-11/12 mx-auto leading-tight font-light">
+                <div class="mx-auto w-full font-light leading-tight lg:w-11/12">
                     <p>
                         Elige localidad y si quieres entrenar en tu casa, al aire libre o de manera
                         Online. Nuestros entrenamientos están pensados en hacer de la actividad

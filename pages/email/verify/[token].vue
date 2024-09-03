@@ -1,26 +1,27 @@
 <template>
-    <div class="space-y-4 min-h-[calc(100vh_-_5rem)] flex items-center justify-center">
-        <div class="text-center max-w-2xl mx-auto">
+    <div class="flex min-h-[calc(100vh_-_5rem)] items-center justify-center space-y-4">
+        <div class="mx-auto max-w-2xl text-center">
             <div v-if="loading">
-                <p class="text-3xl font-semibold mb-4">Verificando información...</p>
+                <p class="mb-4 text-3xl font-semibold">Verificando información...</p>
                 <CommonLoading />
             </div>
             <div v-else-if="error" class="space-y-5">
                 <div>
-                    <h3 class="font-bold text-4xl mb-2">¡Oops!</h3>
+                    <h3 class="mb-2 text-4xl font-bold">¡Oops!</h3>
                     <p>Hubo un error al verificar tu correo electrónico</p>
                     <code v-if="error.data.message">{{ error.data.message }}</code>
                 </div>
-                <div class="inline-flex bg-tertiary-50/30 p-12 rounded-full">
-                    <Icon name="fa6-solid:circle-check" class="text-tertiary text-9xl" />
+                <div class="inline-flex rounded-full bg-tertiary-50/30 p-12">
+                    <Icon name="fa6-solid:circle-check" class="text-9xl text-tertiary" />
                 </div>
                 <div>
                     <p class="mb-4">Puedes volver a intentarlo o contactarnos para ayudarte.</p>
-                    <div class="inline-flex flex-col lg:flex-row gap-2">
+                    <div class="inline-flex flex-col gap-2 lg:flex-row">
                         <CommonButton
                             @click="() => $router.push('/email/verify-email')"
                             bg-color="secondary"
-                            class="px-4 py-2">
+                            class="px-4 py-2"
+                        >
                             <Icon name="fa6-solid:envelope" class="mb-0.5 mr-0.5" />
                             Volver a intentar
                         </CommonButton>
@@ -38,28 +39,29 @@
 
             <div v-else-if="response.success" class="space-y-5">
                 <div>
-                    <h3 class="font-bold text-4xl mb-2">¡Verificación exitosa!</h3>
+                    <h3 class="mb-2 text-4xl font-bold">¡Verificación exitosa!</h3>
                     <p>Tu correo ha sido verificado correctamente.</p>
                 </div>
-                <div class="inline-flex bg-primary-50/30 p-12 rounded-full">
-                    <Icon name="fa6-solid:circle-check" class="text-primary text-9xl" />
+                <div class="inline-flex rounded-full bg-primary-50/30 p-12">
+                    <Icon name="fa6-solid:circle-check" class="text-9xl text-primary" />
                 </div>
                 <div>
                     <CommonButton
                         @click="() => $router.push('/user/dashboard/home')"
                         bg-color="primary"
-                        class="px-4 py-2">
+                        class="px-4 py-2"
+                    >
                         Ir a inicio
                     </CommonButton>
                 </div>
             </div>
             <div v-else class="space-y-5">
                 <div>
-                    <h3 class="font-bold text-4xl mb-2">¡Oops!</h3>
+                    <h3 class="mb-2 text-4xl font-bold">¡Oops!</h3>
                     <p>Hubo un error al verificar tu correo electrónico</p>
                 </div>
-                <div class="inline-flex bg-tertiary-50/30 p-12 rounded-full">
-                    <Icon name="fa6-solid:circle-check" class="text-tertiary text-9xl" />
+                <div class="inline-flex rounded-full bg-tertiary-50/30 p-12">
+                    <Icon name="fa6-solid:circle-check" class="text-9xl text-tertiary" />
                 </div>
                 <div>
                     <p class="mb-4">Puedes volver a intentarlo o contactarnos para ayudarte.</p>
@@ -67,13 +69,15 @@
                         <CommonButton
                             @click="() => $router.push('/user/dashboard/home')"
                             bg-color="zinc-500"
-                            class="px-4 py-2">
+                            class="px-4 py-2"
+                        >
                             Ir a inicio
                         </CommonButton>
                         <CommonButton
                             @click="() => $router.push('/email/verify-email')"
                             bg-color="secondary"
-                            class="px-4 py-2">
+                            class="px-4 py-2"
+                        >
                             <Icon name="fa6-solid:envelope" class="mb-0.5 mr-0.5" />
                             Volver a intentar
                         </CommonButton>
@@ -120,7 +124,7 @@ const goToWhatsapp = async () => {
             open: {
                 target: "_blank",
             },
-        }
+        },
     );
 };
 </script>

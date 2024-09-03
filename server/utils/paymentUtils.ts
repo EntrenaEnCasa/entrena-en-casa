@@ -33,7 +33,7 @@ function createQueryString(data: Record<string, any>): string {
 
 export function createQueryParams(
     data: Record<string, any>,
-    secretKey: string
+    secretKey: string,
 ): Record<string, any> {
     const signature = createSignature(data, secretKey);
 

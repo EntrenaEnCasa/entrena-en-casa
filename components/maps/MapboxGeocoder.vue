@@ -4,42 +4,49 @@
             type="text"
             v-model="searchTerm"
             :placeholder="placeholder"
-            class="border text-gray-800 text-sm rounded-md py-3.5 outline-none w-full px-12"
-            :class="{ 'ring-2 ring-primary ring-inset': inputFocused }"
+            class="w-full rounded-md border px-12 py-3.5 text-sm text-gray-800 outline-none"
+            :class="{ 'ring-2 ring-inset ring-primary': inputFocused }"
             @focus="inputFocused = true"
             @blur="inputFocused = false"
             @input="delayedFetchResults"
-            @keydown="handleKeydown" />
+            @keydown="handleKeydown"
+        />
         <div
-            class="absolute top-1/2 left-3 transform -translate-y-1/2 rounded-full p-1 flex items-center justify-center">
+            class="absolute left-3 top-1/2 flex -translate-y-1/2 transform items-center justify-center rounded-full p-1"
+        >
             <Icon name="heroicons:map-pin" class="text-2xl" />
         </div>
         <div
-            class="absolute top-1/2 right-3 transform -translate-y-1/2 rounded-full p-2 bg-gray-300 w-8 h-8 flex items-center justify-center">
+            class="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 transform items-center justify-center rounded-full bg-gray-300 p-2"
+        >
             <Icon name="fa6-solid:magnifying-glass" class="text-lg text-white" />
         </div>
         <div
-            class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3 text-sm"
-            v-if="inputFocused && searchTerm">
+            class="absolute left-0 right-0 top-[110%] rounded-md border bg-white p-3 text-sm shadow-lg"
+            v-if="inputFocused && searchTerm"
+        >
             <CommonLoading v-if="searchState === 'loading'" text="Buscando" />
             <ul v-else>
                 <li
                     v-show="searchState === 'pending' && filteredResults.length === 0"
-                    class="px-3 py-2">
+                    class="px-3 py-2"
+                >
                     Se buscará {{ searchTerm }}
                 </li>
                 <li
                     class="px-3 py-2"
-                    v-if="filteredResults.length === 0 && searchState === 'success'">
+                    v-if="filteredResults.length === 0 && searchState === 'success'"
+                >
                     No se encontraron resultados
                 </li>
                 <li
-                    class="px-3 py-2 rounded hover:bg-gray-100"
+                    class="rounded px-3 py-2 hover:bg-gray-100"
                     v-show="filteredResults.length > 0"
                     v-for="(result, index) in filteredResults"
                     :key="result.id"
                     @mousedown="selectResult(result)"
-                    :class="{ 'bg-gray-200': index === selectedResultIndex }">
+                    :class="{ 'bg-gray-200': index === selectedResultIndex }"
+                >
                     <p class="font-medium">
                         {{ result.place_name }}
                     </p>
@@ -70,8 +77,8 @@ const fetchResults = async () => {
         try {
             const response = await $fetch(
                 `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-                    searchTerm.value
-                )}.json?language=ES&country=CL&access_token=${runtimeConfig.public.mapboxApiKey}`
+                    searchTerm.value,
+                )}.json?language=ES&country=CL&access_token=${runtimeConfig.public.mapboxApiKey}`,
             );
 
             searchState.value = response && response.features ? "success" : "failure";

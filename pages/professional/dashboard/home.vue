@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <h2 class="text-xl text-center font-semibold text-gray-600 mb-4">Sesión en curso</h2>
+        <h2 class="mb-4 text-center text-xl font-semibold text-gray-600">Sesión en curso</h2>
         <CommonLoading v-if="currentSessionLoading" />
         <div v-else-if="currentSessionError">
             <div class="text-center text-red-500">Error al obtener la sesión en curso</div>
@@ -10,16 +10,17 @@
                 {{ currentSessionData?.message }}
             </p>
         </div>
-        <div v-else class="bg-white rounded-xl divide-y">
+        <div v-else class="divide-y rounded-xl bg-white">
             <div class="p-5">
-                <h3 class="text-center font-semibold text-lg first-letter:uppercase">
+                <h3 class="text-center text-lg font-semibold first-letter:uppercase">
                     {{ formatDateToFullLongFormat(currentSessionData.sessionInfo.date) }}
                     - {{ currentSessionData.sessionInfo.time }}hrs
                 </h3>
             </div>
             <div class="p-5">
                 <div
-                    class="my-10 flex flex-wrap justify-center gap-x-8 sm:gap-20 lg:gap-x-32 gap-y-5">
+                    class="my-10 flex flex-wrap justify-center gap-x-8 gap-y-5 sm:gap-20 lg:gap-x-32"
+                >
                     <div class="flex flex-col">
                         <h4 class="text-xl font-semibold">Modalidad</h4>
                         <p>{{ currentSessionData.sessionInfo.modality }}</p>
@@ -38,9 +39,10 @@
                                 }}
                             </h4>
                             <a
-                                class="flex text-secondary items-center"
+                                class="flex items-center text-secondary"
                                 target="_blank"
-                                :href="currentSessionData.sessionInfo.link">
+                                :href="currentSessionData.sessionInfo.link"
+                            >
                                 <span> Link </span>
                                 <Icon name="fa6-solid:chevron-right" />
                             </a>
@@ -53,28 +55,30 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-semibold ml-10">Asistentes</h3>
+                    <h3 class="ml-10 text-2xl font-semibold">Asistentes</h3>
                     <div class="overflow-x-auto">
-                        <table class="mt-6 min-w-max w-full table-auto">
+                        <table class="mt-6 w-full min-w-max table-auto">
                             <thead>
-                                <tr class="text-gray-600 leading-normal">
-                                    <th class="py-3 px-6 text-center">Confirmado</th>
-                                    <th class="py-3 px-6 text-left">Nombre</th>
-                                    <th class="py-3 px-6 text-left">Teléfono</th>
-                                    <th class="py-3 px-6 text-left">Edad</th>
-                                    <th class="py-3 px-6 text-left">Género</th>
-                                    <th class="py-3 px-6 text-left">Peso</th>
-                                    <th class="py-3 px-6 text-left">Estatura</th>
+                                <tr class="leading-normal text-gray-600">
+                                    <th class="px-6 py-3 text-center">Confirmado</th>
+                                    <th class="px-6 py-3 text-left">Nombre</th>
+                                    <th class="px-6 py-3 text-left">Teléfono</th>
+                                    <th class="px-6 py-3 text-left">Edad</th>
+                                    <th class="px-6 py-3 text-left">Género</th>
+                                    <th class="px-6 py-3 text-left">Peso</th>
+                                    <th class="px-6 py-3 text-left">Estatura</th>
                                     <th
                                         v-if="studentsWithoutData && studentsWithoutData.length > 0"
-                                        class="py-3 px-6 text-left"></th>
+                                        class="px-6 py-3 text-left"
+                                    ></th>
                                 </tr>
                             </thead>
                             <tbody class="">
                                 <tr
                                     v-for="(student, index) in currentSessionData?.students"
-                                    :key="index">
-                                    <td class="py-3 px-6 text-center">
+                                    :key="index"
+                                >
+                                    <td class="px-6 py-3 text-center">
                                         <Icon
                                             :name="
                                                 student.confirmed
@@ -84,9 +88,10 @@
                                             class="text-2xl"
                                             :class="
                                                 student.confirmed ? 'text-primary' : 'text-tertiary'
-                                            " />
+                                            "
+                                        />
                                     </td>
-                                    <td class="py-3 px-6 text-left">
+                                    <td class="px-6 py-3 text-left">
                                         <div v-if="student.first_name">
                                             <div class="text-base font-medium">
                                                 {{ student.first_name }}
@@ -103,29 +108,31 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="py-3 px-6 text-left">
+                                    <td class="px-6 py-3 text-left">
                                         {{ student.phone || "Sin datos" }}
                                     </td>
-                                    <td class="py-3 px-6 text-left">
+                                    <td class="px-6 py-3 text-left">
                                         {{ student.age ? student.age + " años" : "Sin datos" }}
                                     </td>
-                                    <td class="py-3 px-6 text-left">
+                                    <td class="px-6 py-3 text-left">
                                         {{ student.gender || "Sin datos" }}
                                     </td>
-                                    <td class="py-3 px-6 text-left">
+                                    <td class="px-6 py-3 text-left">
                                         {{ student.weight ? student.weight + " kg" : "Sin datos" }}
                                     </td>
-                                    <td class="py-3 px-6 text-left">
+                                    <td class="px-6 py-3 text-left">
                                         {{ student.height ? student.height + " cm" : "Sin datos" }}
                                     </td>
                                     <td
                                         v-if="studentsWithoutData && studentsWithoutData.length > 0"
-                                        class="py-3 px-6 text-left">
+                                        class="px-6 py-3 text-left"
+                                    >
                                         <CommonButton
                                             v-if="student.first_name === null"
                                             class="px-4 py-2"
                                             bg-color="secondary"
-                                            @click="handleOpenModal(student)">
+                                            @click="handleOpenModal(student)"
+                                        >
                                             <Icon name="fa6-solid:user-pen" class="text-2xl" />
                                         </CommonButton>
                                     </td>
@@ -141,7 +148,7 @@
             <CommonModal ref="addStudentDataModal">
                 <div class="px-3 py-6">
                     <Form v-slot="{ meta }" class="space-y-5">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
                             <CommonInput
                                 label="Nombre"
                                 v-model="formData.firstName"
@@ -149,7 +156,8 @@
                                 type="text"
                                 id="firstName"
                                 placeholder="Ingresa el nombre del alumno"
-                                :rules="validateFirstName" />
+                                :rules="validateFirstName"
+                            />
                             <CommonInput
                                 label="Apellido"
                                 v-model="formData.lastName"
@@ -157,7 +165,8 @@
                                 type="text"
                                 id="lastName"
                                 placeholder="Ingresa el nombre del alumno"
-                                :rules="validateLastName" />
+                                :rules="validateLastName"
+                            />
                             <CommonInput
                                 label="Teléfono"
                                 v-model="formData.phoneNumber"
@@ -165,7 +174,8 @@
                                 type="number"
                                 id="phoneNumber"
                                 placeholder="Ingresa el telefono del alumno"
-                                :rules="validatePhoneNumber" />
+                                :rules="validatePhoneNumber"
+                            />
                             <CommonInput
                                 label="¿Cual es tu fecha de nacimiento?"
                                 v-model="formData.birthDate"
@@ -174,7 +184,8 @@
                                 id="birthDate"
                                 placeholder="Ingresa la fecha de nacimiento del alumno"
                                 :rules="validateBirthDate"
-                                class="w-full" />
+                                class="w-full"
+                            />
                             <CommonSelect
                                 label="Género"
                                 v-model="formData.gender"
@@ -182,7 +193,8 @@
                                 id="gender"
                                 placeholder="Ingresa el genero del alumno"
                                 :options="genderOptions"
-                                :rules="validateGender" />
+                                :rules="validateGender"
+                            />
                             <CommonInput
                                 label="Peso"
                                 v-model="formData.weight"
@@ -191,7 +203,8 @@
                                 id="weight"
                                 placeholder="Ingresa el peso del alumno"
                                 :rules="validateWeight"
-                                right-text="KG" />
+                                right-text="KG"
+                            />
                             <CommonInput
                                 label="Estatura"
                                 v-model="formData.height"
@@ -200,14 +213,16 @@
                                 id="height"
                                 placeholder="Ingresa la estatura del alumno"
                                 :rules="validateHeight"
-                                right-text="CM" />
+                                right-text="CM"
+                            />
                         </div>
                         <CommonButton
-                            class="py-2 w-full font-medium"
+                            class="w-full py-2 font-medium"
                             text-size="lg"
                             :loading="addDataLoading"
                             :disabled="!meta.valid"
-                            @click="updateStudentInfo">
+                            @click="updateStudentInfo"
+                        >
                             Guardar
                         </CommonButton>
                     </Form>
@@ -293,7 +308,7 @@ const {
         method: "GET",
         credentials: "include",
         lazy: true,
-    }
+    },
 );
 
 const studentsWithoutData = computed(() => {
@@ -402,7 +417,7 @@ const updateStudentInfo = async () => {
                 method: "PUT",
                 credentials: "include",
                 body: body,
-            }
+            },
         );
 
         if (response.success) {

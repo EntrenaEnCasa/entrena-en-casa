@@ -1,6 +1,6 @@
 <template>
     <Form class="w-full" @submit="register" v-slot="{ meta }">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <CommonInput
                 label="Correo electrónico"
                 v-model="formData.email"
@@ -10,7 +10,8 @@
                 icon="fa6-solid:envelope"
                 placeholder="Ingresa tu correo electrónico"
                 :rules="validateEmail"
-                class="md:col-span-2" />
+                class="md:col-span-2"
+            />
             <CommonInput
                 label="Contraseña"
                 v-model="formData.password"
@@ -19,7 +20,8 @@
                 id="password"
                 icon="fa6-solid:lock"
                 placeholder="* * * * * * * *"
-                :rules="validatePassword" />
+                :rules="validatePassword"
+            />
             <CommonInput
                 label="Confirmar contraseña"
                 v-model="formData.passwordRepeat"
@@ -28,7 +30,8 @@
                 id="password-repeat"
                 icon="fa6-solid:lock"
                 placeholder="* * * * * * * *"
-                :rules="validatePasswordRepeat" />
+                :rules="validatePasswordRepeat"
+            />
             <CommonSelect
                 label="¿En qué región te encuentras?"
                 v-model="formData.region"
@@ -37,7 +40,8 @@
                 placeholder="Ingresa tu región"
                 :rules="validateRegion"
                 :options="regionOptions"
-                class="md:col-span-2" />
+                class="md:col-span-2"
+            />
         </div>
         <!-- <div class="flex items-center space-x-1">
             <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
@@ -49,10 +53,11 @@
             </label>
         </div> -->
         <CommonButton
-            class="py-2 w-full font-medium"
+            class="w-full py-2 font-medium"
             text-size="xl"
             :disabled="!meta.valid"
-            :loading="loading">
+            :loading="loading"
+        >
             Registrarse
         </CommonButton>
     </Form>

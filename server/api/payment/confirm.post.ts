@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
             apiKey: config.flowApiKey,
             token,
         },
-        config.flowSecretKey
+        config.flowSecretKey,
     );
 
     try {
@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
                     "Content-Type": "application/json",
                 },
                 query: queryParams,
-            }
+            },
         );
 
         console.log(response);
@@ -75,7 +75,7 @@ export default defineEventHandler(async (event) => {
 
         if (!user_ids || !plan_id) {
             throw new Error(
-                "No se puede realizar la compra de créditos, faltan parametros. Intente nuevamente."
+                "No se puede realizar la compra de créditos, faltan parametros. Intente nuevamente.",
             );
         }
 
@@ -97,7 +97,7 @@ export default defineEventHandler(async (event) => {
                             "x-api-key": encryptedApiKey,
                         },
                         body: body,
-                    }
+                    },
                 );
 
                 return {

@@ -4,9 +4,10 @@
             <template v-for="image in images" :key="image.id">
                 <div class="p-5">
                     <NuxtImg
-                        class="shadow-lg border border-gray-100 h-[300px] lg:h-[420px] rounded-2xl"
+                        class="h-[300px] rounded-2xl border border-gray-100 shadow-lg lg:h-[420px]"
                         :src="image.src"
-                        :alt="image.alt" />
+                        :alt="image.alt"
+                    />
                 </div>
             </template>
         </Vue3Marquee>

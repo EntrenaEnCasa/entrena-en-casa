@@ -5,25 +5,27 @@
                 <h3 class="text-xl font-medium">Sesiones en curso</h3>
             </div>
             <div
-                class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
-                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
-                <div class="text-lg text-center font-semibold">No hay sesiones en curso</div>
+                class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
+                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+            >
+                <div class="text-center text-lg font-semibold">No hay sesiones en curso</div>
             </div>
             <h3 class="text-xl font-medium">Sesiones reservadas</h3>
             <CommonLoading v-if="futureSessionsLoading" />
             <div v-else-if="futureSessions?.success">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                     <div
                         v-for="session in futureSessions.sessions"
                         :key="session.session_id"
-                        class="rounded-2xl items-center shadow-lg"
-                        :class="session.confirmed ? 'bg-primary' : 'bg-secondary'">
-                        <div class="bg-white rounded-2xl px-6 py-4">
+                        class="items-center rounded-2xl shadow-lg"
+                        :class="session.confirmed ? 'bg-primary' : 'bg-secondary'"
+                    >
+                        <div class="rounded-2xl bg-white px-6 py-4">
                             <div class="flex justify-between gap-1">
                                 <div class="text-gray-400">
                                     <p>{{ formatDate(session.date) }}</p>
                                 </div>
-                                <div class="text-gray-400 text-right">
+                                <div class="text-right text-gray-400">
                                     <p>{{ session.time }}hrs</p>
                                 </div>
                             </div>
@@ -45,7 +47,8 @@
                                     v-else-if="session.modality === 'Online'"
                                     :href="session.link || ''"
                                     target="_blank"
-                                    class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline underline-offset-2">
+                                    class="flex items-center gap-1 text-xl font-medium text-secondary underline decoration-secondary underline-offset-2"
+                                >
                                     <Icon name="icon-park-outline:new-computer" />
                                     <p>Online</p>
                                 </a>
@@ -53,17 +56,19 @@
                                     v-else
                                     :href="session.link || ''"
                                     target="_blank"
-                                    class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline-offset-2">
+                                    class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline-offset-2"
+                                >
                                     <Icon name="heroicons:map-pin" />
                                     <p>Lugar</p>
                                 </a>
                             </div>
                         </div>
-                        <div class="py-2 px-5 text-white flex justify-center items-center">
+                        <div class="flex items-center justify-center px-5 py-2 text-white">
                             <button
                                 v-show="!session.confirmed"
                                 class=""
-                                @click="viewSessionDetails(session)">
+                                @click="viewSessionDetails(session)"
+                            >
                                 Ver detalles/Confirmar asistencia
                             </button>
                             <div v-show="session.confirmed" class="text-white">
@@ -75,8 +80,9 @@
             </div>
             <div v-show="!futureSessionsLoading && !futureSessions?.success">
                 <div
-                    class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
-                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+                    class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
+                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+                >
                     <div class="text-md text-center">
                         <b>{{ futureSessions?.message }}</b>
                     </div>
@@ -87,23 +93,24 @@
             </div>
             <CommonLoading v-if="pastSessionsLoading" />
             <div v-else-if="pastSessions?.success">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                     <div
                         v-for="session in pastSessions.sessions"
                         :key="session.session_id"
-                        class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3 opacity-60 hover:opacity-100 transition-opacity"
-                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+                        class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4 opacity-60 transition-opacity hover:opacity-100"
+                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+                    >
                         <div class="px-3">
                             <div class="grid grid-cols-2 gap-1">
-                                <div class="text-[#949494] text-sm text-left">
+                                <div class="text-left text-sm text-[#949494]">
                                     <p>{{ formatDate(session.date) }}</p>
                                 </div>
-                                <div class="text-[#949494] text-sm text-right">
+                                <div class="text-right text-sm text-[#949494]">
                                     <p>{{ session.time }}hrs</p>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center gap-y-2">
-                                <b class="text-[#000000] text-lg font-medium">{{
+                                <b class="text-lg font-medium text-[#000000]">{{
                                     session.format + " - " + session.modality
                                 }}</b>
                                 <a
@@ -122,7 +129,7 @@
                                     }}
                                 </p>
                             </div>
-                            <div class="text-[#949494] text-base text-center gap-2">
+                            <div class="gap-2 text-center text-base text-[#949494]">
                                 <p>Calificar sesión</p>
                                 <div class="flex place-content-center">
                                     <Icon class="text-[#949494]" name="heroicons:star-20-solid" />
@@ -165,8 +172,9 @@
             </div>
             <div v-else>
                 <div
-                    class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
-                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+                    class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
+                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+                >
                     <div class="text-md text-center">
                         <b>{{ pastSessions?.message }}</b>
                     </div>
@@ -178,7 +186,7 @@
                 <div class="p-4">
                     <div class="grid grid-cols-1 lg:grid-cols-2">
                         <div>
-                            <h3 class="text-xl font-semibold text-center mb-4">
+                            <h3 class="mb-4 text-center text-xl font-semibold">
                                 Detalles de la sesión
                             </h3>
                             <div class="space-y-2" v-if="detailsModalSession != null">
@@ -213,7 +221,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-xl font-semibold text-center mb-3">Sobre ti</h3>
+                            <h3 class="mb-3 text-center text-xl font-semibold">Sobre ti</h3>
                             <div
                                 class="space-y-2"
                                 v-if="
@@ -221,7 +229,8 @@
                                     userData &&
                                     userData.info &&
                                     userData.success
-                                ">
+                                "
+                            >
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Alumno:</h4>
                                     <p class="font-semibold">
@@ -258,7 +267,8 @@
                             <div
                                 v-else-if="
                                     userData && !userData.success && professionalWillFillUserData
-                                ">
+                                "
+                            >
                                 <p class="text-center">
                                     Aún no has rellenado tus datos de estudiante
                                 </p>
@@ -266,7 +276,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <p class="max-w-xl mx-auto text-xs text-center">
+                        <p class="mx-auto max-w-xl text-center text-xs">
                             * Se te enviará el link de acceso a la reunión vía Google Meet por
                             correo electrónico para que logres entrar a la sesión de forma online.
                             También puedes acceder desde la pestaña de reservas.
@@ -274,14 +284,16 @@
                     </div>
                     <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
                         <CommonButton
-                            class="px-4 py-2 bg-tertiary"
-                            @click="detailsModal?.closeModal()">
+                            class="bg-tertiary px-4 py-2"
+                            @click="detailsModal?.closeModal()"
+                        >
                             Cancelar
                         </CommonButton>
                         <CommonButton
                             class="px-4 py-2"
                             @click="confirmSession"
-                            :loading="confirmAttendanceLoading">
+                            :loading="confirmAttendanceLoading"
+                        >
                             Confirmar asistencia
                         </CommonButton>
                     </div>
@@ -290,9 +302,9 @@
         </Teleport>
         <Teleport to="body">
             <CommonModal ref="fillUserDataModal">
-                <div class="p-4 max-w-3xl">
+                <div class="max-w-3xl p-4">
                     <div class="text-center">
-                        <h3 class="text-2xl font-semibold mb-4 text-primary">
+                        <h3 class="mb-4 text-2xl font-semibold text-primary">
                             Aún no has rellenados tus datos de estudiante
                         </h3>
                         <p>
@@ -301,29 +313,30 @@
                             ser necesario, y podrá conocer datos que serán necesarios para realizar
                             los entrenamientos.
                         </p>
-                        <p class="font-medium mt-4">
+                        <p class="mt-4 font-medium">
                             Si así lo prefieres, puedes dejar que el profesional rellene tus datos
                             por ti.
                         </p>
                     </div>
                     <div class="mt-6 flex flex-col items-center gap-5 lg:flex-row">
-                        <div class="text-center w-full">
+                        <div class="w-full text-center">
                             <CommonButton
                                 class="w-full px-5 py-2"
                                 bg-color="secondary"
-                                @click="handleProfessionalWillFillUserData">
+                                @click="handleProfessionalWillFillUserData"
+                            >
                                 Dejar que el profesional rellene mis datos
                             </CommonButton>
-                            <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
+                            <p class="mx-auto mt-1.5 max-w-64 text-xs font-medium">
                                 El profesional se encargará de rellenar tus datos al momento de
                                 realizar la sesión
                             </p>
                         </div>
-                        <div class="text-center w-full">
+                        <div class="w-full text-center">
                             <CommonButton class="w-full px-5 py-2" @click="goToFillUserData">
                                 Rellenar mis datos
                             </CommonButton>
-                            <p class="max-w-64 mx-auto text-xs font-medium mt-1.5">
+                            <p class="mx-auto mt-1.5 max-w-64 text-xs font-medium">
                                 Te llevaremos a la sección de rellenar datos de estudiante
                             </p>
                         </div>
@@ -372,7 +385,7 @@ const { data: userData, pending: userDataLoading } = await useFetch<APIUserRespo
         method: "GET",
         credentials: "include",
         lazy: true,
-    }
+    },
 );
 
 const viewSessionDetails = (session: Session) => {
@@ -421,7 +434,7 @@ const {
         method: "GET",
         credentials: "include",
         lazy: true,
-    }
+    },
 );
 
 // Fetch past sessions
@@ -436,7 +449,7 @@ const {
         method: "GET",
         credentials: "include",
         lazy: true,
-    }
+    },
 );
 
 const confirmSession = async () => {
@@ -454,7 +467,7 @@ const confirmSession = async () => {
                 method: "PUT",
                 credentials: "include",
                 body: body,
-            }
+            },
         );
 
         if (response.success) {

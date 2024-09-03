@@ -1,6 +1,6 @@
 <template>
-    <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-        <div class="flex flex-col justify-center items-center mb-12 w-4/5 mx-auto">
+    <div class="grid min-h-screen grid-cols-1 lg:grid-cols-2">
+        <div class="mx-auto mb-12 flex w-4/5 flex-col items-center justify-center">
             <NuxtLink to="/">
                 <NuxtImg src="/logo.png" class="mb-4 w-36" alt="logo" />
             </NuxtLink>
@@ -13,21 +13,23 @@
             </p>
             <div
                 v-if="form?.registrationState.error"
-                class="w-full mt-5 border rounded-md border-red-500 px-5 py-2 text-red-500">
+                class="mt-5 w-full rounded-md border border-red-500 px-5 py-2 text-red-500"
+            >
                 <p>{{ form.registrationState.errorMessage }}</p>
             </div>
         </div>
         <div
-            class="hidden lg:flex items-center justify-center text-center"
-            style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.8) 100%)">
+            class="hidden items-center justify-center text-center lg:flex"
+            style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.8) 100%)"
+        >
             <div class="space-y-10">
                 <div class="mb-4">
-                    <h1 class="font-bold text-white text-7xl">
+                    <h1 class="text-7xl font-bold text-white">
                         ¿Estás <br />
                         preparado?
                     </h1>
                 </div>
-                <NuxtImg src="/emoji/runners.svg" class="w-1/2 mx-auto" alt="runners" />
+                <NuxtImg src="/emoji/runners.svg" class="mx-auto w-1/2" alt="runners" />
             </div>
         </div>
     </div>

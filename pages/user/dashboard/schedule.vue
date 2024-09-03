@@ -1,14 +1,15 @@
 <template>
     <div class="relative">
         <div>
-            <div class="flex flex-col lg:flex-row justify-between items-center mb-4 gap-5">
+            <div class="mb-4 flex flex-col items-center justify-between gap-5 lg:flex-row">
                 <h3 class="text-xl font-medium">Agendar sesión</h3>
                 <div class="flex flex-col items-center">
                     <button
                         @click="openLocationModal"
-                        class="rounded-md px-4 py-2 flex bg-gray-200 text-gray-500 gap-x-2"
-                        :class="{ invisible: isOnline }">
-                        <Icon name="heroicons:map-pin" class="text-2xl flex-shrink-0" />
+                        class="flex gap-x-2 rounded-md bg-gray-200 px-4 py-2 text-gray-500"
+                        :class="{ invisible: isOnline }"
+                    >
+                        <Icon name="heroicons:map-pin" class="flex-shrink-0 text-2xl" />
                         <div class="max-w-xs">
                             <p v-show="!selectedLocation">Ubicación</p>
                             <p v-show="selectedLocation" class="line-clamp-1">
@@ -18,8 +19,9 @@
                     </button>
 
                     <div
-                        class="flex items-center gap-x-1 text-secondary mt-2"
-                        :class="{ invisible: isOnline }">
+                        class="mt-2 flex items-center gap-x-1 text-secondary"
+                        :class="{ invisible: isOnline }"
+                    >
                         <p class="text-sm font-semibold">¿Por qué necesitan mi ubicación?</p>
                         <Icon name="ion:information-circle-outline" class="text-xl" />
                     </div>
@@ -28,13 +30,15 @@
                     <span :class="{ 'text-gray-400': isOnline }">Presencial</span>
                     <!-- Toggle container -->
                     <button
-                        class="relative w-14 h-8 rounded-full p-1"
+                        class="relative h-8 w-14 rounded-full p-1"
                         :class="[isOnline ? 'bg-secondary' : 'bg-primary']"
-                        @click="isOnline = !isOnline">
+                        @click="isOnline = !isOnline"
+                    >
                         <!-- Toggle thumb -->
                         <div
-                            class="absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform"
-                            :class="{ 'translate-x-6': isOnline }"></div>
+                            class="absolute left-1 top-1 h-6 w-6 rounded-full bg-white transition-transform"
+                            :class="{ 'translate-x-6': isOnline }"
+                        ></div>
                     </button>
                     <span :class="{ 'text-gray-400': !isOnline }">Online</span>
                 </div>
@@ -43,30 +47,34 @@
                 <button
                     @click="goToPreviousWeekAndUpdateSelectedDate"
                     :disabled="isStartWeek"
-                    class="group">
+                    class="group"
+                >
                     <Icon
-                        class="text-5xl text-secondary group-disabled:text-secondary-100 group-disabled:cursor-not-allowed"
-                        name="heroicons:chevron-left-20-solid" />
+                        class="text-5xl text-secondary group-disabled:cursor-not-allowed group-disabled:text-secondary-100"
+                        name="heroicons:chevron-left-20-solid"
+                    />
                 </button>
                 <div
                     v-show="!sessionsLoading"
-                    class="py-2 flex gap-2 overflow-x-auto flex-nowrap md:overflow-visible md:flex-wrap">
+                    class="flex flex-nowrap gap-2 overflow-x-auto py-2 md:flex-wrap md:overflow-visible"
+                >
                     <span
                         v-for="(day, index) in weekDays"
                         @click="selectDate(day)"
                         :key="index"
-                        class="rounded-md py-2 px-4 flex flex-col items-center text-gray-700 min-w-32 outline cursor-pointer"
+                        class="flex min-w-32 cursor-pointer flex-col items-center rounded-md px-4 py-2 text-gray-700 outline"
                         :class="{
-                            'bg-secondary text-white outline-secondary opacity-100':
+                            'bg-secondary text-white opacity-100 outline-secondary':
                                 day.toISOString() === selectedDate.toISOString(),
-                            'outline-gray-500 outline-dashed bg-gray-200 opacity-50':
+                            'bg-gray-200 opacity-50 outline-dashed outline-gray-500':
                                 !hasSessionsOnDay(day) &&
                                 ((!isOnline && selectedLocation !== null) || isOnline),
-                            'outline-transparent bg-gray-200':
+                            'bg-gray-200 outline-transparent':
                                 (!isOnline && selectedLocation == null) ||
                                 (!isOnline && selectedLocation != null && hasSessionsOnDay(day)) ||
                                 (isOnline && hasSessionsOnDay(day)),
-                        }">
+                        }"
+                    >
                         <span class="text-2xl font-semibold">{{ formatDate(day).day }}</span>
                         <span class="capitalize">{{ formatDate(day).month }}</span>
                     </span>
@@ -83,12 +91,13 @@
             <div v-show="!sessionsLoading" class="my-10">
                 <div
                     v-show="(!selectedLocation && !isOnline) || filteredProfessionals.length === 0"
-                    class="shadow-md rounded-xl p-10 w-full text-center mt-10 border">
+                    class="mt-10 w-full rounded-xl border p-10 text-center shadow-md"
+                >
                     <div v-show="!selectedLocation && !isOnline">
-                        <h2 class="text-3xl font-semibold text-primary mb-5">
+                        <h2 class="mb-5 text-3xl font-semibold text-primary">
                             No se ha ingresado ubicación
                         </h2>
-                        <p class="max-w-2xl mx-auto text-gray-700">
+                        <p class="mx-auto max-w-2xl text-gray-700">
                             No podemos mostrarte sesiones presenciales si no ingresas la
                             <span class="font-bold"> ubicación aproximada </span>
                             , ya que no sabemos si el profesional tendrá cobertura. Puedes ingresar
@@ -97,22 +106,21 @@
                         </p>
                     </div>
                     <div
-                        v-show="
-                            selectedLocation && !isOnline && filteredProfessionals.length === 0
-                        ">
-                        <h2 class="text-3xl font-semibold text-primary mb-5">
+                        v-show="selectedLocation && !isOnline && filteredProfessionals.length === 0"
+                    >
+                        <h2 class="mb-5 text-3xl font-semibold text-primary">
                             No hay profesionales
                         </h2>
-                        <p class="max-w-2xl mx-auto text-gray-700">
+                        <p class="mx-auto max-w-2xl text-gray-700">
                             No encontramos ninguna hora con nuestros profesionales para la ubicación
                             y fecha ingresada. Prueba otra fecha o prueba otra ubicación.
                         </p>
                     </div>
                     <div v-show="isOnline && filteredProfessionals.length === 0">
-                        <h2 class="text-3xl font-semibold text-primary mb-5">
+                        <h2 class="mb-5 text-3xl font-semibold text-primary">
                             No hay profesionales
                         </h2>
-                        <p class="max-w-2xl mx-auto text-gray-700">
+                        <p class="mx-auto max-w-2xl text-gray-700">
                             No encontramos ninguna hora con nuestros profesionales para la fecha
                             ingresada. Prueba otra fecha.
                         </p>
@@ -123,63 +131,73 @@
                         ((selectedLocation && !isOnline) || isOnline) &&
                         filteredProfessionals.length === 0
                     "
-                    class="inline-flex flex-col items-center w-full text-center">
-                    <p class="max-w-xl mx-auto text-gray-700 mt-6 mb-3">
+                    class="inline-flex w-full flex-col items-center text-center"
+                >
+                    <p class="mx-auto mb-3 mt-6 max-w-xl text-gray-700">
                         Puedes ponerte en contacto directamente con el administrador para coordinar
                         una sesión a través de whatsapp
                     </p>
                     <NuxtLink
                         to="https://wa.me/56971370313?text=Hola%20Entrena%20En%20Casa,%20tengo%20una%20duda."
                         target="_blank"
-                        class="rounded px-4 py-1.5 text-primary space-x-1">
+                        class="space-x-1 rounded px-4 py-1.5 text-primary"
+                    >
                         <Icon name="logos:whatsapp-icon" class="text-4xl" />
                         <span class="underline underline-offset-4">Contactar</span>
                     </NuxtLink>
                 </div>
                 <div
                     v-show="filteredProfessionals.length > 0"
-                    class="grid grid-cols-1 xl:grid-cols-2">
+                    class="grid grid-cols-1 xl:grid-cols-2"
+                >
                     <div
                         v-for="(professional, index) in filteredProfessionals"
                         :key="index"
-                        class="border rounded-xl bg-white py-10 px-8 grid grid-cols-1 xl:grid-cols-3 gap-4 place-items-center">
+                        class="grid grid-cols-1 place-items-center gap-4 rounded-xl border bg-white px-8 py-10 xl:grid-cols-3"
+                    >
                         <div class="col-span-1 text-center">
                             <h3 class="text-2xl font-semibold">
                                 {{ professional.first_name + " " + professional.last_name }}
                             </h3>
                             <p class="text-sm">{{ professional.title }}</p>
                         </div>
-                        <div class="col-span-1 xl:col-span-2 px-5 text-center xl:text-left">
+                        <div class="col-span-1 px-5 text-center xl:col-span-2 xl:text-left">
                             <div class="space-y-5">
                                 <div v-if="professional.customSessions.length > 0">
-                                    <h3 class="font-medium mb-2">Personalizada</h3>
+                                    <h3 class="mb-2 font-medium">Personalizada</h3>
                                     <div
-                                        class="flex flex-wrap justify-center xl:justify-start gap-2 items-center">
+                                        class="flex flex-wrap items-center justify-center gap-2 xl:justify-start"
+                                    >
                                         <button
                                             v-for="session in professional.customSessions"
                                             :key="session.session_info.session_id"
                                             @click="openConfirmationModal(professional, session)"
-                                            class="border rounded-full px-4 py-1.5 bg-secondary text-white">
+                                            class="rounded-full border bg-secondary px-4 py-1.5 text-white"
+                                        >
                                             <p class="text">{{ session.start_time }}hrs</p>
                                         </button>
                                     </div>
                                 </div>
                                 <div v-if="professional.groupSessions.length > 0">
-                                    <h3 class="font-medium mb-2">Grupal</h3>
+                                    <h3 class="mb-2 font-medium">Grupal</h3>
                                     <div
-                                        class="flex flex-wrap justify-center xl:justify-start items-center"
-                                        :class="[isOnline ? 'gap-2' : 'gap-4']">
+                                        class="flex flex-wrap items-center justify-center xl:justify-start"
+                                        :class="[isOnline ? 'gap-2' : 'gap-4']"
+                                    >
                                         <div
                                             class="flex flex-col gap-2"
-                                            v-for="session in professional.groupSessions">
+                                            v-for="session in professional.groupSessions"
+                                        >
                                             <a
                                                 v-if="!isOnline"
                                                 target="__blank"
                                                 :href="session.session_info.link"
-                                                class="text-secondary">
+                                                class="text-secondary"
+                                            >
                                                 <Icon
                                                     name="fa6-solid:location-dot"
-                                                    class="text-xl mr-1" />
+                                                    class="mr-1 text-xl"
+                                                />
                                                 <span
                                                     class="text-sm font-medium underline underline-offset-4"
                                                     >Ver ubicación</span
@@ -189,7 +207,8 @@
                                                 @click="
                                                     openConfirmationModal(professional, session)
                                                 "
-                                                class="border rounded-full px-4 py-1.5 bg-secondary text-white text-center">
+                                                class="rounded-full border bg-secondary px-4 py-1.5 text-center text-white"
+                                            >
                                                 <p class="text">{{ session.start_time }}hrs</p>
                                             </button>
                                         </div>
@@ -204,24 +223,27 @@
         <Teleport to="body">
             <CommonModal ref="locationModal">
                 <div class="px-2 py-4">
-                    <h2 class="text-xl font-semibold text-center mb-6">Ingresa tu dirección</h2>
+                    <h2 class="mb-6 text-center text-xl font-semibold">Ingresa tu dirección</h2>
                     <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
                     <div>
                         <div
-                            class="relative flex justify-center w-full h-full min-h-[300px] lg:min-w-[400px] mt-5">
+                            class="relative mt-5 flex h-full min-h-[300px] w-full justify-center lg:min-w-[400px]"
+                        >
                             <MapboxMap
                                 :map-id="mapID"
-                                class="w-full h-full rounded-xl"
+                                class="h-full w-full rounded-xl"
                                 :options="{
                                     style: 'mapbox://styles/mapbox/streets-v12',
                                     center: DEFAULT_COORDINATES,
                                     zoom: DEFAULT_ZOOM,
-                                }">
+                                }"
+                            >
                                 <MapboxDefaultMarker
                                     :marker-id="markerID"
                                     :options="{ draggable: isDraggable }"
                                     :lnglat="markerCoordinates"
-                                    @dragend="onMarkerDragEnd">
+                                    @dragend="onMarkerDragEnd"
+                                >
                                 </MapboxDefaultMarker>
                                 <MapboxNavigationControl />
                             </MapboxMap>
@@ -229,24 +251,26 @@
                     </div>
                     <div
                         v-show="!isDraggable"
-                        class="flex flex-col items-center text-secondary mt-3">
+                        class="mt-3 flex flex-col items-center text-secondary"
+                    >
                         <p>¿El pin no coincide con la ubicación?</p>
-                        <button class="underline font-medium" @click="isDraggable = true">
+                        <button class="font-medium underline" @click="isDraggable = true">
                             Ajustar ubicación
                         </button>
                     </div>
                     <div
                         v-show="isDraggable"
-                        class="flex flex-col items-center text-secondary mt-3">
-                        <button class="underline font-medium" @click="isDraggable = false">
+                        class="mt-3 flex flex-col items-center text-secondary"
+                    >
+                        <button class="font-medium underline" @click="isDraggable = false">
                             Dejar de ajustar ubicación
                         </button>
                     </div>
-                    <div class="flex justify-between mt-5">
-                        <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
+                    <div class="mt-5 flex justify-between">
+                        <CommonButton @click="closeLocationModal" class="bg-tertiary px-5 py-2">
                             Cancelar
                         </CommonButton>
-                        <CommonButton @click="confirmLocation" class="px-5 py-2 bg-primary">
+                        <CommonButton @click="confirmLocation" class="bg-primary px-5 py-2">
                             Confirmar ubicación
                         </CommonButton>
                     </div>
@@ -256,7 +280,7 @@
         <Teleport to="body">
             <CommonModal ref="confirmationModal">
                 <div class="px-2 py-4">
-                    <h3 class="text-center text-2xl font-semibold mb-10">Confirmación de datos</h3>
+                    <h3 class="mb-10 text-center text-2xl font-semibold">Confirmación de datos</h3>
                     <div class="grid grid-cols-2 gap-3">
                         <p class="justify-self-end">Profesional:</p>
                         <p class="font-semibold">
@@ -276,27 +300,29 @@
                         </p>
                         <template v-if="selectedSession?.session.location">
                             <p class="justify-self-end">Ubicación de la sesión:</p>
-                            <p v-if="!selectedSession?.isGroup" class="font-semibold max-w-60">
+                            <p v-if="!selectedSession?.isGroup" class="max-w-60 font-semibold">
                                 {{ selectedSession?.session.location }}
                             </p>
                             <a
                                 v-else
                                 :href="selectedSession?.session.location"
                                 target="__blank"
-                                class="font-medium max-w-60 text-secondary flex items-center">
-                                <Icon name="fa6-solid:location-dot" class="text-xl mr-1" />
+                                class="flex max-w-60 items-center font-medium text-secondary"
+                            >
+                                <Icon name="fa6-solid:location-dot" class="mr-1 text-xl" />
                                 <span class="underline underline-offset-4">Ver ubicación</span>
                             </a>
                         </template>
                     </div>
-                    <div class="flex flex-col md:flex-row gap-2 justify-between mt-6">
-                        <CommonButton @click="closeLocationModal" class="px-5 py-2 bg-tertiary">
+                    <div class="mt-6 flex flex-col justify-between gap-2 md:flex-row">
+                        <CommonButton @click="closeLocationModal" class="bg-tertiary px-5 py-2">
                             Cancelar
                         </CommonButton>
                         <CommonButton
                             @click="confirmSession"
-                            class="px-5 py-2 bg-primary"
-                            :loading="confirmSessionLoading">
+                            class="bg-primary px-5 py-2"
+                            :loading="confirmSessionLoading"
+                        >
                             Confirmar sesión
                         </CommonButton>
                     </div>
@@ -349,10 +375,10 @@ const filteredProfessionals = computed(() => {
             });
 
             const customSessions = filteredSessions.filter(
-                (session) => session.session_info.format === "Personalizado"
+                (session) => session.session_info.format === "Personalizado",
             );
             const groupSessions = filteredSessions.filter(
-                (session) => session.session_info.format === "Grupal"
+                (session) => session.session_info.format === "Grupal",
             );
 
             return {
@@ -363,7 +389,7 @@ const filteredProfessionals = computed(() => {
         })
         .filter(
             (professional) =>
-                professional.customSessions.length > 0 || professional.groupSessions.length > 0
+                professional.customSessions.length > 0 || professional.groupSessions.length > 0,
         );
 
     return filteredData;
@@ -379,7 +405,7 @@ const hasSessionsOnDay = (day) => {
             // Extract the date part of the session.date and compare
             const sessionDate = session.date.split("T")[0];
             return sessionDate === dayString;
-        })
+        }),
     );
 };
 
@@ -559,7 +585,7 @@ const getInPersonSessions = async () => {
                 method: "POST",
                 credentials: "include",
                 body: body,
-            }
+            },
         );
 
         if (response.success) {

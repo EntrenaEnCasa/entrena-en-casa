@@ -1,12 +1,12 @@
 <template>
-    <div class="shadow py-8 px-6 flex flex-col bg-white gap-2 rounded-2xl">
+    <div class="flex flex-col gap-2 rounded-2xl bg-white px-6 py-8 shadow">
         <div class="self-end">
             <NuxtImg src="/icons/stars-group.svg" alt="icons-stars" />
         </div>
         <div class="self-start">
             <NuxtImg src="/icons/comillas.png" width="40" alt="icon-comillas" />
         </div>
-        <div class="self-center w-11/12">
+        <div class="w-11/12 self-center">
             <p class="text-justify">
                 {{ description }}
             </p>

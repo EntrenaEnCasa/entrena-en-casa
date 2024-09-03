@@ -6,7 +6,7 @@ export const useGeocoding = () => {
         const lat = coordinates[1];
         try {
             const response = await $fetch(
-                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${runtimeConfig.public.mapboxApiKey}`
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${runtimeConfig.public.mapboxApiKey}`,
             );
             return response.features[0];
         } catch (error) {

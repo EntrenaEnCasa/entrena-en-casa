@@ -1,30 +1,33 @@
 <template>
     <div>
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5 items-center w-full">
+        <div class="mt-4 grid w-full grid-cols-1 items-center gap-5 md:grid-cols-3">
             <ProfessionalDashboardCalendarWeekNavigation
                 :currentMonth="currentMonth"
                 :isFetchingData="fetchingEvents"
                 :currentYear="currentYear"
                 :isStartWeek="isStartWeek"
                 @go-to-previous-week="handleGoToPreviousWeek"
-                @go-to-next-week="handleGoToNextWeek" />
+                @go-to-next-week="handleGoToNextWeek"
+            />
 
-            <div class="justify-self-center bg-gray-200 rounded-lg px-16 py-1">
+            <div class="justify-self-center rounded-lg bg-gray-200 px-16 py-1">
                 <p class="font-semibold">Semanal</p>
             </div>
 
-            <div class="flex gap-2 items-center justify-self-center md:justify-self-end">
+            <div class="flex items-center gap-2 justify-self-center md:justify-self-end">
                 <button
                     v-show="!editMode"
                     :disabled="events.length == 0"
                     @click="toggleEditState"
-                    class="bg-primary rounded text-white font-semibold px-4 py-1 disabled:bg-primary-100 disabled:cursor-not-allowed">
+                    class="rounded bg-primary px-4 py-1 font-semibold text-white disabled:cursor-not-allowed disabled:bg-primary-100"
+                >
                     Editar
                 </button>
                 <button
                     v-show="editMode"
                     @click="toggleEditState"
-                    class="bg-secondary rounded text-white font-semibold px-4 py-1">
+                    class="rounded bg-secondary px-4 py-1 font-semibold text-white"
+                >
                     <div class="flex items-center gap-x-1">
                         <Icon name="fa6-solid:pen-to-square"></Icon>
                         <p>Modo edición</p>
@@ -33,27 +36,31 @@
                 <div v-show="!editMode" class="relative">
                     <button
                         @click.stop="newDropdown.toggle()"
-                        class="bg-primary rounded text-white font-semibold px-4 py-1 flex items-center gap-1">
+                        class="flex items-center gap-1 rounded bg-primary px-4 py-1 font-semibold text-white"
+                    >
                         <span> Nuevo </span>
                         <Icon name="fa6-solid:chevron-down"></Icon>
                     </button>
                     <div
-                        class="min-w-max absolute top-6 border right-0 z-50 my-4 text-base list-none text-white shadow-md font-semibold rounded"
-                        :class="{ hidden: !newDropdown.active }">
+                        class="absolute right-0 top-6 z-50 my-4 min-w-max list-none rounded border text-base font-semibold text-white shadow-md"
+                        :class="{ hidden: !newDropdown.active }"
+                    >
                         <ul class="divide-y divide-gray-200">
                             <li>
                                 <button
                                     @click="newEmptySessionModal.handleClickFromButton"
-                                    class="w-full px-4 py-2 rounded-t text-sm bg-primary hover:bg-primary-600"
-                                    role="menuitem">
+                                    class="w-full rounded-t bg-primary px-4 py-2 text-sm hover:bg-primary-600"
+                                    role="menuitem"
+                                >
                                     Disponibilidad
                                 </button>
                             </li>
                             <li>
                                 <button
                                     @click="newEventModal.handleClick"
-                                    class="px-4 py-2 text-sm rounded-b bg-primary hover:bg-primary-600"
-                                    role="menuitem">
+                                    class="rounded-b bg-primary px-4 py-2 text-sm hover:bg-primary-600"
+                                    role="menuitem"
+                                >
                                     Evento Manual
                                 </button>
                             </li>
@@ -63,13 +70,14 @@
             </div>
         </div>
         <div class="my-6 flex items-center">
-            <Icon name="ic:outline-access-time" class="text-2xl text-gray-600 mr-2" />
+            <Icon name="ic:outline-access-time" class="mr-2 text-2xl text-gray-600" />
             <CommonSelect
                 v-model="slotDurationInMinutes"
                 name="duration"
                 id="duration"
                 :options="slotDurationInMinutesOptions"
-                class="w-max" />
+                class="w-max"
+            />
         </div>
         <ProfessionalDashboardCalendarEventGrid
             :fetchingEvents="fetchingEvents"
@@ -78,21 +86,23 @@
             :emptySlotModal="emptySlotModal"
             :editEventHandler="editEventHandler"
             :infoEventHandler="infoEventHandler"
-            :slotDurationInMinutes="slotDurationInMinutes" />
+            :slotDurationInMinutes="slotDurationInMinutes"
+        />
 
-        <div class="mt-10 mb-4 flex justify-center">
+        <div class="mb-4 mt-10 flex justify-center">
             <div
-                class="flex flex-col items-start lg:flex-row lg:justify-center gap-10 font-semibold">
-                <div class="flex justify-center items-center gap-3">
-                    <div class="w-14 h-12 bg-primary rounded-md"></div>
+                class="flex flex-col items-start gap-10 font-semibold lg:flex-row lg:justify-center"
+            >
+                <div class="flex items-center justify-center gap-3">
+                    <div class="h-12 w-14 rounded-md bg-primary"></div>
                     <span> Bloque disponible para sesión </span>
                 </div>
-                <div class="flex justify-center items-center gap-3">
-                    <div class="w-14 h-12 bg-secondary rounded-md"></div>
+                <div class="flex items-center justify-center gap-3">
+                    <div class="h-12 w-14 rounded-md bg-secondary"></div>
                     <span> Sesión con al menos 1 cliente </span>
                 </div>
-                <div class="flex justify-center items-center gap-3">
-                    <div class="w-14 h-12 bg-quaternary rounded-md"></div>
+                <div class="flex items-center justify-center gap-3">
+                    <div class="h-12 w-14 rounded-md bg-quaternary"></div>
                     <span> Evento personal </span>
                 </div>
             </div>
@@ -102,25 +112,32 @@
 
         <ProfessionalDashboardCalendarModalsEmptySlotModal
             ref="emptySlotModalRef"
-            :modal="emptySlotModal" />
+            :modal="emptySlotModal"
+        />
         <ProfessionalDashboardCalendarModalsEmptySessionModal
             ref="newEmptySessionModalRef"
-            :modal="newEmptySessionModal" />
+            :modal="newEmptySessionModal"
+        />
         <ProfessionalDashboardCalendarModalsNewEventModal
             ref="newEventModalRef"
-            :modal="newEventModal" />
+            :modal="newEventModal"
+        />
         <ProfessionalDashboardCalendarModalsEditEmptySessionModal
             ref="editEmptySessionModalRef"
-            :modal="editEmptySessionModal" />
+            :modal="editEmptySessionModal"
+        />
         <ProfessionalDashboardCalendarModalsEditManualSessionModal
             ref="editManualSessionModalRef"
-            :modal="editManualSessionModal" />
+            :modal="editManualSessionModal"
+        />
         <ProfessionalDashboardCalendarModalsEditPersonalEventModal
             ref="editPersonalEventModalRef"
-            :modal="editPersonalEventModal" />
+            :modal="editPersonalEventModal"
+        />
         <ProfessionalDashboardCalendarModalsSessionDetailsModal
             ref="sessionDetailsModalRef"
-            :modal="sessionDetailsModal" />
+            :modal="sessionDetailsModal"
+        />
     </div>
 </template>
 
@@ -261,7 +278,7 @@ const populateCalendar = (events) => {
         const dayIndex = Math.floor((eventDate - startOfWeek) / (1000 * 60 * 60 * 24));
 
         const { slotIndex: startSlotIndex, offset: startOffset } = getTimeSlotInfo(
-            event.start_time
+            event.start_time,
         );
         const { slotIndex: endSlotIndex, offset: endOffset } = getTimeSlotInfo(event.end_time);
 
@@ -318,7 +335,6 @@ const getEvents = async () => {
         });
 
         if (response.success) {
-            // populateCalendarData(response.events)
             populateCalendar(response.events);
             events.value = response.events;
             console.log("events fetched: ");
@@ -522,7 +538,7 @@ const newEventModal = reactive({
 
         if (newEventModal.data.selectedEventType == "Nuevo entrenamiento") {
             const clientsIDs = newEventModal.data.manualSession.clients.map(
-                (client) => client.user_id
+                (client) => client.user_id,
             );
 
             let link;
@@ -533,7 +549,7 @@ const newEventModal = reactive({
                 newEventModal.data.manualSession.selectedModality === "Presencial"
             ) {
                 link = await createGoogleMapsLink(
-                    newEventModal.data.manualSession.locationCoordinates
+                    newEventModal.data.manualSession.locationCoordinates,
                 );
                 coordinates = JSON.stringify(newEventModal.data.manualSession.locationCoordinates);
             } else if (
@@ -569,7 +585,7 @@ const newEventModal = reactive({
                         method: "POST",
                         credentials: "include",
                         body: body,
-                    }
+                    },
                 );
 
                 if (response.success) {
@@ -587,7 +603,7 @@ const newEventModal = reactive({
             }
         } else if (newEventModal.data.selectedEventType == "Evento personal") {
             const clientsIDs = newEventModal.data.personalEvent.clients.map(
-                (client) => client.user_id
+                (client) => client.user_id,
             );
 
             const body = {
@@ -607,7 +623,7 @@ const newEventModal = reactive({
                         method: "POST",
                         credentials: "include",
                         body: body,
-                    }
+                    },
                 );
 
                 if (response.success) {
@@ -744,7 +760,7 @@ const editEmptySessionModal = reactive({
                 {
                     method: "DELETE",
                     credentials: "include",
-                }
+                },
             );
 
             if (response.success) {
@@ -818,7 +834,7 @@ const editManualSessionModal = reactive({
                     method: "PUT",
                     credentials: "include",
                     body: body,
-                }
+                },
             );
 
             if (response.success) {
@@ -844,7 +860,7 @@ const editManualSessionModal = reactive({
                 {
                     method: "DELETE",
                     credentials: "include",
-                }
+                },
             );
 
             if (response.success) {
@@ -911,7 +927,7 @@ const editPersonalEventModal = reactive({
                     method: "PUT",
                     credentials: "include",
                     body: body,
-                }
+                },
             );
 
             if (response.success) {
@@ -937,7 +953,7 @@ const editPersonalEventModal = reactive({
                 {
                     method: "DELETE",
                     credentials: "include",
-                }
+                },
             );
 
             if (response.success) {

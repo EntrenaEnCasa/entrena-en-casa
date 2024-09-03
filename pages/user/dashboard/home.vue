@@ -1,13 +1,19 @@
 <template>
     <div class="space-y-4">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <!-- <div class="grid grid-rows-2"> -->
-            <div class="bg-white py-6 px-10 rounded-2xl border border-zinc-200"
-                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
-                <div class="mb-5 flex justify-between items-center">
+            <div
+                class="rounded-2xl border border-zinc-200 bg-white px-10 py-6"
+                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+            >
+                <div class="mb-5 flex items-center justify-between">
                     <h5 class="text-lg text-[#949494]">Últimas sesiones</h5>
-                    <button @click="goToScheduledSessions()" class="text-right text-sm font-medium text-gray-800">Ver
-                        todas</button>
+                    <button
+                        @click="goToScheduledSessions()"
+                        class="text-right text-sm font-medium text-gray-800"
+                    >
+                        Ver todas
+                    </button>
                 </div>
                 <CommonLoading v-if="pastSessionsLoading" />
                 <div v-else-if="pastSessions && pastSessions.success">
@@ -18,16 +24,16 @@
                                 <div class="text-xs">
                                     {{ formatDate(session.date) }}
                                 </div>
-                                <div>
-                                    {{ session.time }}hrs
-                                </div>
+                                <div>{{ session.time }}hrs</div>
                             </div>
                             <div class="text-sm">
                                 {{ session.format + " - " + session.modality }}
                             </div>
-                            <button @click="openSessionModal(session)"
-                                class="text-secondary font-semibold place-self-end flex items-center">
-                                <p class="hidden md:block mr-1">Ver más</p>
+                            <button
+                                @click="openSessionModal(session)"
+                                class="flex items-center place-self-end font-semibold text-secondary"
+                            >
+                                <p class="mr-1 hidden md:block">Ver más</p>
                                 <Icon name="fa6-solid:chevron-right" />
                             </button>
                         </div>
@@ -38,12 +44,18 @@
                 </div>
             </div>
             <!-- </div> -->
-            <div class="bg-white py-6 px-10 rounded-2xl border border-zinc-200"
-                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
-                <div class="mb-5 flex justify-between items-center">
+            <div
+                class="rounded-2xl border border-zinc-200 bg-white px-10 py-6"
+                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+            >
+                <div class="mb-5 flex items-center justify-between">
                     <h5 class="text-lg text-[#949494]">Próximas sesiones</h5>
-                    <button @click="goToScheduledSessions()" class="text-right text-sm font-medium text-gray-800">Ver
-                        todas</button>
+                    <button
+                        @click="goToScheduledSessions()"
+                        class="text-right text-sm font-medium text-gray-800"
+                    >
+                        Ver todas
+                    </button>
                 </div>
                 <CommonLoading v-if="futureSessionsLoading" />
                 <div v-else-if="futureSessions && futureSessions.success">
@@ -54,9 +66,11 @@
                             <div class="text-sm">
                                 {{ session.format + " - " + session.modality }}
                             </div>
-                            <button @click="openSessionModal(session)"
-                                class="text-secondary font-semibold place-self-end flex items-center">
-                                <p class="hidden md:block mr-1">Ver más</p>
+                            <button
+                                @click="openSessionModal(session)"
+                                class="flex items-center place-self-end font-semibold text-secondary"
+                            >
+                                <p class="mr-1 hidden md:block">Ver más</p>
                                 <Icon name="fa6-solid:chevron-right" />
                             </button>
                         </div>
@@ -80,12 +94,10 @@
             </div>
         </div> -->
         <StudentDashboardSessionInfoModal ref="sessionInfoModal" :session="actualSession" />
-
     </div>
 </template>
 
 <script setup lang="ts">
-
 import { useUserStore } from "~/stores/UserStore";
 const router = useRouter();
 
@@ -114,16 +126,15 @@ const formatDate = (date: string): string => {
 const goToScheduledSessions = () => {
     //route push to sessions.vue
     router.push("/user/dashboard/sessions");
-
 };
 
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
-const actualSession = ref < Session | null > (null);
+const actualSession = ref<Session | null>(null);
 
 const userId = userStore.user?.user_id;
 const headers = useRequestHeaders(["cookie"]);
-const sessionInfoModal = ref < Modal | null > (null);
+const sessionInfoModal = ref<Modal | null>(null);
 
 const openSessionModal = (session: Session) => {
     actualSession.value = session;
@@ -137,9 +148,8 @@ const { data: futureSessions, pending: futureSessionsLoading } = await useFetch(
         method: "GET",
         credentials: "include",
         lazy: true,
-    }
+    },
 );
-
 
 // Fetch past sessions
 const { data: pastSessions, pending: pastSessionsLoading } = await useFetch(
@@ -148,7 +158,7 @@ const { data: pastSessions, pending: pastSessionsLoading } = await useFetch(
         method: "GET",
         credentials: "include",
         lazy: true,
-    }
+    },
 );
 
 onMounted(() => {

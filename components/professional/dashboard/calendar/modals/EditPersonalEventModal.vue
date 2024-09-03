@@ -5,47 +5,52 @@
                 <div class="px-4 py-4 sm:px-6">
                     <ProfessionalDashboardCalendarDayNavigation />
                     <form action="">
-                        <div class="grid gap-6 mb-6 md:grid-cols-2">
-                            <label class="flex flex-col items-center col-span-2">
-                                <span class="font-medium text-sm mb-2">Horario</span>
+                        <div class="mb-6 grid gap-6 md:grid-cols-2">
+                            <label class="col-span-2 flex flex-col items-center">
+                                <span class="mb-2 text-sm font-medium">Horario</span>
                                 <ProfessionalDashboardCalendarTimeRange :isManual="true" />
                             </label>
-                            <label class="w-full flex flex-col col-span-2">
-                                <label class="w-full flex flex-col col-span-2">
-                                    <span class="font-medium text-sm mb-2"
+                            <label class="col-span-2 flex w-full flex-col">
+                                <label class="col-span-2 flex w-full flex-col">
+                                    <span class="mb-2 text-sm font-medium"
                                         >Clientes (opcional)</span
                                     >
                                     <ProfessionalDashboardCalendarClientSearchInput
                                         v-model:clients="modal.data.clients"
-                                        :selectedFormat="modal.data.selectedFormat" />
+                                        :selectedFormat="modal.data.selectedFormat"
+                                    />
                                 </label>
                             </label>
 
-                            <label class="w-full flex flex-col col-span-2">
-                                <span class="font-medium text-sm mb-2"
+                            <label class="col-span-2 flex w-full flex-col">
+                                <span class="mb-2 text-sm font-medium"
                                     >Información adicional (opcional)</span
                                 >
                                 <textarea
                                     v-model="modal.data.additionalInfo"
                                     placeholder="Ingresar detalles del cliente"
-                                    class="border text-gray-800 text-sm rounded-md w-full px-5 py-3.5 outline-none focus:ring-2 ring-primary"
-                                    rows="4"></textarea>
+                                    class="w-full rounded-md border px-5 py-3.5 text-sm text-gray-800 outline-none ring-primary focus:ring-2"
+                                    rows="4"
+                                ></textarea>
                             </label>
                         </div>
                     </form>
                     <div>
                         <div
-                            class="flex flex-col-reverse sm:flex-row gap-y-2 gap-x-4 justify-between">
+                            class="flex flex-col-reverse justify-between gap-x-4 gap-y-2 sm:flex-row"
+                        >
                             <CommonButton
                                 @click="modal.removeSession"
-                                class="px-4 py-2 bg-tertiary"
-                                :loading="modal.data.removeSessionLoading">
+                                class="bg-tertiary px-4 py-2"
+                                :loading="modal.data.removeSessionLoading"
+                            >
                                 Eliminar sesión
                             </CommonButton>
                             <CommonButton
                                 @click="modal.updateSession"
                                 class="px-4 py-2"
-                                :loading="modal.data.updateSessionLoading">
+                                :loading="modal.data.updateSessionLoading"
+                            >
                                 Guardar cambios
                             </CommonButton>
                         </div>

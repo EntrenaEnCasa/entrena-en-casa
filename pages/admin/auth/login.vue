@@ -1,6 +1,6 @@
 <template>
-    <div class="min-h-screen flex items-center max-w-xl mx-auto">
-        <div class="w-full flex flex-col justify-center items-center mb-12">
+    <div class="mx-auto flex min-h-screen max-w-xl items-center">
+        <div class="mb-12 flex w-full flex-col items-center justify-center">
             <NuxtLink to="/">
                 <NuxtImg src="/logo.png" class="mb-4 w-36" alt="logo" />
             </NuxtLink>

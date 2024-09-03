@@ -8,12 +8,13 @@
                     <slot></slot>
                 </div>
                 <div
-                    class="absolute top-0 w-full h-full transition-all duration-300 ease-in-out"
+                    class="absolute top-0 h-full w-full transition-all duration-300 ease-in-out"
                     :class="[
                         sidebar?.sidebarOpen ? 'bg-black/30' : 'bg-transparent',
                         { 'pointer-events-none': !sidebar?.sidebarOpen },
                         { 'lg:bg-transparent': sidebar?.sidebarOpen },
-                    ]"></div>
+                    ]"
+                ></div>
             </div>
         </main>
     </div>

@@ -5,14 +5,16 @@
         </div>
         <div
             v-show="!isFetchingData"
-            class="flex items-center justify-self-center md:justify-self-start text-2xl">
+            class="flex items-center justify-self-center text-2xl md:justify-self-start"
+        >
             <button @click="goToPreviousWeek" :disabled="isStartWeek || isFetchingData">
                 <Icon
                     :class="{
                         'text-gray-300': isStartWeek || isFetchingData,
                         'text-gray-800': !isStartWeek && !isFetchingData,
                     }"
-                    name="fa6-solid:chevron-left"></Icon>
+                    name="fa6-solid:chevron-left"
+                ></Icon>
             </button>
             <button @click="goToNextWeek" :disabled="isFetchingData">
                 <Icon
@@ -20,7 +22,8 @@
                         'text-gray-300': isFetchingData,
                         'text-gray-800': !isFetchingData,
                     }"
-                    name="fa6-solid:chevron-right"></Icon>
+                    name="fa6-solid:chevron-right"
+                ></Icon>
             </button>
             <p class="ml-2 font-medium capitalize">
                 {{ currentMonth }}

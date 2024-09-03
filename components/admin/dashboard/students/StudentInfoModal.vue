@@ -2,17 +2,19 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modal">
-                <div class="w-full mt-3">
+                <div class="mt-3 w-full">
                     <CommonLoading
-                        v-if="!student || futureSessionsLoading || pastSessionsLoading" />
+                        v-if="!student || futureSessionsLoading || pastSessionsLoading"
+                    />
                     <div v-else>
-                        <h2 class="text-2xl text-center mb-5 font-semibold">Estudiante</h2>
-                        <div class="text-center space-y-5 mb-10 w-10/12 mx-auto">
+                        <h2 class="mb-5 text-center text-2xl font-semibold">Estudiante</h2>
+                        <div class="mx-auto mb-10 w-10/12 space-y-5 text-center">
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
                                 <p
                                     class="text-2xl font-medium text-gray-700"
-                                    v-if="student && student?.first_name">
+                                    v-if="student && student?.first_name"
+                                >
                                     {{ student?.first_name }}
                                     {{ student?.last_name }}
                                 </p>
@@ -21,7 +23,7 @@
 
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Correo electrónico</h3>
-                                <p class="text-2xl font-medium text-gray-700 break-all">
+                                <p class="break-all text-2xl font-medium text-gray-700">
                                     {{ student?.email }}
                                 </p>
                             </div>
@@ -29,15 +31,17 @@
                                 <CommonButton
                                     @click="disableUser()"
                                     bg-color="tertiary"
-                                    class="py-2 px-3 text-white mx-auto mb-5"
-                                    v-if="student && student.enabled">
+                                    class="mx-auto mb-5 px-3 py-2 text-white"
+                                    v-if="student && student.enabled"
+                                >
                                     Deshabilitar usuario</CommonButton
                                 >
                                 <CommonButton
                                     @click="enableUser()"
                                     bg-color="primary"
-                                    class="py-2 px-3 text-white mx-auto mb-5"
-                                    v-else-if="student && !student.enabled">
+                                    class="mx-auto mb-5 px-3 py-2 text-white"
+                                    v-else-if="student && !student.enabled"
+                                >
                                     Habilitar usuario</CommonButton
                                 >
 
@@ -45,30 +49,34 @@
                                 <CommonButton
                                     @click="resetPassword()"
                                     bg-color="secondary"
-                                    class="py-2 px-3 text-white mx-auto mb-5">
+                                    class="mx-auto mb-5 px-3 py-2 text-white"
+                                >
                                     Restablecer contraseña
                                 </CommonButton>
                             </div>
                         </div>
 
-                        <div class="space-y-6 mb-6">
+                        <div class="mb-6 space-y-6">
                             <div class="flex items-center justify-between">
                                 <div
-                                    class="px-5 py-3 rounded-lg border flex items-center justify-between w-full">
+                                    class="flex w-full items-center justify-between rounded-lg border px-5 py-3"
+                                >
                                     <p class="text-lg">Planes comprados</p>
                                     <CommonButton
                                         bg-color="secondary"
                                         text-size="sm"
                                         class="px-4 py-2"
-                                        @click="openModalPlans">
+                                        @click="openModalPlans"
+                                    >
                                         Ver planes
                                     </CommonButton>
                                 </div>
                             </div>
                             <div
-                                class="px-5 py-3 rounded-lg border flex items-center justify-between"
+                                class="flex items-center justify-between rounded-lg border px-5 py-3"
                                 id="futureSessionsToggle"
-                                @click="toggleFutureSessions">
+                                @click="toggleFutureSessions"
+                            >
                                 <!-- //toggle de sesiones próximas -->
                                 <p class="text-lg">Sesiones próximas</p>
                                 <Icon
@@ -76,18 +84,21 @@
                                         isFutureSessionsVisible
                                             ? 'fa6-solid:chevron-down'
                                             : 'fa6-solid:chevron-right'
-                                    " />
+                                    "
+                                />
                             </div>
                             <div
                                 class="overflow-x-auto"
                                 id="futureSessions"
-                                v-show="isFutureSessionsVisible">
+                                v-show="isFutureSessionsVisible"
+                            >
                                 <div v-if="futureSessionsLoading">
                                     <CommonLoading />
                                 </div>
                                 <table
                                     v-else-if="futureSessions.length > 0"
-                                    class="bg-white table-auto text-sm text-left text-gray-500">
+                                    class="table-auto bg-white text-left text-sm text-gray-500"
+                                >
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">Fecha</th>
@@ -99,19 +110,19 @@
                                     </thead>
                                     <tbody>
                                         <tr class="border-b" v-for="session in futureSessions">
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.date }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.time }} hrs
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.format }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.modality }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 <p>
                                                     {{ session.professional?.first_name }}
                                                     {{ session.professional?.last_name }}
@@ -128,9 +139,10 @@
                                 </div>
                             </div>
                             <div
-                                class="px-5 py-3 rounded-lg border flex items-center justify-between"
+                                class="flex items-center justify-between rounded-lg border px-5 py-3"
                                 id="pastSessionsToggle"
-                                @click="togglePastSessions">
+                                @click="togglePastSessions"
+                            >
                                 <!-- //toggle de sesiones pasadas -->
                                 <p class="text-lg">Sesiones pasadas</p>
                                 <Icon
@@ -138,18 +150,21 @@
                                         isPastSessionsVisible
                                             ? 'fa6-solid:chevron-down'
                                             : 'fa6-solid:chevron-right'
-                                    " />
+                                    "
+                                />
                             </div>
                             <div
                                 class="overflow-x-auto"
                                 id="pastSessions"
-                                v-show="isPastSessionsVisible">
+                                v-show="isPastSessionsVisible"
+                            >
                                 <div v-if="pastSessionsLoading">
                                     <CommonLoading />
                                 </div>
                                 <table
                                     v-else-if="pastSessions.length > 0"
-                                    class="bg-white table-auto text-sm text-left text-gray-500">
+                                    class="table-auto bg-white text-left text-sm text-gray-500"
+                                >
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">Fecha</th>
@@ -161,20 +176,20 @@
                                     </thead>
                                     <tbody>
                                         <tr class="border-b" v-for="session in pastSessions">
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.date }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.time }} hrs
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.format }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.modality }}
                                             </td>
 
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 <p>
                                                     {{ session.professional.first_name }}
                                                     {{ session.professional.last_name }}
@@ -200,7 +215,8 @@
             :plansLoading="plansLoading"
             :student="student"
             :plans="plans"
-            ref="planInfoModal" />
+            ref="planInfoModal"
+        />
     </div>
 </template>
 
@@ -294,7 +310,7 @@ const getStudentPlans = async (student: Student) => {
             {
                 method: "GET",
                 credentials: "include",
-            }
+            },
         );
 
         if (response.success) {
@@ -330,7 +346,7 @@ const resetPassword = async () => {
 
         if (response.success) {
             toast.success(
-                "Correo de verificación enviado. Se ha enviado un correo para restablecer la contraseña a la dirección de correo del estudiante"
+                "Correo de verificación enviado. Se ha enviado un correo para restablecer la contraseña a la dirección de correo del estudiante",
             );
         } else {
             toast.error(response.message);
@@ -351,7 +367,7 @@ const disableUser = async () => {
             body: {
                 user_id: props.student.user_id,
             },
-        }
+        },
     );
     if (response.success) {
         toast.success("Usuario deshabilitado");
@@ -371,7 +387,7 @@ const enableUser = async () => {
             body: {
                 user_id: props.student.user_id,
             },
-        }
+        },
     );
     if (response.success) {
         toast.success("Usuario habilitado");

@@ -8,7 +8,8 @@
             id="email"
             icon="fa6-solid:envelope"
             placeholder="Ingresa tu correo electrónico"
-            :rules="validateEmail" />
+            :rules="validateEmail"
+        />
         <CommonInput
             label="Contraseña"
             v-model="formData.password"
@@ -17,7 +18,8 @@
             id="password"
             icon="fa6-solid:lock"
             placeholder="* * * * * * * *"
-            :rules="validatePassword" />
+            :rules="validatePassword"
+        />
 
         <div class="flex justify-between">
             <div class="flex items-center space-x-1">
@@ -29,10 +31,11 @@
             </router-link>
         </div>
         <CommonButton
-            class="py-2 w-full font-medium"
+            class="w-full py-2 font-medium"
             text-size="xl"
             :loading="loading"
-            :disabled="!meta.valid">
+            :disabled="!meta.valid"
+        >
             Iniciar Sesión
         </CommonButton>
     </Form>

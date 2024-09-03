@@ -1,25 +1,29 @@
 <template>
     <div class="relative">
         <div
-            class="border text-gray-800 text-sm rounded-md px-5 py-3.5 max-w-2xl box-border"
-            :class="{ 'ring-2 ring-primary ring-inset': inputFocused }">
-            <div class="flex items-center flex-wrap gap-y-4 gap-x-2">
+            class="box-border max-w-2xl rounded-md border px-5 py-3.5 text-sm text-gray-800"
+            :class="{ 'ring-2 ring-inset ring-primary': inputFocused }"
+        >
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-4">
                 <input
                     type="text"
                     v-model="searchTerm"
                     :placeholder="placeholder"
-                    class="outline-none w-full"
+                    class="w-full outline-none"
                     @focus="inputFocused = true"
                     @blur="inputFocused = false"
                     @input="delayedFetchResults"
-                    @keydown="handleKeydown" />
+                    @keydown="handleKeydown"
+                />
                 <div v-for="(chip, index) in chips" :key="chip.user_id">
                     <span
-                        class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium bg-secondary text-white">
+                        class="inline-flex items-center rounded-full bg-secondary px-2.5 py-1.5 text-xs font-medium text-white"
+                    >
                         <Icon
                             @click="removeChip(index)"
-                            class="text-lg mr-1"
-                            name="fa6-solid:circle-xmark" />
+                            class="mr-1 text-lg"
+                            name="fa6-solid:circle-xmark"
+                        />
                         <span v-if="chip.first_name">
                             {{ chip.first_name }} {{ chip.last_name }}
                         </span>
@@ -30,13 +34,15 @@
                 </div>
             </div>
             <div
-                class="border rounded-md absolute top-[110%] left-0 right-0 bg-white shadow-lg p-3"
-                v-if="inputFocused && searchTerm">
+                class="absolute left-0 right-0 top-[110%] rounded-md border bg-white p-3 shadow-lg"
+                v-if="inputFocused && searchTerm"
+            >
                 <CommonLoading v-if="isLoading" text="Buscando" />
                 <ul v-else>
                     <li
                         v-show="(isSearchPending || isLoading) && filteredResults.length === 0"
-                        class="px-3 py-2">
+                        class="px-3 py-2"
+                    >
                         Se buscará {{ searchTerm }}
                     </li>
                     <li
@@ -46,18 +52,20 @@
                             !isLoading &&
                             hasFetched &&
                             !isSearchPending
-                        ">
+                        "
+                    >
                         No se encontraron resultados
                     </li>
                     <li
-                        class="px-3 py-2 rounded hover:bg-gray-100"
+                        class="rounded px-3 py-2 hover:bg-gray-100"
                         v-show="filteredResults.length > 0"
                         v-for="(result, index) in filteredResults"
                         :key="result.user_id"
                         @mousedown="addChip(result)"
                         :class="{
                             'bg-gray-200': index === selectedResultIndex,
-                        }">
+                        }"
+                    >
                         <p v-if="result.first_name" class="font-medium">
                             {{ result.first_name }} {{ result.last_name }}
                         </p>
@@ -115,7 +123,7 @@ const fetchResults = async () => {
                     body: {
                         searchTerm: searchTerm.value,
                     },
-                }
+                },
             );
 
             if (response.success) {
@@ -161,7 +169,7 @@ const filteredResults = computed(() => {
                 ((student.first_name &&
                     student.first_name.toLowerCase().includes(searchTerm.value.toLowerCase())) ||
                     student.email.toLowerCase().includes(searchTerm.value.toLowerCase())) &&
-                !chipIds.includes(student.user_id)
+                !chipIds.includes(student.user_id),
         )
         .slice(0, 5);
 });

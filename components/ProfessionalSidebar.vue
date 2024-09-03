@@ -1,20 +1,23 @@
 <template>
     <aside
         id="logo-sidebar"
-        class="fixed top-0 left-0 z-40 w-72 h-screen pt-24 duration-300 transition-transform -translate-x-full bg-white border-r border-gray-200 lg:translate-x-0"
+        class="fixed left-0 top-0 z-40 h-screen w-72 -translate-x-full border-r border-gray-200 bg-white pt-24 transition-transform duration-300 lg:translate-x-0"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-        aria-label="Sidebar">
-        <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
+        aria-label="Sidebar"
+    >
+        <div class="h-full overflow-y-auto bg-white px-3 pb-4">
             <ul class="space-y-2 font-medium">
                 <li>
                     <router-link
                         @click="sidebarOpen = false"
                         to="/professional/dashboard/home"
-                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
+                        class="group flex items-center rounded-lg p-3 text-gray-500 hover:bg-secondary-300"
+                    >
                         <Icon
                             name="fa6-solid:house-chimney"
-                            class="w-5 h-5 group-hover:text-white" />
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white"
+                            class="h-5 w-5 group-hover:text-white"
+                        />
+                        <span class="ml-3 flex-1 whitespace-nowrap group-hover:text-white"
                             >Inicio</span
                         >
                     </router-link>
@@ -23,13 +26,15 @@
                     <router-link
                         @click="sidebarOpen = false"
                         to="/professional/dashboard/programmedSessions"
-                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
+                        class="group flex items-center rounded-lg p-3 text-gray-500 hover:bg-secondary-300"
+                    >
                         <div>
                             <Icon
                                 name="fa6-solid:circle-check"
-                                class="w-5 h-5 group-hover:text-white" />
+                                class="h-5 w-5 group-hover:text-white"
+                            />
                         </div>
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white"
+                        <span class="ml-3 flex-1 whitespace-nowrap group-hover:text-white"
                             >Sesiones programadas</span
                         >
                     </router-link>
@@ -38,11 +43,13 @@
                     <router-link
                         @click="sidebarOpen = false"
                         to="/professional/dashboard/calendar"
-                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
+                        class="group flex items-center rounded-lg p-3 text-gray-500 hover:bg-secondary-300"
+                    >
                         <Icon
                             name="fa6-solid:calendar-days"
-                            class="w-5 h-5 group-hover:text-white" />
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white"
+                            class="h-5 w-5 group-hover:text-white"
+                        />
+                        <span class="ml-3 flex-1 whitespace-nowrap group-hover:text-white"
                             >Calendario</span
                         >
                     </router-link>
@@ -51,9 +58,10 @@
                     <router-link
                         @click="sidebarOpen = false"
                         to="/professional/dashboard/profile"
-                        class="flex items-center p-3 text-gray-500 rounded-lg hover:bg-secondary-300 group">
-                        <Icon name="fa6-solid:user" class="w-5 h-5 group-hover:text-white" />
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-white"
+                        class="group flex items-center rounded-lg p-3 text-gray-500 hover:bg-secondary-300"
+                    >
+                        <Icon name="fa6-solid:user" class="h-5 w-5 group-hover:text-white" />
+                        <span class="ml-3 flex-1 whitespace-nowrap group-hover:text-white"
                             >Mi perfil</span
                         >
                     </router-link>

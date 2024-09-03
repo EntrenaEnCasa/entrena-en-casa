@@ -24,5 +24,5 @@ export const usePaymentStore = defineStore(
         persist: {
             storage: localStorage,
         },
-    }
+    },
 );

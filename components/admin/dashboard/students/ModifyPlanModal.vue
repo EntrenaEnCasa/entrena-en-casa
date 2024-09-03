@@ -4,12 +4,14 @@
             <CommonModal ref="modal">
                 <div class="w-full text-center">
                     <div
-                        class="text-center lg:text-start grid grid-cols-1 place-items-center justify-center lg:grid-cols-2 mb-8 w-10/12 mx-auto mt-5">
+                        class="mx-auto mb-8 mt-5 grid w-10/12 grid-cols-1 place-items-center justify-center text-center lg:grid-cols-2 lg:text-start"
+                    >
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Nombre</h3>
                             <p
                                 class="text-2xl font-medium text-gray-700"
-                                v-if="student?.first_name">
+                                v-if="student?.first_name"
+                            >
                                 {{ student?.first_name }}
                                 {{ student?.last_name }}
                             </p>
@@ -23,13 +25,14 @@
                             </p>
                         </div>
                     </div>
-                    <div class="overflow-hidden lg:w-full px-10">
-                        <div class="flex justify-between items-center mb-5">
+                    <div class="overflow-hidden px-10 lg:w-full">
+                        <div class="mb-5 flex items-center justify-between">
                             <h3 class="mx-auto text-2xl">Modificar Plan</h3>
                         </div>
                         <table
-                            class="bg-white table-auto text-sm text-center mx-auto mb-7"
-                            v-if="plan">
+                            class="mx-auto mb-7 table-auto bg-white text-center text-sm"
+                            v-if="plan"
+                        >
                             <thead class="text-gray-400">
                                 <tr>
                                     <th scope="col" class="font-medium"></th>
@@ -39,13 +42,13 @@
                             <tbody>
                                 <tr>
                                     <td class="px-6 py-2">
-                                        <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
-                                            <p class="font-light text-right">Plan</p>
-                                            <p class="font-bold text-left">
+                                        <div class="mx-auto mb-5 grid w-5/6 grid-cols-2 gap-5">
+                                            <p class="text-right font-light">Plan</p>
+                                            <p class="text-left font-bold">
                                                 {{
                                                     getFormattedCreditType(
                                                         plan.credit_type,
-                                                        plan.format_credit
+                                                        plan.format_credit,
                                                     )
                                                 }}
                                             </p>
@@ -53,8 +56,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="grid grid-cols-2 w-4/6 mx-auto gap-5 mb-5">
-                                        <p class="font-light text-right">
+                                    <td class="mx-auto mb-5 grid w-4/6 grid-cols-2 gap-5">
+                                        <p class="text-right font-light">
                                             Cantidad de sesiones compradas
                                         </p>
                                         <div class="flex items-center">
@@ -62,83 +65,97 @@
                                                 v-if="
                                                     plan.credit_type === 'PP' &&
                                                     plan.format_credit === 'Dupla'
-                                                ">
-                                                <div class="text-primary whitespace-nowrap">
+                                                "
+                                            >
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon
                                                         name="material-symbols:supervisor-account-rounded"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                     <Icon
                                                         name="mdi:weight-lifter"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div
                                                 v-else-if="
                                                     plan.credit_type === 'PP' &&
                                                     plan.format_credit === 'Individual'
-                                                ">
-                                                <div class="text-primary whitespace-nowrap">
+                                                "
+                                            >
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon name="ion:person" class="text-2xl" />
                                                     <Icon
                                                         name="mdi:weight-lifter"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div v-else-if="plan.credit_type === 'GP'">
-                                                <div class="text-primary whitespace-nowrap">
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon
                                                         name="mdi:account-multiple-plus"
-                                                        class="text-2xl" />
+                                                        class="text-2xl"
+                                                    />
                                                     <Icon
                                                         name="mdi:weight-lifter"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div
                                                 v-else-if="
                                                     plan.credit_type === 'PO' &&
                                                     plan.format_credit === 'Dupla'
-                                                ">
-                                                <div class="text-primary whitespace-nowrap">
+                                                "
+                                            >
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon
                                                         name="material-symbols:supervisor-account-rounded"
-                                                        class="text-2xl" />
+                                                        class="text-2xl"
+                                                    />
                                                     <Icon
                                                         name="material-symbols:laptop-mac-outline"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div
                                                 v-else-if="
                                                     plan.credit_type === 'PO' &&
                                                     plan.format_credit === 'Individual'
-                                                ">
-                                                <div class="text-primary whitespace-nowrap">
+                                                "
+                                            >
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon name="ion:person" class="text-2xl" />
                                                     <Icon
                                                         name="material-symbols:laptop-mac-outline"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div v-else-if="plan.credit_type === 'GO'">
-                                                <div class="text-primary whitespace-nowrap">
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon
                                                         name="mdi:account-multiple-plus"
-                                                        class="text-2xl" />
+                                                        class="text-2xl"
+                                                    />
                                                     <Icon
                                                         name="material-symbols:laptop-mac-outline"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
-                                            <p class="font-bold ml-3">
+                                            <p class="ml-3 font-bold">
                                                 {{ plan?.available_credits + plan?.used_credits }}
                                             </p>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="grid grid-cols-2 w-4/6 mx-auto gap-5 mb-5">
-                                        <p class="font-light text-right">
+                                    <td class="mx-auto mb-5 grid w-4/6 grid-cols-2 gap-5">
+                                        <p class="text-right font-light">
                                             Cantidad de créditos restantes disponibles
                                         </p>
                                         <div class="flex items-center">
@@ -146,75 +163,89 @@
                                                 v-if="
                                                     plan.credit_type === 'PP' &&
                                                     plan.format_credit === 'Dupla'
-                                                ">
-                                                <div class="text-primary whitespace-nowrap">
+                                                "
+                                            >
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon
                                                         name="material-symbols:supervisor-account-rounded"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                     <Icon
                                                         name="mdi:weight-lifter"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div
                                                 v-else-if="
                                                     plan.credit_type === 'PP' &&
                                                     plan.format_credit === 'Individual'
-                                                ">
-                                                <div class="text-primary whitespace-nowrap">
+                                                "
+                                            >
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon name="ion:person" class="text-2xl" />
                                                     <Icon
                                                         name="mdi:weight-lifter"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div v-else-if="plan.credit_type === 'GP'">
-                                                <div class="text-primary whitespace-nowrap">
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon
                                                         name="mdi:account-multiple-plus"
-                                                        class="text-2xl" />
+                                                        class="text-2xl"
+                                                    />
                                                     <Icon
                                                         name="mdi:weight-lifter"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div
                                                 v-else-if="
                                                     plan.credit_type === 'PO' &&
                                                     plan.format_credit === 'Dupla'
-                                                ">
-                                                <div class="text-primary whitespace-nowrap">
+                                                "
+                                            >
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon
                                                         name="material-symbols:supervisor-account-rounded"
-                                                        class="text-2xl" />
+                                                        class="text-2xl"
+                                                    />
                                                     <Icon
                                                         name="material-symbols:laptop-mac-outline"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div
                                                 v-else-if="
                                                     plan.credit_type === 'PO' &&
                                                     plan.format_credit === 'Individual'
-                                                ">
-                                                <div class="text-primary whitespace-nowrap">
+                                                "
+                                            >
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon name="ion:person" class="text-2xl" />
                                                     <Icon
                                                         name="material-symbols:laptop-mac-outline"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
                                             <div v-else-if="plan.credit_type === 'GO'">
-                                                <div class="text-primary whitespace-nowrap">
+                                                <div class="whitespace-nowrap text-primary">
                                                     <Icon
                                                         name="mdi:account-multiple-plus"
-                                                        class="text-2xl" />
+                                                        class="text-2xl"
+                                                    />
                                                     <Icon
                                                         name="material-symbols:laptop-mac-outline"
-                                                        class="text-3xl" />
+                                                        class="text-3xl"
+                                                    />
                                                 </div>
                                             </div>
-                                            <p class="font-bold ml-3">
+                                            <p class="ml-3 font-bold">
                                                 {{ plan?.available_credits }}
                                             </p>
                                         </div>
@@ -222,11 +253,11 @@
                                 </tr>
                                 <tr>
                                     <td class="px-6 py-2">
-                                        <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
-                                            <p class="font-light text-right">
+                                        <div class="mx-auto mb-5 grid w-5/6 grid-cols-2 gap-5">
+                                            <p class="text-right font-light">
                                                 Fecha de expiración actual
                                             </p>
-                                            <p class="font-bold text-left">
+                                            <p class="text-left font-bold">
                                                 {{ formatDate(plan?.expiration_date) }}
                                             </p>
                                         </div>
@@ -234,15 +265,16 @@
                                 </tr>
                                 <tr>
                                     <td class="px-6 py-2">
-                                        <div class="grid grid-cols-2 w-5/6 mx-auto gap-5 mb-5">
-                                            <p class="font-light text-right">
+                                        <div class="mx-auto mb-5 grid w-5/6 grid-cols-2 gap-5">
+                                            <p class="text-right font-light">
                                                 Fecha de expiración actual
                                             </p>
                                             <form>
                                                 <input
                                                     type="date"
                                                     class="form-input"
-                                                    v-model="newExpirationDate" />
+                                                    v-model="newExpirationDate"
+                                                />
                                             </form>
                                         </div>
                                     </td>
@@ -341,7 +373,7 @@ const modifyPlan = async () => {
                     transaction_id: planId,
                     expiration_date: newExpirationDate.value,
                 }),
-            }
+            },
         );
 
         if (!response.success) {
@@ -383,6 +415,6 @@ watch(
     (newPlan) => {
         newExpirationDate.value = newPlan?.expiration_date ?? "";
     },
-    { immediate: true }
+    { immediate: true },
 );
 </script>

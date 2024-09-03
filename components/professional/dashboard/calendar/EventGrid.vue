@@ -1,24 +1,27 @@
 <!-- EventGrid.vue -->
 <template>
-    <div class="overflow-x-auto bg-white rounded-2xl border py-7 px-9">
+    <div class="overflow-x-auto rounded-2xl border bg-white px-9 py-7">
         <CommonLoading v-if="fetchingEvents" class="my-8" />
         <div v-else>
             <div
                 class="grid"
                 style="
                     grid-template-columns: minmax(60px, max-content) repeat(7, minmax(130px, 1fr));
-                ">
-                <div class="text-sm font-semibold text-center border-gray-200"></div>
+                "
+            >
+                <div class="border-gray-200 text-center text-sm font-semibold"></div>
                 <div
                     v-for="day in calendarData"
                     :key="day.date"
-                    class="capitalize text-sm font-semibold text-center border-b border-gray-200 pb-4 min-w-[130px] text-gray-500">
+                    class="min-w-[130px] border-b border-gray-200 pb-4 text-center text-sm font-semibold capitalize text-gray-500"
+                >
                     {{ day.formattedDate }}
                 </div>
                 <template v-if="calendarData.length > 0">
                     <template v-for="(timeSlot, index) in timeSlots" :key="timeSlot.time">
                         <div
-                            class="text-sm font-semibold text-center border-r border-gray-200 py-2 pr-4 text-gray-500">
+                            class="border-r border-gray-200 py-2 pr-4 text-center text-sm font-semibold text-gray-500"
+                        >
                             {{ timeSlot.time }}
                         </div>
                         <div v-for="day in calendarData" :key="day.date">
@@ -32,7 +35,8 @@
                                 @infoClick="(event) => infoEventHandler.handleClick(event)"
                                 @editClick="
                                     (event) => editEventHandler.handleClick(day.date, event)
-                                " />
+                                "
+                            />
                         </div>
                     </template>
                 </template>

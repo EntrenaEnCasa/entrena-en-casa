@@ -1,13 +1,15 @@
 <template>
     <div
-        class="relative h-14 border-r border-gray-200 min-w-[130px]"
-        :class="{ 'border-b': shouldShowBorder(timeSlot) }">
+        class="relative h-14 min-w-[130px] border-r border-gray-200"
+        :class="{ 'border-b': shouldShowBorder(timeSlot) }"
+    >
         <button
             v-if="isTimeSlotEmpty(timeSlot)"
-            class="w-full h-full"
+            class="h-full w-full"
             :class="[editMode ? '' : editClass]"
             :disabled="editMode"
-            @click="$emit('emptySlotClick')">
+            @click="$emit('emptySlotClick')"
+        >
             <div class="hidden" :class="{ 'group-hover:flex': !editMode }">
                 <Icon name="fa6-solid:square-plus" class="text-3xl text-gray-300" />
             </div>
@@ -20,13 +22,16 @@
             :disabled="!shouldShowEventDetails(event)"
             class="absolute w-full overflow-hidden"
             :class="eventClasses(event)"
-            :style="getEventStyle(event)">
+            :style="getEventStyle(event)"
+        >
             <div
                 v-if="shouldShowEventDetails(event)"
-                class="flex justify-center items-center text-white">
+                class="flex items-center justify-center text-white"
+            >
                 <Icon
                     :name="editMode ? 'fa6-solid:pen-to-square' : 'mdi:eye'"
-                    :class="editMode ? 'text-xl text-white' : 'text-lg text-white'" />
+                    :class="editMode ? 'text-xl text-white' : 'text-lg text-white'"
+                />
                 <span class="ml-1.5 text-sm">{{ editMode ? "Editar" : "Ver detalles" }}</span>
             </div>
         </button>

@@ -1,7 +1,7 @@
 <template>
     <CommonModal ref="modalRef">
-        <div class="px-4 py-4 sm:px-6 text-center">
-            <h2 class="text-2xl font-semibold mb-4">Información de la sesión</h2>
+        <div class="px-4 py-4 text-center sm:px-6">
+            <h2 class="mb-4 text-2xl font-semibold">Información de la sesión</h2>
             <p class="text-lg font-medium">
                 {{ eventTypeText }}
             </p>
@@ -9,13 +9,13 @@
 
             <template v-if="event">
                 <template v-if="['session', 'manual_session'].includes(event.type)">
-                    <h5 class="font-medium text-lg">Formato</h5>
+                    <h5 class="text-lg font-medium">Formato</h5>
                     <p class="mb-4">{{ event.session_info.format }}</p>
-                    <h5 class="font-medium text-lg">Modalidad</h5>
+                    <h5 class="text-lg font-medium">Modalidad</h5>
                     <p class="mb-4">{{ event.session_info.modality }}</p>
                 </template>
 
-                <h5 class="font-medium text-lg">Clientes</h5>
+                <h5 class="text-lg font-medium">Clientes</h5>
                 <p v-if="event.clients.length === 0">Aún no hay clientes agendados</p>
                 <ul v-else>
                     <li v-for="client in event.clients" :key="client.id">

@@ -5,12 +5,15 @@
                 <div class="grid grid-cols-2 gap-4 p-10">
                     <div>
                         <div class="text-sm text-gray-800">Fecha</div>
-                        <div class="text-lg font-semibold text-gray-800">{{ props.session ?
-                            formatDate(props.session.date) : '' }}</div>
+                        <div class="text-lg font-semibold text-gray-800">
+                            {{ props.session ? formatDate(props.session.date) : "" }}
+                        </div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-800">Hora</div>
-                        <div class="text-lg font-semibold text-gray-800">{{ props.session?.time }}hrs</div>
+                        <div class="text-lg font-semibold text-gray-800">
+                            {{ props.session?.time }}hrs
+                        </div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-800">Formato</div>
@@ -20,19 +23,23 @@
                     </div>
                     <div>
                         <div class="text-sm text-gray-800">Modalidad</div>
-                        <div class="text-lg font-semibold text-gray-800"> {{ props.session?.modality }}
+                        <div class="text-lg font-semibold text-gray-800">
+                            {{ props.session?.modality }}
                         </div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-800">Enlace Reunión o Dirección</div>
                         <div class="text-lg font-semibold text-gray-800">
-                            <a :href="props.session?.link" target="_blank" class="text-primary">Ir a la sesión</a>
+                            <a :href="props.session?.link" target="_blank" class="text-primary"
+                                >Ir a la sesión</a
+                            >
                         </div>
                     </div>
                     <div>
                         <div class="text-sm text-gray-800">Profesional</div>
                         <div class="text-lg font-semibold text-gray-800">
-                            {{ props.session?.professional?.first_name }} {{ props.session?.professional?.last_name }}
+                            {{ props.session?.professional?.first_name }}
+                            {{ props.session?.professional?.last_name }}
                         </div>
                     </div>
                 </div>
@@ -81,5 +88,4 @@ const formatDate = (date: string): string => {
 defineExpose({
     openModal,
 });
-
 </script>

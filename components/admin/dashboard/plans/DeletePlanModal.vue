@@ -4,20 +4,22 @@
             <CommonModal ref="modal">
                 <div class="w-full p-5 text-center">
                     <h1 class="text-2xl font-bold">¿De verdad quieres eliminar este plan?</h1>
-                    <p class="text-gray-500 mt-2">Esta acción no puede ser revertida</p>
+                    <p class="mt-2 text-gray-500">Esta acción no puede ser revertida</p>
                 </div>
-                <div class="flex justify-center items-center p-5">
+                <div class="flex items-center justify-center p-5">
                     <CommonButton
                         @click="deletePlan"
                         bg-color="tertiary"
-                        class="px-4 py-2 rounded-md mr-2">
+                        class="mr-2 rounded-md px-4 py-2"
+                    >
                         Eliminar Plan
                     </CommonButton>
                     <CommonButton
                         @click="closeModal"
                         bg-color="gray-200"
                         text-color="gray-700"
-                        class="px-4 py-2 rounded-md">
+                        class="rounded-md px-4 py-2"
+                    >
                         Cancelar
                     </CommonButton>
                 </div>
@@ -56,7 +58,7 @@ const deletePlan = async () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-            }
+            },
         );
         if (response.success) {
             toast.success("Plan eliminado correctamente");

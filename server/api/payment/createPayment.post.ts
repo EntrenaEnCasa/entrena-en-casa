@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
                     "Content-Type": "application/json",
                     Cookie: `auth_token=${auth_token}`,
                 },
-            }
+            },
         );
 
         console.log("get plan success");
@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
                 plan_id: plan_id,
             }),
         },
-        config.flowSecretKey
+        config.flowSecretKey,
     );
 
     console.log(formData);

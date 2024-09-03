@@ -8,11 +8,12 @@
                     <slot></slot>
                 </div>
                 <div
-                    class="absolute top-0 w-full h-full min-h-[calc(100vh_-_4.5rem)] transition-all duration-300 ease-in-out"
+                    class="absolute top-0 h-full min-h-[calc(100vh_-_4.5rem)] w-full transition-all duration-300 ease-in-out"
                     :class="[
                         sidebar?.sidebarOpen ? 'bg-black/30' : 'bg-transparent',
                         { 'pointer-events-none': !sidebar?.sidebarOpen },
-                    ]"></div>
+                    ]"
+                ></div>
             </div>
         </main>
     </div>

@@ -2,18 +2,20 @@
     <div>
         <Teleport to="body">
             <CommonModal ref="modal">
-                <div class="w-full mt-3">
+                <div class="mt-3 w-full">
                     <CommonLoading
-                        v-if="!professional || pastSessionsLoading || futureSessionsLoading" />
+                        v-if="!professional || pastSessionsLoading || futureSessionsLoading"
+                    />
                     <div v-else>
-                        <h2 class="text-2xl text-center mb-5 font-semibold">Entrenador</h2>
+                        <h2 class="mb-5 text-center text-2xl font-semibold">Entrenador</h2>
 
-                        <div class="text-center space-y-5 mb-10 w-10/12 mx-auto">
+                        <div class="mx-auto mb-10 w-10/12 space-y-5 text-center">
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
                                 <p
                                     class="text-2xl font-medium text-gray-700"
-                                    v-if="professional.first_name">
+                                    v-if="professional.first_name"
+                                >
                                     {{ professional.first_name }}
                                     {{ professional.last_name }}
                                 </p>
@@ -30,31 +32,35 @@
                                 <CommonButton
                                     @click="disableUser()"
                                     bg-color="tertiary"
-                                    class="py-2 px-3 text-white mx-auto mb-5"
-                                    v-if="professional && professional.enabled">
+                                    class="mx-auto mb-5 px-3 py-2 text-white"
+                                    v-if="professional && professional.enabled"
+                                >
                                     Deshabilitar usuario</CommonButton
                                 >
                                 <CommonButton
                                     @click="enableUser()"
                                     bg-color="primary"
-                                    class="py-2 px-3 text-white mx-auto mb-5"
-                                    v-else-if="professional && !professional.enabled">
+                                    class="mx-auto mb-5 px-3 py-2 text-white"
+                                    v-else-if="professional && !professional.enabled"
+                                >
                                     Habilitar usuario</CommonButton
                                 >
                                 <!-- Botón para restablecer contraseña -->
                                 <CommonButton
                                     @click="resetPassword()"
                                     bg-color="secondary"
-                                    class="py-2 px-3 text-white mx-auto mb-5">
+                                    class="mx-auto mb-5 px-3 py-2 text-white"
+                                >
                                     Restablecer contraseña
                                 </CommonButton>
                             </div>
                         </div>
-                        <div class="space-y-6 mb-6">
+                        <div class="mb-6 space-y-6">
                             <div
-                                class="px-5 py-3 rounded-lg border flex items-center justify-between"
+                                class="flex items-center justify-between rounded-lg border px-5 py-3"
                                 id="futureSessionsToggle"
-                                @click="toggleFutureSessions">
+                                @click="toggleFutureSessions"
+                            >
                                 <!-- //toggle de sesiones próximas -->
                                 <p class="text-lg">Sesiones próximas</p>
                                 <Icon
@@ -62,18 +68,21 @@
                                         isFutureSessionsVisible
                                             ? 'fa6-solid:chevron-down'
                                             : 'fa6-solid:chevron-right'
-                                    " />
+                                    "
+                                />
                             </div>
                             <div
                                 class="overflow-x-auto"
                                 id="futureSessions"
-                                v-show="isFutureSessionsVisible">
+                                v-show="isFutureSessionsVisible"
+                            >
                                 <div v-if="futureSessionsLoading">
                                     <CommonLoading />
                                 </div>
                                 <table
                                     v-else-if="futureSessions.length > 0"
-                                    class="bg-white table-auto text-sm text-left w-full text-gray-500">
+                                    class="w-full table-auto bg-white text-left text-sm text-gray-500"
+                                >
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">Fecha</th>
@@ -85,19 +94,19 @@
                                     </thead>
                                     <tbody>
                                         <tr class="border-b" v-for="session in futureSessions">
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.date }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.time }} hrs
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.format }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.modality }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.actual_assistant }}
                                             </td>
                                         </tr>
@@ -108,9 +117,10 @@
                                 </div>
                             </div>
                             <div
-                                class="px-5 py-3 rounded-lg border flex items-center justify-between"
+                                class="flex items-center justify-between rounded-lg border px-5 py-3"
                                 id="pastSessionsToggle"
-                                @click="togglePastSessions">
+                                @click="togglePastSessions"
+                            >
                                 <!-- //toggle de sesiones pasadas -->
                                 <p class="text-lg">Sesiones pasadas</p>
                                 <Icon
@@ -118,18 +128,21 @@
                                         isPastSessionsVisible
                                             ? 'fa6-solid:chevron-down'
                                             : 'fa6-solid:chevron-right'
-                                    " />
+                                    "
+                                />
                             </div>
                             <div
                                 class="overflow-x-auto"
                                 id="pastSessions"
-                                v-show="isPastSessionsVisible">
+                                v-show="isPastSessionsVisible"
+                            >
                                 <div v-if="pastSessionsLoading">
                                     <CommonLoading />
                                 </div>
                                 <table
                                     v-else-if="pastSessions.length > 0"
-                                    class="bg-white table-auto text-sm text-left w-full text-gray-500">
+                                    class="w-full table-auto bg-white text-left text-sm text-gray-500"
+                                >
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">Fecha</th>
@@ -141,19 +154,19 @@
                                     </thead>
                                     <tbody>
                                         <tr class="border-b" v-for="session in pastSessions">
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.date }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.time }} hrs
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.format }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.modality }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="whitespace-nowrap px-6 py-4">
                                                 {{ session.actual_assistant }}
                                             </td>
                                         </tr>
@@ -237,7 +250,7 @@ const disableUser = async () => {
             body: {
                 user_id: props.professional.user_id,
             },
-        }
+        },
     );
     if (response.success) {
         toast.success("Usuario deshabilitado");
@@ -257,7 +270,7 @@ const enableUser = async () => {
             body: {
                 user_id: props.professional.user_id,
             },
-        }
+        },
     );
     if (response.success) {
         toast.success("Usuario deshabilitado");
@@ -283,7 +296,7 @@ const resetPassword = async () => {
 
         if (response.success) {
             toast.success(
-                "Correo de verificación enviado. Se ha enviado un correo para restablecer la contraseña a la dirección de correo del profesional"
+                "Correo de verificación enviado. Se ha enviado un correo para restablecer la contraseña a la dirección de correo del profesional",
             );
         } else {
             toast.error(response.message);

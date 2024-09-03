@@ -13,14 +13,16 @@
                                 data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapseOne"
                                 aria-expanded="false"
-                                aria-controls="flush-collapseOne">
+                                aria-controls="flush-collapseOne"
+                            >
                                 ¿Por Que ...?
                             </button>
                         </h2>
                         <div
                             id="flush-collapseOne"
                             class="accordion-collapse collapse"
-                            data-bs-parent="#accordionFlushExample">
+                            data-bs-parent="#accordionFlushExample"
+                        >
                             <div class="accordion-body">
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
                                 mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien
@@ -39,14 +41,16 @@
                                 data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapseTwo"
                                 aria-expanded="false"
-                                aria-controls="flush-collapseTwo">
+                                aria-controls="flush-collapseTwo"
+                            >
                                 ¿Por Que ...?
                             </button>
                         </h2>
                         <div
                             id="flush-collapseTwo"
                             class="accordion-collapse collapse"
-                            data-bs-parent="#accordionFlushExample">
+                            data-bs-parent="#accordionFlushExample"
+                        >
                             <div class="accordion-body">
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
                                 mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien
@@ -65,14 +69,16 @@
                                 data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapseThree"
                                 aria-expanded="false"
-                                aria-controls="flush-collapseThree">
+                                aria-controls="flush-collapseThree"
+                            >
                                 ¿Por Que ...?
                             </button>
                         </h2>
                         <div
                             id="flush-collapseThree"
                             class="accordion-collapse collapse"
-                            data-bs-parent="#accordionFlushExample">
+                            data-bs-parent="#accordionFlushExample"
+                        >
                             <div class="accordion-body">
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa
                                 mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien

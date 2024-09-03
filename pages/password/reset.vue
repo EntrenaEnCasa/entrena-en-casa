@@ -1,14 +1,15 @@
 <template>
-    <div class="min-h-screen flex items-center max-w-3xl mx-auto">
-        <div class="w-full flex flex-col justify-center items-center mb-12 gap-6">
+    <div class="mx-auto flex min-h-screen max-w-3xl items-center">
+        <div class="mb-12 flex w-full flex-col items-center justify-center gap-6">
             <NuxtLink to="/">
                 <NuxtImg src="/logo.png" class="w-36" alt="logo" />
             </NuxtLink>
             <div
                 v-if="!success"
-                class="w-full flex flex-col justify-center items-center mb-12 gap-4">
-                <h1 class="text-2xl font-bold text-center">¿Olvidaste tu contraseña?</h1>
-                <p class="text-gray-500 text-center">
+                class="mb-12 flex w-full flex-col items-center justify-center gap-4"
+            >
+                <h1 class="text-center text-2xl font-bold">¿Olvidaste tu contraseña?</h1>
+                <p class="text-center text-gray-500">
                     Ingresa tu correo electrónico. Si existe una cuenta asociada a este, recibirás
                     un correo con un link para poder restablecer tu contraseña.
                 </p>
@@ -21,25 +22,27 @@
                         id="email"
                         icon="fa6-solid:envelope"
                         placeholder="Ingresa tu correo electrónico"
-                        :rules="validateEmail" />
+                        :rules="validateEmail"
+                    />
                     <CommonButton
-                        class="py-2 w-full font-medium"
+                        class="w-full py-2 font-medium"
                         text-size="xl"
-                        :disabled="!meta.valid">
+                        :disabled="!meta.valid"
+                    >
                         Enviar correo
                     </CommonButton>
                 </Form>
             </div>
-            <div v-else class="w-full flex flex-col justify-center items-center mb-12 gap-4">
-                <h1 class="text-2xl font-bold text-center">¡Correo enviado!</h1>
-                <p class="text-gray-500 text-center">
+            <div v-else class="mb-12 flex w-full flex-col items-center justify-center gap-4">
+                <h1 class="text-center text-2xl font-bold">¡Correo enviado!</h1>
+                <p class="text-center text-gray-500">
                     Si tienes una cuenta con nosotros, te llegará un correo electrónico a la
                     dirección ingresada para restablecer tu contraseña. No olvides revisar la
                     carpeta Spam.
                 </p>
 
-                <div class="inline-flex bg-primary-50/30 p-12 rounded-full">
-                    <Icon name="fa6-solid:circle-check" class="text-primary text-9xl" />
+                <div class="inline-flex rounded-full bg-primary-50/30 p-12">
+                    <Icon name="fa6-solid:circle-check" class="text-9xl text-primary" />
                 </div>
                 <CommonButton @click="() => $router.push('/')" bg-color="primary" class="px-4 py-2">
                     Ir a Inicio
@@ -86,7 +89,7 @@ const sendResetLink = async () => {
 
         if (response.success) {
             toast.success(
-                "Correo de verificación enviado. Revisa la bandeja de entrada del correo ingresado."
+                "Correo de verificación enviado. Revisa la bandeja de entrada del correo ingresado.",
             );
         } else {
             toast.error(response.message);

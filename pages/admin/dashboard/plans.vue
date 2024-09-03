@@ -5,16 +5,18 @@
             <CommonButton
                 @click="openModalCreatePlan"
                 bg-color="primary"
-                class="px-4 py-2 rounded-md text-white">
+                class="rounded-md px-4 py-2 text-white"
+            >
                 Crear Plan
             </CommonButton>
         </div>
         <CommonLoading v-if="plansDataPending" />
         <div class="overflow-x-auto shadow-md sm:rounded-lg">
             <table
-                class="bg-white w-full table-auto text-sm text-left text-gray-500"
-                v-if="!plansDataPending && data">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                class="w-full table-auto bg-white text-left text-sm text-gray-500"
+                v-if="!plansDataPending && data"
+            >
+                <thead class="bg-gray-200 text-xs uppercase text-gray-700">
                     <tr>
                         <th scope="col" class="p-6">Sesiones</th>
                         <th scope="col" class="p-6">Tipo</th>
@@ -27,16 +29,16 @@
                 </thead>
                 <tbody>
                     <tr v-for="plan in data?.plans" class="border-b" :key="plan.plan_id">
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             {{ plan.credit_quantity }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             <div v-if="plan.credit_type === 'PP'">Personalizado Presencial</div>
                             <div v-else-if="plan.credit_type === 'PO'">Personalizado Online</div>
                             <div v-else-if="plan.credit_type === 'GP'">Grupal Presencial</div>
                             <div v-else-if="plan.credit_type === 'GO'">Grupal Online</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             {{ plan.format_credit }}
                         </td>
                         <td class="px-6 py-4">
@@ -44,14 +46,15 @@
                                 {{ formatRegion(region) }}
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ plan.expiration_time }} días</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">{{ plan.expiration_time }} días</td>
+                        <td class="whitespace-nowrap px-6 py-4">
                             {{ plan.formattedPrice }}
                         </td>
                         <td class="h-full px-5">
                             <button
-                                class="px-4 py-1.5 bg-primary text-white my-auto rounded-md font-medium whitespace-nowrap"
-                                @click="openPlanModal(plan)">
+                                class="my-auto whitespace-nowrap rounded-md bg-primary px-4 py-1.5 font-medium text-white"
+                                @click="openPlanModal(plan)"
+                            >
                                 Ver Detalles
                             </button>
                         </td>

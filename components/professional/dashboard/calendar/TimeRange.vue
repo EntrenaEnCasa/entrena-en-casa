@@ -1,25 +1,29 @@
 <template>
     <div class="flex justify-center">
-        <div class="py-2 mb-5 flex flex-col sm:flex-row max-w-max items-center gap-y-2 gap-x-4">
+        <div class="mb-5 flex max-w-max flex-col items-center gap-x-4 gap-y-2 py-2 sm:flex-row">
             <div class="flex items-center gap-2">
                 <select
                     v-model="selectedStartHour"
-                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary min-w-max">
+                    class="w-full min-w-max rounded-md border bg-white px-4 py-3 text-sm text-gray-800 outline-primary"
+                >
                     <option
                         v-for="hour in startHourOptions"
                         :key="`start-hour-${hour}`"
-                        :value="hour">
+                        :value="hour"
+                    >
                         {{ hour }}
                     </option>
                 </select>
                 <span>:</span>
                 <select
                     v-model="selectedStartMinute"
-                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary min-w-max">
+                    class="w-full min-w-max rounded-md border bg-white px-4 py-3 text-sm text-gray-800 outline-primary"
+                >
                     <option
                         v-for="minute in startMinuteOptions"
                         :key="`start-minute-${minute}`"
-                        :value="minute">
+                        :value="minute"
+                    >
                         {{ minute }}
                     </option>
                 </select>
@@ -29,20 +33,23 @@
                 <select
                     v-if="isManual"
                     v-model="selectedEndHour"
-                    class="border text-gray-800 bg-white text-sm rounded-md w-full px-4 py-3 outline-primary min-w-max">
+                    class="w-full min-w-max rounded-md border bg-white px-4 py-3 text-sm text-gray-800 outline-primary"
+                >
                     <option v-for="hour in endHourOptions" :key="`end-hour-${hour}`" :value="hour">
                         {{ hour }}
                     </option>
                 </select>
                 <div
                     v-else
-                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-7 py-3 cursor-not-allowed">
+                    class="cursor-not-allowed rounded-md border border-gray-300 bg-gray-100 px-7 py-3 text-sm text-gray-600"
+                >
                     {{ calculatedEndHour }}
                 </div>
 
                 <span>:</span>
                 <span
-                    class="border border-gray-300 bg-gray-100 text-gray-600 text-sm rounded-md px-7 py-3 cursor-not-allowed">
+                    class="cursor-not-allowed rounded-md border border-gray-300 bg-gray-100 px-7 py-3 text-sm text-gray-600"
+                >
                     {{ selectedEndMinute }}
                 </span>
             </div>

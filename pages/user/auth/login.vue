@@ -1,8 +1,9 @@
 <template>
-    <div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+    <div class="grid min-h-screen grid-cols-1 lg:grid-cols-2">
         <div
-            class="hidden lg:flex items-center justify-center text-center"
-            style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.8) 100%)">
+            class="hidden items-center justify-center text-center lg:flex"
+            style="background: linear-gradient(135deg, #99d0dfcc 0%, rgba(0, 129, 183, 0.8) 100%)"
+        >
             <div>
                 <div class="mb-10">
                     <h1 class="mb-3 text-7xl font-bold text-white">
@@ -11,10 +12,10 @@
                     </h1>
                     <p class="text-[22px] text-white">¿Listo para un nuevo desafío?</p>
                 </div>
-                <NuxtImg src="/emoji/runners.svg" class="w-1/2 mx-auto" alt="runner" />
+                <NuxtImg src="/emoji/runners.svg" class="mx-auto w-1/2" alt="runner" />
             </div>
         </div>
-        <div class="flex flex-col justify-center items-center mb-12">
+        <div class="mb-12 flex flex-col items-center justify-center">
             <NuxtLink to="/">
                 <NuxtImg src="/logo.png" class="mb-4 w-36" alt="logo" />
             </NuxtLink>

@@ -1,14 +1,14 @@
 <template>
     <div class="min-h-screen">
-        <div class="flex flex-col items-center pt-5 mx-3 mb-10">
+        <div class="mx-3 mb-10 flex flex-col items-center pt-5">
             <NuxtLink to="/">
-                <NuxtImg class="mx-auto w-28 h-28" src="/logo.png" alt="logo" />
+                <NuxtImg class="mx-auto h-28 w-28" src="/logo.png" alt="logo" />
             </NuxtLink>
-            <p class="text-secondary text-lg font-semibold">Cuéntanos un poco sobre ti</p>
+            <p class="text-lg font-semibold text-secondary">Cuéntanos un poco sobre ti</p>
         </div>
 
         <Form v-slot="{ meta }" @submit="saveUserData">
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center lg:px-10">
+            <div class="grid justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-3 lg:px-10">
                 <CommonInput
                     label="¿Cual es tu nombre?"
                     v-model="formData.firstName"
@@ -17,7 +17,8 @@
                     id="firstName"
                     placeholder="Ingresa tu nombre"
                     :rules="validateFirstName"
-                    class="w-full" />
+                    class="w-full"
+                />
                 <CommonInput
                     label="¿Cual es tu apellido?"
                     v-model="formData.lastName"
@@ -26,7 +27,8 @@
                     id="lastName"
                     placeholder="Ingresa tu apellido"
                     :rules="validateLastName"
-                    class="w-full" />
+                    class="w-full"
+                />
                 <CommonInput
                     label="¿Cual es tu fecha de nacimiento?"
                     v-model="formData.birthDate"
@@ -35,7 +37,8 @@
                     id="birthDate"
                     placeholder="Ingresa tu fecha de nacimiento"
                     :rules="validateBirthDate"
-                    class="w-full" />
+                    class="w-full"
+                />
                 <CommonSelect
                     label="¿Cuál es tu género?"
                     v-model="formData.gender"
@@ -44,7 +47,8 @@
                     placeholder="Ingresa tu género"
                     :rules="validateGender"
                     :options="genderOptions"
-                    class="w-full" />
+                    class="w-full"
+                />
                 <CommonInput
                     label="¿Cual es tu peso actual?"
                     v-model="formData.weight"
@@ -54,7 +58,8 @@
                     placeholder="Ingresa tu peso actual"
                     :rules="validateWeight"
                     right-text="KG"
-                    class="w-full" />
+                    class="w-full"
+                />
                 <CommonInput
                     label="¿Cual es tu estatura actual?"
                     v-model="formData.height"
@@ -64,7 +69,8 @@
                     placeholder="Ingresa tu estatura actual"
                     :rules="validateHeight"
                     right-text="CM"
-                    class="w-full" />
+                    class="w-full"
+                />
                 <CommonInput
                     label="¿Cual es tu número de teléfono?"
                     v-model="formData.phoneNumber"
@@ -73,27 +79,30 @@
                     id="phoneNumber"
                     placeholder="9 XXXX XXXX"
                     :rules="validatePhoneNumber"
-                    class="w-full" />
+                    class="w-full"
+                />
             </div>
 
             <div class="mt-10">
-                <p class="text-center mb-3">
+                <p class="mb-3 text-center">
                     Estos datos son necesarios para informar al profesor durante la sesión agendada
                     e ir midiendo tu avance.
                 </p>
-                <div class="flex flex-col lg:flex-row lg:justify-center gap-4 px-5">
+                <div class="flex flex-col gap-4 px-5 lg:flex-row lg:justify-center">
                     <CommonButton
                         type="button"
                         class="px-4 py-2"
                         bg-color="secondary"
-                        @click="openModal()">
+                        @click="openModal()"
+                    >
                         Recordarmelo más tarde
                     </CommonButton>
                     <CommonButton
                         type="submit"
                         :loading="saveUserDataLoading"
                         :disabled="!meta.valid"
-                        class="px-4 py-2">
+                        class="px-4 py-2"
+                    >
                         Confirmar
                     </CommonButton>
                 </div>
@@ -103,17 +112,18 @@
             <CommonModal ref="modal">
                 <div class="p-4 text-center">
                     <div class="mb-4">
-                        <h3 class="font-semibold text-2xl mb-2">¿Estar seguro/a?</h3>
-                        <p class="text-lg max-w-2xl">
+                        <h3 class="mb-2 text-2xl font-semibold">¿Estar seguro/a?</h3>
+                        <p class="max-w-2xl text-lg">
                             Si no rellenas estos datos, no podrás agendar ninguna sesión.
                         </p>
                     </div>
-                    <div class="flex flex-col lg:flex-row lg:justify-center gap-4">
+                    <div class="flex flex-col gap-4 lg:flex-row lg:justify-center">
                         <div>
                             <CommonButton
                                 bg-color="tertiary"
                                 class="px-4 py-2"
-                                @click="closeModal()">
+                                @click="closeModal()"
+                            >
                                 Cancelar
                             </CommonButton>
                         </div>

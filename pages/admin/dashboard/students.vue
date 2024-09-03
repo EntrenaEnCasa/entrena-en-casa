@@ -6,9 +6,10 @@
         <CommonLoading v-show="studentsLoading" />
         <div
             v-show="!studentsLoading && data && data.success"
-            class="overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="bg-white w-full table-auto text-sm text-left text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+            class="overflow-x-auto shadow-md sm:rounded-lg"
+        >
+            <table class="w-full table-auto bg-white text-left text-sm text-gray-500">
+                <thead class="bg-gray-200 text-xs uppercase text-gray-700">
                     <tr>
                         <th scope="col" class="p-6">Nombre</th>
                         <th scope="col" class="p-6">Apellido</th>
@@ -18,26 +19,27 @@
                 </thead>
                 <tbody>
                     <tr v-for="student in data?.students" class="border-b" :key="student.user_id">
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             <div v-if="student.first_name">
                                 {{ student.first_name }}
                             </div>
                             <div v-else>Sin datos</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             <div v-if="student.last_name">
                                 {{ student.last_name }}
                             </div>
                             <div v-else>Sin datos</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="whitespace-nowrap px-6 py-4">
                             {{ student.email }}
                         </td>
 
                         <td class="px-6 py-4">
                             <button
                                 @click="openModalStudent(student)"
-                                class="px-4 py-2 bg-primary text-white rounded-md font-medium">
+                                class="rounded-md bg-primary px-4 py-2 font-medium text-white"
+                            >
                                 Ver Detalles
                             </button>
                         </td>
@@ -47,8 +49,9 @@
         </div>
         <div v-show="!studentsLoading && data && !data.success">
             <div
-                class="bg-white py-4 px-6 rounded-2xl border border-zinc-200 gap-6 items-center space-y-3"
-                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+                class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
+                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+            >
                 <div class="text-md text-center">
                     <b>{{ data?.message }}</b>
                 </div>
@@ -60,7 +63,8 @@
             :futureSessions="futureSessions"
             :futureSessionsLoading="futureSessionsLoading"
             :pastSessionsLoading="pastSessionsLoading"
-            ref="studentModal" />
+            ref="studentModal"
+        />
     </div>
 </template>
 
@@ -134,7 +138,7 @@ const getPastSessions = async (student: Student) => {
             {
                 method: "GET",
                 credentials: "include",
-            }
+            },
         );
 
         if (response.success) {
@@ -162,7 +166,7 @@ const getFutureSessions = async (student: Student) => {
             {
                 method: "GET",
                 credentials: "include",
-            }
+            },
         );
 
         if (response.success) {

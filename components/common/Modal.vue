@@ -3,16 +3,19 @@
         <div
             ref="scrollableContentRef"
             v-show="isOpen"
-            class="fixed grid place-items-center inset-0 z-50 p-4 bg-black/30 overflow-y-auto"
-            @mousedown.self="closeModal">
+            class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/30 p-4"
+            @mousedown.self="closeModal"
+        >
             <div
                 @click.stop
-                class="p-4 bg-white rounded-xl max-w-[calc(100vw_-_50px)] w-full lg:w-fit">
+                class="w-full max-w-[calc(100vw_-_50px)] rounded-xl bg-white p-4 lg:w-fit"
+            >
                 <div>
                     <button
                         type="button"
-                        class="p-1 transition duration-75 bg-transparent rounded-lg hover:bg-gray-100"
-                        @click="closeModal">
+                        class="rounded-lg bg-transparent p-1 transition duration-75 hover:bg-gray-100"
+                        @click="closeModal"
+                    >
                         <div class="flex items-center gap-x-1 text-primary">
                             <Icon name="ic:round-close" class="text-3xl" />
                             <p class="text-xl font-medium">Cerrar</p>
@@ -20,7 +23,7 @@
                         <span class="sr-only">Cerrar modal</span>
                     </button>
                 </div>
-                <div class="mx-auto md:min-w-[40rem] w-full md:w-auto">
+                <div class="mx-auto w-full md:w-auto md:min-w-[40rem]">
                     <div class="w-full">
                         <slot></slot>
                     </div>

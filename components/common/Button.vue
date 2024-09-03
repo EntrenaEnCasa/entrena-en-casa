@@ -8,7 +8,8 @@
             'disabled:cursor-not-allowed',
             `text-${textSize}`,
         ]"
-        :disabled="disabled || loading">
+        :disabled="disabled || loading"
+    >
         <span v-if="!loading">
             <slot></slot>
         </span>
@@ -17,7 +18,8 @@
             <span>
                 <Icon
                     :class="['animate-spin', 'ml-2', `text-${textColor}`, `text-${iconSize}`]"
-                    name="fa6-solid:circle-notch" />
+                    name="fa6-solid:circle-notch"
+                />
             </span>
         </div>
     </button>
