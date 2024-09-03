@@ -118,16 +118,14 @@ interface Professional {
     phone: string | null;
 }
 
-const {
-    data,
-    pending: studentsLoading,
-    error,
-    refresh: getStudents,
-} = await useFetch<StudentResponse>(`${runtimeConfig.public.apiBase}/admin/students`, {
-    method: "GET",
-    credentials: "include",
-    lazy: true,
-});
+const { data, pending: studentsLoading } = await useFetch<StudentResponse>(
+    `${runtimeConfig.public.apiBase}/admin/students`,
+    {
+        method: "GET",
+        credentials: "include",
+        lazy: true,
+    },
+);
 
 const getPastSessions = async (student: Student) => {
     pastSessionsLoading.value = true;
