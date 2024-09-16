@@ -29,8 +29,11 @@
     "dependencies": {
         "@pinia/nuxt": "^0.5.3",
         "@turf/turf": "^6.5.0",
+        "@types/jspdf": "^2.0.0",
         "@vee-validate/nuxt": "^4.13.2",
         "jsonwebtoken": "^9.0.2",
+        "jspdf": "^2.5.1",
+        "jspdf-autotable": "^3.8.3",
         "pinia": "^2.2.1",
         "resend": "^3.5.0",
         "swiper": "^11.1.9",
