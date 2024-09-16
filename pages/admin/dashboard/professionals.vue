@@ -5,10 +5,7 @@
         </div>
         <CommonLoading v-if="professionalsDataPending" />
         <div class="overflow-x-auto shadow-md sm:rounded-lg">
-            <table
-                class="w-full table-auto bg-white text-left text-sm text-gray-500"
-                v-if="professionalsData"
-            >
+            <table class="w-full table-auto bg-white text-left text-sm text-gray-500" v-if="professionalsData">
                 <thead class="bg-gray-200 text-xs uppercase text-gray-700">
                     <tr>
                         <th scope="col" class="p-6">Nombre</th>
@@ -19,11 +16,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="professional in professionalsData.professionals"
-                        class="border-b"
-                        :key="professional.user_id"
-                    >
+                    <tr v-for="professional in professionalsData.professionals" class="border-b"
+                        :key="professional.user_id">
                         <td class="whitespace-nowrap px-6 py-4">
                             <div v-if="professional.first_name">
                                 {{ professional.first_name }}
@@ -43,10 +37,8 @@
                             {{ professional.title }}
                         </td>
                         <td class="px-6 py-4">
-                            <button
-                                class="rounded-md bg-primary px-4 py-2 font-medium text-white"
-                                @click="openProfessionalModal(professional)"
-                            >
+                            <button class="rounded-md bg-primary px-4 py-2 font-medium text-white"
+                                @click="openProfessionalModal(professional)">
                                 Ver Detalles
                             </button>
                         </td>
@@ -54,14 +46,9 @@
                 </tbody>
             </table>
         </div>
-        <AdminDashboardProfessionalsProfessionalInfoModal
-            :professional="currentProfessional"
-            :pastSessions="pastSessions"
-            :futureSessions="futureSessions"
-            :futureSessionsLoading="futureSessionsLoading"
-            :pastSessionsLoading="pastSessionsLoading"
-            ref="professionalModal"
-        />
+        <AdminDashboardProfessionalsProfessionalInfoModal :professional="currentProfessional"
+            :pastSessions="pastSessions" :futureSessions="futureSessions" :futureSessionsLoading="futureSessionsLoading"
+            :pastSessionsLoading="pastSessionsLoading" ref="professionalModal" />
     </div>
 </template>
 
@@ -125,7 +112,6 @@ const {
 
 const getPastSessions = async (professional: Professional) => {
     pastSessionsLoading.value = true;
-    console.log(professional.user_id);
     try {
         const response = await $fetch<PastSessionsResponse>(
             `${runtimeConfig.public.apiBase}/admin/professional/sessions/past/${professional.user_id}`,
@@ -153,7 +139,6 @@ const getPastSessions = async (professional: Professional) => {
 
 const getFutureSessions = async (professional: Professional) => {
     futureSessionsLoading.value = true;
-    console.log(professional.user_id);
     try {
         const response = await $fetch<FutureSessionsResponse>(
             `${runtimeConfig.public.apiBase}/admin/professional/sessions/future/${professional.user_id}`,
