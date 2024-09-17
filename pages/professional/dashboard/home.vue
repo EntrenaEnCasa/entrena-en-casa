@@ -314,6 +314,16 @@ const {
     },
 );
 
+const route = useRoute();
+
+watch(
+    () => route.path,
+    () => {
+        getCurrentSession();
+    },
+    { immediate: true, deep: true },
+);
+
 const studentsWithoutData = computed(() => {
     return currentSessionData.value?.students.filter((student) => student.first_name === null);
 });
