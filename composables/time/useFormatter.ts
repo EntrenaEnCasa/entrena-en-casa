@@ -42,7 +42,7 @@ export const useFormatter = () => {
             year: "numeric",
         };
         const formatter = new Intl.DateTimeFormat("es-CL", options);
-        return formatter.format(new Date(date));
+        return formatter.format(createDate(date));
     };
 
     return {
