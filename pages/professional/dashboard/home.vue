@@ -56,7 +56,10 @@
                 </div>
                 <div>
                     <h3 class="ml-10 text-2xl font-semibold">Asistentes</h3>
-                    <div class="overflow-x-auto">
+                    <h4 v-if="currentSessionData.students.length === 0" class="text-center">
+                        No hay asistentes registrados
+                    </h4>
+                    <div v-else class="overflow-x-auto">
                         <table class="mt-6 w-full min-w-max table-auto">
                             <thead>
                                 <tr class="leading-normal text-gray-600">
