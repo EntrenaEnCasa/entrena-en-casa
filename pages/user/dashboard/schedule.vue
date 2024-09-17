@@ -148,7 +148,7 @@
                 </div>
                 <div
                     v-show="filteredProfessionals.length > 0"
-                    class="grid grid-cols-1 xl:grid-cols-2"
+                    class="grid grid-cols-1 gap-4 xl:grid-cols-2"
                 >
                     <div
                         v-for="(professional, index) in filteredProfessionals"
