@@ -34,7 +34,7 @@ export const useFormatter = () => {
         return parseInt(time.split(":")[0]);
     };
 
-    const formatDateToFullLongFormat = (date: string | Date): string => {
+    const formatDateToFullLongFormat = (date: string): string => {
         const options: Intl.DateTimeFormatOptions = {
             weekday: "long",
             day: "numeric",
