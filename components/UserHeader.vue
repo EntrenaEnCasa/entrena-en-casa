@@ -3,27 +3,15 @@
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start lg:hidden">
-                    <button
-                        @click="toggleSidebar"
-                        data-drawer-target="logo-sidebar"
-                        data-drawer-toggle="logo-sidebar"
-                        aria-controls="logo-sidebar"
-                        type="button"
-                        class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                    >
+                    <button @click="toggleSidebar" data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar"
+                        aria-controls="logo-sidebar" type="button"
+                        class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
                         <span class="sr-only">Open sidebar</span>
-                        <svg
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                clip-rule="evenodd"
-                                fill-rule="evenodd"
-                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-                            ></path>
+                        <svg class="h-6 w-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                            </path>
                         </svg>
                     </button>
                 </div>
@@ -47,27 +35,19 @@
                                 </p>
                             </div>
                             <div>
-                                <button
-                                    type="button"
-                                    @click="toggleUserMenu"
+                                <button type="button" @click="toggleUserMenu"
                                     class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300"
-                                    aria-expanded="false"
-                                    data-dropdown-toggle="dropdown-user"
-                                >
+                                    aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                     <span class="sr-only">Open user menu</span>
-                                    <NuxtImg
-                                        class="h-12 w-12 rounded-full"
-                                        src="/icons/dumbbell.png"
-                                        alt="user photo"
-                                    />
+                                    <NuxtImg v-if="user.user_type == 2" class="h-12 w-12 rounded-full"
+                                        src="/icons/dumbell-student.png" alt="user photo" />
+                                    <NuxtImg v-else class="h-12 w-12 rounded-full" src="/icons/dumbbell.png"
+                                        alt="user photo" />
                                 </button>
                             </div>
                         </div>
-                        <div
-                            class="absolute right-5 top-14 z-50 my-4 list-none divide-y divide-gray-100 rounded border bg-white text-base shadow-md"
-                            :class="{ hidden: !userMenuOpen }"
-                            id="dropdown-user"
-                        >
+                        <div class="absolute right-5 top-14 z-50 my-4 list-none divide-y divide-gray-100 rounded border bg-white text-base shadow-md"
+                            :class="{ hidden: !userMenuOpen }" id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="truncate text-sm font-medium text-gray-900" role="none">
                                     {{ user.email }}
@@ -75,24 +55,14 @@
                             </div>
                             <ul class="py-1" role="none">
                                 <li v-show="user.user_type != 0">
-                                    <routerLink
-                                        v-if="user.user_type === 2"
-                                        @click="userMenuOpen = false"
+                                    <routerLink v-if="user.user_type === 2" @click="userMenuOpen = false"
                                         to="/user/dashboard/settings"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        role="menuitem"
-                                    >
-                                        Configuración</routerLink
-                                    >
-                                    <routerLink
-                                        v-else-if="user.user_type === 1"
-                                        @click="userMenuOpen = false"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                        Configuración</routerLink>
+                                    <routerLink v-else-if="user.user_type === 1" @click="userMenuOpen = false"
                                         to="/professional/dashboard/settings"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        role="menuitem"
-                                    >
-                                        Configuración</routerLink
-                                    >
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                        Configuración</routerLink>
                                 </li>
                                 <!-- <li>
                                     <routerLink @click="userMenuOpen = false" to="/user/dashboard/support"
@@ -100,11 +70,9 @@
                                         Soporte</routerLink>
                                 </li> -->
                                 <li>
-                                    <button
-                                        @click="logout"
+                                    <button @click="logout"
                                         class="w-full px-4 py-2 text-start text-sm text-gray-700 hover:bg-gray-100"
-                                        role="menuitem"
-                                    >
+                                        role="menuitem">
                                         Cerrar sesión
                                     </button>
                                 </li>
