@@ -3,24 +3,24 @@
         <Teleport to="body">
             <CommonModal ref="modal">
                 <div class="mt-3 w-full">
-                    <CommonLoading
-                        v-if="!student || futureSessionsLoading || pastSessionsLoading"
-                    />
+                    <CommonLoading v-if="!student || futureSessionsLoading || pastSessionsLoading" />
                     <div v-else>
                         <h2 class="mb-5 text-center text-2xl font-semibold">Estudiante</h2>
                         <div class="mx-auto mb-10 w-10/12 space-y-5 text-center">
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
-                                <p
-                                    class="text-2xl font-medium text-gray-700"
-                                    v-if="student && student?.first_name"
-                                >
+                                <p class="text-2xl font-medium text-gray-700" v-if="student && student?.first_name">
                                     {{ student?.first_name }}
                                     {{ student?.last_name }}
                                 </p>
                                 <p class="text-2xl font-medium text-gray-700" v-else>Sin datos</p>
                             </div>
-
+                            <div class="flex justify-center">
+                                <CommonButton @click="generatePurchaseReport" bg-color="primary"
+                                    class="px-4 py-2 text-white">
+                                    Generar reporte de compras
+                                </CommonButton>
+                            </div>
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Correo electrónico</h3>
                                 <p class="break-all text-2xl font-medium text-gray-700">
@@ -28,29 +28,16 @@
                                 </p>
                             </div>
                             <div class="flex">
-                                <CommonButton
-                                    @click="disableUser()"
-                                    bg-color="tertiary"
-                                    class="mx-auto mb-5 px-3 py-2 text-white"
-                                    v-if="student && student.enabled"
-                                >
-                                    Deshabilitar usuario</CommonButton
-                                >
-                                <CommonButton
-                                    @click="enableUser()"
-                                    bg-color="primary"
-                                    class="mx-auto mb-5 px-3 py-2 text-white"
-                                    v-else-if="student && !student.enabled"
-                                >
-                                    Habilitar usuario</CommonButton
-                                >
+                                <CommonButton @click="disableUser()" bg-color="tertiary"
+                                    class="mx-auto mb-5 px-3 py-2 text-white" v-if="student && student.enabled">
+                                    Deshabilitar usuario</CommonButton>
+                                <CommonButton @click="enableUser()" bg-color="primary"
+                                    class="mx-auto mb-5 px-3 py-2 text-white" v-else-if="student && !student.enabled">
+                                    Habilitar usuario</CommonButton>
 
                                 <!-- Botón para restablecer contraseña -->
-                                <CommonButton
-                                    @click="resetPassword()"
-                                    bg-color="secondary"
-                                    class="mx-auto mb-5 px-3 py-2 text-white"
-                                >
+                                <CommonButton @click="resetPassword()" bg-color="secondary"
+                                    class="mx-auto mb-5 px-3 py-2 text-white">
                                     Restablecer contraseña
                                 </CommonButton>
                             </div>
@@ -58,47 +45,29 @@
 
                         <div class="mb-6 space-y-6">
                             <div class="flex items-center justify-between">
-                                <div
-                                    class="flex w-full items-center justify-between rounded-lg border px-5 py-3"
-                                >
+                                <div class="flex w-full items-center justify-between rounded-lg border px-5 py-3">
                                     <p class="text-lg">Planes comprados</p>
-                                    <CommonButton
-                                        bg-color="secondary"
-                                        text-size="sm"
-                                        class="px-4 py-2"
-                                        @click="openModalPlans"
-                                    >
+                                    <CommonButton bg-color="secondary" text-size="sm" class="px-4 py-2"
+                                        @click="openModalPlans">
                                         Ver planes
                                     </CommonButton>
                                 </div>
                             </div>
-                            <div
-                                class="flex items-center justify-between rounded-lg border px-5 py-3"
-                                id="futureSessionsToggle"
-                                @click="toggleFutureSessions"
-                            >
+                            <div class="flex items-center justify-between rounded-lg border px-5 py-3"
+                                id="futureSessionsToggle" @click="toggleFutureSessions">
                                 <!-- //toggle de sesiones próximas -->
                                 <p class="text-lg">Sesiones próximas</p>
-                                <Icon
-                                    :name="
-                                        isFutureSessionsVisible
-                                            ? 'fa6-solid:chevron-down'
-                                            : 'fa6-solid:chevron-right'
-                                    "
-                                />
+                                <Icon :name="isFutureSessionsVisible
+                                    ? 'fa6-solid:chevron-down'
+                                    : 'fa6-solid:chevron-right'
+                                    " />
                             </div>
-                            <div
-                                class="overflow-x-auto"
-                                id="futureSessions"
-                                v-show="isFutureSessionsVisible"
-                            >
+                            <div class="overflow-x-auto" id="futureSessions" v-show="isFutureSessionsVisible">
                                 <div v-if="futureSessionsLoading">
                                     <CommonLoading />
                                 </div>
-                                <table
-                                    v-else-if="futureSessions.length > 0"
-                                    class="table-auto bg-white text-left text-sm text-gray-500"
-                                >
+                                <table v-else-if="futureSessions.length > 0"
+                                    class="table-auto bg-white text-left text-sm text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">Fecha</th>
@@ -138,33 +107,21 @@
                                     <p>No hay sesiones próximas</p>
                                 </div>
                             </div>
-                            <div
-                                class="flex items-center justify-between rounded-lg border px-5 py-3"
-                                id="pastSessionsToggle"
-                                @click="togglePastSessions"
-                            >
+                            <div class="flex items-center justify-between rounded-lg border px-5 py-3"
+                                id="pastSessionsToggle" @click="togglePastSessions">
                                 <!-- //toggle de sesiones pasadas -->
                                 <p class="text-lg">Sesiones pasadas</p>
-                                <Icon
-                                    :name="
-                                        isPastSessionsVisible
-                                            ? 'fa6-solid:chevron-down'
-                                            : 'fa6-solid:chevron-right'
-                                    "
-                                />
+                                <Icon :name="isPastSessionsVisible
+                                    ? 'fa6-solid:chevron-down'
+                                    : 'fa6-solid:chevron-right'
+                                    " />
                             </div>
-                            <div
-                                class="overflow-x-auto"
-                                id="pastSessions"
-                                v-show="isPastSessionsVisible"
-                            >
+                            <div class="overflow-x-auto" id="pastSessions" v-show="isPastSessionsVisible">
                                 <div v-if="pastSessionsLoading">
                                     <CommonLoading />
                                 </div>
-                                <table
-                                    v-else-if="pastSessions.length > 0"
-                                    class="table-auto bg-white text-left text-sm text-gray-500"
-                                >
+                                <table v-else-if="pastSessions.length > 0"
+                                    class="table-auto bg-white text-left text-sm text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">Fecha</th>
@@ -211,23 +168,35 @@
             </CommonModal>
         </Teleport>
 
-        <AdminDashboardStudentsPlanStudentInfoModal
-            :plansLoading="plansLoading"
-            :student="student"
-            :plans="plans"
-            ref="planInfoModal"
-        />
+        <AdminDashboardStudentsPlanStudentInfoModal :plansLoading="plansLoading" :student="student" :plans="plans"
+            ref="planInfoModal" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { useToast } from "vue-toastification";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const toast = useToast();
 
 const runtimeConfig = useRuntimeConfig();
 interface PlansResponse extends APIResponse {
     credits: Plan[];
+}
+interface PurchaseResponse extends APIResponse {
+    purchases: Purchase[];
+}
+
+interface Purchase {
+    purchase_id: number;
+    purchase_date: string;
+    credit_type: string;
+    format_credit: string;
+    purchase_credits: number;
+    used_credits: number;
+    available_credits: number;
+    expiration_date: string;
 }
 
 interface Plan {
@@ -397,4 +366,82 @@ const enableUser = async () => {
         toast.error("Error al habilitar usuario");
     }
 };
+const formatCreditTranslation = (format: string) => {
+    switch (format) {
+        case 'PP': return 'Personalizado Presencial';
+        case 'PO': return 'Personalizado Online';
+        case 'GP': return 'Grupal Presencial';
+        case 'GO': return 'Grupal Online';
+        default: return format;
+    }
+};
+
+const generatePurchaseReport = async () => {
+    if (!props.student) {
+        toast.error("No se ha seleccionado ningún estudiante");
+        return;
+    }
+
+    try {
+        const response = await $fetch<PurchaseResponse>(
+            `${runtimeConfig.public.apiBase}/admin/all-purchases/${props.student.user_id}`,
+            {
+                method: "GET",
+                credentials: "include",
+            }
+        );
+
+        if (response.success && response.purchases.length > 0) {
+            const purchases = response.purchases;
+
+            const doc = new jsPDF();
+
+            // Title
+            doc.setFontSize(18);
+            doc.text(`Reporte de compras de planes realizadas por ${props.student.first_name} ${props.student.last_name}`, 14, 20);
+
+            // General information
+            doc.setFontSize(12);
+            doc.text(`Fecha de generación: ${new Date().toLocaleDateString()}`, 14, 30);
+            doc.text(`Hora de generación: ${new Date().toLocaleTimeString()}`, 14, 35);
+
+            // Table of purchases
+            autoTable(doc, {
+                startY: 40,
+                head: [['Fecha de compra', 'Tipo', 'Formato', 'Créditos comprados', 'Créditos usados', 'Créditos disponibles', 'Fecha de expiración']],
+                body: purchases.map(p => [
+                    new Date(p.purchase_date).toLocaleDateString(),
+                    formatCreditTranslation(p.credit_type),
+                    p.format_credit,
+                    p.purchase_credits,
+                    p.used_credits,
+                    p.available_credits,
+                    new Date(p.expiration_date).toLocaleDateString()
+                ]),
+            });
+
+            // Footer
+            const pageCount = doc.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(10);
+                doc.setTextColor(150);
+                doc.text('Compras realizadas en www.entrenaencasa.cl', doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
+            }
+
+            // Generate and download the PDF
+            const fileName = `${props.student.last_name}_${props.student.first_name}_compras_historicas_${new Date().toLocaleDateString().replace(/\//g, '-')}.pdf`;
+            doc.save(fileName);
+
+            toast.success("Reporte de compras generado y descargado exitosamente");
+        } else {
+            toast.warning("El usuario no tiene compras realizadas hasta el momento");
+        }
+    } catch (error) {
+        console.error("Error al generar el reporte de compras:", error);
+        toast.error("Error al generar el reporte de compras");
+    }
+};
+
+
 </script>
