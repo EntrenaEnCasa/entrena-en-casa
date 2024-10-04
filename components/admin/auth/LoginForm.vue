@@ -20,13 +20,6 @@
             placeholder="* * * * * * * *"
             :rules="validatePassword"
         />
-
-        <div class="flex justify-between">
-            <div class="flex items-center space-x-1">
-                <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
-                <label class="text-gray-500" for="remember">Recuérdame</label>
-            </div>
-        </div>
         <CommonButton
             class="w-full py-2 font-medium"
             text-size="xl"
@@ -43,7 +36,6 @@ import { useAuthStore } from "~/stores/AuthStore";
 import { useToast } from "vue-toastification";
 
 const router = useRouter();
-const runtimeConfig = useRuntimeConfig();
 const authStore = useAuthStore();
 const toast = useToast();
 

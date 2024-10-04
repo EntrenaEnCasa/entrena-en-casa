@@ -21,11 +21,7 @@
             :rules="validatePassword"
         />
 
-        <div class="flex justify-between">
-            <div class="flex items-center space-x-1">
-                <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
-                <label class="text-gray-500" for="remember">Recuérdame</label>
-            </div>
+        <div class="flex">
             <router-link to="/password/reset" class="text-secondary">
                 Olvidé mi contraseña
             </router-link>
