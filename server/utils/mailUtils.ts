@@ -13,6 +13,24 @@ export function contactFormTemplate(email: string, subject: string, message: str
   `;
 }
 
+export function notificationNewProfessionalTemplate(first_name: string, last_name: string, email: string, title: string): string {
+    return `
+    <div style="width: 100%; background-color: #F6F6F6; padding-top: 2.5rem; padding-bottom: 2.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; text-align: center;">
+      <h1 style="font-size: 2rem; color: #333; margin-bottom: 1rem;">Nuevo profesional registrado</h1>
+      <p style="font-size: 1rem; color: #333; margin-bottom: 1rem;">${new Date().toLocaleString()}</p>
+      <div style="margin-bottom: 2.5rem;">
+      <img src="https://res.cloudinary.com/deg11anix/image/upload/v1710952923/logo-horizontal_rrgbm0.png" width="200" />
+      </div>
+      <h3 style="font-size: 1.5rem; color: #333; margin-bottom: 1rem;">Datos del profesional:</h3>
+      <div style="max-width: 48rem; background-color: white; border-radius: 0.375rem; padding: 1.5rem; margin: 0 auto;">
+        <p style="margin-bottom: 0.5rem;">Nombre: ${first_name} ${last_name}</p>
+        <p style="margin-bottom: 0.5rem;">Email: ${email}</p>
+        <p style="margin-bottom: 0.5rem;">Título: ${title}</p>
+      </div>
+    </div>
+  `;
+}
+
 export function emailVerificationTemplate(link: string) {
     return `
   <html>
