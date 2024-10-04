@@ -458,13 +458,11 @@ const startOfWeek = computed(() => weekDays.value[0]);
 const goToNextWeekAndUpdateSelectedDate = () => {
     goToNextWeek();
     selectDate(weekDays.value[0]);
-    getSessions();
 };
 
 const goToPreviousWeekAndUpdateSelectedDate = () => {
     goToPreviousWeek();
     selectDate(weekDays.value[0]);
-    getSessions();
 };
 
 const selectDate = (day) => {
@@ -618,6 +616,8 @@ const getOnlineSessions = async () => {
             credentials: "include",
             body: body,
         });
+
+        console.log(response);
 
         if (response.success) {
             professionals.value = response.professionals;
