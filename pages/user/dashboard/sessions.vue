@@ -4,17 +4,22 @@
             <div>
                 <h3 class="text-xl font-medium">Sesiones en curso</h3>
             </div>
-            <div class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
-                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+            <div
+                class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
+                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+            >
                 <div class="text-center text-lg font-semibold">No hay sesiones en curso</div>
             </div>
             <h3 class="text-xl font-medium">Sesiones reservadas</h3>
             <CommonLoading v-if="futureSessionsLoading" />
             <div v-else-if="futureSessions?.success">
                 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <div v-for="session in futureSessions.sessions" :key="session.session_id"
+                    <div
+                        v-for="session in futureSessions.sessions"
+                        :key="session.session_id"
                         class="items-center rounded-2xl shadow-lg"
-                        :class="session.confirmed ? 'bg-primary' : 'bg-secondary'">
+                        :class="session.confirmed ? 'bg-primary' : 'bg-secondary'"
+                    >
                         <div class="rounded-2xl bg-white px-6 py-4">
                             <div class="flex justify-between gap-1">
                                 <div class="text-gray-400">
@@ -35,23 +40,38 @@
                                 <p class="font-light text-gray-700">
                                     {{ session.professional.title }}
                                 </p>
+                                <p class="text-lg font-medium text-[#0EB3E0]">
+                                    {{ session.professional.phone }}
+                                </p>
                                 <p v-if="session.link == ''" class="text-gray-700">
                                     Aún no hay link de acceso
                                 </p>
-                                <a v-else-if="session.modality === 'Online'" :href="session.link || ''" target="_blank"
-                                    class="flex items-center gap-1 text-xl font-medium text-secondary underline decoration-secondary underline-offset-2">
+                                <a
+                                    v-else-if="session.modality === 'Online'"
+                                    :href="session.link || ''"
+                                    target="_blank"
+                                    class="flex items-center gap-1 text-xl font-medium text-secondary underline decoration-secondary underline-offset-2"
+                                >
                                     <Icon name="icon-park-outline:new-computer" />
                                     <p>Online</p>
                                 </a>
-                                <a v-else :href="session.link || ''" target="_blank"
-                                    class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline-offset-2">
+                                <a
+                                    v-else
+                                    :href="session.link || ''"
+                                    target="_blank"
+                                    class="flex items-center gap-1 text-xl font-medium text-secondary decoration-secondary underline-offset-2"
+                                >
                                     <Icon name="heroicons:map-pin" />
                                     <p>Lugar</p>
                                 </a>
                             </div>
                         </div>
                         <div class="flex items-center justify-center px-5 py-2 text-white">
-                            <button v-show="!session.confirmed" class="" @click="viewSessionDetails(session)">
+                            <button
+                                v-show="!session.confirmed"
+                                class=""
+                                @click="viewSessionDetails(session)"
+                            >
                                 Ver detalles/Confirmar asistencia
                             </button>
                             <div v-show="session.confirmed" class="text-white">
@@ -62,8 +82,10 @@
                 </div>
             </div>
             <div v-show="!futureSessionsLoading && !futureSessions?.success">
-                <div class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
-                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+                <div
+                    class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
+                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+                >
                     <div class="text-md text-center">
                         <b>{{ futureSessions?.message }}</b>
                     </div>
@@ -75,9 +97,12 @@
             <CommonLoading v-if="pastSessionsLoading" />
             <div v-else-if="pastSessions?.success">
                 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <div v-for="session in pastSessions.sessions" :key="session.session_id"
+                    <div
+                        v-for="session in pastSessions.sessions"
+                        :key="session.session_id"
                         class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4 opacity-60 transition-opacity hover:opacity-100"
-                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+                        style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+                    >
                         <div class="px-3">
                             <div class="grid grid-cols-2 gap-1">
                                 <div class="text-left text-sm text-[#949494]">
@@ -91,8 +116,12 @@
                                 <b class="text-lg font-medium text-[#000000]">{{
                                     session.format + " - " + session.modality
                                 }}</b>
-                                <a :href="session.link || ''" target="_blank"
-                                    ss="text-xl font-medium underline text-secondary decoration-secondary underline-offset-2">Link</a>
+                                <a
+                                    :href="session.link || ''"
+                                    target="_blank"
+                                    ss="text-xl font-medium underline text-secondary decoration-secondary underline-offset-2"
+                                    >Link</a
+                                >
                                 <p class="text-[#949494]">
                                     {{
                                         session.professional.first_name +
@@ -145,8 +174,10 @@
                 </div>
             </div>
             <div v-else>
-                <div class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
-                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+                <div
+                    class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
+                    style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+                >
                     <div class="text-md text-center">
                         <b>{{ pastSessions?.message }}</b>
                     </div>
@@ -194,12 +225,15 @@
                         </div>
                         <div>
                             <h3 class="mb-3 text-center text-xl font-semibold">Sobre ti</h3>
-                            <div class="space-y-2" v-if="
-                                !userDataLoading &&
-                                userData &&
-                                userData.info &&
-                                userData.success
-                            ">
+                            <div
+                                class="space-y-2"
+                                v-if="
+                                    !userDataLoading &&
+                                    userData &&
+                                    userData.info &&
+                                    userData.success
+                                "
+                            >
                                 <div class="grid grid-cols-2 gap-x-4">
                                     <h4 class="place-self-end">Alumno:</h4>
                                     <p class="font-semibold">
@@ -233,9 +267,11 @@
                                     </p>
                                 </div>
                             </div>
-                            <div v-else-if="
-                                userData && !userData.success && professionalWillFillUserData
-                            ">
+                            <div
+                                v-else-if="
+                                    userData && !userData.success && professionalWillFillUserData
+                                "
+                            >
                                 <p class="text-center">
                                     Aún no has rellenado tus datos de estudiante
                                 </p>
@@ -250,13 +286,20 @@
                         </p>
                     </div>
                     <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:justify-between">
-                        <CommonButton class="bg-tertiary px-4 py-2" @click="detailsModal?.closeModal()">
+                        <CommonButton
+                            class="bg-tertiary px-4 py-2"
+                            @click="detailsModal?.closeModal()"
+                        >
                             Cancelar
                         </CommonButton>
                         <CommonButton @click="openModalDelete" class="bg-tertiary px-5 py-2">
                             Eliminar Reserva
                         </CommonButton>
-                        <CommonButton class="px-4 py-2" @click="confirmSession" :loading="confirmAttendanceLoading">
+                        <CommonButton
+                            class="px-4 py-2"
+                            @click="confirmSession"
+                            :loading="confirmAttendanceLoading"
+                        >
                             Confirmar asistencia
                         </CommonButton>
                     </div>
@@ -283,8 +326,11 @@
                     </div>
                     <div class="mt-6 flex flex-col items-center gap-5 lg:flex-row">
                         <div class="w-full text-center">
-                            <CommonButton class="w-full px-5 py-2" bg-color="secondary"
-                                @click="handleProfessionalWillFillUserData">
+                            <CommonButton
+                                class="w-full px-5 py-2"
+                                bg-color="secondary"
+                                @click="handleProfessionalWillFillUserData"
+                            >
                                 Dejar que el profesional rellene mis datos
                             </CommonButton>
                             <p class="mx-auto mt-1.5 max-w-64 text-xs font-medium">
@@ -308,12 +354,17 @@
             <CommonModal ref="modalDelete">
                 <div class="p-4 text-center">
                     <div class="mb-4">
-                        <h3 class="mb-2 text-2xl font-semibold">¿Estas seguro/a de eliminar esta reserva?</h3>
-
+                        <h3 class="mb-2 text-2xl font-semibold">
+                            ¿Estas seguro/a de eliminar esta reserva?
+                        </h3>
                     </div>
                     <div class="flex flex-col gap-4 lg:flex-row lg:justify-center">
                         <div>
-                            <CommonButton bg-color="tertiary" class="px-4 py-2" @click="closeDeleteModal()">
+                            <CommonButton
+                                bg-color="tertiary"
+                                class="px-4 py-2"
+                                @click="closeDeleteModal()"
+                            >
                                 Cancelar
                             </CommonButton>
                         </div>
@@ -474,7 +525,6 @@ watchEffect(() => {
     refreshFutureSessions();
 });
 
-
 const modalDelete = ref(Modal);
 
 const openModalDelete = () => {
@@ -484,14 +534,17 @@ const openModalDelete = () => {
 const deleteScheduleSession = async () => {
     modalDelete.value.closeModal();
     try {
-        const response: APIResponse = await $fetch(`${runtimeConfig.public.apiBase}/student/cancel-session`, {
-            method: "PUT",
-            credentials: "include",
-            body: JSON.stringify({
-                user_id: userStore.user?.user_id,
-                session_id: detailsModalSession.value?.session_id,
-            }),
-        });
+        const response: APIResponse = await $fetch(
+            `${runtimeConfig.public.apiBase}/student/cancel-session`,
+            {
+                method: "PUT",
+                credentials: "include",
+                body: JSON.stringify({
+                    user_id: userStore.user?.user_id,
+                    session_id: detailsModalSession.value?.session_id,
+                }),
+            },
+        );
 
         if (response.success) {
             toast.success("Reserva eliminada con éxito");
