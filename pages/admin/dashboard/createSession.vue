@@ -12,6 +12,7 @@
                         name="date"
                         id="date"
                         v-model="sessionInfo.date"
+                        :min="getTodayFormatted()"
                         class="mt-2 block rounded-md border border-gray-200 px-4 py-3 text-sm shadow"
                     />
                 </div>
@@ -170,6 +171,10 @@ const currentZoom = computed(() => mapRef.value?.getZoom());
 const getMarkerCoordinates = () => markerCoordinates.value;
 
 const geocoderRef = ref<CustomGeocoder | null>(null);
+
+const getTodayFormatted = (): string => {
+    return new Date().toISOString().split("T")[0];
+};
 
 const { getReverseGeocodingData } = useGeocoding();
 const { flyTo, calculateDistance, calculateDurationBasedOnDistance } = useMapInteraction(mapRef);
