@@ -14,88 +14,40 @@
             </div>
             <Form v-slot="{ meta }" @submit="register" class="h-full w-full pb-10">
                 <div
-                    class="grid w-full grid-cols-1 items-center justify-items-center gap-6 lg:grid-cols-2 lg:space-x-4 lg:px-10"
-                >
+                    class="grid w-full grid-cols-1 items-center justify-items-center gap-6 lg:grid-cols-2 lg:space-x-4 lg:px-10">
                     <div class="w-4/5 space-y-6 lg:justify-self-end">
                         <div class="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-                            <CommonInput
-                                label="¿Cual es tu nombre?"
-                                v-model="formData.firstName"
-                                name="firstName"
-                                type="firstName"
-                                id="firstName"
-                                placeholder="Ingresa tu nombre"
-                                :rules="validateFirstName"
-                                class="w-full"
-                            />
-                            <CommonInput
-                                label="¿Cual es tu apellido?"
-                                v-model="formData.lastName"
-                                name="lastName"
-                                type="lastName"
-                                id="lastName"
-                                placeholder="Ingresa tu apellido"
-                                :rules="validateLastName"
-                                class="w-full"
-                            />
+                            <CommonInput label="¿Cual es tu nombre?" v-model="formData.firstName" name="firstName"
+                                type="firstName" id="firstName" placeholder="Ingresa tu nombre"
+                                :rules="validateFirstName" class="w-full" />
+                            <CommonInput label="¿Cual es tu apellido?" v-model="formData.lastName" name="lastName"
+                                type="lastName" id="lastName" placeholder="Ingresa tu apellido"
+                                :rules="validateLastName" class="w-full" />
                         </div>
-                        <CommonInput
-                            label="¿Cuál es tu título o especialidad?"
-                            v-model="formData.title"
-                            name="title"
-                            type="title"
-                            id="title"
-                            placeholder="Entrenador físico"
-                            :rules="validateTitle"
-                            class="w-full"
-                        />
+                        <CommonInput label="¿Cuál es tu título o especialidad?" v-model="formData.title" name="title"
+                            type="title" id="title" placeholder="Entrenador físico" :rules="validateTitle"
+                            class="w-full" />
                     </div>
                     <div class="w-4/5 space-y-6 lg:justify-self-start">
-                        <CommonInput
-                            label="Correo Electrónico"
-                            v-model="formData.email"
-                            name="email"
-                            type="email"
-                            id="email"
-                            icon="fa6-solid:envelope"
-                            placeholder="Ingresa tu correo electrónico"
-                            :rules="validateEmail"
-                        />
+                        <CommonInput label="Correo Electrónico" v-model="formData.email" name="email" type="email"
+                            id="email" icon="fa6-solid:envelope" placeholder="Ingresa tu correo electrónico"
+                            :rules="validateEmail" />
                         <div class="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-                            <CommonInput
-                                label="Contraseña"
-                                v-model="formData.password"
-                                name="password"
-                                type="password"
-                                id="password"
-                                icon="fa6-solid:lock"
-                                placeholder="* * * * * * * *"
-                                :rules="validatePassword"
-                            />
+                            <CommonInput label="Contraseña" v-model="formData.password" name="password" type="password"
+                                id="password" icon="fa6-solid:lock" placeholder="* * * * * * * *"
+                                :rules="validatePassword" />
 
-                            <CommonInput
-                                label="Confirma tu contraseña"
-                                v-model="formData.repassword"
-                                name="repassword"
-                                type="password"
-                                icon="fa6-solid:lock"
-                                id="repassword"
-                                placeholder="* * * * * * * *"
-                                :rules="validateRePassword"
-                                class="w-full"
-                            />
+                            <CommonInput label="Confirma tu contraseña" v-model="formData.repassword" name="repassword"
+                                type="password" icon="fa6-solid:lock" id="repassword" placeholder="* * * * * * * *"
+                                :rules="validateRePassword" class="w-full" />
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-10">
                     <div class="flex justify-center">
-                        <CommonButton
-                            type="submit"
-                            :loading="saveUserDataLoading"
-                            :disabled="!meta.valid"
-                            class="px-8 py-2"
-                        >
+                        <CommonButton type="submit" :loading="saveUserDataLoading" :disabled="!meta.valid"
+                            class="px-8 py-2">
                             Registrarse
                         </CommonButton>
                     </div>
@@ -203,6 +155,22 @@ const register = async () => {
         });
 
         if (response.success) {
+            const responseNotification = await $fetch<APIResponse>(
+                `/api/auth/professional/send-notification-email`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        first_name: formData.firstName,
+                        last_name: formData.lastName,
+                        title: formData.title,
+                        email: formData.email,
+
+                    }),
+                },
+            );
             toast.success(response.message);
             authStore.signUp(response.user);
             router.push("/professional/dashboard/home");
