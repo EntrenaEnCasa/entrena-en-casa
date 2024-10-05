@@ -77,6 +77,12 @@
                             >
                                 Planes</NuxtLink
                             >
+                            <NuxtLink
+                                to="/about-us"
+                                class="rounded-md px-4 py-2 font-medium text-gray-600 hover:bg-secondary hover:text-white"
+                            >
+                                Sobre nosotros</NuxtLink
+                            >
                         </div>
                     </div>
                     <div class="hidden items-center space-x-2 font-medium text-gray-500 lg:flex">
@@ -111,6 +117,12 @@
                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-secondary hover:text-white"
                 >
                     Planes
+                </nuxt-link>
+                <nuxt-link
+                    to="/about-us"
+                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-secondary hover:text-white"
+                >
+                    Sobre nosotros
                 </nuxt-link>
                 <div class="space-y-1 py-5">
                     <nuxt-link
