@@ -2,10 +2,8 @@
     <div class="space-y-14 text-gray-700">
         <section class="pt-10">
             <div class="mx-auto flex w-10/12 max-w-5xl flex-col items-center justify-center">
-                <p class="text-gray-700">Sobre nosotros</p>
-                <h2 class="text-center text-4xl font-bold text-gray-800">
-                    Bienvenido a entrena en casa
-                </h2>
+                <p>Sobre nosotros</p>
+                <h2 class="text-center text-4xl font-bold">Bienvenido a entrena en casa</h2>
                 <NuxtImg
                     src="/about-us/people-stretching.jpg"
                     alt="Entrena en casa"
@@ -17,7 +15,7 @@
             <div
                 class="mx-auto grid w-10/12 max-w-5xl grid-cols-1 place-items-center gap-5 lg:grid-cols-2"
             >
-                <h3 class="text-3xl font-bold text-gray-700">¿Qué hacemos?</h3>
+                <h3 class="text-3xl font-bold">¿Qué hacemos?</h3>
                 <p>
                     En Entrenaencasa SpA, nos dedicamos a brindarte los entrenamientos
                     personalizados que necesitas para alcanzar tus metas de bienestar y salud, desde
@@ -58,8 +56,8 @@
                         class="h-80 w-72 rounded-3xl object-cover"
                     />
                     <div class="mt-3">
-                        <h3 class="text-2xl font-bold text-gray-700">Jorge Sierra</h3>
-                        <p class="text-gray-700">Fundador y creador</p>
+                        <h3 class="text-2xl font-bold">Jorge Sierra</h3>
+                        <p>Fundador y creador</p>
                     </div>
                 </div>
             </div>
@@ -103,7 +101,7 @@
                 class="mx-auto flex w-10/12 max-w-5xl flex-col items-center gap-8 rounded-3xl py-12 lg:flex-row"
             >
                 <div>
-                    <h3 class="mb-4 text-3xl font-bold text-gray-700">Nuestros profesionales</h3>
+                    <h3 class="mb-4 text-3xl font-bold">Nuestros profesionales</h3>
                     <p>
                         En Entrenaencasa, nos enorgullece trabajar con un equipo de profesionales
                         altamente capacitados y con una vasta experiencia demostrable. Nos
