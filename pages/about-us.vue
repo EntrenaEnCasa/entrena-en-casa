@@ -65,7 +65,7 @@
 
         <section>
             <div
-                class="mx-auto flex w-10/12 max-w-5xl flex-col items-center gap-8 rounded-3xl bg-gray-50 p-7 lg:flex-row lg:p-10"
+                class="mx-auto flex w-10/12 max-w-5xl flex-col items-center gap-8 rounded-3xl bg-gray-100 p-7 lg:flex-row lg:p-10"
             >
                 <NuxtImg src="/about-us/medalla.png" class="max-h-32 max-w-32" />
                 <p>
@@ -116,7 +116,7 @@
         </section>
         <section>
             <div
-                class="mx-auto w-10/12 max-w-5xl gap-8 rounded-3xl bg-gray-50 p-7 shadow-lg lg:p-10"
+                class="mx-auto w-10/12 max-w-5xl gap-8 rounded-3xl bg-gray-100 p-7 shadow-lg lg:p-10"
             >
                 <div class="space-y-6 text-center">
                     <p>
