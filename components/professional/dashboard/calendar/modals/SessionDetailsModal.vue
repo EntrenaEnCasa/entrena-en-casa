@@ -14,6 +14,10 @@
                     <h5 class="text-lg font-medium">Modalidad</h5>
                     <p class="mb-4">{{ event.session_info.modality }}</p>
                 </template>
+                <template v-if="event.type === 'personal'">
+                    <h5 class="text-lg font-medium">Detalles</h5>
+                    <p class="mb-4">{{ event.info }}</p>
+                </template>
 
                 <h5 class="text-lg font-medium">Clientes</h5>
                 <p v-if="event.clients.length === 0">Aún no hay clientes agendados</p>
@@ -36,6 +40,8 @@ const props = defineProps({
 });
 
 const event = computed(() => props.modal.data.event);
+
+console.log("event", event.value);
 
 const eventTypeText = computed(() => {
     switch (event.value?.type) {
