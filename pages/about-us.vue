@@ -1,5 +1,5 @@
 <template>
-    <div class="text-gray-700">
+    <div class="space-y-14 text-gray-700">
         <section class="pt-10">
             <div class="mx-auto flex w-10/12 max-w-5xl flex-col items-center justify-center">
                 <p class="text-gray-700">Sobre nosotros</p>
@@ -13,7 +13,7 @@
                 />
             </div>
         </section>
-        <section class="py-12">
+        <section>
             <div
                 class="mx-auto grid w-10/12 max-w-5xl grid-cols-1 place-items-center gap-5 lg:grid-cols-2"
             >
@@ -65,7 +65,7 @@
             </div>
         </section>
 
-        <section class="py-12">
+        <section>
             <div
                 class="mx-auto flex w-10/12 max-w-5xl flex-col items-center gap-8 rounded-3xl bg-gray-50 p-7 lg:flex-row lg:p-10"
             >
@@ -78,7 +78,7 @@
                 </p>
             </div>
         </section>
-        <section class="py-12">
+        <section>
             <div class="mx-auto w-10/12 max-w-5xl">
                 <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
                     <div class="aspect-video overflow-hidden rounded-xl shadow-lg">
@@ -116,7 +116,7 @@
                 <NuxtImg src="/about-us/entrena.jpg" class="max-h-64 rounded-3xl" />
             </div>
         </section>
-        <section class="py-12">
+        <section>
             <div
                 class="mx-auto w-10/12 max-w-5xl gap-8 rounded-3xl bg-gray-50 p-7 shadow-lg lg:p-10"
             >
