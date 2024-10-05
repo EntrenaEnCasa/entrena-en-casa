@@ -78,6 +78,26 @@
                 </p>
             </div>
         </section>
+        <section class="py-12">
+            <div class="mx-auto w-10/12 max-w-5xl">
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                    <div class="aspect-video overflow-hidden rounded-xl shadow-lg">
+                        <NuxtImg
+                            src="/about-us/news-1.jpg"
+                            alt="El gimnasio puertas adentro"
+                            class="h-full w-full object-cover object-top"
+                        />
+                    </div>
+                    <div class="aspect-video overflow-hidden rounded-xl shadow-lg">
+                        <NuxtImg
+                            src="/about-us/news-2.jpg"
+                            alt="Lo más importante es estar motivado"
+                            class="h-full w-full object-cover object-top"
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
         <section class="bg-gradiente">
             <div
                 class="mx-auto flex w-10/12 max-w-5xl flex-col items-center gap-8 rounded-3xl py-12 lg:flex-row"
