@@ -393,7 +393,7 @@ const toast = useToast();
 const user: null | User | Student = userStore.user;
 
 interface APISessionResponseType extends APIResponse {
-    sessions?: Session[];
+    sessions?: SessionExtended[];
 }
 
 interface APIUserResponseType extends APIResponse {
@@ -404,7 +404,7 @@ const confirmAttendanceLoading = ref(false);
 const professionalWillFillUserData = ref(false);
 const detailsModal = ref<Modal | null>(null);
 const fillUserDataModal = ref<Modal | null>(null);
-const detailsModalSession = ref<Session | null>(null);
+const detailsModalSession = ref<SessionExtended | null>(null);
 
 // Utility function to format date
 const formatDate = (date: string): string => {
@@ -422,7 +422,7 @@ const { data: userData, pending: userDataLoading } = await useFetch<APIUserRespo
     },
 );
 
-const viewSessionDetails = (session: Session) => {
+const viewSessionDetails = (session: SessionExtended) => {
     detailsModalSession.value = session;
     if (userData.value?.success || professionalWillFillUserData.value) {
         detailsModal.value?.openModal();

@@ -15,14 +15,22 @@ declare global {
 
     interface Session {
         session_id: number;
+        user_id: number;
         date: string;
         time: string;
         available: boolean;
-        confirmed: boolean;
         format: "Personalizado" | "Grupal";
         modality: "Online" | "Presencial";
         link: string | null;
         actual_assistant: number;
+        type: string;
+        coordinates: string | null;
+        google_event_id: string | null;
+        participant_count: number;
+    }
+
+    interface SessionExtended extends Session {
+        confirmed: boolean;
         professional: Professional;
     }
 
