@@ -21,7 +21,7 @@
                     class="rounded-2xl bg-white shadow-lg"
                 >
                     <div class="space-y-4 px-6 py-4">
-                        <div class="flex justify-between text-sm text-gray-400">
+                        <div class="flex justify-between text-gray-400">
                             <p>{{ formatDateToFullLongFormat(session.date) }}</p>
                             <p>{{ session.time }}hrs</p>
                         </div>
@@ -73,7 +73,7 @@
                     :key="session.session_id"
                     class="space-y-4 rounded-2xl bg-white px-6 py-4 shadow-lg"
                 >
-                    <div class="flex justify-between text-sm text-gray-400">
+                    <div class="flex justify-between text-gray-400">
                         <p>{{ formatDateToFullLongFormat(session.date) }}</p>
                         <p>{{ session.time }}hrs</p>
                     </div>
