@@ -113,6 +113,14 @@ interface Session {
     professional: Professional;
 }
 
+interface FutureSessionsResponse extends APIResponse {
+    sessions: Session[];
+}
+
+interface PastSessionsResponse extends APIResponse {
+    sessions: Session[];
+}
+
 const formatDate = (date: string): string => {
     const [year, month, day] = date.split("-").map(Number);
     const d = new Date(year, month - 1, day);
@@ -142,17 +150,18 @@ const openSessionModal = (session: Session) => {
 };
 
 // Fetch future sessions
-const { data: futureSessions, pending: futureSessionsLoading } = await useFetch(
-    `${runtimeConfig.public.apiBase}/student/${userId}/sessions/soon`,
-    {
-        method: "GET",
-        credentials: "include",
-        lazy: true,
-    },
-);
+const { data: futureSessions, pending: futureSessionsLoading } =
+    await useFetch<FutureSessionsResponse>(
+        `${runtimeConfig.public.apiBase}/student/${userId}/sessions/soon`,
+        {
+            method: "GET",
+            credentials: "include",
+            lazy: true,
+        },
+    );
 
 // Fetch past sessions
-const { data: pastSessions, pending: pastSessionsLoading } = await useFetch(
+const { data: pastSessions, pending: pastSessionsLoading } = await useFetch<PastSessionsResponse>(
     `${runtimeConfig.public.apiBase}/student/${userId}/sessions/last`,
     {
         method: "GET",
