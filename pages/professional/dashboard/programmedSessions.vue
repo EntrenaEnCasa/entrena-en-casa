@@ -3,7 +3,7 @@
         <div>
             <h3 class="mb-5 text-xl font-medium">Sesiones próximas</h3>
             <div v-if="futureSessionsStatus === 'pending'" class="text-center">
-                <p>Cargando sesiones próximas...</p>
+                <CommonLoading text="Cargando sesiones proximas..." />
             </div>
             <div v-else-if="futureSessionsStatus === 'error'" class="text-center text-red-500">
                 <p>Error al cargar las sesiones próximas. Por favor, intente de nuevo más tarde.</p>
@@ -45,7 +45,7 @@
         <div>
             <h3 class="mb-5 text-xl font-medium">Sesiones pasadas (Últimas 10)</h3>
             <div v-if="pastSessionsStatus === 'pending'" class="text-center">
-                <p>Cargando sesiones pasadas...</p>
+                <CommonLoading text="Cargando sesiones pasadas..." />
             </div>
             <div v-else-if="pastSessionsStatus === 'error'" class="text-center text-red-500">
                 <p>Error al cargar las sesiones pasadas. Por favor, intente de nuevo más tarde.</p>
@@ -140,7 +140,7 @@ interface SessionsResponse extends APIResponse {
     data: Session[];
 }
 
-const { data: futureSessions, status: futureSessionsStatus } = await useFetch<SessionsResponse>(
+const { data: futureSessions, status: futureSessionsStatus } = useFetch<SessionsResponse>(
     `${runtimeConfig.public.apiBase}/professional/future-sessions/${userStore.user?.user_id}`,
     {
         method: "GET",
@@ -148,7 +148,7 @@ const { data: futureSessions, status: futureSessionsStatus } = await useFetch<Se
     },
 );
 
-const { data: pastSessions, status: pastSessionsStatus } = await useFetch<SessionsResponse>(
+const { data: pastSessions, status: pastSessionsStatus } = useFetch<SessionsResponse>(
     `${runtimeConfig.public.apiBase}/professional/past-sessions/${userStore.user?.user_id}`,
     {
         method: "GET",
