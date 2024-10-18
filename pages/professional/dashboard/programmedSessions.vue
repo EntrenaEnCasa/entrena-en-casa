@@ -22,16 +22,19 @@
                 >
                     <div class="space-y-4 px-6 py-4">
                         <div class="flex justify-between text-sm text-gray-400">
-                            <p>{{ formatDate(session.date) }}</p>
+                            <p>{{ formatDateToFullLongFormat(session.date) }}</p>
                             <p>{{ session.time }}hrs</p>
                         </div>
                         <div class="space-y-2 text-center">
                             <h4 class="text-2xl font-semibold">{{ session.format }}</h4>
                             <p class="text-xl font-medium text-secondary">
-                                {{ getLocation(session) }}
+                                {{ session.modality }}
                             </p>
                             <p class="text-gray-600">
-                                {{ session.actual_assistant }} Participante(s)
+                                {{ session.actual_assistant }}
+                                {{
+                                    session.actual_assistant == 1 ? "Participante" : "Participantes"
+                                }}
                             </p>
                         </div>
                         <div class="text-center">
@@ -71,13 +74,13 @@
                     class="space-y-4 rounded-2xl bg-white px-6 py-4 shadow-lg"
                 >
                     <div class="flex justify-between text-sm text-gray-400">
-                        <p>{{ formatDate(session.date) }}</p>
+                        <p>{{ formatDateToFullLongFormat(session.date) }}</p>
                         <p>{{ session.time }}hrs</p>
                     </div>
                     <div class="space-y-2 text-center">
                         <h4 class="text-xl font-medium">{{ session.format }}</h4>
                         <p class="text-lg font-medium text-secondary">
-                            {{ getLocation(session) }}
+                            {{ session.modality }}
                         </p>
                         <p class="text-gray-600">{{ session.actual_assistant }} Participante(s)</p>
                     </div>
@@ -95,39 +98,51 @@
     </div>
 
     <CommonModal ref="detailsModal">
-        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-            <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">
+        <div v-if="selectedSession" class="bg-white p-4">
+            <h3 class="mb-4 text-center text-2xl font-semibold text-gray-900" id="modal-title">
                 Detalles de la Sesión
             </h3>
-            <div class="mt-2">
-                <p class="text-sm text-gray-500">
-                    <strong>Fecha:</strong>
-                    {{ formatDate(selectedSession?.date ?? "") }}
-                </p>
-                <p class="text-sm text-gray-500">
-                    <strong>Hora:</strong> {{ selectedSession?.time }}
-                </p>
-                <p class="text-sm text-gray-500">
-                    <strong>Formato:</strong> {{ selectedSession?.format }}
-                </p>
-                <p class="text-sm text-gray-500">
-                    <strong>Modalidad:</strong> {{ selectedSession?.modality }}
-                </p>
-                <p class="text-sm text-gray-500">
-                    <strong>Ubicación:</strong> {{ getLocation(selectedSession) }}
-                </p>
-                <p class="text-sm text-gray-500">
-                    <strong>Participantes:</strong>
-                    {{ selectedSession?.actual_assistant }}
-                </p>
+            <div class="mt-2 space-y-2">
+                <div class="grid grid-cols-2 gap-x-4">
+                    <h4 class="place-self-end">Fecha:</h4>
+                    <p class="font-semibold">
+                        {{ formatDateToFullLongFormat(selectedSession.date) }}
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4">
+                    <h4 class="place-self-end">Hora:</h4>
+                    <p class="font-semibold">{{ selectedSession.time }}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4">
+                    <h4 class="place-self-end">Formato:</h4>
+                    <p class="font-semibold">{{ selectedSession.format }}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4">
+                    <h4 class="place-self-end">Modalidad:</h4>
+                    <p class="font-semibold">{{ selectedSession.modality }}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4">
+                    <h4 class="place-self-end">Participantes:</h4>
+                    <p class="font-semibold">
+                        {{ selectedSession.actual_assistant }}
+                        {{
+                            selectedSession.actual_assistant == 1 ? "Participante" : "Participantes"
+                        }}
+                    </p>
+                </div>
             </div>
         </div>
     </CommonModal>
 </template>
 
 <script setup lang="ts">
+import { useFormatter } from "~/composables/time/useFormatter";
+
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
+const formatter = useFormatter();
+
+const { formatDateToFullLongFormat } = formatter;
 
 interface SessionsResponse extends APIResponse {
     data: Session[];
@@ -149,29 +164,11 @@ const { data: pastSessions, status: pastSessionsStatus } = await useFetch<Sessio
     },
 );
 
-const getLocation = (session: Session | null) => {
-    if (!session) return "";
-    return session.modality.toLowerCase() === "online"
-        ? "Online"
-        : session.coordinates || "Presencial";
-};
-
-const formatDate = (date: string): string => {
-    const [year, month, day] = date.split("-").map(Number);
-    const d = new Date(year, month - 1, day);
-    return d.toLocaleString("es-ES", { day: "2-digit", month: "long", year: "numeric" });
-};
-
 const detailsModal = ref<Modal | null>(null);
 const selectedSession = ref<Session | null>(null);
 
 const viewSessionDetails = (session: Session) => {
     selectedSession.value = session;
     detailsModal.value?.openModal();
-};
-
-const closeModal = () => {
-    detailsModal.value?.closeModal();
-    selectedSession.value = null;
 };
 </script>
