@@ -145,6 +145,7 @@ const { data: futureSessions, status: futureSessionsStatus } = useFetch<Sessions
     {
         method: "GET",
         credentials: "include",
+        lazy: true,
     },
 );
 
@@ -153,6 +154,7 @@ const { data: pastSessions, status: pastSessionsStatus } = useFetch<SessionsResp
     {
         method: "GET",
         credentials: "include",
+        lazy: true,
     },
 );
 
