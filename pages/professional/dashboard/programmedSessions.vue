@@ -15,38 +15,30 @@
                 <p>No hay sesiones próximas programadas.</p>
             </div>
             <div v-else-if="futureSessions?.data" class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <div
-                    v-for="session in futureSessions.data"
-                    :key="session.session_id"
-                    class="rounded-2xl bg-white shadow-lg"
-                >
-                    <div class="space-y-4 px-6 py-4">
-                        <div class="flex justify-between text-gray-400">
-                            <p>{{ formatDateToFullLongFormat(session.date) }}</p>
-                            <p>{{ session.time }}hrs</p>
-                        </div>
-                        <div class="space-y-2 text-center">
-                            <h4 class="text-2xl font-semibold">{{ session.format }}</h4>
-                            <p class="text-xl font-medium text-secondary">
-                                {{ session.modality }}
-                            </p>
-                            <p class="text-gray-600">
-                                {{ session.actual_assistant }}
-                                {{
-                                    session.actual_assistant == 1 ? "Participante" : "Participantes"
-                                }}
-                            </p>
-                        </div>
-                        <div class="text-center">
-                            <button
-                                class="rounded-md bg-primary px-4 py-2 font-medium text-white"
-                                @click="viewSessionDetails(session)"
-                            >
-                                Ver detalles
-                            </button>
-                        </div>
+                <CommonCard v-for="session in futureSessions.data" :key="session.session_id">
+                    <div class="flex justify-between text-gray-400">
+                        <p>{{ formatDateToFullLongFormat(session.date) }}</p>
+                        <p>{{ session.time }}hrs</p>
                     </div>
-                </div>
+
+                    <div class="space-y-2 text-center">
+                        <h4 class="text-2xl font-semibold">{{ session.format }}</h4>
+                        <p class="text-xl font-medium text-secondary">{{ session.modality }}</p>
+                        <p class="text-gray-600">
+                            {{ session.actual_assistant }}
+                            {{ session.actual_assistant === 1 ? "Participante" : "Participantes" }}
+                        </p>
+                    </div>
+
+                    <div class="text-center">
+                        <button
+                            class="rounded-md bg-primary px-5 py-2 font-medium text-white"
+                            @click="viewSessionDetails(session)"
+                        >
+                            Ver detalles
+                        </button>
+                    </div>
+                </CommonCard>
             </div>
         </div>
 
