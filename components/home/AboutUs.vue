@@ -20,7 +20,3 @@
         </div>
     </div>
 </template>
-<style scoped></style>
-<script>
-import "@justinribeiro/lite-youtube";
-</script>
