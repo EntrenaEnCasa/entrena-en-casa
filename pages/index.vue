@@ -5,7 +5,7 @@
             <HomeServices />
             <HomeSlider />
             <HomeWhyUs />
-            <HomeWhatIs />
+            <HomeAboutUs />
             <HomeTestimonialOurStudents />
             <HomeContact />
         </main>
