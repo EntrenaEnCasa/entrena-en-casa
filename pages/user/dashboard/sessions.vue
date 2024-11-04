@@ -8,7 +8,7 @@
                 class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
                 style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
             >
-                <div class="text-center text-lg font-semibold">No hay sesiones en curso</div>
+                <p class="text-center text-lg font-semibold">No hay sesiones en curso</p>
             </div>
             <h3 class="text-xl font-medium">Sesiones reservadas</h3>
             <CommonLoading v-if="futureSessionsLoading" />
@@ -86,9 +86,9 @@
                     class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
                     style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
                 >
-                    <div class="text-md text-center">
-                        <b>{{ futureSessions?.message }}</b>
-                    </div>
+                    <p class="text-center text-lg font-semibold">
+                        {{ futureSessions?.message }}
+                    </p>
                 </div>
             </div>
             <div>
