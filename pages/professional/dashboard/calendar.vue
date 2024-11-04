@@ -565,7 +565,7 @@ const newEventModal = reactive({
                 newEventModal.data.manualSession.selectedModality === "Presencial"
             ) {
                 link = "";
-                coordinates = null;
+                coordinates = JSON.stringify(newEventModal.data.manualSession.locationCoordinates);
             } else {
                 link = newEventModal.data.manualSession.link;
                 coordinates = null;
@@ -720,7 +720,7 @@ const editEmptySessionModal = reactive({
             editEmptySessionModal.data.selectedModality === "Presencial"
         ) {
             link = "";
-            coordinates = null;
+            coordinates = JSON.stringify(newEventModal.data.manualSession.locationCoordinates);
         } else {
             link = newEmptySessionModal.data.link;
             coordinates = null;
