@@ -368,6 +368,19 @@ const hasSessionLocation = computed(() => {
 });
 
 // Methods
+const updateLocationAddress = async () => {
+    if (isInPersonSession.value && hasSessionLocation.value) {
+        try {
+            const geocodingData = await getReverseGeocodingData(coordinates.value);
+            locationAddress.value = geocodingData.place_name;
+        } catch (e) {
+            console.error("Error getting address:", e);
+            locationAddress.value = "No se pudo cargar la dirección";
+        }
+    }
+};
+
+const viewSessionDetails = async (session: SessionEvent) => {
     console.log("Session details:", session);
     selectedSession.value = session;
     detailsModal.value?.openModal();
