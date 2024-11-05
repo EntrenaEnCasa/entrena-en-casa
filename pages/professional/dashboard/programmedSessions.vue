@@ -381,7 +381,6 @@ const updateLocationAddress = async () => {
 };
 
 const viewSessionDetails = async (session: SessionEvent) => {
-    console.log("Session details:", session);
     selectedSession.value = session;
     detailsModal.value?.openModal();
     if (isInPersonSession.value && hasSessionLocation.value) {
