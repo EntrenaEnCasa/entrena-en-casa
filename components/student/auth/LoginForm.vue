@@ -42,7 +42,6 @@ import { useAuthStore } from "~/stores/AuthStore";
 import { useToast } from "vue-toastification";
 
 const router = useRouter();
-const runtimeConfig = useRuntimeConfig();
 const authStore = useAuthStore();
 const toast = useToast();
 
