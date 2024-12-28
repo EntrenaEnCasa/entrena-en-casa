@@ -53,6 +53,9 @@
                     <p class="text-center font-medium">
                         {{ plan.description }}
                     </p>
+                    <p class="text-center font-medium">
+                        Duración del plan: {{ plan.expiration_time }}
+                    </p>
                     <ul class="space-y-3">
                         <li class="flex gap-2">
                             <div
@@ -87,18 +90,33 @@
                             </p>
                         </li>
                     </ul>
-                    <CommonButton
-                        @click="
-                            goToWhatsapp(plan.format_credit, plan.credit_type, plan.credit_quantity)
-                        "
-                        class="w-full bg-primary-500 px-4 py-2"
-                        rounded-size="full"
-                    >
-                        Hablar con ventas
-                    </CommonButton>
+                    <div class="space-y-2">
+                        <CommonButton
+                            @click="handleBuyPlan(plan)"
+                            class="w-full bg-secondary px-4 py-2"
+                            rounded-size="full"
+                        >
+                            Comprar plan
+                        </CommonButton>
+                        <CommonButton
+                            @click="
+                                goToWhatsapp(
+                                    plan.format_credit,
+                                    plan.credit_type,
+                                    plan.credit_quantity,
+                                )
+                            "
+                            class="w-full bg-primary px-4 py-2"
+                            rounded-size="full"
+                        >
+                            Hablar con ventas
+                        </CommonButton>
+                    </div>
                 </div>
             </div>
         </div>
+        <PlansLoginModal ref="loginModalRef" @openRegister="openRegisterModal" />
+        <PlansRegisterModal ref="registerModalRef" @openLogin="openLoginModal" />
     </div>
 </template>
 
@@ -144,6 +162,28 @@ const sessionModalities = ref([
     { value: "O", label: "Online" },
 ]);
 
+const authStore = useAuthStore();
+const loginModalRef = ref(null);
+const registerModalRef = ref(null);
+
+const handleBuyPlan = (plan) => {
+    console.log("Plan to purchase: ", plan);
+    if (!authStore.loggedIn) {
+        loginModalRef.value?.openModal();
+        return;
+    }
+    // TODO: Handle purchase logic here
+    console.log("Plan to purchase: ", plan);
+};
+
+const openLoginModal = () => {
+    loginModalRef.value?.openModal();
+};
+
+const openRegisterModal = () => {
+    registerModalRef.value?.openModal();
+};
+
 const formatPlan = (creditType) => {
     if (creditType === "PP") {
         return "Personalizado Presencial";
@@ -160,39 +200,24 @@ const goToWhatsapp = async (planFormat, planType, planCreditQuantity) => {
     if (!planFormat || !planType || !planCreditQuantity) return;
     const modality = formatPlan(planType);
     const planRegion = formatRegion(region.value);
-    if (planRegion === "") {
-        const link =
-            "https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20" +
-            modality +
-            "%20" +
-            planFormat +
-            "%20" +
-            planCreditQuantity +
-            "%20sesiones.";
-        await navigateTo(link, {
-            external: true,
-            open: {
-                target: "_blank",
-            },
-        });
-    } else {
-        const link =
-            "https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20" +
-            modality +
-            "%20" +
-            planFormat +
-            "%20" +
-            planCreditQuantity +
-            "%20sesiones%20en%20la%20región%20de%20" +
-            planRegion +
-            ".";
-        await navigateTo(link, {
-            external: true,
-            open: {
-                target: "_blank",
-            },
-        });
-    }
+
+    const link =
+        "https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20" +
+        modality +
+        "%20" +
+        planFormat +
+        "%20" +
+        planCreditQuantity +
+        "%20sesiones%20en%20la%20región%20de%20" +
+        planRegion +
+        ".";
+    await navigateTo(link, {
+        external: true,
+        open: {
+            target: "_blank",
+        },
+    });
+
     return;
 };
 
@@ -206,7 +231,7 @@ const {
     data: plansResponse,
     pending: plansLoading,
     error,
-} = await useFetch(`${config.public.apiBase}/user/prices`, {
+} = await useFetch(`${config.public.apiBase}/user/plans`, {
     method: "POST",
     body: {
         region: region,
