@@ -90,13 +90,13 @@
                             </p>
                         </li>
                     </ul>
-                    <div class="space-y-2">
+                    <div class="w-full space-y-2">
                         <CommonButton
-                            @click="handleBuyPlan(plan)"
+                            :to="`/plans/${plan.plan_id}`"
                             class="w-full bg-secondary px-4 py-2"
                             rounded-size="full"
                         >
-                            Comprar plan
+                            Ver detalles del plan
                         </CommonButton>
                         <CommonButton
                             @click="
