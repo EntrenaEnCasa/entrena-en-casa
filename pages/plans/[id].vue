@@ -138,11 +138,9 @@ const handleBuyPlan = () => {
 
 const handleContactSales = async () => {
     if (!plan.value) return;
-
-    const planRegion = "Metropolitana de Santiago"; // You might want to add region to the plan details
     const modality = formatPlan(plan.value.credit_type);
 
-    const link = `https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20${modality}%20${plan.value.format_credit}%20${plan.value.credit_quantity}%20sesiones%20en%20la%20región%20de%20${planRegion}.`;
+    const link = `https://wa.me/56971370313?text=Hola%20Jorge,%20quiero%20contratar%20un%20plan%20${modality}%20${plan.value.format_credit}%20${plan.value.credit_quantity}%20sesiones%20.`;
 
     await navigateTo(link, {
         external: true,
