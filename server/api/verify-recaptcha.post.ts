@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        const response = await $fetch("https://www.google.com/recaptcha/api/siteverify", {
+        const response: { success: boolean } = await $fetch("https://www.google.com/recaptcha/api/siteverify", {
             method: "POST",
             body: {
                 secret: config.recaptchaSecretKey,

@@ -12,43 +12,47 @@
         </div>
 
         <!-- Mostrar CAPTCHA después de varios intentos fallidos -->
-        <div v-if="showCaptcha" class="captcha-container">
-            <div id="recaptcha-container" class="g-recaptcha" :data-sitekey="recaptchaSiteKey"></div>
+        <div v-if="captchaRequired" class="captcha-container">
             <p v-if="captchaError" class="error-message">{{ captchaError }}</p>
         </div>
 
         <CommonButton class="w-full py-2 font-medium" text-size="xl" :loading="loading"
-            :disabled="!meta.valid || (showCaptcha && !captchaVerified)">
-            Iniciar Sesión
+            :disabled="!meta.valid || (isLocked && timer > 0)">
+            {{ isLocked && timer > 0 ? `Reintentar en ${timer}s` : "Iniciar Sesión" }}
         </CommonButton>
     </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, watch } from "vue";
 import { useToast } from "vue-toastification";
-import { useRouter, useRuntimeConfig } from "#app";
+import { useRouter } from "#app";
 import { useAuthStore } from "~/stores/AuthStore";
+import { useReCaptcha } from "vue-recaptcha-v3";
 
 // Configuración y composables
-const runtimeConfig = useRuntimeConfig();
 const router = useRouter();
 const authStore = useAuthStore();
 const toast = useToast();
+const recaptcha = useReCaptcha();
+const executeRecaptcha = recaptcha?.executeRecaptcha;
 
 // Variables reactivas
 const failedAttempts = ref(0);
 const captchaVerified = ref(false);
 const captchaError = ref<string | null>(null);
-const recaptchaSiteKey = runtimeConfig.public.siteKey;
 const loading = ref(false);
+const isLocked = ref(false);
+const timer = ref(0);
+let timerInterval: NodeJS.Timeout | null = null;
 
 const formData = reactive({
     email: "",
     password: "",
 });
 
-const showCaptcha = computed(() => failedAttempts.value >= 2);
+// Mostrar CAPTCHA solo después de ciertos intentos fallidos
+const captchaRequired = computed(() => failedAttempts.value >= 2);
 
 // Funciones de validación
 const validateEmail = (value: string) => {
@@ -63,29 +67,28 @@ const validatePassword = (password: string) => {
     return true;
 };
 
-// Cargar el script de reCAPTCHA dinámicamente
-const loadRecaptchaScript = () => {
-    const scriptId = "recaptcha-script";
-    if (!document.getElementById(scriptId)) {
-        const script = document.createElement("script");
-        script.id = scriptId;
-        script.src = "https://www.google.com/recaptcha/api.js";
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-    }
+// Bloquear intentos adicionales por 30 segundos después de 5 intentos fallidos
+const startLockout = () => {
+    isLocked.value = true;
+    timer.value = 30;
+    toast.error(`Demasiados intentos fallidos. Espera ${timer.value} segundos.`);
+
+    timerInterval = setInterval(() => {
+        timer.value--;
+        if (timer.value <= 0) {
+            clearInterval(timerInterval!);
+            isLocked.value = false;
+        }
+    }, 1000);
 };
 
-// Validar CAPTCHA en el backend
+// Validar CAPTCHA con vue-recaptcha-v3
 const validateCaptcha = async (): Promise<boolean> => {
-    const token = (window as any).grecaptcha.getResponse();
-
-    if (!token) {
-        captchaError.value = "Por favor, completa el CAPTCHA.";
-        return false;
-    }
-
     try {
+        if (!executeRecaptcha) {
+            throw new Error("Recaptcha is not available");
+        }
+        const token = await executeRecaptcha("login_action");
         const response = await $fetch("/api/verify-recaptcha", {
             method: "POST",
             body: { token },
@@ -95,8 +98,8 @@ const validateCaptcha = async (): Promise<boolean> => {
             captchaVerified.value = true;
             return true;
         } else {
+            console.log(response)
             captchaError.value = "Verificación del CAPTCHA fallida.";
-            (window as any).grecaptcha.reset();
             return false;
         }
     } catch (error) {
@@ -108,10 +111,17 @@ const validateCaptcha = async (): Promise<boolean> => {
 
 // Validar el login después del CAPTCHA
 const validateAndLogin = async (event: Event) => {
+
+    if (isLocked.value) {
+        toast.error("Debes esperar antes de volver a intentar.");
+        return;
+    }
+
     loading.value = true;
 
     try {
-        if (showCaptcha.value && !(await validateCaptcha())) {
+        // Si el CAPTCHA es requerido, validarlo antes de continuar
+        if (captchaRequired.value && !(await validateCaptcha())) {
             loading.value = false;
             return;
         }
@@ -129,22 +139,33 @@ const validateAndLogin = async (event: Event) => {
             authStore.logIn(response.user);
             router.push("/user/dashboard/home");
             toast.success("Inicio de sesión exitoso");
+            failedAttempts.value = 0; // Reiniciar intentos fallidos en caso de éxito
         } else {
             failedAttempts.value++;
             toast.error(response.message);
+
+            if (failedAttempts.value >= 5) {
+                startLockout();
+            }
         }
     } catch (error) {
         failedAttempts.value++;
         console.error("Error:", error);
         toast.error("Ocurrió un error al iniciar sesión.");
+
+        if (failedAttempts.value >= 5) {
+            startLockout();
+        }
     } finally {
         loading.value = false;
     }
 };
 
-// Cargar el script en el montaje
-onMounted(() => {
-    if (showCaptcha.value) loadRecaptchaScript();
+// Limpiar el intervalo al desmontar el componente
+watch(timer, (newTimer) => {
+    if (newTimer <= 0 && timerInterval) {
+        clearInterval(timerInterval);
+    }
 });
 </script>
 
