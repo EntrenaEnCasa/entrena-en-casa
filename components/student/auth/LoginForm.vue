@@ -4,16 +4,13 @@
             icon="fa6-solid:envelope" placeholder="Ingresa tu correo electrónico" :rules="validateEmail" />
         <CommonInput label="Contraseña" v-model="formData.password" name="password" type="password" id="password"
             icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePassword" />
-
+        <p v-if="isLocked" class="error-message">
+            {{ errorTimeMessage || "Demasiados intentos fallidos, espera antes de volver a intentarlo" }}
+        </p>
         <div class="flex">
             <router-link to="/password/reset" class="text-secondary">
                 Olvidé mi contraseña
             </router-link>
-        </div>
-
-        <!-- Mostrar CAPTCHA después de varios intentos fallidos -->
-        <div v-if="captchaRequired" class="captcha-container">
-            <p v-if="captchaError" class="error-message">{{ captchaError }}</p>
         </div>
 
         <CommonButton class="w-full py-2 font-medium" text-size="xl" :loading="loading"
@@ -40,7 +37,7 @@ const executeRecaptcha = recaptcha?.executeRecaptcha;
 // Variables reactivas
 const failedAttempts = ref(0);
 const captchaVerified = ref(false);
-const captchaError = ref<string | null>(null);
+const errorTimeMessage = ref<string | null>(null);
 const loading = ref(false);
 const isLocked = ref(false);
 const timer = ref(0);
@@ -70,14 +67,13 @@ const validatePassword = (password: string) => {
 // Bloquear intentos adicionales por 30 segundos después de 5 intentos fallidos
 const startLockout = () => {
     isLocked.value = true;
-    timer.value = 30;
-    toast.error(`Demasiados intentos fallidos. Espera ${timer.value} segundos.`);
-
+    timer.value = 15;
     timerInterval = setInterval(() => {
         timer.value--;
         if (timer.value <= 0) {
             clearInterval(timerInterval!);
             isLocked.value = false;
+            errorTimeMessage.value = null;
         }
     }, 1000);
 };
@@ -98,12 +94,11 @@ const validateCaptcha = async (): Promise<boolean> => {
             captchaVerified.value = true;
             return true;
         } else {
-            console.log(response)
-            captchaError.value = "Verificación del CAPTCHA fallida.";
+            toast.error("Verificación del CAPTCHA fallida.");
             return false;
         }
     } catch (error) {
-        captchaError.value = "Error al verificar el CAPTCHA.";
+        toast.error("Error al verificar el CAPTCHA.");
         console.error(error);
         return false;
     }
@@ -123,6 +118,7 @@ const validateAndLogin = async (event: Event) => {
         // Si el CAPTCHA es requerido, validarlo antes de continuar
         if (captchaRequired.value && !(await validateCaptcha())) {
             loading.value = false;
+            startLockout();
             return;
         }
 
