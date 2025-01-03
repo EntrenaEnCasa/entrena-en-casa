@@ -115,8 +115,6 @@
                 </div>
             </div>
         </div>
-        <PlansLoginModal ref="loginModalRef" @openRegister="openRegisterModal" />
-        <PlansRegisterModal ref="registerModalRef" @openLogin="openLoginModal" />
     </div>
 </template>
 
@@ -161,28 +159,6 @@ const sessionModalities = ref([
     { value: "P", label: "Presencial" },
     { value: "O", label: "Online" },
 ]);
-
-const authStore = useAuthStore();
-const loginModalRef = ref(null);
-const registerModalRef = ref(null);
-
-const handleBuyPlan = (plan) => {
-    console.log("Plan to purchase: ", plan);
-    if (!authStore.loggedIn) {
-        loginModalRef.value?.openModal();
-        return;
-    }
-    // TODO: Handle purchase logic here
-    console.log("Plan to purchase: ", plan);
-};
-
-const openLoginModal = () => {
-    loginModalRef.value?.openModal();
-};
-
-const openRegisterModal = () => {
-    registerModalRef.value?.openModal();
-};
 
 const formatPlan = (creditType) => {
     if (creditType === "PP") {
