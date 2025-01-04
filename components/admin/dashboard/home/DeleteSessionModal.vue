@@ -1,4 +1,3 @@
-type: Object,
 <template>
     <div>
         <Teleport to="body">
