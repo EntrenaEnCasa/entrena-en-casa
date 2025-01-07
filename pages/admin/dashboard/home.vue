@@ -20,11 +20,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                v-for="session in futureSessionsData?.sessions"
-                                class="border-b"
-                                :key="session.session_id"
-                            >
+                            <tr v-for="session in futureSessionsData?.sessions" class="border-b"
+                                :key="session.session_id">
                                 <td class="whitespace-nowrap px-6 py-4">
                                     {{ session.date }}
                                 </td>
@@ -49,10 +46,8 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <button
-                                        class="rounded-md bg-primary px-4 py-2 font-medium text-white"
-                                        @click="openModalModifySession(session.session_id)"
-                                    >
+                                    <button class="rounded-md bg-primary px-4 py-2 font-medium text-white"
+                                        @click="openModalModifySession(session.session_id)">
                                         Ver Detalles
                                     </button>
                                 </td>
@@ -63,12 +58,8 @@
             </div>
         </div>
 
-        <AdminDashboardHomeModifySessionModal
-            @refresh-data="refreshData"
-            :loading="sessionInfoLoading"
-            :sessionInfo="sessionInfo"
-            ref="modifySessionModal"
-        />
+        <AdminDashboardHomeModifySessionModal @refresh-data="refreshData" :loading="sessionInfoLoading"
+            :sessionInfo="sessionInfo" ref="modifySessionModal" />
     </div>
 </template>
 
@@ -139,9 +130,6 @@ const refreshData = () => {
     getFutureSessions();
 };
 
-const filter = () => {
-    console.log("filter");
-};
 
 const getSessionInfo = async (session_id: number) => {
     sessionInfoLoading.value = true;

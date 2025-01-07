@@ -4,14 +4,10 @@
             <CommonModal ref="modal">
                 <div class="w-full text-center">
                     <div
-                        class="mx-auto mb-8 mt-5 grid w-10/12 grid-cols-1 place-items-center justify-center text-center lg:grid-cols-2 lg:text-start"
-                    >
+                        class="mx-auto mb-8 mt-5 grid w-10/12 grid-cols-1 place-items-center justify-center text-center lg:grid-cols-2 lg:text-start">
                         <div class="mb-5 space-y-2 px-1">
                             <h3 class="text-gray-500">Nombre</h3>
-                            <p
-                                class="text-2xl font-medium text-gray-700"
-                                v-if="student?.first_name"
-                            >
+                            <p class="text-2xl font-medium text-gray-700" v-if="student?.first_name">
                                 {{ student?.first_name }}
                                 {{ student?.last_name }}
                             </p>
@@ -32,14 +28,9 @@
                         <div>
                             <form class="flex flex-col items-center justify-center">
                                 <div class="flex w-full flex-col items-center py-5">
-                                    <label for="plan" class="mb-2 w-full text-left text-gray-500"
-                                        >Tipo de Plan</label
-                                    >
-                                    <select
-                                        v-model="selectedPlan"
-                                        id="plan"
-                                        class="w-full rounded-lg border border-gray-200 px-5 py-3 outline-none"
-                                    >
+                                    <label for="plan" class="mb-2 w-full text-left text-gray-500">Tipo de Plan</label>
+                                    <select v-model="selectedPlan" id="plan"
+                                        class="w-full rounded-lg border border-gray-200 px-5 py-3 outline-none">
                                         <option value="0" disabled selected>
                                             Selecciona un plan
                                         </option>
@@ -61,9 +52,7 @@
                                     <tbody v-if="selectedPlanData">
                                         <tr>
                                             <td class="px-6 py-2">
-                                                <div
-                                                    class="mx-auto mb-5 grid w-5/6 grid-cols-2 items-center gap-5"
-                                                >
+                                                <div class="mx-auto mb-5 grid w-5/6 grid-cols-2 items-center gap-5">
                                                     <p class="text-right font-light">Plan</p>
                                                     <p class="text-left font-bold">
                                                         {{
@@ -75,73 +64,41 @@
                                         </tr>
 
                                         <tr>
-                                            <td
-                                                class="mx-auto mb-5 grid w-4/6 grid-cols-2 items-center gap-5"
-                                            >
+                                            <td class="mx-auto mb-5 grid w-4/6 grid-cols-2 items-center gap-5">
                                                 <p class="text-right font-light">
                                                     Cantidad de sesiones
                                                 </p>
                                                 <div class="flex items-center">
-                                                    <div
-                                                        v-if="selectedPlanData.credit_type === 'PP'"
-                                                    >
+                                                    <div v-if="selectedPlanData.credit_type === 'PP'">
                                                         <div class="whitespace-nowrap text-primary">
-                                                            <Icon
-                                                                name="ion:person"
-                                                                class="text-2xl"
-                                                            />
-                                                            <Icon
-                                                                name="mdi:weight-lifter"
-                                                                class="text-3xl"
-                                                            />
+                                                            <Icon name="ion:person" class="text-2xl" />
+                                                            <Icon name="mdi:weight-lifter" class="text-3xl" />
                                                         </div>
                                                     </div>
-                                                    <div
-                                                        v-else-if="
-                                                            selectedPlanData.credit_type === 'GP'
-                                                        "
-                                                    >
+                                                    <div v-else-if="
+                                                        selectedPlanData.credit_type === 'GP'
+                                                    ">
                                                         <div class="whitespace-nowrap text-primary">
-                                                            <Icon
-                                                                name="mdi:account-multiple-plus"
-                                                                class="text-2xl"
-                                                            />
-                                                            <Icon
-                                                                name="mdi:weight-lifter"
-                                                                class="text-3xl"
-                                                            />
+                                                            <Icon name="mdi:account-multiple-plus" class="text-2xl" />
+                                                            <Icon name="mdi:weight-lifter" class="text-3xl" />
                                                         </div>
                                                     </div>
-                                                    <div
-                                                        v-else-if="
-                                                            selectedPlanData.credit_type === 'PO'
-                                                        "
-                                                    >
+                                                    <div v-else-if="
+                                                        selectedPlanData.credit_type === 'PO'
+                                                    ">
                                                         <div class="whitespace-nowrap text-primary">
-                                                            <Icon
-                                                                name="ion:person"
-                                                                class="text-2xl"
-                                                            />
-                                                            <Icon
-                                                                name="material-symbols:laptop-mac-outline"
-                                                                class="text-3xl"
-                                                            />
+                                                            <Icon name="ion:person" class="text-2xl" />
+                                                            <Icon name="material-symbols:laptop-mac-outline"
+                                                                class="text-3xl" />
                                                         </div>
                                                     </div>
-                                                    <div
-                                                        v-else-if="
-                                                            selectedPlanData.credit_type === 'GO'
-                                                        "
-                                                    >
+                                                    <div v-else-if="
+                                                        selectedPlanData.credit_type === 'GO'
+                                                    ">
                                                         <div class="whitespace-nowrap text-primary">
-                                                            <Icon
-                                                                name="mdi:account-multiple-plus"
-                                                                class="text-2xl"
-                                                            />
-                                                            <Icon
-                                                                name="material-symbols:laptop-mac-outline"
-                                                                class="text-3xl"
-                                                            />
+                                                            <Icon name="mdi:account-multiple-plus" class="text-2xl" />
+                                                            <Icon name="material-symbols:laptop-mac-outline"
+                                                                class="text-3xl" />
                                                         </div>
                                                     </div>
                                                     <p class="ml-3 font-bold">
@@ -152,9 +109,7 @@
                                         </tr>
                                         <tr>
                                             <td class="px-6 py-2">
-                                                <div
-                                                    class="mx-auto mb-5 grid w-5/6 grid-cols-2 items-center gap-5"
-                                                >
+                                                <div class="mx-auto mb-5 grid w-5/6 grid-cols-2 items-center gap-5">
                                                     <p class="text-right font-light">
                                                         Tiempo máximo para utilizar sesiones
                                                     </p>
@@ -314,7 +269,6 @@ watch(
     () => props.student,
     async (newStudent) => {
         if (newStudent) {
-            console.log(newStudent);
             await getPlans();
         }
     },
