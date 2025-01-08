@@ -197,7 +197,7 @@
                             </h4>
                         </div>
                         <div
-                            class="mt-6 flex flex-col-reverse gap-2 md:flex-row md:justify-between"
+                            class="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-between"
                         >
                             <CommonButton
                                 class="px-4 py-2"

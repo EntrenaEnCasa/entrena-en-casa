@@ -266,7 +266,7 @@
                             Dejar de ajustar ubicación
                         </button>
                     </div>
-                    <div class="mt-5 flex justify-between">
+                    <div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
                         <CommonButton @click="closeLocationModal" class="bg-tertiary px-5 py-2">
                             Cancelar
                         </CommonButton>
