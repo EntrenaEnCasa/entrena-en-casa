@@ -22,7 +22,7 @@
                         <div
                             v-for="credit in creditsData?.credits"
                             :key="credit.transaction_id"
-                            class="flex w-full flex-col items-center justify-between gap-2 rounded-xl border p-5 font-medium text-gray-400 md:flex-row"
+                            class="flex w-full flex-col items-center justify-between gap-x-4 gap-y-2 rounded-xl border p-5 font-medium text-gray-400 md:flex-row"
                         >
                             <div class="whitespace-nowrap text-secondary">
                                 <Icon
@@ -30,7 +30,7 @@
                                         getCreditTypeIcon(credit.credit_type, credit.format_credit)
                                             .person
                                     "
-                                    class="text-2xl"
+                                    class="mr-1 text-2xl"
                                 />
                                 <Icon
                                     :name="
@@ -40,18 +40,18 @@
                                     class="text-3xl"
                                 />
                             </div>
-                            <p>
+                            <p class="text-center">
                                 {{ credit.available_credits }} sesiones restantes -
                                 {{
                                     getFormattedCreditType(credit.credit_type, credit.format_credit)
                                 }}
                             </p>
-                            <button
-                                class="whitespace-nowrap text-secondary"
-                                @click="handleOpenDetailsModal(credit)"
-                            >
+                            <button class="text-secondary" @click="handleOpenDetailsModal(credit)">
                                 <span>Ver detalles</span>
-                                <Icon name="fa6-solid:chevron-right" />
+                                <Icon
+                                    name="material-symbols:chevron-right-rounded"
+                                    class="text-2xl"
+                                />
                             </button>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
             </CommonModal>
 
             <CommonModal ref="confirmationModal">
-                <div class="px-5 py-2">
+                <div class="px-4 py-2 sm:px-6">
                     <h3 class="mb-6 text-center text-xl font-semibold">Detalles de tu compra</h3>
                     <div class="text-center">
                         <div
@@ -196,7 +196,9 @@
                                 {{ selectedPlan.formattedPrice }}
                             </h4>
                         </div>
-                        <div class="mt-6 flex justify-between">
+                        <div
+                            class="mt-6 flex flex-col-reverse gap-2 md:flex-row md:justify-between"
+                        >
                             <CommonButton
                                 class="px-4 py-2"
                                 bg-color="tertiary"

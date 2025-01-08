@@ -1,8 +1,8 @@
 <template>
     <CommonModal ref="modalRef">
-        <div class="px-4 py-8">
+        <div class="px-4 py-8 sm:px-6">
             <h2 class="mb-8 text-center text-2xl font-bold">Inicia sesión para continuar</h2>
-            <Form class="mx-auto w-4/5 space-y-5" @submit="login" v-slot="{ meta }">
+            <Form class="mx-auto space-y-5" @submit="login" v-slot="{ meta }">
                 <CommonInput
                     label="Correo Electrónico"
                     v-model="formData.email"
