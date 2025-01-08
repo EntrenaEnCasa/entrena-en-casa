@@ -112,6 +112,4 @@ const {
     },
     watch: [region, creditType, format],
 });
-
-console.log(plansResponse.value);
 </script>
