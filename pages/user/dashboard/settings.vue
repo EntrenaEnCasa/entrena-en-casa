@@ -6,8 +6,10 @@
                 <div v-if="userStore.user.name" class="rounded-xl border bg-white px-7 py-4">
                     <div class="flex items-center justify-between">
                         <p class="text-sm text-gray-500">Nombre de usuario</p>
-                        <button disabled
-                            class="rounded-lg bg-primary px-8 py-1 text-white disabled:cursor-not-allowed disabled:bg-primary-100">
+                        <button
+                            disabled
+                            class="rounded-md bg-primary px-8 py-1 text-white disabled:cursor-not-allowed disabled:bg-primary-100"
+                        >
                             Editar
                         </button>
                     </div>
@@ -18,7 +20,10 @@
                 <div v-if="userStore.user.email" class="rounded-xl border bg-white px-7 py-4">
                     <div class="flex items-center justify-between">
                         <p class="text-sm text-gray-500">Correo electrónico</p>
-                        <button class="rounded-lg bg-primary px-8 py-1 text-white" @click="openModalEmail()">
+                        <button
+                            class="rounded-md bg-primary px-8 py-1 text-white"
+                            @click="openModalEmail()"
+                        >
                             Editar
                         </button>
                     </div>
@@ -29,8 +34,10 @@
                 <div v-if="userStore.user.bornDate" class="rounded-xl border bg-white px-7 py-4">
                     <div class="flex items-center justify-between">
                         <p class="text-sm text-gray-500">Fecha de nacimiento</p>
-                        <button disabled
-                            class="rounded-lg bg-primary px-8 py-1 text-white disabled:cursor-not-allowed disabled:bg-primary-100">
+                        <button
+                            disabled
+                            class="rounded-md bg-primary px-8 py-1 text-white disabled:cursor-not-allowed disabled:bg-primary-100"
+                        >
                             Editar
                         </button>
                     </div>
@@ -41,7 +48,10 @@
                 <div class="rounded-xl border bg-white px-7 py-4">
                     <div class="flex items-center justify-between">
                         <p class="text-sm text-gray-500">Contraseña</p>
-                        <button class="rounded-lg bg-primary px-8 py-1 text-white" @click="openModalPassword()">
+                        <button
+                            class="rounded-md bg-primary px-8 py-1 text-white"
+                            @click="openModalPassword()"
+                        >
                             Editar
                         </button>
                     </div>
@@ -51,9 +61,11 @@
         </div>
         <div class="mt-20 flex justify-center">
             <div class="flex flex-col items-center gap-2">
-                <p class="text-xl font-medium text-tertiary">¿Darse de baja?</p>
-                <button @click="openModalDeactivate()"
-                    class="flex items-center gap-2 rounded-md bg-tertiary px-4 py-1 font-medium text-white">
+                <p class="text-xl font-semibold text-tertiary">¿Darse de baja?</p>
+                <button
+                    @click="openModalDeactivate()"
+                    class="flex items-center gap-2 rounded-md bg-tertiary px-5 py-2 font-medium text-white"
+                >
                     <Icon name="fa6-solid:triangle-exclamation" />
                     <span>Desactivar perfil</span>
                 </button>
@@ -61,13 +73,28 @@
         </div>
         <Teleport to="body">
             <CommonModal ref="modalEmail">
-                <Form class="w-full" @submit="changeEmail">
+                <Form class="w-full p-4" @submit="changeEmail">
                     <div class="mb-6 grid gap-6 md:grid-cols-2">
-                        <CommonInput label="Email" v-model="email" name="email" type="email" id="email"
-                            icon="fa6-solid:lock" placeholder="1234@entrenaencasa.cl" :rules="validateEmail" />
+                        <CommonInput
+                            label="Email"
+                            v-model="email"
+                            name="email"
+                            type="email"
+                            id="email"
+                            icon="fa6-solid:lock"
+                            placeholder="1234@entrenaencasa.cl"
+                            :rules="validateEmail"
+                        />
 
-                        <CommonInput label="Confirmar email" name="email-repeat" type="email" id="email-repeat"
-                            icon="fa6-solid:lock" placeholder="1234@entrenaencasa.cl" :rules="validateEmailRepeat" />
+                        <CommonInput
+                            label="Confirmar email"
+                            name="email-repeat"
+                            type="email"
+                            id="email-repeat"
+                            icon="fa6-solid:lock"
+                            placeholder="1234@entrenaencasa.cl"
+                            :rules="validateEmailRepeat"
+                        />
                     </div>
                     <CommonButton class="w-full py-2 font-medium" text-size="xl" :loading="loading">
                         Confirmar
@@ -77,14 +104,28 @@
         </Teleport>
         <Teleport to="body">
             <CommonModal ref="modalPassword">
-                <Form class="w-full" @submit="changePassword">
+                <Form class="w-full p-4" @submit="changePassword">
                     <div class="mb-6 grid gap-6 md:grid-cols-2">
-                        <CommonInput label="Contraseña" v-model="password" name="password" type="password" id="password"
-                            icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePassword" />
+                        <CommonInput
+                            label="Contraseña"
+                            v-model="password"
+                            name="password"
+                            type="password"
+                            id="password"
+                            icon="fa6-solid:lock"
+                            placeholder="* * * * * * * *"
+                            :rules="validatePassword"
+                        />
 
-                        <CommonInput label="Confirmar contraseña" name="password-repeat" type="password"
-                            id="password-repeat" icon="fa6-solid:lock" placeholder="* * * * * * * *"
-                            :rules="validatePasswordRepeat" />
+                        <CommonInput
+                            label="Confirmar contraseña"
+                            name="password-repeat"
+                            type="password"
+                            id="password-repeat"
+                            icon="fa6-solid:lock"
+                            placeholder="* * * * * * * *"
+                            :rules="validatePasswordRepeat"
+                        />
                     </div>
                     <CommonButton class="w-full py-2 font-medium" text-size="xl" :loading="loading">
                         Confirmar
@@ -98,12 +139,17 @@
                     <div class="mb-4">
                         <h3 class="mb-2 text-2xl font-semibold">¿Estas seguro/a?</h3>
                         <p class="max-w-2xl text-lg">
-                            Si desactivas tu cuenta, solo podrás volver a activarla hablando con el administrador.
+                            Si desactivas tu cuenta, solo podrás volver a activarla hablando con el
+                            administrador.
                         </p>
                     </div>
                     <div class="flex flex-col gap-4 lg:flex-row lg:justify-center">
                         <div>
-                            <CommonButton bg-color="tertiary" class="px-4 py-2" @click="closeModal()">
+                            <CommonButton
+                                bg-color="tertiary"
+                                class="px-4 py-2"
+                                @click="closeModal()"
+                            >
                                 Cancelar
                             </CommonButton>
                         </div>
@@ -285,9 +331,12 @@ const deactivateAccount = async () => {
 
         if (response.success) {
             toast.success("Perfil desactivado con éxito.");
-            setTimeout(() => { logout(); }, 500);
-            setTimeout(() => { router.push("/"); }, 500);
-
+            setTimeout(() => {
+                logout();
+            }, 500);
+            setTimeout(() => {
+                router.push("/");
+            }, 500);
         } else {
             toast.error(response.message);
         }
@@ -308,8 +357,9 @@ const logout = async () => {
 
         if (response.success) {
             toast.success("Sesión cerrada con éxito. Redirigiendo...");
-            setTimeout(() => { authStore.logOut(); }, 800);
-
+            setTimeout(() => {
+                authStore.logOut();
+            }, 800);
         } else {
             toast.error("Error al cerrar sesión");
         }

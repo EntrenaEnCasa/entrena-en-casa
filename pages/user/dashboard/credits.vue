@@ -46,7 +46,10 @@
                                     getFormattedCreditType(credit.credit_type, credit.format_credit)
                                 }}
                             </p>
-                            <button class="text-secondary" @click="handleOpenDetailsModal(credit)">
+                            <button
+                                class="whitespace-nowrap text-secondary"
+                                @click="handleOpenDetailsModal(credit)"
+                            >
                                 <span>Ver detalles</span>
                                 <Icon
                                     name="material-symbols:chevron-right-rounded"
@@ -115,7 +118,7 @@
         <Teleport to="body">
             <CommonModal ref="detailsModal">
                 <div class="px-5 py-2">
-                    <h3 class="mb-6 text-center text-xl font-semibold">Detalles</h3>
+                    <h3 class="mb-6 text-center text-2xl font-semibold">Detalles</h3>
                     <div class="text-center">
                         <h4 class="mb-4 text-lg font-semibold">Tu compra</h4>
                         <div
