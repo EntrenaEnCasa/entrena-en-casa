@@ -47,7 +47,7 @@
                 <div class="mb-4 flex justify-end">
                     <button
                         type="button"
-                        class="text-primary hover:underline"
+                        class="text-orange-500 hover:underline"
                         @click="openLoginModal"
                     >
                         Ya tengo una cuenta
@@ -72,6 +72,7 @@ import { useToast } from "vue-toastification";
 const modalRef = ref(null);
 const emit = defineEmits(["openLogin"]);
 const toast = useToast();
+const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -177,8 +178,15 @@ const register = async () => {
         if (response.success) {
             authStore.signUp(response.user);
             modalRef.value.closeModal();
-            // TODO: Redirect to the plan page
-            toast.success(response.message);
+
+            // Get planId from the current route
+            const planId = route.params.id;
+
+            // Redirect to credits page with planId as query param
+            await router.push({
+                path: "/user/dashboard/credits",
+                query: planId ? { planId } : {},
+            });
         } else {
             toast.error(response.message);
         }

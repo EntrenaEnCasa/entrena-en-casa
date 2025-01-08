@@ -231,6 +231,8 @@ const config = useRuntimeConfig();
 const userStore = useUserStore();
 const paymentStore = usePaymentStore();
 const toast = useToast();
+const route = useRoute();
+const router = useRouter();
 
 const user = userStore.user as Student;
 
@@ -386,6 +388,27 @@ const buyPlan = async () => {
         handleCloseConfirmationModal();
     }
 };
+
+onMounted(async () => {
+    const planId = route.query.planId;
+    if (planId && plansInformation.value.plans) {
+        // Find the plan - if undefined, it means it's not available in user's region
+        const plan = plansInformation.value.plans.find((p) => p.plan_id === Number(planId));
+
+        if (!plan) {
+            toast.error("Este plan no está disponible en tu región");
+            await router.replace({ query: {} });
+            return;
+        }
+
+        // If we found the plan, open the modal
+        selectedPlan.value = plan;
+        confirmationModal.value?.openModal();
+
+        // Remove planId from query params after opening modal
+        await router.replace({ query: {} });
+    }
+});
 </script>
 
 <style scoped>

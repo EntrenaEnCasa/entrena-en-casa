@@ -30,7 +30,7 @@
                     </router-link>
                     <button
                         type="button"
-                        class="text-primary hover:underline"
+                        class="text-orange-500 hover:underline"
                         @click="openRegisterModal"
                     >
                         Crear cuenta
@@ -52,11 +52,12 @@
 <script setup>
 import { useToast } from "vue-toastification";
 
+const route = useRoute();
+const router = useRouter();
 const modalRef = ref(null);
 const emit = defineEmits(["openRegister"]);
 const toast = useToast();
 const authStore = useAuthStore();
-const router = useRouter();
 
 const formData = reactive({
     email: "",
@@ -93,8 +94,15 @@ const login = async () => {
         if (response.success) {
             authStore.logIn(response.user);
             modalRef.value.closeModal();
-            toast.success("Inicio de sesión exitoso");
-            router.push("/user/dashboard/credits");
+
+            // Get planId from the current route
+            const planId = route.params.id;
+
+            // Redirect to credits page with planId as query param
+            await router.push({
+                path: "/user/dashboard/credits",
+                query: planId ? { planId } : {},
+            });
         } else {
             toast.error(response.message);
         }
