@@ -1,49 +1,48 @@
 <template>
     <CommonModal ref="modalRef">
-        <div class="px-4 py-8">
+        <div class="px-4 py-8 sm:px-6">
             <h2 class="mb-8 text-center text-2xl font-bold">Crear una cuenta</h2>
-            <Form class="mx-auto w-4/5" @submit="register" v-slot="{ meta }">
-                <div class="mb-6 grid grid-cols-1 gap-4">
-                    <CommonInput
-                        label="Correo electrónico"
-                        v-model="formData.email"
-                        name="register-email"
-                        type="email"
-                        id="register-email"
-                        icon="fa6-solid:envelope"
-                        placeholder="Ingresa tu correo electrónico"
-                        :rules="validateEmail"
-                    />
-                    <CommonInput
-                        label="Contraseña"
-                        v-model="formData.password"
-                        name="register-password"
-                        type="password"
-                        id="register-password"
-                        icon="fa6-solid:lock"
-                        placeholder="* * * * * * * *"
-                        :rules="validatePassword"
-                    />
-                    <CommonInput
-                        label="Confirmar contraseña"
-                        v-model="formData.passwordRepeat"
-                        name="password-repeat"
-                        type="password"
-                        id="password-repeat"
-                        icon="fa6-solid:lock"
-                        placeholder="* * * * * * * *"
-                        :rules="validatePasswordRepeat"
-                    />
-                    <CommonSelect
-                        label="¿En qué región te encuentras?"
-                        v-model="formData.region"
-                        name="region"
-                        id="region"
-                        placeholder="Ingresa tu región"
-                        :rules="validateRegion"
-                        :options="regionOptions"
-                    />
-                </div>
+            <Form class="mx-auto space-y-5" @submit="register" v-slot="{ meta }">
+                <CommonInput
+                    label="Correo electrónico"
+                    v-model="formData.email"
+                    name="register-email"
+                    type="email"
+                    id="register-email"
+                    icon="fa6-solid:envelope"
+                    placeholder="Ingresa tu correo electrónico"
+                    :rules="validateEmail"
+                />
+                <CommonInput
+                    label="Contraseña"
+                    v-model="formData.password"
+                    name="register-password"
+                    type="password"
+                    id="register-password"
+                    icon="fa6-solid:lock"
+                    placeholder="* * * * * * * *"
+                    :rules="validatePassword"
+                />
+                <CommonInput
+                    label="Confirmar contraseña"
+                    v-model="formData.passwordRepeat"
+                    name="password-repeat"
+                    type="password"
+                    id="password-repeat"
+                    icon="fa6-solid:lock"
+                    placeholder="* * * * * * * *"
+                    :rules="validatePasswordRepeat"
+                />
+                <CommonSelect
+                    label="¿En qué región te encuentras?"
+                    v-model="formData.region"
+                    name="region"
+                    id="region"
+                    placeholder="Ingresa tu región"
+                    :rules="validateRegion"
+                    :options="regionOptions"
+                />
+
                 <div class="mb-4 flex justify-end">
                     <button
                         type="button"
