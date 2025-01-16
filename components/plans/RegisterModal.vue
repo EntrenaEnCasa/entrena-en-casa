@@ -152,7 +152,7 @@ const validatePassword = (password) => {
 const validatePasswordRepeat = (passRepeat) => {
     if (!passRepeat) return "Debes repetir la contraseña";
 
-    if (passRepeat !== password.value) return "Las contraseñas no coinciden";
+    if (passRepeat !== formData.password) return "Las contraseñas no coinciden";
 
     return true;
 };
