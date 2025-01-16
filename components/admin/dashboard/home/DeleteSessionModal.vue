@@ -68,7 +68,7 @@
                     </tbody>
                 </table>
 
-                <div class="flex items-center justify-center p-5">
+                <div class="flex flex-col-reverse gap-2 p-5 sm:flex-row sm:justify-center">
                     <CommonButton
                         @click="deleteSession"
                         bg-color="tertiary"

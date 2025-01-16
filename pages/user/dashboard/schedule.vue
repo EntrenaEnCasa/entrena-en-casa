@@ -314,7 +314,7 @@
                             </a>
                         </template>
                     </div>
-                    <div class="mt-6 flex flex-col justify-between gap-2 md:flex-row">
+                    <div class="mt-6 flex flex-col-reverse gap-2 md:flex-row md:justify-between">
                         <CommonButton @click="closeLocationModal" class="bg-tertiary px-5 py-2">
                             Cancelar
                         </CommonButton>

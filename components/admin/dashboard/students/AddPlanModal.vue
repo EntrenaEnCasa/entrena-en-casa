@@ -170,11 +170,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-between">
+                    <div class="flex flex-col-reverse gap-2 p-5 sm:flex-row sm:justify-center">
                         <CommonButton bg-color="tertiary" class="px-4 py-2" @click="closeModal()">
                             Cancelar
                         </CommonButton>
-                        <CommonButton class="px-4 py-2" @click="addPlan"> Confirmar </CommonButton>
+                        <CommonButton class="px-4 py-2" @click="addPlan">Confirmar</CommonButton>
                     </div>
                 </div>
             </CommonModal>
