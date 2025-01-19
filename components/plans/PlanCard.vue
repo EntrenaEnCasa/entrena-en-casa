@@ -64,7 +64,7 @@
         </ul>
 
         <!-- Actions Section -->
-        <div class="w-full space-y-3">
+        <div class="w-full space-y-2.5">
             <!-- Primary Action Button (Slotted) -->
             <slot name="primary-action">
                 <CommonButton
@@ -72,7 +72,7 @@
                     class="w-full bg-secondary px-4 py-2"
                     rounded-size="full"
                 >
-                    Ver detalles del plan
+                    Contrata aquí
                 </CommonButton>
             </slot>
 
