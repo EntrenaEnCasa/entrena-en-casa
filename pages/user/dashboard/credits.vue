@@ -6,21 +6,35 @@
                 <p class="mr-1 text-sm font-medium">¿Qué significa cada sesión?</p>
                 <Icon name="fa6-solid:circle-info" />
             </div>
-            <div class="flex flex-col items-center rounded-xl border bg-white px-8 py-6"
-                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
+            <div
+                class="flex flex-col items-center rounded-xl border bg-white px-8 py-6"
+                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
+            >
                 <h5 class="mb-5 text-center text-xl font-medium">Sesiones compradas</h5>
                 <div>
                     <CommonLoading v-show="getCreditsLoading" />
-                    <div v-show="!getCreditsLoading && creditsData && creditsData.credits.length > 0"
-                        class="grid grid-cols-1 gap-2 xl:grid-cols-2">
-                        <div v-for="credit in creditsData?.credits"
-                            class="flex w-full flex-col items-center justify-between gap-2 rounded-xl border p-5 font-medium text-gray-400 md:flex-row">
-                            <template v-if="
-                                credit.credit_type === 'PP' && credit.format_credit === 'Dupla'
-                            ">
+                    <div
+                        v-show="!getCreditsLoading && creditsData && creditsData.credits.length > 0"
+                        class="grid grid-cols-1 gap-2 xl:grid-cols-2"
+                    >
+                        <div
+                            v-for="credit in creditsData?.credits"
+                            class="flex w-full flex-col items-center justify-between gap-2 rounded-xl border p-5 font-medium text-gray-400 md:flex-row"
+                        >
+                            <template
+                                v-if="
+                                    credit.credit_type === 'PP' && credit.format_credit === 'Dupla'
+                                "
+                            >
                                 <div class="whitespace-nowrap text-secondary">
-                                    <Icon name="material-symbols:supervisor-account-rounded" class="text-3xl" />
-                                    <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                    <Icon
+                                        name="material-symbols:supervisor-account-rounded"
+                                        class="text-3xl"
+                                    />
+                                    <Icon
+                                        name="material-symbols:laptop-mac-outline"
+                                        class="text-3xl"
+                                    />
                                 </div>
                                 <p>
                                     {{ credit.available_credits }} sesiones restantes -
@@ -50,12 +64,20 @@
                                 </p>
                             </template>
 
-                            <template v-else-if="
-                                credit.credit_type === 'PO' && credit.format_credit === 'Dupla'
-                            ">
+                            <template
+                                v-else-if="
+                                    credit.credit_type === 'PO' && credit.format_credit === 'Dupla'
+                                "
+                            >
                                 <div class="whitespace-nowrap text-secondary">
-                                    <Icon name="material-symbols:supervisor-account-rounded" class="text-2xl" />
-                                    <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                    <Icon
+                                        name="material-symbols:supervisor-account-rounded"
+                                        class="text-2xl"
+                                    />
+                                    <Icon
+                                        name="material-symbols:laptop-mac-outline"
+                                        class="text-3xl"
+                                    />
                                 </div>
                                 <p>
                                     {{ credit.available_credits }} sesiones restantes -
@@ -66,7 +88,10 @@
                             <template v-else-if="credit.credit_type === 'PO'">
                                 <div class="whitespace-nowrap text-secondary">
                                     <Icon name="ion:person" class="text-2xl" />
-                                    <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                    <Icon
+                                        name="material-symbols:laptop-mac-outline"
+                                        class="text-3xl"
+                                    />
                                 </div>
                                 <p>
                                     {{ credit.available_credits }} sesiones restantes -
@@ -77,32 +102,45 @@
                             <template v-else-if="credit.credit_type === 'GO'">
                                 <div class="whitespace-nowrap text-secondary">
                                     <Icon name="mdi:account-multiple-plus" class="text-2xl" />
-                                    <Icon name="material-symbols:laptop-mac-outline" class="text-3xl" />
+                                    <Icon
+                                        name="material-symbols:laptop-mac-outline"
+                                        class="text-3xl"
+                                    />
                                 </div>
                                 <p>
                                     {{ credit.available_credits }} sesiones restantes - Grupal
                                     Online
                                 </p>
                             </template>
-                            <button class="whitespace-nowrap text-secondary" @click="handleOpenDetailsModal(credit)">
+                            <button
+                                class="whitespace-nowrap text-secondary"
+                                @click="handleOpenDetailsModal(credit)"
+                            >
                                 <span> Ver detalles </span>
                                 <Icon name="fa6-solid:chevron-right" />
                             </button>
                         </div>
                     </div>
-                    <div v-show="!getCreditsLoading && creditsData && creditsData.credits.length === 0
-                        ">
+                    <div
+                        v-show="
+                            !getCreditsLoading && creditsData && creditsData.credits.length === 0
+                        "
+                    >
                         <p>No tienes sesiones compradas</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="grid grid-cols-1 gap-4 text-center sm:grid-cols-2 lg:grid-cols-4">
-            <CommonButton @click="changeSelectedInformation('PP')"
-                class="w-full rounded-lg px-4 py-2 font-medium outline" :class="plansInformation.selected === 'PP'
+            <CommonButton
+                @click="changeSelectedInformation('PP')"
+                class="w-full rounded-lg px-4 py-2 font-medium outline"
+                :class="
+                    plansInformation.selected === 'PP'
                         ? 'outline-primary-600'
                         : 'outline-transparent'
-                    ">
+                "
+            >
                 <div class="flex items-center justify-center gap-2">
                     <div>
                         <Icon name="ion:person" class="text-2xl" />
@@ -114,11 +152,15 @@
                     </div>
                 </div>
             </CommonButton>
-            <CommonButton @click="changeSelectedInformation('GP')" class="rounded-lg px-4 py-2 font-medium outline"
-                :class="plansInformation.selected === 'GP'
+            <CommonButton
+                @click="changeSelectedInformation('GP')"
+                class="rounded-lg px-4 py-2 font-medium outline"
+                :class="
+                    plansInformation.selected === 'GP'
                         ? 'outline-primary-600'
                         : 'outline-transparent'
-                    ">
+                "
+            >
                 <div class="flex items-center justify-center gap-2">
                     <div>
                         <Icon name="mdi:account-multiple-plus" class="text-3xl" />
@@ -130,11 +172,16 @@
                     </div>
                 </div>
             </CommonButton>
-            <CommonButton @click="changeSelectedInformation('PO')" bg-color="secondary"
-                class="rounded-lg px-4 py-2 font-medium text-white outline" :class="plansInformation.selected === 'PO'
+            <CommonButton
+                @click="changeSelectedInformation('PO')"
+                bg-color="secondary"
+                class="rounded-lg px-4 py-2 font-medium text-white outline"
+                :class="
+                    plansInformation.selected === 'PO'
                         ? 'outline-secondary-600'
                         : 'outline-transparent'
-                    ">
+                "
+            >
                 <div class="flex items-center justify-center gap-2">
                     <div class="space-x-2">
                         <Icon name="ion:person" class="text-2xl" />
@@ -146,11 +193,16 @@
                     </div>
                 </div>
             </CommonButton>
-            <CommonButton @click="changeSelectedInformation('GO')" bg-color="secondary"
-                class="rounded-lg px-4 py-2 font-medium outline" :class="plansInformation.selected === 'GO'
+            <CommonButton
+                @click="changeSelectedInformation('GO')"
+                bg-color="secondary"
+                class="rounded-lg px-4 py-2 font-medium outline"
+                :class="
+                    plansInformation.selected === 'GO'
                         ? 'outline-secondary-600'
                         : 'outline-transparent'
-                    ">
+                "
+            >
                 <div class="flex items-center justify-center gap-2">
                     <div class="space-x-1">
                         <Icon name="mdi:account-multiple-plus" class="text-3xl" />
@@ -171,9 +223,12 @@
                 <div class="">Sesiones totales</div>
                 <div class="">Valor</div>
                 <div class=""></div>
-                <div v-show="plansInformation.plans.length > 0" v-for="(plan, index) in plansInformation.plans"
+                <div
+                    v-show="plansInformation.plans.length > 0"
+                    v-for="(plan, index) in plansInformation.plans"
                     :key="index"
-                    class="col-span-6 grid grid-cols-6 items-center gap-5 rounded-lg border bg-white px-6 py-4">
+                    class="col-span-6 grid grid-cols-6 items-center gap-5 rounded-lg border bg-white px-6 py-4"
+                >
                     <div class="col-span-2">
                         {{ plan.description }}
                     </div>
@@ -187,8 +242,10 @@
                         {{ plan.formattedPrice }}
                     </div>
                     <div>
-                        <button @click="handleOpenConfirmationModal(plan.plan_id)"
-                            class="rounded-md bg-primary px-4 py-2 font-medium text-white">
+                        <button
+                            @click="handleOpenConfirmationModal(plan.plan_id)"
+                            class="rounded-md bg-primary px-4 py-2 font-medium text-white"
+                        >
                             Comprar
                         </button>
                     </div>
@@ -205,7 +262,10 @@
                 <div class="px-5 py-2">
                     <h3 class="mb-6 text-center text-xl font-semibold">Detalles del tu compra</h3>
                     <div class="text-center">
-                        <div v-if="selectedPlan" class="custom-grid grid grid-cols-2 items-center gap-4">
+                        <div
+                            v-if="selectedPlan"
+                            class="custom-grid grid grid-cols-2 items-center gap-4"
+                        >
                             <p>Plan</p>
                             <p class="font-semibold">
                                 {{
@@ -238,10 +298,18 @@
                             </h4>
                         </div>
                         <div class="mt-6 flex justify-between">
-                            <CommonButton class="px-4 py-2" bg-color="tertiary" @click="handleCloseConfirmationModal">
+                            <CommonButton
+                                class="px-4 py-2"
+                                bg-color="tertiary"
+                                @click="handleCloseConfirmationModal"
+                            >
                                 Cancelar
                             </CommonButton>
-                            <CommonButton class="px-4 py-2" @click="buyPlan" :loading="buyPlanLoading">
+                            <CommonButton
+                                class="px-4 py-2"
+                                @click="buyPlan"
+                                :loading="buyPlanLoading"
+                            >
                                 Comprar plan
                             </CommonButton>
                         </div>
@@ -256,7 +324,10 @@
                     <h3 class="mb-6 text-center text-xl font-semibold">Detalles</h3>
                     <div class="text-center">
                         <h4 class="mb-4 text-lg font-semibold">Tu compra</h4>
-                        <div v-if="selectedCredit" class="custom-grid grid grid-cols-2 items-center gap-4">
+                        <div
+                            v-if="selectedCredit"
+                            class="custom-grid grid grid-cols-2 items-center gap-4"
+                        >
                             <p>Plan</p>
                             <p class="font-semibold">
                                 {{
@@ -280,7 +351,11 @@
                             </p>
                         </div>
                         <div class="mt-6 flex justify-center">
-                            <CommonButton class="px-10 py-2" bg-color="tertiary" @click="handleCloseDetailsModal">
+                            <CommonButton
+                                class="px-10 py-2"
+                                bg-color="tertiary"
+                                @click="handleCloseDetailsModal"
+                            >
                                 Cerrar
                             </CommonButton>
                         </div>
@@ -292,13 +367,13 @@
 </template>
 
 <style scoped>
-.custom-grid> :nth-child(odd) {
+.custom-grid > :nth-child(odd) {
     justify-self: end;
     max-width: 300px;
     text-align: right;
 }
 
-.custom-grid> :nth-child(even) {
+.custom-grid > :nth-child(even) {
     justify-self: start;
     max-width: 300px;
     text-align: left;
@@ -383,7 +458,6 @@ const {
         onResponse({ response }) {
             let responseData = response._data;
             if (!responseData.success) {
-
                 toast.error(responseData.message);
             }
         },
