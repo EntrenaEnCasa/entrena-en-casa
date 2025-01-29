@@ -7,8 +7,14 @@
             <div class="flex flex-col items-start justify-between gap-4 sm:flex-row">
                 <div>
                     <span class="mb-2 text-sm font-medium">Fecha</span>
-                    <input type="date" name="date" id="date" v-model="sessionInfo.date" :min="getTodayFormatted()"
-                        class="mt-2 block rounded-md border border-gray-200 px-4 py-3 text-sm shadow" />
+                    <input
+                        type="date"
+                        name="date"
+                        id="date"
+                        v-model="sessionInfo.date"
+                        :min="getTodayFormatted()"
+                        class="mt-2 block rounded-md border border-gray-200 px-4 py-3 text-sm shadow"
+                    />
                 </div>
                 <div>
                     <span class="mb-2 text-sm font-medium">Horario</span>
@@ -19,22 +25,28 @@
                 <div class="">
                     <label class="flex w-full flex-col">
                         <span class="text-sm font-medium">Profesional</span>
-                        <AdminDashboardProfessionalSearchInput v-model:professionals="professionals" />
+                        <AdminDashboardProfessionalSearchInput
+                            v-model:professionals="professionals"
+                        />
                     </label>
                 </div>
                 <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
                     <label class="flex w-full flex-col">
                         <span class="mb-2 text-sm font-medium">Formato</span>
-                        <select v-model="sessionInfo.format"
-                            class="w-full rounded-md border bg-white px-5 py-3.5 text-sm text-gray-800 outline-primary">
+                        <select
+                            v-model="sessionInfo.format"
+                            class="w-full rounded-md border bg-white px-5 py-3.5 text-sm text-gray-800 outline-primary"
+                        >
                             <option value="Personalizado">Personalizado</option>
                             <option value="Grupal">Grupal</option>
                         </select>
                     </label>
                     <label class="flex w-full flex-col">
                         <span class="mb-2 text-sm font-medium">Modalidad</span>
-                        <select v-model="sessionInfo.modality"
-                            class="w-full rounded-md border bg-white px-5 py-3.5 text-sm text-gray-800 outline-primary">
+                        <select
+                            v-model="sessionInfo.modality"
+                            class="w-full rounded-md border bg-white px-5 py-3.5 text-sm text-gray-800 outline-primary"
+                        >
                             <option value="Online">Online</option>
                             <option value="Presencial">Presencial</option>
                         </select>
@@ -43,39 +55,73 @@
                 <div class="">
                     <label class="flex w-full flex-col">
                         <span class="mb-2 text-sm font-medium">Clientes</span>
-                        <AdminDashboardStudentSearchInput v-model:clients="sessionInfo.students"
-                            :selectedFormat="sessionInfo.format" />
+                        <AdminDashboardStudentSearchInput
+                            v-model:clients="sessionInfo.students"
+                            :selectedFormat="sessionInfo.format"
+                        />
                     </label>
                 </div>
                 <div class="min-w-full">
-                    <div v-show="sessionInfo.modality === 'Online'" class="col-span-full flex flex-col">
+                    <div
+                        v-show="sessionInfo.modality === 'Online'"
+                        class="col-span-full flex flex-col"
+                    >
                         <span class="mb-2 text-sm font-medium">Link</span>
-                        <input v-model="sessionInfo.link" type="text" placeholder="https://"
-                            class="w-full rounded-md border px-5 py-3.5 text-sm text-gray-800 outline-none ring-primary focus:ring-2" />
+                        <input
+                            v-model="sessionInfo.link"
+                            type="text"
+                            placeholder="https://"
+                            class="w-full rounded-md border px-5 py-3.5 text-sm text-gray-800 outline-none ring-primary focus:ring-2"
+                        />
                     </div>
-                    <div v-show="sessionInfo.modality === 'Presencial'" class="col-span-full flex w-full flex-col">
+                    <div
+                        v-show="sessionInfo.modality === 'Presencial'"
+                        class="col-span-full flex w-full flex-col"
+                    >
                         <span class="mb-2 text-sm font-medium">Ubicación</span>
                         <MapsMapboxGeocoder ref="geocoderRef" @locationSelected="flyToLocation" />
-                        <div class="lg:min-w-100 relative mt-5 flex h-full min-h-[250px] w-full justify-center">
-                            <MapboxMap :map-id="mapID" class="h-full w-full rounded-xl" :options="{
-                                style: 'mapbox://styles/mapbox/streets-v12',
-                                center: DEFAULT_COORDINATES,
-                                zoom: DEFAULT_ZOOM,
-                            }">
-                                <MapboxDefaultMarker :marker-id="markerID" :options="{ draggable: isDraggable }"
-                                    :lnglat="markerCoordinates" @dragend="onMarkerDragEnd">
+                        <div
+                            class="lg:min-w-100 relative mt-5 flex h-full min-h-[250px] w-full justify-center"
+                        >
+                            <MapboxMap
+                                :map-id="mapID"
+                                class="h-full w-full rounded-xl"
+                                :options="{
+                                    style: 'mapbox://styles/mapbox/streets-v12',
+                                    center: DEFAULT_COORDINATES,
+                                    zoom: DEFAULT_ZOOM,
+                                }"
+                            >
+                                <MapboxDefaultMarker
+                                    :marker-id="markerID"
+                                    :options="{ draggable: isDraggable }"
+                                    :lnglat="markerCoordinates"
+                                    @dragend="onMarkerDragEnd"
+                                >
                                 </MapboxDefaultMarker>
                                 <MapboxNavigationControl />
                             </MapboxMap>
                         </div>
-                        <div v-show="!isDraggable" class="mt-3 flex flex-col items-center text-secondary">
+                        <div
+                            v-show="!isDraggable"
+                            class="mt-3 flex flex-col items-center text-secondary"
+                        >
                             <p>¿El pin no coincide con la ubicación?</p>
-                            <button class="font-medium underline" @click.prevent="isDraggable = true">
+                            <button
+                                class="font-medium underline"
+                                @click.prevent="isDraggable = true"
+                            >
                                 Ajustar ubicación
                             </button>
                         </div>
-                        <div v-show="isDraggable" class="mt-3 flex flex-col items-center text-secondary">
-                            <button class="font-medium underline" @click.prevent="isDraggable = false">
+                        <div
+                            v-show="isDraggable"
+                            class="mt-3 flex flex-col items-center text-secondary"
+                        >
+                            <button
+                                class="font-medium underline"
+                                @click.prevent="isDraggable = false"
+                            >
                                 Dejar de ajustar ubicación
                             </button>
                         </div>
