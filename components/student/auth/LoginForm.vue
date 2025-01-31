@@ -44,9 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from "vue";
 import { useToast } from "vue-toastification";
-import { useRouter } from "#app";
 import { useAuthStore } from "~/stores/AuthStore";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
