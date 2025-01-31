@@ -20,7 +20,7 @@
             placeholder="* * * * * * * *"
             :rules="validatePassword"
         />
-        <p v-if="isLocked" class="error-message">
+        <p v-if="isLocked" class="text-sm text-red-500">
             {{
                 errorTimeMessage ||
                 "Demasiados intentos fallidos, espera antes de volver a intentarlo"
@@ -186,14 +186,3 @@ watch(timer, (newTimer) => {
     }
 });
 </script>
-
-<style scoped>
-.captcha-container {
-    margin: 20px 0;
-}
-
-.error-message {
-    color: red;
-    font-size: 14px;
-}
-</style>
