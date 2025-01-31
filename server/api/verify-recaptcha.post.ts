@@ -10,13 +10,16 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        const response: { success: boolean } = await $fetch("https://www.google.com/recaptcha/api/siteverify", {
-            method: "POST",
-            body: {
-                secret: config.recaptchaSecretKey,
-                response: token,
+        const response: { success: boolean } = await $fetch(
+            "https://www.google.com/recaptcha/api/siteverify",
+            {
+                method: "POST",
+                body: {
+                    secret: config.recaptchaSecretKey,
+                    response: token,
+                },
             },
-        });
+        );
 
         if (response.success) {
             return { success: true, message: "CAPTCHA válido." };

@@ -1,11 +1,30 @@
 <template>
     <Form class="w-4/5 space-y-5" @submit="validateAndLogin" v-slot="{ meta }">
-        <CommonInput label="Correo Electrónico" v-model="formData.email" name="email" type="email" id="email"
-            icon="fa6-solid:envelope" placeholder="Ingresa tu correo electrónico" :rules="validateEmail" />
-        <CommonInput label="Contraseña" v-model="formData.password" name="password" type="password" id="password"
-            icon="fa6-solid:lock" placeholder="* * * * * * * *" :rules="validatePassword" />
+        <CommonInput
+            label="Correo Electrónico"
+            v-model="formData.email"
+            name="email"
+            type="email"
+            id="email"
+            icon="fa6-solid:envelope"
+            placeholder="Ingresa tu correo electrónico"
+            :rules="validateEmail"
+        />
+        <CommonInput
+            label="Contraseña"
+            v-model="formData.password"
+            name="password"
+            type="password"
+            id="password"
+            icon="fa6-solid:lock"
+            placeholder="* * * * * * * *"
+            :rules="validatePassword"
+        />
         <p v-if="isLocked" class="error-message">
-            {{ errorTimeMessage || "Demasiados intentos fallidos, espera antes de volver a intentarlo" }}
+            {{
+                errorTimeMessage ||
+                "Demasiados intentos fallidos, espera antes de volver a intentarlo"
+            }}
         </p>
         <div class="flex">
             <router-link to="/password/reset" class="text-secondary">
@@ -13,8 +32,12 @@
             </router-link>
         </div>
 
-        <CommonButton class="w-full py-2 font-medium" text-size="xl" :loading="loading"
-            :disabled="!meta.valid || (isLocked && timer > 0)">
+        <CommonButton
+            class="w-full py-2 font-medium"
+            text-size="xl"
+            :loading="loading"
+            :disabled="!meta.valid || (isLocked && timer > 0)"
+        >
             {{ isLocked && timer > 0 ? `Reintentar en ${timer}s` : "Iniciar Sesión" }}
         </CommonButton>
     </Form>
@@ -106,7 +129,6 @@ const validateCaptcha = async (): Promise<boolean> => {
 
 // Validar el login después del CAPTCHA
 const validateAndLogin = async (event: Event) => {
-
     if (isLocked.value) {
         toast.error("Debes esperar antes de volver a intentar.");
         return;
