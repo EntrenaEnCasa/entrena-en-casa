@@ -7,10 +7,17 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     if (!siteKey) {
         console.error(
-            "La clave pública de reCAPTCHA no está configurada en runtimeConfig.public.sitekey",
+            "La clave pública de reCAPTCHA no está configurada en la configuración de runtime",
         );
         return;
     }
 
-    nuxtApp.vueApp.use(VueReCaptcha, { siteKey: siteKey, loaderOptions: { autoHideBadge: false } });
+    const options = {
+        siteKey,
+        loaderOptions: {
+            autoHideBadge: false,
+        },
+    };
+
+    nuxtApp.vueApp.use(VueReCaptcha, options);
 });
