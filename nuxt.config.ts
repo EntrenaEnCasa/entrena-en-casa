@@ -28,17 +28,6 @@ export default defineNuxtConfig({
             siteKey: process.env.RECAPTCHA_SITE_KEY,
         },
     },
-    app: {
-        head: {
-            script: [
-                {
-                    src: "https://www.google.com/recaptcha/api.js",
-                    async: true,
-                    defer: true,
-                },
-            ],
-        },
-    },
     mapbox: {
         accessToken: process.env.MAPBOX_API_KEY,
     },
