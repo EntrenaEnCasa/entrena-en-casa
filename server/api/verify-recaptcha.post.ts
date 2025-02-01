@@ -1,6 +1,3 @@
-import { defineEventHandler, readBody } from "h3";
-import { useRuntimeConfig } from "#imports";
-
 export default defineEventHandler(async (event) => {
     const { token } = await readBody(event);
     const config = useRuntimeConfig();
