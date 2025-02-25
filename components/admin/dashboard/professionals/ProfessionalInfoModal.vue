@@ -3,19 +3,14 @@
         <Teleport to="body">
             <CommonModal ref="modal">
                 <div class="mt-3 w-full">
-                    <CommonLoading
-                        v-if="!professional || pastSessionsLoading || futureSessionsLoading"
-                    />
+                    <CommonLoading v-if="!professional || pastSessionsLoading || futureSessionsLoading" />
                     <div v-else>
                         <h2 class="mb-5 text-center text-2xl font-semibold">Entrenador</h2>
 
                         <div class="mx-auto mb-10 w-10/12 space-y-5 text-center">
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Nombre</h3>
-                                <p
-                                    class="text-2xl font-medium text-gray-700"
-                                    v-if="professional.first_name"
-                                >
+                                <p class="text-2xl font-medium text-gray-700" v-if="professional.first_name">
                                     {{ professional.first_name }}
                                     {{ professional.last_name }}
                                 </p>
@@ -29,69 +24,42 @@
                                 </p>
                             </div>
                             <div class="flex">
-                                <CommonButton
-                                    @click="disableUser()"
-                                    bg-color="tertiary"
+                                <CommonButton @click="disableUser()" bg-color="tertiary"
                                     class="mx-auto mb-5 px-3 py-2 text-white"
-                                    v-if="professional && professional.enabled"
-                                >
-                                    Deshabilitar usuario</CommonButton
-                                >
-                                <CommonButton
-                                    @click="enableUser()"
-                                    bg-color="primary"
+                                    v-if="professional && professional.enabled">
+                                    Deshabilitar usuario</CommonButton>
+                                <CommonButton @click="enableUser()" bg-color="primary"
                                     class="mx-auto mb-5 px-3 py-2 text-white"
-                                    v-else-if="professional && !professional.enabled"
-                                >
-                                    Habilitar usuario</CommonButton
-                                >
+                                    v-else-if="professional && !professional.enabled">
+                                    Habilitar usuario</CommonButton>
                                 <!-- Botón para restablecer contraseña -->
-                                <CommonButton
-                                    @click="resetPassword()"
-                                    bg-color="secondary"
-                                    class="mx-auto mb-5 px-3 py-2 text-white"
-                                >
+                                <CommonButton @click="resetPassword()" bg-color="secondary"
+                                    class="mx-auto mb-5 px-3 py-2 text-white">
                                     Restablecer contraseña
                                 </CommonButton>
                             </div>
                             <div class="mt-5 flex justify-center">
-                                <CommonButton
-                                    @click="showReportModal"
-                                    bg-color="primary"
-                                    class="px-3 py-2 text-white"
-                                >
+                                <CommonButton @click="showReportModal" bg-color="primary" class="px-3 py-2 text-white">
                                     Crear reporte
                                 </CommonButton>
                             </div>
                         </div>
                         <div class="mb-6 space-y-6">
-                            <div
-                                class="flex items-center justify-between rounded-lg border px-5 py-3"
-                                id="futureSessionsToggle"
-                                @click="toggleFutureSessions"
-                            >
+                            <div class="flex items-center justify-between rounded-lg border px-5 py-3"
+                                id="futureSessionsToggle" @click="toggleFutureSessions">
                                 <!-- //toggle de sesiones próximas -->
                                 <p class="text-lg">Sesiones próximas</p>
-                                <Icon
-                                    :name="
-                                        isFutureSessionsVisible
-                                            ? 'fa6-solid:chevron-down'
-                                            : 'fa6-solid:chevron-right'
-                                    "
-                                />
+                                <Icon :name="isFutureSessionsVisible
+                                    ? 'fa6-solid:chevron-down'
+                                    : 'fa6-solid:chevron-right'
+                                    " />
                             </div>
-                            <div
-                                class="overflow-x-auto"
-                                id="futureSessions"
-                                v-show="isFutureSessionsVisible"
-                            >
+                            <div class="overflow-x-auto" id="futureSessions" v-show="isFutureSessionsVisible">
                                 <div v-if="futureSessionsLoading">
                                     <CommonLoading />
                                 </div>
-                                <table
-                                    v-else-if="futureSessions.length > 0"
-                                    class="w-full table-auto bg-white text-left text-sm text-gray-500"
-                                >
+                                <table v-else-if="futureSessions.length > 0"
+                                    class="w-full table-auto bg-white text-left text-sm text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">Fecha</th>
@@ -125,33 +93,21 @@
                                     <p>No hay sesiones próximas</p>
                                 </div>
                             </div>
-                            <div
-                                class="flex items-center justify-between rounded-lg border px-5 py-3"
-                                id="pastSessionsToggle"
-                                @click="togglePastSessions"
-                            >
+                            <div class="flex items-center justify-between rounded-lg border px-5 py-3"
+                                id="pastSessionsToggle" @click="togglePastSessions">
                                 <!-- //toggle de sesiones pasadas -->
                                 <p class="text-lg">Sesiones pasadas</p>
-                                <Icon
-                                    :name="
-                                        isPastSessionsVisible
-                                            ? 'fa6-solid:chevron-down'
-                                            : 'fa6-solid:chevron-right'
-                                    "
-                                />
+                                <Icon :name="isPastSessionsVisible
+                                    ? 'fa6-solid:chevron-down'
+                                    : 'fa6-solid:chevron-right'
+                                    " />
                             </div>
-                            <div
-                                class="overflow-x-auto"
-                                id="pastSessions"
-                                v-show="isPastSessionsVisible"
-                            >
+                            <div class="overflow-x-auto" id="pastSessions" v-show="isPastSessionsVisible">
                                 <div v-if="pastSessionsLoading">
                                     <CommonLoading />
                                 </div>
-                                <table
-                                    v-else-if="pastSessions.length > 0"
-                                    class="w-full table-auto bg-white text-left text-sm text-gray-500"
-                                >
+                                <table v-else-if="pastSessions.length > 0"
+                                    class="w-full table-auto bg-white text-left text-sm text-gray-500">
                                     <thead class="text-gray-400">
                                         <tr>
                                             <th scope="col" class="p-6 font-medium">Fecha</th>
@@ -203,21 +159,13 @@
                         <label class="mb-2 block">Fecha de término:</label>
                         <input type="date" v-model="endDate" class="w-full rounded border p-2" />
                     </div>
-                    <div
-                        class="flex flex-col items-center gap-5 align-baseline sm:flex-row sm:justify-center"
-                    >
-                        <CommonButton
-                            @click="closeReportModal()"
-                            bg-color="secondary"
-                            class="block w-full px-3 py-2 text-white"
-                        >
+                    <div class="flex flex-col items-center gap-5 align-baseline sm:flex-row sm:justify-center">
+                        <CommonButton @click="closeReportModal()" bg-color="secondary"
+                            class="block w-full px-3 py-2 text-white">
                             Cancelar
                         </CommonButton>
-                        <CommonButton
-                            @click="generateReport"
-                            bg-color="primary"
-                            class="block w-full px-3 py-2 text-white"
-                        >
+                        <CommonButton @click="generateReport" bg-color="primary"
+                            class="block w-full px-3 py-2 text-white">
                             Generar y Descargar Reporte
                         </CommonButton>
                     </div>
@@ -272,8 +220,17 @@ interface ApiResponseReport {
                 actual_assistant: number;
                 format: string;
                 modality: number;
-            },
+                students: [
+                    {
+                        first_name: string;
+                        last_name: string;
+                        email: string;
+                        phone: string;
+                    }
+                ];
+            }
         ];
+
     };
 }
 
@@ -402,41 +359,35 @@ const generateReport = async () => {
         );
 
         if (response.success) {
-            const {
-                professional,
-                start_date,
-                end_date,
-                total_PP_credits,
-                total_PO_credits,
-                total_GP_credits,
-                total_GO_credits,
-                sessions,
-            } = response.data;
+            const { professional, start_date, end_date, total_PP_credits, total_PO_credits, total_GP_credits, total_GO_credits, sessions } = response.data;
 
             const doc = new jsPDF();
 
             // Título
-            doc.setFontSize(18);
+            doc.setFontSize(14);
             doc.text(`Reporte de ${professional.first_name} ${professional.last_name}`, 14, 20);
 
             // Información general
-            doc.setFontSize(12);
+            doc.setFontSize(10);
             doc.text(`Período: ${start_date} - ${end_date}`, 14, 30);
             doc.text(`Créditos Personalizados Presencial: ${total_PP_credits}`, 14, 40);
             doc.text(`Créditos Personalizados Online: ${total_PO_credits}`, 14, 50);
             doc.text(`Créditos Grupal Presencial: ${total_GP_credits}`, 14, 60);
             doc.text(`Créditos Grupal Online: ${total_GO_credits}`, 14, 70);
 
+
+
             // Tabla de sesiones
             autoTable(doc, {
                 startY: 80,
-                head: [["Fecha", "Hora Inicio", "Asistentes", "Formato", "Modalidad"]],
+                head: [['Fecha', 'Hora Inicio', '# Asistentes', 'Formato', 'Modalidad', 'Estudiantes']],
                 body: sessions.map((s) => [
                     s.date,
                     s.time,
                     s.actual_assistant,
                     s.format,
                     s.modality,
+                    s.students.map(student => `-${student.first_name} ${student.last_name}\n${student.email}\n${student.phone}\n`)
                 ]),
             });
 
