@@ -6,7 +6,7 @@
                     <h1 class="text-2xl font-bold">¿De verdad quieres eliminar este plan?</h1>
                     <p class="mt-2 text-gray-500">Esta acción no puede ser revertida</p>
                 </div>
-                <div class="flex items-center justify-center p-5">
+                <div class="flex flex-col-reverse gap-2 p-5 sm:flex-row sm:justify-center">
                     <CommonButton
                         @click="deletePlan"
                         bg-color="tertiary"

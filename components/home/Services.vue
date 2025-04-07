@@ -5,7 +5,8 @@
             <h2 class="my-3 text-4xl font-medium">¿Qué ofrecemos?</h2>
         </div>
         <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <div
+            <NuxtLink
+                to="/plans"
                 class="grid grid-cols-1 gap-5 rounded-xl border border-sky-100 p-8 shadow-xl shadow-indigo-50 md:grid-cols-2"
             >
                 <NuxtImg
@@ -22,8 +23,9 @@
                         Nos conectamos contigo y guiamos tu entrenamiento el 100% de la sesión
                     </p>
                 </div>
-            </div>
-            <div
+            </NuxtLink>
+            <NuxtLink
+                to="/plans"
                 class="grid grid-cols-1 gap-5 rounded-xl border border-sky-100 p-8 shadow-xl shadow-indigo-50 md:grid-cols-2"
             >
                 <div class="flex flex-col items-center justify-center gap-5 text-center">
@@ -42,7 +44,7 @@
                     class="h-[250px] w-full rounded-xl object-cover"
                     alt="presencial training"
                 />
-            </div>
+            </NuxtLink>
         </div>
     </div>
 </template>

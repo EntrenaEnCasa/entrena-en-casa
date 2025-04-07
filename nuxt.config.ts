@@ -12,7 +12,6 @@ export default defineNuxtConfig({
         "@nuxt/image",
         "@pinia-plugin-persistedstate/nuxt",
     ],
-
     runtimeConfig: {
         flowApiKey: process.env.FLOW_API_KEY,
         flowSecretKey: process.env.FLOW_SECRET_KEY,
@@ -20,17 +19,27 @@ export default defineNuxtConfig({
         backendApiKey: process.env.BACKEND_API_KEY,
         backendSecretKey: process.env.BACKEND_SECRET_KEY,
         emailToken: process.env.EMAIL_TOKEN,
+        recaptchaSecretKey: process.env.RECAPTCHA_SECRET_KEY,
         public: {
             apiBase: process.env.API_BASE,
             nuxtApiBase: process.env.NUXT_API_BASE,
             nodeEnv: process.env.NODE_ENV,
             mapboxApiKey: process.env.MAPBOX_API_KEY,
+            siteKey: process.env.RECAPTCHA_SITE_KEY,
         },
     },
-
     mapbox: {
         accessToken: process.env.MAPBOX_API_KEY,
     },
-
     compatibilityDate: "2024-07-11",
+    typescript: {
+        tsConfig: {
+            compilerOptions: {
+                paths: {
+                    "@": ["."],
+                    "@/*": ["./*"],
+                },
+            },
+        },
+    },
 });

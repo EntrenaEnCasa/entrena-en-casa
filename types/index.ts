@@ -1,11 +1,6 @@
 export {};
 
 declare global {
-    interface APIResponse {
-        success: boolean;
-        message: string;
-    }
-
     interface Professional extends User {
         first_name: string;
         last_name: string;

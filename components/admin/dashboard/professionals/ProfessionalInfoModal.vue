@@ -43,8 +43,6 @@
                                     Crear reporte
                                 </CommonButton>
                             </div>
-
-
                         </div>
                         <div class="mb-6 space-y-6">
                             <div class="flex items-center justify-between rounded-lg border px-5 py-3"
@@ -155,19 +153,19 @@
                     <h3 class="mb-4 text-xl font-semibold">Generar Reporte</h3>
                     <div class="mb-4">
                         <label class="mb-2 block">Fecha de inicio:</label>
-                        <input type="date" v-model="startDate" class="w-full rounded border p-2">
+                        <input type="date" v-model="startDate" class="w-full rounded border p-2" />
                     </div>
                     <div class="mb-4">
                         <label class="mb-2 block">Fecha de término:</label>
-                        <input type="date" v-model="endDate" class="w-full rounded border p-2">
+                        <input type="date" v-model="endDate" class="w-full rounded border p-2" />
                     </div>
-                    <div class="flex flex-col md:flex-row justify-center align-baseline items-center gap-5">
+                    <div class="flex flex-col items-center gap-5 align-baseline sm:flex-row sm:justify-center">
                         <CommonButton @click="closeReportModal()" bg-color="secondary"
-                            class="w-full block px-3 py-2 text-white">
+                            class="block w-full px-3 py-2 text-white">
                             Cancelar
                         </CommonButton>
                         <CommonButton @click="generateReport" bg-color="primary"
-                            class="w-full block px-3 py-2 text-white">
+                            class="block w-full px-3 py-2 text-white">
                             Generar y Descargar Reporte
                         </CommonButton>
                     </div>
@@ -179,16 +177,16 @@
 
 <script setup lang="ts">
 import { useToast } from "vue-toastification";
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const toast = useToast();
 const runtimeConfig = useRuntimeConfig();
 const isPastSessionsVisible = ref(false);
 const isFutureSessionsVisible = ref(false);
 const reportModal = ref<Modal | null>(null);
-const startDate = ref('');
-const endDate = ref('');
+const startDate = ref("");
+const endDate = ref("");
 
 const showReportModal = () => {
     reportModal.value?.openModal();
@@ -222,8 +220,17 @@ interface ApiResponseReport {
                 actual_assistant: number;
                 format: string;
                 modality: number;
+                students: [
+                    {
+                        first_name: string;
+                        last_name: string;
+                        email: string;
+                        phone: string;
+                    }
+                ];
             }
         ];
+
     };
 }
 
@@ -338,15 +345,18 @@ const generateReport = async () => {
     if (!props.professional) return;
 
     try {
-        const response = await $fetch<ApiResponseReport>(`${runtimeConfig.public.apiBase}/admin/professional-report`, {
-            method: "POST",
-            credentials: "include",
-            body: {
-                user_id: props.professional.user_id,
-                start_date: startDate.value,
-                end_date: endDate.value,
+        const response = await $fetch<ApiResponseReport>(
+            `${runtimeConfig.public.apiBase}/admin/professional-report`,
+            {
+                method: "POST",
+                credentials: "include",
+                body: {
+                    user_id: props.professional.user_id,
+                    start_date: startDate.value,
+                    end_date: endDate.value,
+                },
             },
-        });
+        );
 
         if (response.success) {
             const { professional, start_date, end_date, total_PP_credits, total_PO_credits, total_GP_credits, total_GO_credits, sessions } = response.data;
@@ -354,27 +364,31 @@ const generateReport = async () => {
             const doc = new jsPDF();
 
             // Título
-            doc.setFontSize(18);
+            doc.setFontSize(14);
             doc.text(`Reporte de ${professional.first_name} ${professional.last_name}`, 14, 20);
 
             // Información general
-            doc.setFontSize(12);
+            doc.setFontSize(10);
             doc.text(`Período: ${start_date} - ${end_date}`, 14, 30);
             doc.text(`Créditos Personalizados Presencial: ${total_PP_credits}`, 14, 40);
             doc.text(`Créditos Personalizados Online: ${total_PO_credits}`, 14, 50);
             doc.text(`Créditos Grupal Presencial: ${total_GP_credits}`, 14, 60);
             doc.text(`Créditos Grupal Online: ${total_GO_credits}`, 14, 70);
 
+
+
             // Tabla de sesiones
             autoTable(doc, {
                 startY: 80,
-                head: [['Fecha', 'Hora Inicio', 'Asistentes', 'Formato', 'Modalidad']],
-                body: sessions.map(s => [
+                head: [['Fecha', 'Hora Inicio', '# Asistentes', 'Formato', 'Modalidad', 'Estudiantes']],
+                body: sessions.map((s) => [
                     s.date,
                     s.time,
                     s.actual_assistant,
                     s.format,
-                    s.modality]),
+                    s.modality,
+                    s.students.map(student => `-${student.first_name} ${student.last_name}\n${student.email}\n${student.phone}\n`)
+                ]),
             });
 
             // Generar y descargar el PDF
