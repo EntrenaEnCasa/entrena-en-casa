@@ -3,11 +3,10 @@
         <div class="mb-4">
             <h3 class="text-xl font-medium">Alumnos</h3>
         </div>
+        <!-- Barra de búsqueda -->
+        <SearchBar v-model:searchQuery="searchQuery" />
         <CommonLoading v-show="studentsLoading" />
-        <div
-            v-show="!studentsLoading && data && data.success"
-            class="overflow-x-auto shadow-md sm:rounded-lg"
-        >
+        <div v-show="!studentsLoading && data && data.success" class="overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full table-auto bg-white text-left text-sm text-gray-500">
                 <thead class="bg-gray-200 text-xs uppercase text-gray-700">
                     <tr>
@@ -18,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="student in data?.students" class="border-b" :key="student.user_id">
+                    <tr v-for="student in filteredStudents" class="border-b" :key="student.user_id">
                         <td class="whitespace-nowrap px-6 py-4">
                             <div v-if="student.first_name">
                                 {{ student.first_name }}
@@ -36,10 +35,8 @@
                         </td>
 
                         <td class="px-6 py-4">
-                            <button
-                                @click="openModalStudent(student)"
-                                class="rounded-md bg-primary px-4 py-2 font-medium text-white"
-                            >
+                            <button @click="openModalStudent(student)"
+                                class="rounded-md bg-primary px-4 py-2 font-medium text-white">
                                 Ver Detalles
                             </button>
                         </td>
@@ -48,27 +45,22 @@
             </table>
         </div>
         <div v-show="!studentsLoading && data && !data.success">
-            <div
-                class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
-                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
-            >
+            <div class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4"
+                style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)">
                 <div class="text-md text-center">
                     <b>{{ data?.message }}</b>
                 </div>
             </div>
         </div>
-        <AdminDashboardStudentsStudentInfoModal
-            :student="currentStudent"
-            :pastSessions="pastSessions"
-            :futureSessions="futureSessions"
-            :futureSessionsLoading="futureSessionsLoading"
-            :pastSessionsLoading="pastSessionsLoading"
-            ref="studentModal"
-        />
+        <AdminDashboardStudentsStudentInfoModal :student="currentStudent" :pastSessions="pastSessions"
+            :futureSessions="futureSessions" :futureSessionsLoading="futureSessionsLoading"
+            :pastSessionsLoading="pastSessionsLoading" ref="studentModal" />
     </div>
 </template>
 
 <script setup lang="ts">
+import SearchBar from '~/components/common/SearchBar.vue';
+
 interface StudentResponse extends APIResponse {
     students: Student[];
 }
@@ -96,6 +88,17 @@ const futureSessions = ref<Session[]>([]);
 const pastSessions = ref<Session[]>([]);
 const futureSessionsLoading = ref<boolean>(false);
 const pastSessionsLoading = ref<boolean>(false);
+const searchQuery = ref('');
+
+const filteredStudents = computed(() => {
+    if (!data?.value?.students) return [];
+    const query = searchQuery.value.toLowerCase();
+    return data.value.students.filter(student =>
+        (student.first_name && student.first_name.toLowerCase().includes(query)) ||
+        (student.last_name && student.last_name.toLowerCase().includes(query)) ||
+        (student.email && student.email.toLowerCase().includes(query))
+    );
+});
 
 interface Session {
     session_id: number;

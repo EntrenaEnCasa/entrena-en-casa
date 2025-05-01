@@ -3,6 +3,9 @@
         <div class="mb-4">
             <h3 class="text-xl font-medium">Profesionales</h3>
         </div>
+        <!-- Barra de búsqueda -->
+        <SearchBar v-model:searchQuery="searchQuery" />
+        <!-- Tabla de profesionales -->
         <CommonLoading v-if="professionalsDataPending" />
         <div class="overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full table-auto bg-white text-left text-sm text-gray-500" v-if="professionalsData">
@@ -16,8 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="professional in professionalsData.professionals" class="border-b"
-                        :key="professional.user_id">
+                    <tr v-for="professional in filteredProfessionals" class="border-b" :key="professional.user_id">
                         <td class="whitespace-nowrap px-6 py-4">
                             <div v-if="professional.first_name">
                                 {{ professional.first_name }}
@@ -53,8 +55,23 @@
 </template>
 
 <script setup lang="ts">
+import SearchBar from '~/components/common/SearchBar.vue';
+
 const runtimeConfig = useRuntimeConfig();
 const currentProfessional = ref<Professional | null>(null);
+const searchQuery = ref('');
+
+const filteredProfessionals = computed(() => {
+    if (!professionalsData?.value?.professionals) return [];
+    const query = searchQuery.value.toLowerCase();
+    return professionalsData.value.professionals.filter(professional =>
+        (professional.first_name && professional.first_name.toLowerCase().includes(query)) ||
+        (professional.last_name && professional.last_name.toLowerCase().includes(query)) ||
+        (professional.email && professional.email.toLowerCase().includes(query)) ||
+        (professional.title && professional.title.toLowerCase().includes(query))
+    );
+});
+
 
 interface FutureSessionsResponse extends APIResponse {
     sessions: Session[];
