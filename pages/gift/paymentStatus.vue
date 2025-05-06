@@ -74,7 +74,7 @@
                         </p>
                         <div class="inline-flex gap-3">
                             <CommonButton @click="() => $router.push('/gift')" bg-color="tertiary" class="px-4 py-2">
-                                Volver a créditos
+                                Volver a Planes de Regalo
                             </CommonButton>
                             <CommonButton @click="goToWhatsapp" bg-color="secondary" class="px-4 py-2">
                                 Hablar vía whatsapp
@@ -160,7 +160,7 @@ watch(
     async (status) => {
         if (status === 2) {
             await sendEmail();
-        } else if (status === 3 || status === 4) {
+        } else if ((status === 3 || status === 4) && !giftStore.giftTransaction?.had_account) {
             await deleteUser();
         }
     },

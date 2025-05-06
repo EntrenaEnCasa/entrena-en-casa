@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
             html = giftEmailTemplateNew(sender_name, sender_email, recipient_email, credit_quantity, format, modality, expiration_date);
         } else {
             const link = `${config.public.nuxtBase}/user/dashboard/credits`;
-            html = giftEmailTemplate(sender_name, sender_email, credit_quantity, format, modality, expiration_date, link);
+            html = giftEmailTemplate(recipient_email, sender_name, sender_email, credit_quantity, format, modality, expiration_date, link);
         }
         const data = {
             from: fromMail,

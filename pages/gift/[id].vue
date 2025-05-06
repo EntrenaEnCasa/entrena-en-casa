@@ -123,19 +123,32 @@ const handleGiftPlan = async () => {
         giftData.value.had_account = true;
         giftData.value.user_id = checkEmailResponse.user_id;
     } else {
-        // If the email does not exist, sign up the recipient and then proceed to checkout
-        const signUpResponse = await $fetch<SignUpResponse>(`api/gift/new-gift/sign-up`, {
+        console.log("El correo no existe, se procederá a crear una cuenta");
+        console.log(giftData.value.recipient_email);
+        const signUpResponse = await useFetch<SignUpResponse>(`${config.public.nuxtApiBase}/api/gift/new-gift/sign-up`, {
             method: "POST",
-            body: {
+            body: JSON.stringify({
                 email: giftData.value.recipient_email,
+            }),
+            headers: {
+                "Content-Type": "application/json",
             },
         });
-        if (signUpResponse.success) {
+        if (signUpResponse.data.value && signUpResponse.data.value.success) {
             giftData.value.had_account = false;
-            giftData.value.user_id = signUpResponse.user.user_id;
+            giftData.value.user_id = signUpResponse.data.value?.user.user_id ?? 0;
         } else {
-            console.error("Error al intentar usar este correo para un regalo. Intentalo nuevamente.", signUpResponse.message);
-            toast.error("Error al intentar usar este correo para un regalo. Intentalo nuevamente.");
+
+            giftStore.clearGiftTransaction();
+            giftData.value = {
+                plan_id: Number(route.params.id),
+                user_id: 0,
+                recipient_email: "",
+                sender_name: "",
+                sender_email: "",
+                had_account: false,
+                flowOrder: 0
+            };
             return;
         }
     }
@@ -160,6 +173,16 @@ const handleGiftPlan = async () => {
     } else {
         console.error("Error al crear el pago del regalo. Intentalo nuevamente.", checkoutResponse.message);
         toast.error("Error al crear el pago del regalo. Intentalo nuevamente.");
+        giftStore.clearGiftTransaction();
+        giftData.value = {
+            plan_id: Number(route.params.id),
+            user_id: 0,
+            recipient_email: "",
+            sender_name: "",
+            sender_email: "",
+            had_account: false,
+            flowOrder: 0
+        };
         return;
     }
 }

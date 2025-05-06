@@ -19,9 +19,13 @@ export const useGiftStore = defineStore(
             giftTransaction.value = newGiftTransaction;
         };
 
+        const clearGiftTransaction = () => {
+            giftTransaction.value = null;
+        }
         return {
             giftTransaction,
             setGiftTransaction,
+            clearGiftTransaction,
         };
     },
     {

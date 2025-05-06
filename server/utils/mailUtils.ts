@@ -187,7 +187,7 @@ export function giftEmailTemplateNew(sender_name: string, sender_email: string,
 }
 
 // En caso de que tenga ya una cuenta, no se le envía la contraseña por email, sino que se le envía un link para que vea el regalo en la sección de créditos de su cuenta
-export function giftEmailTemplate(sender_name: string, sender_email: string,
+export function giftEmailTemplate(recipient_email: string, sender_name: string, sender_email: string,
   credit_quantity: number,
   format: string,
   modality: string,
@@ -257,6 +257,7 @@ export function giftEmailTemplate(sender_name: string, sender_email: string,
       </div>
       <div class="container">
         <div class="title">¡Felicidades!</div>
+        <div class="text" >Ha llegado solo para ti: ${recipient_email}</div>
         <div class="text">Has recibido un regalo de entrenamiento <strong>${modality}</strong> de Entrena en Casa.</div>
         <div class="text">Incluye <strong>${credit_quantity}</strong> sesiones <strong>${format}</strong> para agendar en nuestra plataforma.</div>
         <div class="text">Podrás usarlas hasta el <strong>${expiration_date}</strong>.</div>
