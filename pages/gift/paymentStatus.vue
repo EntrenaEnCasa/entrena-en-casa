@@ -187,32 +187,32 @@ const modality = computed(() => {
 });
 
 const sendEmail = async () => {
-    // console.log(giftStore.giftTransaction);
-    // const EmailResponse = await $fetch<APIResponse>("/api/gift/new-gift/send-gift-email", {
-    //     method: "POST",
-    //     body: {
-    //         credit_quantity: plan.value?.credit_quantity,
-    //         format: format.value,
-    //         modality: modality.value,
-    //         expiration_date: plan.value?.expiration_date,
-    //         sender_email: giftStore.giftTransaction?.sender_email,
-    //         sender_name: giftStore.giftTransaction?.sender_name,
-    //         recipient_email: giftStore.giftTransaction?.recipient_email,
-    //         has_account: giftStore.giftTransaction?.has_account,
-    //     },
-    // });
-    // if (EmailResponse.success) {
-    //     toast.success("Correo enviado correctamente");
-    //     // Si pasa esto, se debe eliminar el giftTransaction
-    //     giftStore.clearGiftTransaction();
-    //     //después de 10 segundos, redirigir a la página de inicio
-    //     setTimeout(() => {
-    //         router.push("/gift");
-    //     }, 10000);
+    console.log(giftStore.giftTransaction);
+    const EmailResponse = await $fetch<APIResponse>("/api/gift/new-gift/send-gift-email", {
+        method: "POST",
+        body: {
+            credit_quantity: plan.value?.credit_quantity,
+            format: format.value,
+            modality: modality.value,
+            expiration_date: plan.value?.expiration_date,
+            sender_email: giftStore.giftTransaction?.sender_email,
+            sender_name: giftStore.giftTransaction?.sender_name,
+            recipient_email: giftStore.giftTransaction?.recipient_email,
+            has_account: giftStore.giftTransaction?.has_account,
+        },
+    });
+    if (EmailResponse.success) {
+        toast.success("Correo enviado correctamente");
+        // Si pasa esto, se debe eliminar el giftTransaction
+        giftStore.clearGiftTransaction();
+        //después de 10 segundos, redirigir a la página de inicio
+        setTimeout(() => {
+            router.push("/gift");
+        }, 10000);
 
-    // } else {
-    //     toast.error("Error al enviar el correo. Contáctese con el soporte técnico");
-    // }
+    } else {
+        toast.error("Error al enviar el correo. Contáctese con el soporte técnico");
+    }
 };
 // Si el status es 3 o 4, se debe verificar que en la giftStore el has_account. Si es falso, se debe llamar a la API para eliminar ese usuario a api/gift/abort-gift/delete-student.post.ts
 const deleteUser = async () => {
