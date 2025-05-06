@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
     try {
         const response = await resend.emails.send(data);
-
+        console.log(response)
         if (response.error) {
             return {
                 success: false,
