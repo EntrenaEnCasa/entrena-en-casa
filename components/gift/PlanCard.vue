@@ -92,21 +92,22 @@ interface Props {
 const formatRegion = (region: number) => {
     const regions = {
         0: "Sin región específica",
-        1: "Región Metropolitana",
-        2: "Región de Valparaíso",
-        3: "Región del Libertador General Bernardo O'Higgins",
-        4: "Región del Maule",
-        5: "Región de Ñuble",
-        6: "Región del Biobío",
-        7: "Región de La Araucanía",
-        8: "Región de Los Ríos",
-        9: "Región de Los Lagos",
-        10: "Región Aysén del General Carlos Ibáñez del Campo",
-        11: "Región de Magallanes y de la Antártica Chilena",
-        12: "Región de Arica y Parinacota",
-        13: "Región de Tarapacá",
-        14: "Región de Antofagasta",
-        15: "Región de Atacama",
+        11: "Región de Aisén del General Carlos Ibañez del Campo",
+        2: "Región de Antofagasta",
+        15: "Región de Arica y Parinacota",
+        3: "Región de Atacama",
+        8: "Región de Bío Bío",
+        4: "Región de Coquimbo",
+        9: "Región de la Araucanía",
+        6: "Región de Libertador General Bernardo O'Higgins",
+        10: "Región de Los Lagos",
+        14: "Región de Los Ríos",
+        12: "Región de Magallanes y de la Antártica Chilena",
+        7: "Región del Maule",
+        13: "Región Metropolitana de Santiago",
+        16: "Región del Ñuble",
+        1: "Región de Tarapacá",
+        5: "Región de Valparaíso"
     };
     return regions[region as keyof typeof regions] || "Sin región";
 };
