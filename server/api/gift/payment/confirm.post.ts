@@ -40,10 +40,6 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    interface EmailSendResponse {
-        success: boolean;
-        message: string;
-    }
 
     const { token } = await readBody(event);
 
@@ -67,6 +63,8 @@ export default defineEventHandler(async (event) => {
     );
 
     try {
+        console.log("Query Params: ", queryParams);
+        console.log("llamando a Flow para confirmar el pago...");
         const response = await $fetch<FlowStatusResponse>(
             `${config.flowHosting}/api/payment/getStatus`,
             {
@@ -77,15 +75,15 @@ export default defineEventHandler(async (event) => {
                 query: queryParams,
             },
         );
-
+        console.log("Response: ", response);
 
         if (!response.optional) {
             throw new Error("No se puede realizar la compra del plan de regalo. Intente nuevamente.");
         }
 
-        const { user_ids, plan_id } = response.optional;
+        const { user_id, plan_id } = response.optional;
 
-        if (!user_ids || !plan_id) {
+        if (!user_id || !plan_id) {
             throw new Error(
                 "No se puede realizar la compra del plan de regalo. Intente nuevamente.",
             );
@@ -93,8 +91,11 @@ export default defineEventHandler(async (event) => {
 
         if (response.status == 2) {
             try {
+                console.log("Pago confirmado. Realizando la compra del plan de regalo.");
+                console.log("user_id: ", user_id);
+                console.log("plan_id: ", plan_id);
                 const body = {
-                    user_id: user_ids.split(",").map(Number),
+                    user_id: user_id,
                     plan_id: plan_id,
                 };
 
@@ -107,13 +108,14 @@ export default defineEventHandler(async (event) => {
                     },
                 );
                 if (responseAddCredits.success) {
-
+                    console.log("Compra realizada exitosamente.");
                     return {
                         success: true,
                         message: "Compra realizada exitosamente",
                         plan: responseAddCredits.plan,
                     };
                 } else {
+                    console.log("Error al intentar cargar los créditos.");
                     setResponseStatus(event, 400);
                     return {
                         success: false,

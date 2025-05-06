@@ -171,8 +171,9 @@ export function giftEmailTemplateNew(sender_name: string, sender_email: string,
           <div class="text"><strong>Contraseña:</strong> RegaloEntrena</div>
         </div>
         <div class="text">Te recomendamos cambiar tu contraseña al ingresar.</div>
-
-        <a href="https://www.entrenaencasa.cl/user/auth/login" class="button">Iniciar sesión</a>
+<button style="background-color: #B5CD13; padding: 0.6rem 1.2rem; border-radius: 0.375rem; border:none; margin: 0.5rem 0;">
+        	<a href="https://www.entrenaencasa.cl/user/auth/login" style="text-decoration: none; color: white; font-size: 14px;">Iniciar sesión</a>
+        </button>
 
         <div class="text">Si no puedes hacer clic en el botón, copia y pega la URL siguiente en tu navegador: <a href="https://www.entrenaencasa.cl/user/auth/login">https://www.entrenaencasa.cl/user/auth/login</a></div>
         <div class="text">Este regalo fue enviado por <strong>${sender_name}</strong> - ${sender_email}.</div>

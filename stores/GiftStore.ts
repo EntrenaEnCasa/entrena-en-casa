@@ -6,7 +6,7 @@ interface GiftTransaction {
     recipient_email: string; // Correo electrónico del destinatario
     sender_name: string; // Nombre de quien está haciendo el regalo
     sender_email: string; // Correo electrónico de quien está haciendo el regalo
-    had_account: boolean; // Indica si el destinatario ya tiene cuenta
+    has_account: boolean; // Indica si el destinatario ya tiene cuenta
     flowOrder: number; // Orden de pago de Flow
 }
 

@@ -15,10 +15,10 @@ export default defineEventHandler(async (event) => {
         const subject = "Entrenamiento de regalo de Entrena en Casa";
         var html = "";
 
-        if (has_account) {
+        if (!has_account) {
             html = giftEmailTemplateNew(sender_name, sender_email, recipient_email, credit_quantity, format, modality, expiration_date);
         } else {
-            const link = `${config.public.nuxtBase}/user/dashboard/credits`;
+            const link = `https://www.entrenaencasa.cl/user/dashboard/credits`;
             html = giftEmailTemplate(recipient_email, sender_name, sender_email, credit_quantity, format, modality, expiration_date, link);
         }
         const data = {

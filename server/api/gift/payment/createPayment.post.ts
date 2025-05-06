@@ -73,10 +73,7 @@ export default defineEventHandler(async (event) => {
             body: formData,
             redirect: "follow",
         });
-        console.log("create payment success");
-        console.log(response);
         const redirectUrl = `${response.url}?token=${response.token}`;
-        console.log(redirectUrl);
         const returnData = {
             success: true,
             message: "Pago creado exitosamente. Redirigiendo a Flow.",

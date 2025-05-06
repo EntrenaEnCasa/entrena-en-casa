@@ -22,10 +22,11 @@ const openSpecialOfferModal = (session: Session) => {
 //Abrir automáticamente el modal de oferta especial al cargar la página
 
 onMounted(() => {
-    const hasSeenSpecialOffer = localStorage.getItem("hasSeenSpecialOffer");
-    if (!hasSeenSpecialOffer) {
+    const lastSeenSpecialOffer = localStorage.getItem("lastSeenSpecialOffer");
+    const now = new Date().getTime();
+    if (!lastSeenSpecialOffer || now - parseInt(lastSeenSpecialOffer, 10) > 2 * 60 * 60 * 1000) {
         specialOfferModal.value?.openModal();
-        localStorage.setItem("hasSeenSpecialOffer", "true");
+        localStorage.setItem("lastSeenSpecialOffer", now.toString());
     }
 });
 const closeSpecialOfferModal = () => {

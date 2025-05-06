@@ -106,7 +106,7 @@ const giftData = ref({
     recipient_email: "",
     sender_name: "",
     sender_email: "",
-    had_account: false,
+    has_account: false,
     flowOrder: 0
 });
 
@@ -120,7 +120,7 @@ const handleGiftPlan = async () => {
     });
 
     if (checkEmailResponse.success) {
-        giftData.value.had_account = true;
+        giftData.value.has_account = true;
         giftData.value.user_id = checkEmailResponse.user_id;
     } else {
         console.log("El correo no existe, se procederá a crear una cuenta");
@@ -135,7 +135,7 @@ const handleGiftPlan = async () => {
             },
         });
         if (signUpResponse.data.value && signUpResponse.data.value.success) {
-            giftData.value.had_account = false;
+            giftData.value.has_account = false;
             giftData.value.user_id = signUpResponse.data.value?.user.user_id ?? 0;
         } else {
 
@@ -146,7 +146,7 @@ const handleGiftPlan = async () => {
                 recipient_email: "",
                 sender_name: "",
                 sender_email: "",
-                had_account: false,
+                has_account: false,
                 flowOrder: 0
             };
             return;
@@ -180,7 +180,7 @@ const handleGiftPlan = async () => {
             recipient_email: "",
             sender_name: "",
             sender_email: "",
-            had_account: false,
+            has_account: false,
             flowOrder: 0
         };
         return;

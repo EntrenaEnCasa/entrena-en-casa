@@ -89,9 +89,12 @@
 <script setup lang="ts">
 import { useGiftStore } from "~/stores/GiftStore";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
 
 const config = useRuntimeConfig();
 const toast = useToast();
+const router = useRouter();
+
 
 interface PaymentStatusResponse extends APIResponse {
     response: Payment;
@@ -141,7 +144,8 @@ const getStatus = (status: number) => {
             return "Desconocido";
     }
 };
-// Removed duplicate declaration of 'plan'
+const plan = ref<GetPlanResponse["plan"] | null>(null); // Mueve esta línea hacia arriba
+
 onMounted(async () => {
     const response = await useFetch<GetPlanResponse>(`${config.public.apiBase}/user/plans/${giftStore.giftTransaction?.plan_id}`, {
         method: "GET",
@@ -153,21 +157,20 @@ onMounted(async () => {
     plan.value = response.data.value.plan;
 });
 
-// Removed getPlan function and moved its logic into sendEmail.
-//watch status
+const emailSent = ref(false); // Bandera para controlar el envío del correo
+
 watch(
-    () => data.value?.response.status,
-    async (status) => {
-        if (status === 2) {
+    [() => data.value?.response.status, () => plan.value], // Observa el estatus y el plan
+    async ([status, currentPlan]) => {
+        if (status === 2 && currentPlan && !emailSent.value) {
+            emailSent.value = true; // Marca el correo como enviado
             await sendEmail();
-        } else if ((status === 3 || status === 4) && !giftStore.giftTransaction?.had_account) {
+        } else if ((status === 3 || status === 4) && !giftStore.giftTransaction?.has_account) {
             await deleteUser();
         }
     },
-    { immediate: true },
+    { immediate: true }
 );
-const plan = ref<GetPlanResponse["plan"] | null>(null);
-
 const format = computed(() => {
     if (plan.value?.credit_type === "PO" || plan.value?.credit_type === "PP") {
         return plan.value?.format_credit === "Individual" ? "Personalizado Individual" : "Personalizado Dupla";
@@ -184,30 +187,36 @@ const modality = computed(() => {
 });
 
 const sendEmail = async () => {
+    // console.log(giftStore.giftTransaction);
+    // const EmailResponse = await $fetch<APIResponse>("/api/gift/new-gift/send-gift-email", {
+    //     method: "POST",
+    //     body: {
+    //         credit_quantity: plan.value?.credit_quantity,
+    //         format: format.value,
+    //         modality: modality.value,
+    //         expiration_date: plan.value?.expiration_date,
+    //         sender_email: giftStore.giftTransaction?.sender_email,
+    //         sender_name: giftStore.giftTransaction?.sender_name,
+    //         recipient_email: giftStore.giftTransaction?.recipient_email,
+    //         has_account: giftStore.giftTransaction?.has_account,
+    //     },
+    // });
+    // if (EmailResponse.success) {
+    //     toast.success("Correo enviado correctamente");
+    //     // Si pasa esto, se debe eliminar el giftTransaction
+    //     giftStore.clearGiftTransaction();
+    //     //después de 10 segundos, redirigir a la página de inicio
+    //     setTimeout(() => {
+    //         router.push("/gift");
+    //     }, 10000);
 
-
-    const EmailResponse = await $fetch<APIResponse>("/api/gift/new-gift/send-gift-email", {
-        method: "POST",
-        body: {
-            credit_quantity: plan.value?.credit_quantity,
-            format: format.value,
-            modality: modality.value,
-            expiration_date: plan.value?.expiration_date,
-            sender_email: giftStore.giftTransaction?.sender_email,
-            sender_name: giftStore.giftTransaction?.sender_name,
-            recipient_email: giftStore.giftTransaction?.recipient_email,
-            had_account: giftStore.giftTransaction?.had_account,
-        },
-    });
-    if (EmailResponse.success) {
-        toast.success("Correo enviado correctamente");
-    } else {
-        toast.error("Error al enviar el correo");
-    }
+    // } else {
+    //     toast.error("Error al enviar el correo. Contáctese con el soporte técnico");
+    // }
 };
 // Si el status es 3 o 4, se debe verificar que en la giftStore el has_account. Si es falso, se debe llamar a la API para eliminar ese usuario a api/gift/abort-gift/delete-student.post.ts
 const deleteUser = async () => {
-    if (giftStore.giftTransaction?.had_account) return;
+    if (giftStore.giftTransaction?.has_account) return;
     const response = await $fetch<APIResponse>(
         "/api/gift/abort-gift/delete-student",
         {
@@ -218,7 +227,7 @@ const deleteUser = async () => {
         },
     );
     if (response.success) {
-        giftStore.giftTransaction = null;
+        giftStore.clearGiftTransaction();
     } else {
         toast.error("Error al eliminar el usuario");
     }
