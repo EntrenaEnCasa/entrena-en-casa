@@ -1,3 +1,4 @@
+
 export default defineEventHandler(async (event) => {
     interface EmailSendResponse {
         success: boolean;
@@ -6,24 +7,25 @@ export default defineEventHandler(async (event) => {
 
     const config = useRuntimeConfig(event);
 
-    const { user_id, email } = await readBody(event);
+    const { credit_quantity, format, modality, expiration_date, sender_email, sender_name, recipient_email, has_account } = await readBody(event);
 
     try {
-        const token = createToken({ user_id }, "1h");
-        const domain =
-            config.public.nodeEnv === "production"
-                ? "https://www.entrenaencasa.cl"
-                : "http://localhost:3000";
-        const link = domain + "/email/verify/" + token;
-
         const fromMail = "Entrena en casa <noreply@entrenaencasa.cl>";
-        const toMails = [email];
+        const toMails = [sender_email, recipient_email];
+        const subject = "Entrenamiento de regalo de Entrena en Casa";
+        var html = "";
 
+        if (has_account) {
+            html = giftEmailTemplateNew(sender_name, sender_email, recipient_email, credit_quantity, format, modality, expiration_date);
+        } else {
+            const link = `${config.public.nuxtBase}/user/dashboard/credits`;
+            html = giftEmailTemplate(sender_name, sender_email, credit_quantity, format, modality, expiration_date, link);
+        }
         const data = {
             from: fromMail,
             to: toMails,
-            subject: "Verificación de email",
-            html: emailVerificationTemplate(link),
+            subject: subject,
+            html: html,
         };
 
         const response = await $fetch<EmailSendResponse>(
@@ -38,6 +40,7 @@ export default defineEventHandler(async (event) => {
                 },
             },
         );
+
 
         if (response.success) {
             return {
