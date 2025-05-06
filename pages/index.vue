@@ -22,11 +22,11 @@ const openSpecialOfferModal = (session: Session) => {
 //Abrir automáticamente el modal de oferta especial al cargar la página
 
 onMounted(() => {
-    // const hasSeenSpecialOffer = localStorage.getItem("hasSeenSpecialOffer");
-    // if (!hasSeenSpecialOffer) {
-    specialOfferModal.value?.openModal();
-    //     localStorage.setItem("hasSeenSpecialOffer", "true");
-    // }
+    const hasSeenSpecialOffer = localStorage.getItem("hasSeenSpecialOffer");
+    if (!hasSeenSpecialOffer) {
+        specialOfferModal.value?.openModal();
+        localStorage.setItem("hasSeenSpecialOffer", "true");
+    }
 });
 const closeSpecialOfferModal = () => {
     specialOfferModal.value?.closeModal();
