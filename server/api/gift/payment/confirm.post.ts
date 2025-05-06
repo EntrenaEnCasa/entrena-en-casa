@@ -30,14 +30,6 @@ export default defineEventHandler(async (event) => {
     interface addCreditsResponse {
         success: boolean;
         message: string;
-        plan:
-        {
-            credit_type: string;
-            format_credit: string;
-            used_credits: number;
-            available_credits: number;
-            expiration_date: string;
-        }
     }
 
 
@@ -63,8 +55,7 @@ export default defineEventHandler(async (event) => {
     );
 
     try {
-        console.log("Query Params: ", queryParams);
-        console.log("llamando a Flow para confirmar el pago...");
+
         const response = await $fetch<FlowStatusResponse>(
             `${config.flowHosting}/api/payment/getStatus`,
             {
@@ -75,7 +66,6 @@ export default defineEventHandler(async (event) => {
                 query: queryParams,
             },
         );
-        console.log("Response: ", response);
 
         if (!response.optional) {
             throw new Error("No se puede realizar la compra del plan de regalo. Intente nuevamente.");
@@ -83,17 +73,9 @@ export default defineEventHandler(async (event) => {
 
         const { user_id, plan_id } = response.optional;
 
-        if (!user_id || !plan_id) {
-            throw new Error(
-                "No se puede realizar la compra del plan de regalo. Intente nuevamente.",
-            );
-        }
-
         if (response.status == 2) {
             try {
-                console.log("Pago confirmado. Realizando la compra del plan de regalo.");
-                console.log("user_id: ", user_id);
-                console.log("plan_id: ", plan_id);
+
                 const body = {
                     user_id: user_id,
                     plan_id: plan_id,
@@ -107,12 +89,12 @@ export default defineEventHandler(async (event) => {
                         body: body,
                     },
                 );
+                console.log("responseAddCredits", responseAddCredits);
                 if (responseAddCredits.success) {
                     console.log("Compra realizada exitosamente.");
                     return {
                         success: true,
-                        message: "Compra realizada exitosamente",
-                        plan: responseAddCredits.plan,
+                        message: "Compra realizada exitosamente"
                     };
                 } else {
                     console.log("Error al intentar cargar los créditos.");
@@ -120,7 +102,6 @@ export default defineEventHandler(async (event) => {
                     return {
                         success: false,
                         message: responseAddCredits.message,
-                        plan: null
                     }
 
                 }
