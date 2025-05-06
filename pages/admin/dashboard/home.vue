@@ -139,10 +139,6 @@ const refreshData = () => {
     getFutureSessions();
 };
 
-const filter = () => {
-    console.log("filter");
-};
-
 const getSessionInfo = async (session_id: number) => {
     sessionInfoLoading.value = true;
 

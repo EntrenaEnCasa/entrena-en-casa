@@ -320,14 +320,18 @@ const createSession = async () => {
 
         if (response.success) {
             toast.success(response.message);
-            reloadNuxtApp();
         } else {
             toast.error(response.message);
         }
     } catch (error) {
         console.error(error);
+        toast.error("Error al crear la sesión");
     } finally {
         loadingResponse.value = false;
+        // Despues de 5 segundos, recargar la página
+        setTimeout(() => {
+            reloadNuxtApp();
+        }, 5000);
     }
 };
 

@@ -314,7 +314,6 @@ watch(
     () => props.student,
     async (newStudent) => {
         if (newStudent) {
-            console.log(newStudent);
             await getPlans();
         }
     },
