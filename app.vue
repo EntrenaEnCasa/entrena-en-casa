@@ -23,6 +23,7 @@ body.modal-open {
 
 .bg-gradiente {
     background: url("/background.svg") no-repeat center center fixed;
+    background-size: cover;
 }
 
 :root {
