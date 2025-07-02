@@ -2,7 +2,19 @@
 export default defineNuxtConfig({
     ssr: false,
     devtools: { enabled: false },
-
+    app: {
+        head: {
+            script: [
+                {
+                    src: "https://www.googletagmanager.com/gtag/js?id=G-HNJF8E0VRZ",
+                    async: true,
+                },
+                {
+                    src: "/assets/js/ga.js",
+                }
+            ]
+        },
+    },
     modules: [
         "@pinia/nuxt",
         "@nuxtjs/tailwindcss",
