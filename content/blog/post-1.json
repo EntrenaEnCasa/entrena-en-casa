@@ -1,0 +1,50 @@
+{
+  "id": 1,
+  "title": "Cómo Implementar SEO en NuxtJS: Guía Completa para Desarrolladores",
+  "slug": "como-implementar-seo-nuxtjs-guia-completa",
+  "subtitles": [
+    "¿Qué es SEO y por qué es importante?",
+    "Configuración básica de SEO en NuxtJS",
+    "Meta tags y structured data",
+    "Optimización de rendimiento para SEO"
+  ],
+  "introduction": "El SEO (Search Engine Optimization) es fundamental para cualquier sitio web que quiera tener visibilidad en los motores de búsqueda. En esta guía completa, aprenderás cómo implementar las mejores prácticas de SEO en NuxtJS, desde la configuración básica hasta técnicas avanzadas que te ayudarán a posicionar tu sitio web en los primeros resultados de Google.",
+  "content": "El SEO no es solo sobre palabras clave, sino sobre crear una experiencia de usuario excepcional que los motores de búsqueda puedan entender y valorar. Con NuxtJS, tenemos herramientas poderosas para implementar SEO de manera efectiva.\n\nLa configuración básica incluye la optimización de meta tags, la implementación de structured data y la creación de un sitemap XML. Estos elementos son fundamentales para que los motores de búsqueda puedan indexar correctamente nuestro contenido.\n\nLas meta tags son elementos HTML que proporcionan información sobre una página web. Incluyen el título, la descripción, las palabras clave y otros metadatos importantes. En NuxtJS, podemos configurar estas meta tags de manera dinámica usando el composable useSeoMeta().\n\nEl rendimiento es un factor crucial para el SEO. Los motores de búsqueda favorecen sitios web que cargan rápidamente y proporcionan una buena experiencia de usuario. NuxtJS incluye optimizaciones automáticas como code splitting, lazy loading y server-side rendering que mejoran significativamente el rendimiento.",
+  "conclusion": "Implementar SEO en NuxtJS requiere atención a múltiples aspectos: desde la configuración técnica hasta la optimización de contenido. Con las herramientas y técnicas que hemos cubierto en esta guía, estarás bien equipado para crear sitios web que no solo sean funcionales, sino también visibles en los motores de búsqueda. Recuerda que el SEO es un proceso continuo que requiere monitoreo y ajustes constantes.",
+  "images": [
+    {
+      "src": "/images/blog/seo-nuxtjs-intro.jpg",
+      "alt": "Diagrama de SEO en NuxtJS",
+      "caption": "Visualización de los elementos clave del SEO en NuxtJS",
+      "position": "intro"
+    },
+    {
+      "src": "/images/blog/meta-tags-example.jpg",
+      "alt": "Ejemplo de meta tags en código",
+      "caption": "Ejemplo de implementación de meta tags en NuxtJS",
+      "position": "content"
+    },
+    {
+      "src": "/images/blog/performance-metrics.jpg",
+      "alt": "Métricas de rendimiento web",
+      "caption": "Métricas importantes para el SEO técnico",
+      "position": "conclusion"
+    }
+  ],
+  "publishedAt": "2024-03-15T10:00:00Z",
+  "keywords": [
+    "SEO",
+    "NuxtJS",
+    "optimización",
+    "meta tags",
+    "rendimiento web",
+    "desarrollo web"
+  ],
+  "cta": {
+    "type": "contact",
+    "title": "¿Necesitas ayuda con SEO?",
+    "description": "Contacta con nuestro equipo de expertos en SEO y desarrollo web para optimizar tu sitio web y mejorar tu posicionamiento en buscadores."
+  },
+  "author": "Equipo de Desarrollo",
+  "readTime": 8
+}
