@@ -12,7 +12,16 @@ export default defineNuxtConfig({
                 {
                     src: "/assets/js/ga.js",
                 }
-            ]
+            ],
+            titleTemplate: '%title - Entrena en Casa',
+      htmlAttrs: {
+        lang: 'es'
+      },
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'format-detection', content: 'telephone=no' }
+      ]
         },
     },
     modules: [
