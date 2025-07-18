@@ -1,6 +1,5 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "buildCommand": "pnpm install --ignore-scripts && pnpm run build"
+  ]
 }
