@@ -36,5 +36,17 @@
 //     openSpecialOfferModal,
 //     closeSpecialOfferModal
 // });
+const { setSEO, generateStructuredData } = useSEO()
+
+// SEO específico para la página de inicio
+setSEO({
+  title: 'Entrena en Casa - Entrenamiento Personal Online y Presencial',
+  description: 'Plataforma de entrenamiento personalizado con profesionales certificados. Sesiones online y presenciales adaptadas a tus necesidades. ¡Comienza tu transformación hoy!',
+  keywords: ['entrenamiento personal', 'fitness online', 'ejercicio en casa', 'entrenador personal', 'rutinas personalizadas', 'Chile'],
+  image: '/home/banner-img-min.png',
+  type: 'website'
+})
+
 
 </script>
+
