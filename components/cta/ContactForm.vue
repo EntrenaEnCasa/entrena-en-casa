@@ -1,91 +1,143 @@
 <template>
-  <div class="bg-primary-50 p-6 rounded-lg border border-primary-200">
-    <h3 class="text-xl font-bold text-primary-800 mb-4">{{ title }}</h3>
-    <p v-if="description" class="text-primary-700 mb-6">{{ description }}</p>
-    
-    <form @submit.prevent="handleSubmit" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-primary-700 mb-2">
-          Nombre
-        </label>
-        <input
-          v-model="form.name"
-          type="text"
-          required
-          class="w-full px-3 py-2 border border-primary-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-        />
-      </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-primary-700 mb-2">
-          Email
-        </label>
-        <input
-          v-model="form.email"
-          type="email"
-          required
-          class="w-full px-3 py-2 border border-primary-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-        />
-      </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-primary-700 mb-2">
-          Mensaje
-        </label>
-        <textarea
-          v-model="form.message"
-          rows="4"
-          required
-          class="w-full px-3 py-2 border border-primary-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-        ></textarea>
-      </div>
-      
-      <button
-        type="submit"
-        :disabled="loading"
-        class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 disabled:opacity-50 transition-colors"
-      >
-        {{ loading ? 'Enviando...' : 'Enviar Mensaje' }}
-      </button>
-    </form>
-  </div>
+    <div class="py-14 bg-white rounded-lg shadow" id="contacto">
+        <div class="mx-auto flex w-10/12 flex-col items-center justify-center lg:w-8/12">
+            <div class="mb-10 text-center">
+                <h2 class="text-center font-medium md:text-4xl">
+                    ¿Tienes dudas? ¡Contactanos!
+                </h2>
+            </div>
+            <div class="mb-10 flex w-full flex-col items-stretch gap-10 lg:flex-row">
+                <Form @submit="sendEmail" class="flex-1 space-y-4" v-slot="{ meta }">
+                    <CommonInput
+                        v-model="formData.email"
+                        type="text"
+                        name="email"
+                        label="Correo electrónico"
+                        placeholder="Ingresa tu correo electrónico"
+                        :rules="validateEmail"
+                    />
+                    <CommonInput
+                        v-model="formData.subject"
+                        type="text"
+                        name="subject"
+                        label="Asunto"
+                        placeholder="Ingresa tu consulta"
+                        :rules="validateSubject"
+                    />
+                    <CommonTextarea
+                        v-model="formData.message"
+                        name="message"
+                        label="¿Como te podemos ayudar?"
+                        placeholder="Escribe aquí tus dudas"
+                        rows="5"
+                        maxlength="350"
+                        :rules="validateMessage"
+                    />
+                    <p class="text-center text-xs font-medium text-gray-400">
+                        * Máximo 350 caracteres
+                    </p>
+                    <CommonButton
+                        class="w-full py-2 font-medium"
+                        text-size="sm"
+                        bg-color="secondary"
+                        :loading="loading"
+                        :disabled="!meta.valid"
+                    >
+                        Enviar
+                    </CommonButton>
+                </Form>
+
+            </div>
+
+        </div>
+    </div>
 </template>
 
-<script setup lang="ts">
-interface Props {
-  title: string
-  description?: string
-}
+<script setup>
+import { useToast } from "vue-toastification";
 
-defineProps<Props>()
+const toast = useToast();
 
-const form = ref({
-  name: '',
-  email: '',
-  message: ''
-})
+const formData = reactive({
+    email: "",
+    subject: "",
+    message: "",
+});
 
-const loading = ref(false)
+const loading = ref(false);
 
-const handleSubmit = async () => {
-  loading.value = true
-  
-  try {
-    // Aquí integras con tu API de contacto
-    await $fetch('/api/contact', {
-      method: 'POST',
-      body: form.value
-    })
-    
-    // Resetear formulario
-    form.value = { name: '', email: '', message: '' }
-    
-    // Mostrar mensaje de éxito
-    alert('Mensaje enviado correctamente')
-  } catch (error) {
-    alert('Error al enviar el mensaje')
-  } finally {
-    loading.value = false
-  }
-}
+const validateEmail = (value) => {
+    if (!value) {
+        return "El email es requerido";
+    }
+
+    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (!regex.test(value)) {
+        return "El email no es válido";
+    }
+
+    return true;
+};
+
+const validateSubject = (value) => {
+    if (!value) {
+        return "El asunto es requerido";
+    }
+
+    if (value.length < 10) {
+        return "El asunto debe tener al menos 10 caracteres";
+    }
+
+    return true;
+};
+
+const validateMessage = (value) => {
+    if (!value) {
+        return "El mensaje es requerido";
+    }
+
+    if (value.length < 20) {
+        return "El mensaje debe tener al menos 20 caracteres";
+    }
+
+    return true;
+};
+
+const sendEmail = async (values, { resetForm }) => {
+    loading.value = true;
+
+    const body = {
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+    };
+
+    try {
+        const response = await $fetch("/api/email/send/contactForm", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: body,
+        });
+
+        if (response.success) {
+            toast.success("Mensaje enviado correctamente");
+            resetForm();
+        } else {
+            toast.error(response.message);
+        }
+    } catch (error) {
+        console.log(error);
+        toast.error("Ocurrió un error al enviar el correo");
+    } finally {
+        loading.value = false;
+    }
+};
+
+const resetFormData = () => {
+    formData.email = "";
+    formData.subject = "";
+    formData.message = "";
+};
 </script>

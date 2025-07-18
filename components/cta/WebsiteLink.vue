@@ -5,7 +5,7 @@
     
     <NuxtLink
       :to="url"
-      class="inline-flex items-center bg-secondary-600 text-white px-6 py-3 rounded-md hover:bg-secondary-700 transition-colors"
+      class="inline-flex items-center bg-secondary-600 text-white px-6 py-3 rounded-full mx-auto hover:bg-secondary-700 transition-colors"
     >
       <span>Visitar</span>
       <Icon name="heroicons:arrow-right-20-solid" class="ml-2 h-5 w-5" />
