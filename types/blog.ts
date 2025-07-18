@@ -2,6 +2,7 @@ export interface BlogPost {
   id: number
   title: string
   slug: string
+  description: string
   subtitles: string[]
   introduction: string
   content: string
@@ -12,6 +13,7 @@ export interface BlogPost {
   cta: CTAConfig
   author?: string
   readTime?: number
+  category?: string[]
 }
 
 export interface BlogImage {
