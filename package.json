@@ -16,7 +16,7 @@
         "@types/jsonwebtoken": "^9.0.8",
         "@types/node": "^20.17.16",
         "mapbox-gl": "^3.9.4",
-        "nuxt": "^3.15.4",
+        "nuxt": "3.17.7",
         "nuxt-icon": "^0.6.10",
         "nuxt-mapbox": "^1.6.2",
         "prettier": "^3.4.2",
@@ -24,10 +24,13 @@
         "sass": "^1.83.4",
         "sass-loader": "^13.3.3",
         "typescript": "^5.7.3",
-        "vue-tsc": "^2.2.0"
+        "vue-tsc": "^2.2.12"
     },
     "dependencies": {
+        "@nuxtjs/robots": "^5.4.0",
+        "@nuxtjs/sitemap": "^7.4.3",
         "@pinia/nuxt": "^0.5.5",
+        "@tailwindcss/vite": "^4.1.11",
         "@turf/turf": "^6.5.0",
         "@types/jspdf": "^2.0.0",
         "@vee-validate/nuxt": "^4.15.0",
