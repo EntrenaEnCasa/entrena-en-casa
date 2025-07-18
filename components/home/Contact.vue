@@ -1,5 +1,5 @@
 <template>
-    <div class="py-14">
+    <div class="py-14" id="contacto">
         <div class="mx-auto flex w-10/12 flex-col items-center justify-center lg:w-8/12">
             <div class="mb-10 text-center">
                 <p class="text-sm tracking-[.15rem]">CONTACTO</p>
