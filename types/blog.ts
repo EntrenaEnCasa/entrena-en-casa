@@ -47,4 +47,6 @@ export interface BlogResponse {
   success: boolean
   data?: BlogPost | BlogPost[] | null
   error?: string
+  total?: number
+  page?: number
 }

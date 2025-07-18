@@ -1,10 +1,17 @@
 import type { BlogPost, BlogResponse } from '~/types/blog'
 export default defineEventHandler(async (event): Promise<BlogResponse> => {
     try {
-        const posts: BlogPost[] = await readBlogPosts()
+        // Obtener parámetros de paginación
+        const query = getQuery(event)
+        const page = Number(query.page) || 1
+        const limit =  5
+
+        const { posts, total } = await readBlogPosts(page, limit)
         return {
             success: true,
-            data: posts
+            data: posts,
+            total,
+            page,
         }
     } catch (error) {
         return {
@@ -14,35 +21,25 @@ export default defineEventHandler(async (event): Promise<BlogResponse> => {
     }
 })
 
-async function readBlogPosts(): Promise<BlogPost[]> {
+async function readBlogPosts(page: number, limit: number): Promise<{ posts: BlogPost[], total: number }> {
   try {
-    // Leer desde directorio de posts JSON
-    const postsDir = './content/blog/'
+    // Leer desde único archivo blog.json
+    const blogFile = './content/blog/blog.json'
     const fs = await import('fs')
-    const path = await import('path')
-    
-    if (!fs.existsSync(postsDir)) {
-      return []
+    if (!fs.existsSync(blogFile)) {
+      return { posts: [], total: 0 }
     }
-    
-    const files = fs.readdirSync(postsDir)
-    const posts: BlogPost[] = []
-    
-    for (const file of files) {
-      if (file.endsWith('.json')) {
-        const filePath = path.join(postsDir, file)
-        const content = fs.readFileSync(filePath, 'utf8')
-        const post = JSON.parse(content) as BlogPost
-        posts.push(post)
-      }
-    }
-    
-    return posts.sort((a, b) => 
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    )
-    
+    const content = fs.readFileSync(blogFile, 'utf8')
+    const posts: BlogPost[] = JSON.parse(content)
+    // Ordenar de más nuevo a más viejo
+    const sortedPosts = posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    const total = sortedPosts.length
+    const start = (page - 1) * limit
+    const end = start + limit
+    const pagePosts = sortedPosts.slice(start, end)
+    return { posts: pagePosts, total }
   } catch (error) {
     console.error('Error reading blog posts:', error)
-    return []
+    return { posts: [], total: 0 }
   }
 }
