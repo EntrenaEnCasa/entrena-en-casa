@@ -74,7 +74,7 @@
       class="p-2 text-purple-500 transition-colors"
       aria-label="Compartir"
     >
-      <NuxtIcon name="mdi:share-variant" class="w-5 h-5" />
+      <Icon name="mdi:share-variant" class="w-5 h-5" />
     </button>
   </div>
     </div>
