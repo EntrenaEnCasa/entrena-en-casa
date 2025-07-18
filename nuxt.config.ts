@@ -3,7 +3,6 @@
 export default defineNuxtConfig({
 
     ssr: false,
-    devtools: { enabled: false },
     app: {
         head: {
             script: [
@@ -106,7 +105,7 @@ export default defineNuxtConfig({
     mapbox: {
         accessToken: process.env.MAPBOX_API_KEY,
     },
-    compatibilityDate: "2024-07-11",
+    compatibilityDate: "2025-07-17",
     typescript: {
         tsConfig: {
             compilerOptions: {
