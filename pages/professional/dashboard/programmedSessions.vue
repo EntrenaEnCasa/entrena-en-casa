@@ -396,4 +396,19 @@ watch(
     },
     { deep: true },
 );
+
+const { setSEO } = useSEO();
+setSEO({
+  title: 'Revisa tus sesiones programadas como Profesor - Entrena en Casa',
+  description: 'Visualiza tus próximos entrenamientos online y a domicilio a realizar. Planifica sesiones funcionales para adultos mayores, empresas y grupos personalizados.',
+  keywords: [
+    "entrenamientos agendados online", "calendario de sesiones fitness", "agenda de entrenamientos a domicilio", "entrenamiento funcional programado",
+    "programación de clases personalizadas", "próximas sesiones entrenador", "planificación semanal de clases", "personal trainer con clases programadas",
+    "gestión de calendario fitness", "reprogramar sesión de entrenamiento"
+  ],
+  image: '/SEO/professional/dashboard/programmedSessions.png',
+  type: 'website'
+})
+
+
 </script>

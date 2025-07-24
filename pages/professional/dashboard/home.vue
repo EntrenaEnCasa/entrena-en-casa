@@ -447,4 +447,17 @@ const updateStudentInfo = async () => {
         addStudentDataModal.value?.closeModal();
     }
 };
+
+const { setSEO } = useSEO();
+setSEO({
+  title: 'Inicia sesión como profesional - Entrena en Casa',
+  description: 'Administra tus sesiones, gana visibilidad, fideliza alumnos y aumenta ingresos como personal trainer online o a domicilio con EntrenaEnCasa.',
+  keywords: [
+    "calendario entrenador personal", "clases asignadas entrenador", "sesiones personal trainer online", "dashboard entrenador personal",
+    "entrenamientos personalizados profesor", "agenda de clases fitness", "historial de entrenamientos", "registro de clases online", "Personal trainer"
+  ],
+  image: '/SEO/professional/dashboard.png',
+  type: 'website'
+})
+
 </script>

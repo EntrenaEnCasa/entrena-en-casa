@@ -39,4 +39,21 @@
 definePageMeta({
     layout: "auth",
 });
+const { setSEO } = useSEO();
+
+setSEO({
+  title: 'Inicia sesión como estudiante - Entrena en Casa',
+  description: 'Elige tu plan con personal trainer online, a domicilio o grupal. Filtra por comuna y horario. Entrena solo, en dupla o con quien tú quieras. Rápido y fácil.',
+  keywords: [
+    "Inicio de sesión estudiante", "personal trainer online", "entrenadores personales", "entrenamiento personalizado", "Entrenamientos grupales online",
+    "Personal Trainer Viña del Mar", "Personal Trainer Concon", "Personal trainer las condes", "ejercicios con hijos", "entrena en casa", "entrenador",
+    "entrenamiento personal en santiago", "personal trainer presencial", "personal trainer a domicilio", "entrenamiento online personalizado",
+    "entrenamiento personalizado providencia", "rutina para adultos mayores", "entrenamiento funcional oficina", "entrenar fuerza online",
+    "entrenamiento en pareja en casa", "entrenar con mi pareja", "necesito entrenar con mi pareja en casa"
+  ],
+  image: '/SEO/user/auth/login.png',
+  type: 'website',
+  noindex: true
+})
+
 </script>

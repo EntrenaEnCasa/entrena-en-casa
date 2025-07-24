@@ -36,6 +36,22 @@
 </template>
 <script setup>
 const form = ref(null);
+const { setSEO } = useSEO()
+
+setSEO({
+  title: 'Regístrate como Estudiante - Entrena en Casa',
+  description: 'Crea tu cuenta y accede a entrenamiento personalizado online o a domicilio. Entrena en casa fácil, rápido y con profesionales en tu comuna.',
+  keywords: [
+    "buscar entrenamiento personalizado", "entrenamiento a domicilio", "por que es importante entrenar", "entrenamientos personales online",
+    "personal trainer a domicilio en viña del mar", "registrarse entrenamiento personalizado", "crear cuenta entrenamiento online",
+    "cuenta entrenamiento personalizado", "Evaluación ejercicios en casa", "Necesito Personal Trainer Online", "Busco Personal Trainer mujer",
+    "ejercicios bajar de peso"
+  ],
+  image: '/SEO/user/auth/register.png',
+  type: 'website',
+  noindex: true
+})
+
 
 definePageMeta({
     layout: "auth",

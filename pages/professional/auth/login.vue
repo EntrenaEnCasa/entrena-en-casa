@@ -28,4 +28,20 @@
 definePageMeta({
     layout: "auth",
 });
+const { setSEO } = useSEO()
+setSEO({
+  title: 'Inicia sesión como Profesional - Entrena en Casa',
+  description: 'Actualiza tus datos, zonas de trabajo, tu perfil entrenador personal en (Viña del Mar, Providencia, Santiago Centro, etc.), especialidades y credenciales como entrenador personalizado adultos mayores, entrenadora personal para mujeres o personal trainer online, Agrega tu disponibilidad semanal para que puedas acceder a una mayor cantidad de alumnos.',
+  keywords: [
+    "perfil entrenador personal", "entrenador certificado chile", "entrenador funcional a domicilio", "preparador físico profesional", "personal trainer online",
+    "entrenador con experiencia", "personal trainer en las condes", "entrenador personal viña del mar", "entrenador con cobertura local",
+    "entrenador personalizado adultos mayores", "entrenador con rutinas adaptadas", "entrenador personal en casa", "entrenador con agenda abierta",
+    "entrenador personal para mujeres", "entrenador personal fitness", "entrenador personal domicilio santiago", "perfil profesional entrenador",
+    "entrenador personal con certificación", "coach de entrenamiento funcional", "entrenador especializado en salud y movimiento"
+  ],
+  image: '/SEO/professional/auth/login.png',
+  type: 'website',
+  noindex: true
+})
+
 </script>

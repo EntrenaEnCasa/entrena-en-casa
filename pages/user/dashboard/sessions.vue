@@ -561,4 +561,17 @@ const deleteScheduleSession = async () => {
 const closeDeleteModal = () => {
     modalDelete.value.closeModal();
 };
+const { setSEO } = useSEO();
+setSEO({
+  title: 'Revisa tus Sesiones agendadas - Entrena en Casa',
+  description: 'Revisa y gestiona tus sesiones agendadas con personal trainer online, a domicilio o grupales. Controla tu entrenamiento fácil y rápido con EntrenaEnCasa.',
+  keywords: [
+    "personal trainer a domicilio", "entrenamiento online", "ejercicios con hijos", "entrenador funcional casa", "personal trainer santiago centro",
+    "sesión online", "sesión personalizada", "sesión grupal", "sesiones agendadas", "clases fitness hogar"
+  ],
+  image: '/SEO/user/dashboard/programmedSessions.png',
+  type: 'website'
+})
+
+
 </script>
