@@ -1016,4 +1016,18 @@ onMounted(() => {
 onBeforeUnmount(() => {
     document.removeEventListener("click", newDropdown.close);
 });
+const { setSEO } = useSEO();
+setSEO({
+  title: 'Gestiona tu calendario de clases como profesional - Entrena en Casa',
+  description: 'Configura tu disponibilidad horaria como personal trainer online o a domicilio. Gestiona tu agenda semanal y clases desde un solo calendario integrado.',
+  keywords: [
+    "calendario personal trainer", "sesiones programadas entrenador", "clases online programadas", "organización sesiones semanal",
+    "planificación mensual personal trainer", "cronograma de entrenamientos", "disponibilidad horaria entrenador", "agenda de sesiones fitness",
+    "planificación de clases a domicilio", "agenda semanal de entrenamientos", "calendario de rutinas personalizadas", "Personal Trainer a domicilio"
+  ],
+  image: '/SEO/professional/dashboard/calendar.png',
+  type: 'website'
+})
+
+
 </script>

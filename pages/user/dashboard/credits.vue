@@ -359,6 +359,22 @@ onMounted(async () => {
         await router.replace({ query: {} });
     }
 });
+
+const { setSEO } = useSEO();
+setSEO({
+  title: 'Contrata un Plan - Entrena en Casa',
+  description: 'Contrata tu plan con personal trainer online o a domicilio. Entrena individual, en dupla o grupal. Pago seguro y flexible. Entrena donde estés con EntrenaEnCasa.',
+  keywords: [
+    "comprar plan", "contratar plan", "Comprar créditos", "entrenamiento en casa", "entrenamiento online", "clases de personal trainer domicilio",
+    "Contratar entrenador a domicilio", "Valores personal trainer online", "Plan personal training online", "entrenamiento funcional a domicilio",
+    "personal trainer las condes contratar", "precio entrenador personal santiago", "plan entrenamiento personalizado", "entrenador personal en casa",
+    "entrenamiento funcional a domicilio", "entrena en casa", "rehabilitación física domicilio", "entrenamiento en casa mayores"
+  ],
+  image: '/SEO/user/dashboard/credits.png',
+  type: 'website'
+})
+
+
 </script>
 
 <style scoped>

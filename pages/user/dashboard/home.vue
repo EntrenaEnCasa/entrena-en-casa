@@ -173,4 +173,18 @@ const { data: pastSessions, pending: pastSessionsLoading } = await useFetch<Past
 onMounted(() => {
     console.log(runtimeConfig.public.apiBase);
 });
+
+const {setSEO} = useSEO()
+setSEO({
+  title: 'Inicio de Estudiante - Entrena en Casa',
+  description: 'Revisa tus créditos y agenda sesiones con personal trainer online, a domicilio o grupal. Entrena solo o en dupla. Verifica si tu empresa tiene convenio.',
+  keywords: [
+    "Personal Trainer", "entrenamiento personalizado", "Personal trainer online", "Personal trainer domicilio", "Entrenamiento funcional",
+    "asesorías online fitness", "clases de entrenamiento online", "entrenamiento a domicilio", "entrenador", "Personal Trainer Viña",
+    "Personal trainer Ñuñoa", "Personal Trainer Santiago", "clases de entrenamiento online", "Entrenamiento funcional grupal", "Entrenador con experiencia"
+  ],
+  image: '/SEO/user/dashboard.png',
+  type: 'website'
+})
+
 </script>

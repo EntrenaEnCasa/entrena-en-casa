@@ -665,4 +665,19 @@ const updateSelectedLocationToCurrentLocation = async () => {
     const location = await getReverseGeocodingData(getMarkerCoordinates());
     selectedLocation.value = location;
 };
+
+const {setSEO} = useSEO();
+setSEO({
+  title: 'Reserva Sesión de Entrenamiento - Entrena en Casa',
+  description: 'Agenda tu entrenamiento personalizado online y a domicilio. Personal trainer en Santiago, Viña del Mar, Concón y más. Sesiones grupales en tu ciudad y Online.',
+  keywords: [
+    "entrenamiento personalizado en casa", "Entrenamiento al aire", "personal trainer certificado", "entrenador fitness online", "personal trainer online",
+    "reservar entrenador a domicilio", "Personal trainer en santiago", "Personal Trainer Concon", "Contratar Personal Trainer a domicilio",
+    "Personal Trainer en mi hotel", "Ejercicio físico en casa", "Personal trainer en ñuñoa", "Personal Trainer Hotel Santiago", "Personal Trainer Hotel Viña del Mar"
+  ],
+  image: '/SEO/user/dashboard/schedule.png',
+  type: 'website'
+})
+
+
 </script>

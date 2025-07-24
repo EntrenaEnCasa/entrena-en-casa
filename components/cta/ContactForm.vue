@@ -1,9 +1,8 @@
 <template>
-    <div class="py-14" id="contacto">
+    <div class="py-14 bg-white rounded-lg shadow" id="contacto">
         <div class="mx-auto flex w-10/12 flex-col items-center justify-center lg:w-8/12">
             <div class="mb-10 text-center">
-                <p class="text-sm tracking-[.15rem]">CONTACTO</p>
-                <h2 class="text-center text-3xl font-medium md:text-4xl">
+                <h2 class="text-center font-medium md:text-4xl">
                     ¿Tienes dudas? ¡Contactanos!
                 </h2>
             </div>
@@ -47,26 +46,9 @@
                         Enviar
                     </CommonButton>
                 </Form>
-                <div class="flex-1 place-self-center lg:place-self-start">
-                    <NuxtImg
-                        class="h-full rounded-2xl object-cover"
-                        width="400"
-                        height="450"
-                        src="/home/Jorge.jpg"
-                        alt="Contacto"
-                    />
-                </div>
+
             </div>
-            <div class="flex flex-col gap-4 space-x-5 md:flex-row">
-                <div class="flex items-center gap-x-3 text-secondary">
-                    <Icon class="text-2xl md:text-3xl" name="fa6-solid:envelope" />
-                    <p class="text-lg md:text-xl">entrenaencasa0@gmail.com</p>
-                </div>
-                <div class="flex items-center gap-2 text-2xl text-secondary">
-                    <Icon class="text-2xl md:text-3xl" name="fa6-solid:phone" />
-                    <p class="text-lg md:text-xl">+56 9 7137 0313</p>
-                </div>
-            </div>
+
         </div>
     </div>
 </template>

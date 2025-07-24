@@ -148,3 +148,23 @@
         </section>
     </div>
 </template>
+<script setup lang="ts">
+const { setSEO } = useSEO()
+
+setSEO({
+  title: 'Quienes somos - Entrena en Casa',
+  description: 'Entrenamiento personalizado para adultos mayores. Personal trainer a domicilio y online. Profesionales con experiencia en salud, movilidad y funcionalidad.',
+  keywords: [
+    "equipo de entrenadores certificados", "preparador físico online", "entrenamiento funcional", "bienestar desde casa", "personal trainer con experiencia",
+    "entrenadores personales en Chile", "trayectoria en entrenamiento personalizado", "compromiso con tu salud", "entrenador a domicilio", "Personal Trainer domicilio",
+    "entrenamiento personalizado", "Personal Trainers", "entrenador personal santiago", "entrena en casa", "ejercicios para adultos mayores", "entrenamiento para tercera edad",
+    "entrenador mayores a domicilio", "clases online adultos mayores", "personal trainer para mayores", "necesito entrenador personal", "mejorar fuerza tercera edad",
+    "fitness para empresas", "entrenamiento para empresas", "actividad física laboral", "entrenamientos empresa online", "pausas activas oficina",
+    "Entrenamiento para quema de grasa", "entrenar fuerza muscular", "Programa entrenamiento de fuerza en casa", "entrenamiento en pareja", "entrenamiento en pareja en casa",
+    "entrenamiento en pareja online"
+  ],
+  image: '/SEO/about-us.png',
+  type: 'website'
+})
+
+</script>
