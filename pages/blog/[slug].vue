@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div v-if="post" class="bg-gradiente min-h-screen">
       <!-- Breadcrumb -->
       <div class="max-w-6xl mx-auto px-4 pt-6">
@@ -17,17 +16,17 @@
 
       <!-- Main Content -->
       <div class="max-w-6xl mx-auto px-4 pb-12">
-        <div class="grid grid-cols-1  gap-8">
+        <div class="grid grid-cols-1 gap-8">
           <!-- Left Content -->
           <div class="">
             <!-- Post Header -->
             <div class="mb-8">
               <!-- Categories/Tags -->
-            <div class="flex gap-2 mb-3">
-              <span v-for="(category, index) in post.category" :key="index" class="px-3 py-1 bg-secondary-500 text-white text-xs font-medium rounded-full">
-                {{ category}}
-              </span>
-            </div>
+              <div class="flex gap-2 mb-3">
+                <span v-for="(category, index) in post.category" :key="index" class="px-3 py-1 bg-secondary-500 text-white text-xs font-medium rounded-full">
+                  {{ category}}
+                </span>
+              </div>
               
               <!-- Title -->
               <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
@@ -47,69 +46,67 @@
               </div>
             </div>
 
-            <!-- Featured Image -->
-            <div v-if="getImageByPosition('intro')" class="mb-8">
-              <NuxtImg
-                :src="getImageByPosition('intro')!.src"
-                :alt="getImageByPosition('intro')!.alt"
-                class="w-full h-64 lg:h-96 object-cover rounded-lg shadow-lg"
-              />
-                <p v-if="getImageByPosition('intro')!.caption" class="text-center text-sm text-gray-600 mt-2">
-                  {{ getImageByPosition('intro')!.caption }}
-                </p>
-            </div>
-
             <!-- Post Content -->
             <article class="prose prose-lg max-w-none">
               <!-- Introduction -->
               <div class="mb-8">
-                <p class=" text-gray-700 leading-relaxed">
-                  {{ post.introduction }}
+                <div 
+                  v-html="renderedIntroduction"
+                  class="markdown-content"
+                ></div>
+              </div>
+
+              <!-- Primera imagen (después de introducción) -->
+              <div v-if="post.images && post.images[0]" class="mb-8">
+                <NuxtImg
+                  :src="post.images[0].src"
+                  :alt="post.images[0].alt"
+                  class="w-auto h-[80vh] mx-auto object-cover rounded-lg shadow-lg"
+                />
+                <p v-if="post.images[0].caption" class="text-center text-sm text-gray-600 mt-2">
+                  {{ post.images[0].caption }}
                 </p>
               </div>
 
-              <!-- Content Sections -->
-              <div class="space-y-8">
-                <div v-for="(subtitle, index) in post.subtitles" :key="index">
-                  <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ subtitle }}</h2>
-                  
-                  <!-- Section Image -->
-                  <div v-if="getImageByPosition('content', index)" class="mb-6">
-                    <NuxtImg
-                      :src="getImageByPosition('content', index)!.src"
-                      :alt="getImageByPosition('content', index)!.alt"
-                      class="w-full h-64 object-cover rounded-lg"
-                    />
-                    <p v-if="getImageByPosition('content', index)!.caption" class="text-center text-sm text-gray-600 mt-2">
-                      {{ getImageByPosition('content', index)!.caption }}
-                    </p>
-                  </div>
-                  
-                  <!-- Section Content -->
-                  <div 
-                    v-html="formatContent(post.content, index)" 
-                    class="text-gray-700 leading-relaxed mb-6"
-                  ></div>
+              <!-- Contenido principal en markdown -->
+              <div class="markdown-content mb-8">
+                <div v-html="renderedContent || 'Cargando contenido...'"></div>
+              </div>
+
+              <!-- Segunda imagen (después del contenido) -->
+              <div v-if="post.images && post.images[1]" class="mb-8">
+                <NuxtImg
+                  :src="post.images[1].src"
+                  :alt="post.images[1].alt"
+                  class="w-auto h-[80vh] mx-auto object-cover rounded-lg shadow-lg"
+                />
+                <p v-if="post.images[1].caption" class="text-center text-sm text-gray-600 mt-2">
+                  {{ post.images[1].caption }}
+                </p>
+              </div>
+
+              <!-- Conclusión -->
+              <div class="mt-12 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
+                <div 
+                  v-html="renderedConclusion"
+                  class="markdown-content text-center text-gray-600"
+                ></div>
+                
+                <!-- Tercera imagen (después de conclusión) -->
+                <div v-if="post.images && post.images[2]" class="mt-6">
+                  <NuxtImg
+                    :src="post.images[2].src"
+                    :alt="post.images[2].alt"
+                    class="w-auto h-[80vh] mx-auto object-cover rounded-lg"
+                  />
+                  <p v-if="post.images[2].caption" class="text-center text-sm text-gray-600 mt-2">
+                    {{ post.images[2].caption }}
+                  </p>
                 </div>
               </div>
-
-              <!-- Final Image -->
-              <div  class="mt-12 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
-                <NuxtImg v-if="getImageByPosition('conclusion')"
-                  :src="getImageByPosition('conclusion')!.src"
-                  :alt="getImageByPosition('conclusion')!.alt"
-                  class="w-full h-64 object-cover rounded-lg"
-                />
-                <p  class="text-center text-gray-600 mt-2">
-                  {{ post.conclusion}}
-                </p>
-              </div>
-
-
-      
             </article>
 
-            <!-- CTA Components (mantiene la lógica original) -->
+            <!-- CTA Components -->
             <div class="mt-12">
               <div v-show="post.cta.type === 'contact'">
                 <CtaContactForm
@@ -146,7 +143,7 @@
             </div>
 
             <!-- Keywords Section -->
-            <div class="mt-8 p-4  rounded-lg">
+            <div class="mt-8 p-4 rounded-lg">
               <p class="text-sm text-gray-600">
                 <span class="font-medium">Palabras Clave:</span>
                 <span v-for="(keyword, index) in post.keywords" :key="keyword">
@@ -161,7 +158,7 @@
                 <SocialShare
                   :title="post.title"
                   :description="post.introduction"
-                  :image="getImageByPosition('intro')?.src"
+                  :image="post.images && post.images[0] ? post.images[0].src : undefined"
                 />
               </div>
             </div>
@@ -170,7 +167,7 @@
           <div class="">
             <!-- Related Posts Section -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-                <h3 class="text-lg font-bold text-gray-900 flex justify-center mb-6">Post Relacionados</h3>
+              <h3 class="text-lg font-bold text-gray-900 flex justify-center mb-6">Post Relacionados</h3>
               
               <div v-if="relatedPosts.length > 0" class="space-y-6">
                 <article
@@ -210,16 +207,14 @@
         Volver al Blog
       </NuxtLink>
     </div>
-
   </div>
 </template>
 
 <script setup lang="ts">
-// import type { BlogPost } from '~/types/blog'
 import { useBlog } from '~/composables/useBlog'
 
 const route = useRoute()
-const { getPostBySlug, getAllPosts, calculateReadTime } = useBlog()
+const { getPostBySlug, getAllPosts, calculateReadTime, renderMarkdown } = useBlog()
 
 // Obtener el post
 const { data: post } = await useAsyncData(`blog/${route.params.slug}`, () =>
@@ -229,31 +224,49 @@ const { data: post } = await useAsyncData(`blog/${route.params.slug}`, () =>
 // Posts relacionados optimizados
 const { data: allPosts } = await useLazyAsyncData('all-posts', () => getAllPosts())
 
+// Variables reactivas para contenido renderizado
+const renderedIntroduction = ref('')
+const renderedContent = ref('')
+const renderedConclusion = ref('')
+
+// Renderizar markdown de forma asíncrona cuando el post cambie
+watch(post, async (newPost) => {
+  if (newPost) {
+    try {
+      // Renderizar cada sección por separado
+      renderedIntroduction.value = await renderMarkdown(newPost.introduction || '')
+      renderedContent.value = await renderMarkdown(newPost.content || '')
+      renderedConclusion.value = await renderMarkdown(newPost.conclusion || '')
+    } catch (error) {
+      console.error('Error rendering markdown:', error)
+      // Fallback al contenido original
+      renderedIntroduction.value = newPost.introduction || ''
+      renderedContent.value = newPost.content || ''
+      renderedConclusion.value = newPost.conclusion || ''
+    }
+  }
+}, { immediate: true })
+
 const relatedPosts = computed(() => {
   if (!post.value || !allPosts.value) return []
 
-  // Prioridad: mismos tags/categorías, luego fecha cercana, luego popularidad (si existe)
   const currentCategories = post.value.category ?? []
   const currentId = post.value.id
 
-  // Filtrar por categoría y excluir el actual
   let candidates = allPosts.value
     .filter(p => p.id !== currentId)
     .filter(p => Array.isArray(p.category) && p.category.some(cat => currentCategories.includes(cat)))
 
-  // Si hay menos de 3, rellenar con otros posts (sin repetir)
   if (candidates.length < 3) {
     const others = allPosts.value
       .filter(p => p.id !== currentId && !candidates.includes(p))
       .sort((a, b) => {
-        // Más reciente primero
         return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       })
       .slice(0, 3 - candidates.length)
     candidates = candidates.concat(others)
   }
 
-  // Limitar a 3
   return candidates.slice(0, 3)
 })
 
@@ -273,30 +286,6 @@ const formatDate = (dateString: string) => {
     day: 'numeric'
   })
 }
-
-const getImageByPosition = (position: string, index?: number) => {
-  if (!post.value || !post.value.images) return null
-  
-  const images = post.value.images.filter(img => img.position === position)
-  if (index !== undefined) {
-    return images[index] || null
-  }
-  return images[0] || null
-}
-
-const formatContent = (content: string, subtitleIndex: number) => {
-  // Dividir el contenido en párrafos basado en los subtítulos
-  const paragraphs = content.split('\n')
-  const paragraphsPerSubtitle = Math.ceil(paragraphs.length / (post.value?.subtitles?.length || 1))
-  
-  const startIndex = subtitleIndex * paragraphsPerSubtitle
-  const endIndex = startIndex + paragraphsPerSubtitle
-  
-  return paragraphs.slice(startIndex, endIndex).join('</p><p>')
-    .replace(/\n/g, '<br>')
-}
-
-
 </script>
 
 <style scoped>
@@ -308,16 +297,59 @@ const formatContent = (content: string, subtitleIndex: number) => {
   overflow: hidden;
 }
 
-.prose {
-  max-width: none;
+/* Estilos para el contenido markdown */
+.markdown-content {
+  @apply text-gray-700 leading-relaxed;
 }
 
-.prose p {
-  margin-bottom: 1rem;
+.markdown-content h1, 
+.markdown-content h2, 
+.markdown-content h3, 
+.markdown-content h4, 
+.markdown-content h5, 
+.markdown-content h6 {
+  @apply font-bold text-gray-900;
 }
 
-.prose h2 {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+.markdown-content ul, 
+.markdown-content ol {
+  @apply mb-4;
+}
+
+.markdown-content li {
+  @apply mb-1;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-cyan-500 pl-4 py-2 my-4 bg-gray-50 italic text-gray-700;
+}
+
+.markdown-content pre {
+  @apply overflow-x-auto;
+}
+
+.markdown-content table {
+  @apply w-full border-collapse border border-gray-300 my-4;
+}
+
+.markdown-content th,
+.markdown-content td {
+  @apply border border-gray-300 px-4 py-2;
+}
+
+.markdown-content th {
+  @apply bg-gray-100 font-semibold;
+}
+
+.markdown-content p {
+  @apply mb-4;
+}
+
+.markdown-content strong {
+  @apply font-semibold;
+}
+
+.markdown-content em {
+  @apply italic;
 }
 </style>

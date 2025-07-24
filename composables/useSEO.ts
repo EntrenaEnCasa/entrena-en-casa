@@ -256,6 +256,18 @@ export const useSEO = () => {
       { path: '/user/auth/register', title: 'Registrarse', description: 'Crea tu cuenta', changefreq: 'yearly' as const, priority: 0.3, noindex: true },
       { path: '/professional/auth/login', title: 'Profesionales - Iniciar Sesión', changefreq: 'yearly' as const, priority: 0.2, noindex: true },
       { path: '/professional/auth/register', title: 'Profesionales - Registro', changefreq: 'yearly' as const, priority: 0.2, noindex: true },
+
+      //Rutas de dashboard usuario relevantes
+      { path: '/user/dashboard/home', title: 'Dashboard Usuario', description: 'Panel de control del usuario', changefreq: 'yearly' as const, priority: 0.6 },
+      { path: '/user/dashboard/credits', title: 'Créditos del Usuario', description: 'Compra tus planes de entrenamiento', changefreq: 'yearly' as const, priority: 0.5 },
+      { path: '/user/dashboard/schedule', title: 'Agendar Sesión', description: 'Agenda tus sesiones de entrenamiento', changefreq: 'yearly' as const, priority: 0.6 },
+      { path: '/user/dashboard/sessions', title: 'Mis Sesiones', description: 'Consulta tus sesiones de entrenamiento', changefreq: 'yearly' as const, priority: 0.6 },
+
+      //Rutas de dashboard profesional relevantes
+      { path: '/professional/dashboard/home', title: 'Dashboard Profesional', description: 'Panel de control del profesional', changefreq: 'yearly' as const, priority: 0.6 },
+      { path: '/professional/dashboard/calendar', title: 'Calendario Profesional', description: 'Gestiona tu calendario de sesiones', changefreq: 'yearly' as const, priority: 0.6 },
+      { path: '/professional/dashboard/programmedSessions', title: 'Sesiones Programadas', description: 'Gestiona tus sesiones programadas', changefreq: 'yearly' as const, priority: 0.6 },
+
     ]
     
     routes.push(...staticRoutes)

@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-quaternary-50 p-6 rounded-lg border border-quaternary-200">
-    <h3 class="text-xl font-bold text-quaternary-800 mb-4">{{ title }}</h3>
-    <p v-if="description" class="text-quaternary-700 mb-6">{{ description }}</p>
-    
+  <div class="bg-green-100 p-6 rounded-lg border border-green-200 flex flex-col items-center text-center">
+    <h3 class="text-xl font-bold text-green-800 mb-4">{{ title }}</h3>
+    <p v-if="description" class="text-green-700 mb-6">{{ description }}</p>
+
     <a
-      :href="whatsappUrl"
+      href="https://wa.me/56971370313?text=Hola,%20estoy%20interesado%20en%20obtener%20más%20información%20sobre%20sus%20servicios.%20Vengo%20del%20blog."
       target="_blank"
       rel="noopener noreferrer"
       class="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors"
@@ -22,9 +22,4 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
-const whatsappUrl = computed(() => {
-  const message = encodeURIComponent('Hola, estoy interesado en obtener más información sobre sus servicios.')
-  return `"https://wa.me/56971370313?text=${message}`
-})
 </script>

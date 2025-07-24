@@ -143,7 +143,7 @@
                   v-if="post.images && post.images[0]"
                   :src="post.images[0].src"
                   :alt="post.images[0].alt"
-                  class="w-full h-64 md:h-full object-cover"
+                  class="w-full h-64 md:h-full md:max-h-[80vh] object-cover"
                 />
               </div>
             </div>
