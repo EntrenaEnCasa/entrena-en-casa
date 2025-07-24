@@ -23,12 +23,12 @@ export default defineEventHandler(async (event): Promise<BlogResponse> => {
 
 async function readBlogPosts(page: number, limit: number): Promise<{ posts: BlogPost[], total: number }> {
   try {
-    // Leer desde único archivo blog.json
-    const blogFile = process.env.NODE_ENV === 'production'
-      ? `${process.cwd()}/content/blog/blog.json`
-      : 'content/blog/blog.json'
+    // Leer desde public/blog/blog.json para compatibilidad producción
+    const blogFile = `${process.cwd()}/public/blog/blog.json`
     const fs = await import('fs')
+    console.log('Reading blog posts from:', blogFile)
     if (!fs.existsSync(blogFile)) {
+      console.warn('Blog file does not exist:', blogFile)
       return { posts: [], total: 0 }
     }
     const content = fs.readFileSync(blogFile, 'utf8')
