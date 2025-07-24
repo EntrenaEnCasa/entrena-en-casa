@@ -24,7 +24,13 @@ export default defineEventHandler(async (event): Promise<BlogResponse> => {
 
 async function readBlogPosts(page: number, limit: number): Promise<{ posts: BlogPost[], total: number }> {
   try {
-    const blogFile = path.join(process.cwd(), '.output/public', 'blog/blog.json')
+    let blogFile = "";
+    if (process.env.NODE_ENV === 'production') {
+      blogFile = 'blog/blog.json';
+    }
+    else {
+      blogFile = 'content/blog/blog.json';
+    }
     const fs = await import('fs')
     
     if (!fs.existsSync(blogFile)) {
