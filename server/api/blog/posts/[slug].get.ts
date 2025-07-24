@@ -1,15 +1,15 @@
 import type { BlogPost, BlogResponse } from '~/types/blog'
+import blogData from '~/public/blog/blog.json'
 
 async function readBlogPosts(): Promise<BlogPost[]> {
   try {
-    // Leer desde único archivo blog.json
-    const blogFile = './content/blog/blog.json'
-    const fs = await import('fs')
-    if (!fs.existsSync(blogFile)) {
+    const posts: BlogPost[] = blogData as BlogPost[]
+    
+    if (!Array.isArray(posts)) {
+      console.warn('Blog data is not an array')
       return []
     }
-    const content = fs.readFileSync(blogFile, 'utf8')
-    const posts: BlogPost[] = JSON.parse(content)
+    
     // Ordenar de más nuevo a más viejo
     return posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
   } catch (error) {
@@ -17,6 +17,7 @@ async function readBlogPosts(): Promise<BlogPost[]> {
     return []
   }
 }
+
 export default defineEventHandler(async (event): Promise<BlogResponse> => {
   const slug = getRouterParam(event, 'slug')
 
@@ -34,8 +35,10 @@ export default defineEventHandler(async (event): Promise<BlogResponse> => {
 
     return {
       success: true,
-      data: post    }
+      data: post
+    }
   } catch (error) {
+    console.error('Error loading blog post:', error)
     return {
       success: false,
       data: null,
