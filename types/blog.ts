@@ -3,7 +3,6 @@ export interface BlogPost {
   title: string
   slug: string
   description: string
-  subtitles: string[]
   introduction: string
   content: string
   conclusion: string
@@ -14,13 +13,14 @@ export interface BlogPost {
   author?: string
   readTime?: number
   category?: string[]
+  // Eliminamos subtitles ya que ahora están dentro del content como markdown
 }
 
 export interface BlogImage {
   src: string
   alt: string
   caption?: string
-  position: 'intro' | 'content' | 'conclusion'
+  // Eliminamos position ya que ahora las imágenes van en orden: [0] después de intro, [1] después de content, [2] después de conclusion
 }
 
 export interface CTAConfig {
