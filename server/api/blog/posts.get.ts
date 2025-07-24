@@ -26,7 +26,7 @@ async function readBlogPosts(page: number, limit: number): Promise<{ posts: Blog
   try {
     let blogFile = "";
     if (process.env.NODE_ENV === 'production') {
-      blogFile = 'blog/blog.json';
+      blogFile = path.join('.output', 'blog/blog.json');
     }
     else {
       blogFile = 'content/blog/blog.json';
