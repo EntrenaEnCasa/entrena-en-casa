@@ -1,4 +1,5 @@
 import type { BlogPost, BlogResponse } from '~/types/blog'
+import path from 'path'
 export default defineEventHandler(async (event): Promise<BlogResponse> => {
     try {
         // Obtener parámetros de paginación
@@ -26,10 +27,10 @@ async function readBlogPosts(page: number, limit: number): Promise<{ posts: Blog
     // Leer desde único archivo blog.json
     const blogFile = process.env.NODE_ENV === 'production'
       ? `/content/blog/blog.json`
-      : 'content/blog/blog.json'
+      : path.join(process.cwd(), 'content', 'blog/blog.json')
     const fs = await import('fs')
-    console.log('Reading blog posts from:', blogFile)
     if (!fs.existsSync(blogFile)) {
+      console.warn('Blog file does not exist:', blogFile)
       return { posts: [], total: 0 }
     }
     const content = fs.readFileSync(blogFile, 'utf8')
