@@ -54,6 +54,24 @@
 
 <script setup lang="ts">
 import type { GetPlansResponse } from "@/types/api/plans";
+const { setSEO } = useSEO()
+
+setSEO({
+  title: 'Nuestros Planes - Entrena en Casa',
+  description: 'Planes con personal trainer online y a domicilio. Entrenamiento funcional individual, en duplas, grupal y programas corporativos para empresas en Chile.',
+  keywords: [
+    "Personal Trainer a domicilio", "Entrenamiento personalizado", "Entrenador personal santiago", "Preparador físico online", "Personal trainer las condes",
+    "Personal trainers online", "Personal trainer domicilio", "entrenador personal", "entrenaencasa", "Personal trainer viña", "Personal Fitness", "Entrenamiento Personalizado",
+    "entrenador personal adultos mayores", "movilidad funcional en casa", "por que es importante entrenar", "entrenamientos personales cerca de mi",
+    "entrenadores personales santiago", "Planes personalizados", "Contratar Personal Trainer en casa", "Plan entrenamiento condominio", "Planes Personal trainer online",
+    "Contratar Personal Trainer para mayores", "Entrenador a Mayores las condes", "Plan ejercicios en casa", "Plan Funcional para empresas",
+    "Entrenamiento para empresa", "Programa entrenamiento fuerza mujeres", "plan entrenamiento mujeres", "como entrenar fuerza en casa", "Plan ganar músculo en casa",
+    "como ganar fuerza muscular en casa", "entrenamiento fuerza"
+  ],
+  image: '/SEO/plans.png',
+  type: 'website'
+})
+
 
 const config = useRuntimeConfig();
 

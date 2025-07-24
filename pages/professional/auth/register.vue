@@ -188,4 +188,22 @@ const register = async () => {
 definePageMeta({
     layout: "auth",
 });
+const { setSEO } = useSEO();
+setSEO({
+  title: 'Únete como profesional - Entrena en Casa',
+  description: 'Crea tu cuenta como personal trainer y accede a más alumnos en tu zona. Entrena online, a domicilio o con empresas. Muestra tus credenciales y gestiona tu disponibilidad semanal.',
+  keywords: [
+    "perfil entrenador personal", "entrenador certificado chile", "entrenador funcional a domicilio", "preparador físico profesional", "personal trainer online",
+    "entrenador con experiencia", "personal trainer en las condes", "entrenador personal viña del mar", "entrenador con cobertura local",
+    "entrenador personalizado adultos mayores", "entrenador con rutinas adaptadas", "entrenador personal en casa", "entrenador con agenda abierta",
+    "entrenador personal para mujeres", "entrenador personal fitness", "entrenador personal domicilio santiago", "perfil profesional entrenador",
+    "entrenador personal con certificación", "coach de entrenamiento funcional", "entrenador especializado en salud y movimiento",
+    "registro profesional", "unete como profesional", "registro personal trainer"
+  ],
+  image: '/SEO/professional/auth/register.png',
+  type: 'website',
+  noindex: true
+})
+
+
 </script>
