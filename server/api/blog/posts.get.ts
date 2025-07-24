@@ -30,9 +30,9 @@ async function readBlogPosts(page: number, limit: number): Promise<{ posts: Blog
     
     // Intentar múltiples rutas
     const possiblePaths = [
-      path.join(process.cwd(), '.output/public', 'blog/blog.json'), // Vercel producción
-      path.join(process.cwd(), 'public', 'blog/blog.json'),         // Local con public
-      path.join(process.cwd(), 'content', 'blog/blog.json')         // Original
+      path.join('.output/public', 'blog/blog.json'),
+      path.join('public', 'blog/blog.json'),
+      path.join('content', 'blog/blog.json')
     ]
     
     for (const filePath of possiblePaths) {
