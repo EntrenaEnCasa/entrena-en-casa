@@ -1,5 +1,5 @@
 import type { BlogPost, BlogResponse } from '~/types/blog'
-import path from 'path'
+import blogData from '~/public/blog/blog.json'
 
 export default defineEventHandler(async (event): Promise<BlogResponse> => {
     try {
@@ -24,33 +24,12 @@ export default defineEventHandler(async (event): Promise<BlogResponse> => {
 
 async function readBlogPosts(page: number, limit: number): Promise<{ posts: BlogPost[], total: number }> {
   try {
-    const fs = await import('fs')
-    let blogFile: string
-    let content: string
+    const posts: BlogPost[] = blogData as BlogPost[]
     
-    // Intentar múltiples rutas
-    const possiblePaths = [
-      path.join('.output/public', 'blog/blog.json'),
-      path.join('public', 'blog/blog.json'),
-      path.join('content', 'blog/blog.json')
-    ]
+    const sortedPosts = posts.sort((a, b) => 
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    )
     
-    for (const filePath of possiblePaths) {
-      if (fs.existsSync(filePath)) {
-        blogFile = filePath
-        break
-      }
-    }
-    
-    if (!blogFile!) {
-      console.warn('Blog file not found in any of the expected locations')
-      return { posts: [], total: 0 }
-    }
-    
-    content = fs.readFileSync(blogFile, 'utf8')
-    const posts: BlogPost[] = JSON.parse(content)
-    
-    const sortedPosts = posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     const total = sortedPosts.length
     const start = (page - 1) * limit
     const end = start + limit
