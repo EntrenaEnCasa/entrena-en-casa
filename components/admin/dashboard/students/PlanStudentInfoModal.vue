@@ -48,6 +48,8 @@
                                                 Fecha de expiración
                                             </th>
                                             <th scope="col" class="px-6 py-4 font-medium"></th>
+                                                                                        <th scope="col" class="px-6 py-4 font-medium"></th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -181,6 +183,14 @@
                                                     Modificar
                                                 </button>
                                             </td>
+                                            <td class="px-6 py-6">
+                                                <button v-show="credit.available_credits > 0"
+                                                    @click="openDeleteModal(credit.transaction_id)"
+                                                    class="rounded-full bg-red-500 px-4 py-2 font-medium text-white"
+                                                >
+                                                    Eliminar Compra
+                                                </button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -212,11 +222,41 @@
             :student="student"
             :plan="planToModify"
         />
+        <Teleport to="body">
+                    <CommonModal ref="modalDelete">
+                        <div class="p-4 text-center">
+                            <div class="mb-4">
+                                <h3 class="mb-2 font-semibold">
+                                    ¿Estas seguro/a de eliminar esta compra? Se consumirán todos los créditos.
+                                </h3>
+                            </div>
+                            <div class="flex flex-col gap-4 lg:flex-row lg:justify-center">
+                                <div>
+                                    <CommonButton
+                                        bg-color="tertiary"
+                                        class="px-4 py-2"
+                                        @click="closeDeleteModal()"
+                                    >
+                                        Cancelar
+                                    </CommonButton>
+                                </div>
+                                <div>
+                                    <CommonButton class="px-4 py-2 bg-secondary" @click="deletePurchase()">
+                                        Si, estoy seguro/a
+                                    </CommonButton>
+                                </div>
+                            </div>
+                        </div>
+                    </CommonModal>
+                </Teleport>
         <AdminDashboardStudentsAddPlanModal ref="addPlan" :student="student" />
     </div>
 </template>
 <script setup lang="ts">
+import { useToast } from 'vue-toastification'
 const modal = ref<Modal | null>(null);
+const deleteTransaction = ref(0);
+const runtimeConfig = useRuntimeConfig();
 
 const openModal = () => {
     modal.value?.openModal();
@@ -226,9 +266,52 @@ const closeModal = () => {
     modal.value?.closeModal();
 };
 
-defineExpose({
-    openModal,
-});
+// Use as a function to get the toast instance
+const toast = useToast();
+
+
+const modalDelete = ref<Modal | null>(null);
+
+const openDeleteModal = (transaction_id: number) => {
+    deleteTransaction.value = transaction_id;
+    modalDelete.value?.openModal();
+};
+
+const closeDeleteModal = () => {
+    if (modalDelete.value) {
+        modalDelete.value.closeModal();
+    }
+    deleteTransaction.value = 0;
+};
+const deletePurchase = async () => {
+    try{
+     const response = await $fetch<APIResponse>(
+        `${runtimeConfig.public.apiBase}/admin/purchase/consume`,
+        {
+            method: "POST",
+            credentials: "include",
+            body: {
+                transaction_id: deleteTransaction.value,
+            },
+        },
+    );
+    if (response.success) {
+        toast.success("Compra deshabilitada");
+        modal.value?.closeModal();
+        reloadNuxtApp();
+    } else {
+        toast.error("Error al deshabilitar compra");
+    }
+    }
+    catch{
+        toast.error("Error al deshabilitar compra");
+    }
+    finally{
+        if (modalDelete.value) {
+            modalDelete.value.closeModal();
+        }
+    }
+}
 
 interface Student {
     user_id: number;
@@ -266,4 +349,10 @@ const openModalModifyPlan = (credit: Plan) => {
     modifyPlan.value?.openModal();
     planToModify.value = credit;
 };
+defineExpose({
+    openModal,
+    closeModal,
+    openDeleteModal,
+    closeDeleteModal
+});
 </script>
