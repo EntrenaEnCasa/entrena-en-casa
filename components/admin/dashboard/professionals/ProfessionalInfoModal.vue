@@ -16,7 +16,9 @@
                                 </p>
                                 <p class="text-2xl font-medium text-gray-700" v-else>Sin datos</p>
                             </div>
-
+                                                            <!-- <CommonButton @click="deleteUser()" 
+                                    class="mx-auto mb-5 px-3 py-2 text-white bg-red-600 hover:bg-red-700">
+                                    Eliminar usuario</CommonButton> -->
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Correo electrónico</h3>
                                 <p class="text-2xl font-medium text-gray-700">
@@ -24,6 +26,7 @@
                                 </p>
                             </div>
                             <div class="flex">
+
                                 <CommonButton @click="disableUser()" bg-color="tertiary"
                                     class="mx-auto mb-5 px-3 py-2 text-white"
                                     v-if="professional && professional.enabled">
@@ -380,11 +383,10 @@ const generateReport = async () => {
             // Tabla de sesiones
             autoTable(doc, {
                 startY: 80,
-                head: [['Fecha', 'Hora Inicio', '# Asistentes', 'Formato', 'Modalidad', 'Estudiantes']],
+                head: [['Fecha', 'Hora Inicio',  'Formato', 'Modalidad', 'Estudiantes']],
                 body: sessions.map((s) => [
                     s.date,
                     s.time,
-                    s.actual_assistant,
                     s.format,
                     s.modality,
                     s.students.map(student => `-${student.first_name} ${student.last_name}\n${student.email}\n${student.phone}\n`)
@@ -405,4 +407,38 @@ const generateReport = async () => {
         toast.error("Error al generar el reporte");
     }
 };
+const deleteUser = async () => {
+    if (!props.professional) return;
+    if (!confirm(`¿Estás seguro de que deseas eliminar al usuario ${props.professional.first_name} ${props.professional.last_name}? Esta acción no se puede deshacer.`)) {
+        return;
+    }
+    try {
+        const response = await $fetch<APIResponse>(
+            `${runtimeConfig.public.apiBase}/admin/delete-account`,
+            {
+                method: "DELETE",
+                credentials: "include",
+                body: {
+                    user_id: props.professional.user_id,
+                    user_type: 1
+                },
+            },
+        );
+        if (response.success) {
+            toast.success("Usuario eliminado");
+            modal.value?.closeModal();
+            reloadNuxtApp();
+        } else {
+            toast.error("Error al eliminar usuario");
+        }
+    } catch (error) {
+        console.error("Error al eliminar usuario:", error);
+        toast.error("Error al eliminar usuario");
+    }
+};
+watch(() => props.professional, (newVal) => {
+    if (newVal) {
+        console.log(newVal);
+    }
+});
 </script>
