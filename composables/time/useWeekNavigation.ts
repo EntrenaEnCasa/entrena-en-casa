@@ -1,10 +1,10 @@
 export const useWeekNavigation = () => {
     const currentDate = ref(new Date());
+    currentDate.value.setDate(currentDate.value.getDate()); // Asegura que la fecha sea hoy
     currentDate.value.setHours(0, 0, 0, 0);
 
     const getStartOfWeek = (date: Date) => {
-        // The start of the week is always the current date
-        return new Date(date);
+        return date; // La semana siempre comienza hoy
     };
 
     const getEndOfWeek = (date: Date) => {
@@ -25,7 +25,7 @@ export const useWeekNavigation = () => {
         const result = [];
         const startOfWeek = startOfWeekDate.value;
         for (let i = 0; i < 7; i++) {
-            const date = new Date(startOfWeek);
+            const date = startOfWeek;
             date.setDate(date.getDate() + i);
             result.push(date);
         }
