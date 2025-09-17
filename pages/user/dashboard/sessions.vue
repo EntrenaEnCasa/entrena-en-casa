@@ -409,7 +409,7 @@ const detailsModalSession = ref<SessionExtended | null>(null);
 // Utility function to format date
 const formatDate = (date: string): string => {
     const [year, month, day] = date.split("-").map(Number);
-    const d = new Date(year, month, day);
+    const d = new Date(year, month - 1, day);
     return d.toLocaleString("es-ES", { day: "2-digit", month: "long" });
 };
 
