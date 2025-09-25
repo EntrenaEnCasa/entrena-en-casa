@@ -5,9 +5,8 @@ export const useFormatter = () => {
      * @returns {Date} A new Date object representing the input date.
      */
     const createDate = (date: string): Date => {
-        const transformDate = new Date(date);
-        const truncatedDate = transformDate.toUTCString().split(" ").slice(0, 4).join(" ");
-        return new Date(truncatedDate);
+        const [year, month, day] = date.split("-").map(Number);
+        return new Date(year, month - 1, day);
     };
 
     const formatDateToAbbreviatedWeekdayAndDay = (date: Date): string => {
@@ -45,17 +44,12 @@ export const useFormatter = () => {
         const formatter = new Intl.DateTimeFormat("es-CL", options);
         return formatter.format(createDate(date));
     };
-    const getUserTimezone = () => {
-        return Intl.DateTimeFormat().resolvedOptions().timeZone;
-    };
-
 
     return {
-        getUserTimezone,
+        createDate,
         formatHourToTimeString,
         extractHourFromTimeString,
         formatDateToAbbreviatedWeekdayAndDay,
         formatDateToFullLongFormat,
-        createDate,
     };
 };

@@ -153,11 +153,7 @@ import { useToast } from "vue-toastification";
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const toast = useToast();
-const { 
-    formatDateToAbbreviatedWeekdayAndDay, 
-    getUserTimezone,
-    createDate
-} = useFormatter();
+const { createDate, formatDateToAbbreviatedWeekdayAndDay } = useFormatter();
 const { isStartWeek, goToPreviousWeek, goToNextWeek, currentYear, currentMonth, currentDate } =
     useWeekNavigation();
 const { getReverseGeocodingData } = useGeocoding();
@@ -237,23 +233,21 @@ const initializeCalendarData = () => {
     calendarData.value = [];
     const today = new Date().setHours(0, 0, 0, 0);
 
-    const startOfWeek = currentDate.value;
+    const startOfWeek = new Date(today);
     const endOfWeek = new Date(today);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
-    console.log('Start of week calculated (local timezone):', startOfWeek);
 
     const slotsPerDay = 24 * (60 / slotDurationInMinutes.value);
     const daysToShow = 7;
 
     try {
         for (let i = 0; i < daysToShow; i++) {
-            const currentCalendarDate = new Date(startOfWeek);
-            currentCalendarDate.setDate(startOfWeek.getDate() + i);
-            currentCalendarDate.setHours(0, 0, 0, 0); // Medianoche exacta en la zona horaria local
+            const currentDate = new Date(startOfWeek);
+            currentDate.setDate(startOfWeek.getDate() + i);
 
             const day = {
-                date: new Date(currentCalendarDate), // Asegurar que cada día sea una nueva instancia
-                formattedDate: formatDateToAbbreviatedWeekdayAndDay(currentCalendarDate),
+                date: currentDate,
+                formattedDate: formatDateToAbbreviatedWeekdayAndDay(currentDate),
                 timeSlots: Array.from({ length: slotsPerDay }, (_, j) => {
                     const totalMinutes = j * slotDurationInMinutes.value;
                     const hours = Math.floor(totalMinutes / 60);
@@ -268,12 +262,7 @@ const initializeCalendarData = () => {
             calendarData.value.push(day);
         }
 
-        console.log("Fixed calendar days:", calendarData.value.map((day, index) => ({
-            index,
-            date: day.date.toISOString().split('T')[0],
-            time: day.date.toTimeString(),
-            formatted: day.formattedDate
-        })));
+        console.log("Calendar data initialized: ", calendarData.value);
     } catch (error) {
         console.error("Error initializing calendar data:", error);
     }
@@ -287,30 +276,15 @@ const getTimeSlotInfo = (time) => {
     return { slotIndex, offset };
 };
 
-
 const populateCalendar = (events) => {
-    const startOfWeekBase = new Date(calendarData.value[0].date);
-    
-    console.log('=== POPULATE DEBUG ===');
-    console.log('Start of week from calendar:', startOfWeekBase);
+    const startOfWeek = new Date(calendarData.value[0].date);
 
     events.forEach((event) => {
+        // we use createDate to create a Date object from the string date to avoid timezone issues
         const eventDate = createDate(event.date);
-        
-        console.log('Processing event:', {
-            date: event.date,
-            eventDateObj: eventDate,
-            startOfWeek: startOfWeekBase
-        });
-        
-        const dayIndex = Math.floor((eventDate - startOfWeekBase) / (1000 * 60 * 60 * 24));
-        
-        console.log('Calculated dayIndex:', dayIndex);
 
-        if (dayIndex < 0 || dayIndex >= 7) {
-            console.warn(`Event fuera de rango - dayIndex: ${dayIndex}`, event);
-            return;
-        }
+        const dayIndex = Math.floor((eventDate - startOfWeek) / (1000 * 60 * 60 * 24));
+
         const { slotIndex: startSlotIndex, offset: startOffset } = getTimeSlotInfo(
             event.start_time,
         );
@@ -354,13 +328,11 @@ const getEvents = async () => {
     initializeCalendarData();
 
     const localDateString = getFormattedDateString(currentDate.value);
-    const userTimezone = getUserTimezone(); // Usar la función del composable
-    console.log("User timezone:", userTimezone);
 
+    console.log("get events local date string: ", localDateString);
     const body = {
         user_id: userStore.user.user_id,
-        start_date: localDateString,
-        timezone: userTimezone // Agregar timezone
+        start_date: localDateString, // fecha en formato YYYY-MM-DD
     };
 
     try {
@@ -371,9 +343,10 @@ const getEvents = async () => {
         });
 
         if (response.success) {
-            // Los eventos ya vienen convertidos al timezone del usuario desde el backend
             populateCalendar(response.events);
             events.value = response.events;
+            console.log("events fetched: ");
+            console.log(events.value);
         } else {
             events.value = [];
             toast.error(response.message);
@@ -481,7 +454,6 @@ const newEmptySessionModal = reactive({
             user_id: userStore.user.user_id,
             date: localDateString, // fecha en formato YYYY-MM-DD
             time: formattedStartTime.value,
-             timezone: getUserTimezone(),
             available: true,
             format: newEmptySessionModal.data.selectedFormat,
             modality: newEmptySessionModal.data.selectedModality,
@@ -604,7 +576,6 @@ const newEventModal = reactive({
                 date: localDateString, // fecha en formato YYYY-MM-DD
                 start_time: formattedStartTime.value, // hora en formato HH:MM
                 end_time: formattedEndTime.value, // hora en formato HH:MM
-                 timezone: getUserTimezone(),
                 format: newEventModal.data.manualSession.selectedFormat, // "Personalizado" o "Grupal"
                 modality: newEventModal.data.manualSession.selectedModality, // "Online" o "Presencial"
                 link: link, // link de la sesión, se pasa como text
@@ -647,7 +618,6 @@ const newEventModal = reactive({
                 user_id: userStore.user.user_id,
                 date: localDateString, // fecha en formato YYYY-MM-DD
                 start_time: formattedStartTime.value, // hora en formato HH:MM
-                 timezone: getUserTimezone(),
                 end_time: formattedEndTime.value, // hora en formato HH:MM
                 info: newEventModal.data.personalEvent.additionalInfo, // información adicional
                 clients: clientsIDs, // array de ids de clientes
@@ -761,7 +731,6 @@ const editEmptySessionModal = reactive({
             session_id: event.session_info.session_id,
             date: getFormattedDateString(selectedDate.value),
             time: formattedStartTime.value,
-             timezone: getUserTimezone(),
             format: editEmptySessionModal.data.selectedFormat,
             modality: editEmptySessionModal.data.selectedModality,
             clients: clientsIDs,
@@ -859,7 +828,6 @@ const editManualSessionModal = reactive({
             session_id: event.session_info.session_id,
             date: getFormattedDateString(selectedDate.value),
             start_time: formattedStartTime.value,
-             timezone: getUserTimezone(),
             end_time: formattedEndTime.value,
             format: editManualSessionModal.data.selectedFormat,
             modality: editManualSessionModal.data.selectedModality,
@@ -954,7 +922,6 @@ const editPersonalEventModal = reactive({
             event_id: event.event_id,
             date: getLocalDateString(selectedDate.value),
             start_time: formattedStartTime.value,
-            timezone: getUserTimezone(),
             end_time: formattedEndTime.value,
             info: editPersonalEventModal.data.additionalInfo,
             clients: editPersonalEventModal.data.clients.map((client) => client.user_id),
