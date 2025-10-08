@@ -1,13 +1,16 @@
 <template>
     <div>
-        <HomeBanner />
+        <HomeNewBanner />
         <main>
             <HomeServices />
             <!-- <HomeSlider /> -->
-            <HomeWhyUs />
+            <HomeNewFeatures />
             <HomeAboutUs />
-            <HomeTestimonialOurStudents />
-            <HomeContact />
+            <HomeOurTeam />
+            <HomeNewTestimonial />
+            <HomeFAQ />
+
+            <HomeNewContact />
         </main>
         <HomeWhatsappButton />
         <!-- <HomeSpecialOfferModal ref="specialOfferModal" /> -->
