@@ -2,6 +2,35 @@
     <Form class="w-full" @submit="register" v-slot="{ meta }">
         <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <CommonInput
+                label="Nombre"
+                v-model="formData.firstName"
+                name="first-name"
+                type="text"
+                id="first-name"
+                placeholder="Ingresa tu nombre"
+                :rules="(value) => !!value || 'El nombre es requerido'"
+            />
+            <CommonInput
+                label="Apellido"
+                v-model="formData.lastName"
+                name="last-name"
+                type="text"
+                id="last-name"
+                placeholder="Ingresa tu apellido"
+                :rules="(value) => !!value || 'El apellido es requerido'"
+            />
+            <CommonInput
+                label="Teléfono"
+                v-model="formData.phone"
+                name="phone"
+                type="tel"
+                id="phone"
+                icon="fa6-solid:phone"
+                placeholder="9 1234 5678"
+                :rules="validatePhone"
+                class="md:col-span-2"
+            />
+            <CommonInput
                 label="Correo electrónico"
                 v-model="formData.email"
                 name="email"
@@ -42,6 +71,7 @@
                 :options="regionOptions"
                 class="md:col-span-2"
             />
+            
         </div>
         <!-- <div class="flex items-center space-x-1">
             <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
@@ -76,6 +106,9 @@ const formData = reactive({
     password: "",
     passwordRepeat: "",
     region: "",
+    firstName: "",
+    lastName: "",
+    phone: ""
 });
 
 const loading = ref(false);
@@ -119,6 +152,17 @@ const validateEmail = (value) => {
         return "El email no es válido";
     }
     // All is good
+    return true;
+};
+
+const validatePhone = (value) => {
+    if (!value) {
+        return "El teléfono es requerido";
+    }
+    const regex = /^[0-9]{8,15}$/;
+    if (!regex.test(value)) {
+        return "El teléfono no es válido";
+    }
     return true;
 };
 
@@ -183,6 +227,9 @@ const register = async () => {
         email: formData.email,
         password: formData.password,
         region: formData.region,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone: formData.phone
     };
 
     registrationState.error = false;

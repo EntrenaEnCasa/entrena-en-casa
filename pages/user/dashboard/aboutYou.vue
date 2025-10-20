@@ -8,8 +8,8 @@
         </div>
 
         <Form v-slot="{ meta }" @submit="saveUserData">
-            <div class="grid justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-3 lg:px-10">
-                <CommonInput
+            <div class="grid justify-items-center gap-6 md:grid-cols-2  lg:px-10">
+                <!-- <CommonInput
                     label="¿Cual es tu nombre?"
                     v-model="formData.firstName"
                     name="firstName"
@@ -28,7 +28,7 @@
                     placeholder="Ingresa tu apellido"
                     :rules="validateLastName"
                     class="w-full"
-                />
+                /> -->
                 <CommonInput
                     label="¿Cual es tu fecha de nacimiento?"
                     v-model="formData.birthDate"
@@ -71,7 +71,7 @@
                     right-text="CM"
                     class="w-full"
                 />
-                <CommonInput
+                <!-- <CommonInput
                     label="¿Cual es tu número de teléfono?"
                     v-model="formData.phoneNumber"
                     name="phoneNumber"
@@ -80,7 +80,7 @@
                     placeholder="9 XXXX XXXX"
                     :rules="validatePhoneNumber"
                     class="w-full"
-                />
+                /> -->
             </div>
 
             <div class="mt-10">
@@ -148,13 +148,11 @@ const user = userStore.user;
 const toast = useToast();
 
 const formData = reactive({
-    firstName: "",
-    lastName: "",
+
     birthDate: "",
     gender: "",
     weight: "",
     height: "",
-    phoneNumber: "",
 });
 
 const saveUserDataLoading = ref(false);
@@ -254,13 +252,10 @@ const saveUserData = async () => {
 
     const body = {
         user_id: user.user_id,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
         birth_date: formData.birthDate,
         gender: formData.gender,
         weight: formData.weight,
-        height: formData.height,
-        phone: formData.phoneNumber,
+        height: formData.height
     };
 
     try {

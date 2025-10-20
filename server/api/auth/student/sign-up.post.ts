@@ -3,6 +3,9 @@ export default defineEventHandler(async (event) => {
         email: string;
         password: string;
         region: number;
+        phone: string;
+        first_name: string;
+        last_name: string;
     }
 
     interface Response {
@@ -20,7 +23,7 @@ export default defineEventHandler(async (event) => {
         };
     }
 
-    const { email, password, region } = await readBody<Body>(event);
+    const { email, password, region, first_name, last_name, phone } = await readBody<Body>(event);
 
     // Validate email, password region
     if (!email || !password || !region) {
@@ -43,6 +46,9 @@ export default defineEventHandler(async (event) => {
                 email,
                 password,
                 region,
+                first_name,
+                last_name,
+                phone
             }),
         });
 
