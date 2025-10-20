@@ -2,7 +2,7 @@
     <div class="my-5 grid grid-cols-1 lg:grid-cols-2 lg:p-10">
         <div class="mx-auto w-3/4 text-center  lg:items-end">
             <h3 class="tracking-[.3rem]">BENEFICIOS</h3>
-            <h2 class="my-3 text-4xl font-medium">¿Por qué Entrena en Casa?</h2>
+            <h2 class="my-3 text-4xl md:text-5xl font-bold text-gray-900">¿Por qué Entrena en Casa?</h2>
             <p class="font-light">
                 Entrena en Casa es la nueva forma de ejercitarse y vivir de forma más saludable.
             </p>
