@@ -357,6 +357,7 @@
                         <h3 class="mb-2 text-2xl font-semibold">
                             ¿Estas seguro/a de eliminar esta reserva?
                         </h3>
+                        <p>Recuerda que si faltan menos de 24 horas, no se te retornarán los créditos consumidos para agendar esta sesión.</p>
                     </div>
                     <div class="flex flex-col gap-4 lg:flex-row lg:justify-center">
                         <div>
