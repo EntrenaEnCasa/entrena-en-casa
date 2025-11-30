@@ -33,9 +33,9 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
 
   // Get events for selected date
   const selectedDateEvents = computed(() => {
-    return events.value
+    return [...events.value]
       .filter(event => event.date === selectedDateString.value)
-      .sort((a, b) => a.startTime.localeCompare(b.startTime))
+      .sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''))
   })
 
   // Get events for current month
@@ -104,13 +104,14 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
     return days
   })
 
-  // Generate quick dates (for mobile view)
+  // Generate quick dates (for mobile view) - starting from today
   const quickDates = computed(() => {
     const dates = []
-    const baseDate = selectedDate.value
+    const today = new Date()
+    const baseDate = new Date(today.getFullYear(), today.getMonth(), today.getDate()) // Start from today
     
-    // Get 3 days before, today, and 3 days after
-    for (let i = -3; i <= 3; i++) {
+    // Get 7 days starting from today
+    for (let i = 0; i < 7; i++) {
       const date = new Date(baseDate)
       date.setDate(baseDate.getDate() + i)
       
@@ -124,7 +125,7 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
         dayName: (date instanceof Date && !isNaN(date)) ? date.toLocaleDateString(defaultOptions.locale, { weekday: 'short' }) : '',
         hasEvents: dayEvents.length > 0,
         eventCount: dayEvents.length,
-        isToday: date.toDateString() === today.value.toDateString(),
+        isToday: date.toDateString() === today.toDateString(),
         isSelected: date.toDateString() === selectedDate.value.toDateString()
       })
     }
@@ -391,13 +392,13 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
     }
   }
 
-  // Responsive utilities
+  // Responsive utilities - Default to desktop for SSR
   const isMobileView = ref(false)
-  const isTabletView = ref(false)
-  const isDesktopView = ref(false)
+  const isTabletView = ref(false) 
+  const isDesktopView = ref(true) // Default to desktop for better UX
 
   const updateViewportInfo = () => {
-    if (process.client) {
+    if (process.client && window) {
       const width = window.innerWidth
       isMobileView.value = width < 768
       isTabletView.value = width >= 768 && width < 1024

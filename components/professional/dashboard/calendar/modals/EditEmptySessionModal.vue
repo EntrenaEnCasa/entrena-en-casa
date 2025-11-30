@@ -238,7 +238,14 @@ watch(
 );
 
 const handleOpenModal = () => {
-    modalRef.value?.openModal();
+    console.log('🔍 EditEmptySessionModal.handleOpenModal called');
+    console.log('🔍 modalRef.value:', modalRef.value);
+    if (modalRef.value) {
+        console.log('✅ Opening modal via modalRef');
+        modalRef.value.openModal();
+    } else {
+        console.error('❌ modalRef.value is null');
+    }
 };
 
 const handleCloseModal = () => {
