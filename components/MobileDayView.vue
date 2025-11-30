@@ -163,7 +163,7 @@ const emit = defineEmits(['date-changed', 'event-click', 'slot-click'])
 const dayEvents = computed(() => {
   const dateString = props.selectedDate.toISOString().split('T')[0]
   return props.events
-    .filter(event => event.date === dateString || event.start_time)
+    .filter(event => event.date === dateString)
     .sort((a, b) => (a.start_time || '').localeCompare(b.start_time || ''))
 })
 

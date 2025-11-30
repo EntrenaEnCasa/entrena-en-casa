@@ -312,9 +312,8 @@ const goToNextWeek = () => {
 
 const handleSlotClick = (slot) => {
   if (slot.event) {
-    if (canEditEvent(slot.event)) {
-      emit('event-click', slot.event)
-    }
+    // Siempre emitir event-click para que se abra el modal correcto (info o edición)
+    emit('event-click', slot.event)
   } else {
     // No permitir clicks en slots pasados
     if (isPastTimeSlot(props.selectedDate, slot.time)) {

@@ -36,7 +36,12 @@ import { useDayNavigationStore } from "~/stores/professional/dashboard/calendar/
 
 const store = useDayNavigationStore();
 
-const { selectedDayName, selectedDayNumber, selectedMonth, isFirstDayOfWeek, isLastDayOfWeek } =
-    toRefs(store);
+// Usar computed para asegurar reactividad
+const selectedDayName = computed(() => store.selectedDayName);
+const selectedDayNumber = computed(() => store.selectedDayNumber);
+const selectedMonth = computed(() => store.selectedMonth);
+const isFirstDayOfWeek = computed(() => store.isFirstDayOfWeek);
+const isLastDayOfWeek = computed(() => store.isLastDayOfWeek);
+
 const { goToNextDay, goToPreviousDay } = store;
 </script>

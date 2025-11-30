@@ -57,6 +57,8 @@
 </style>
 
 <script setup>
+const emit = defineEmits(['modal-closed'])
+
 const isOpen = ref(false);
 const scrollableContentRef = ref(null);
 
@@ -74,6 +76,9 @@ const closeModal = () => {
 
     // Remove the event listener
     window.removeEventListener("keydown", handleKeyDown);
+    
+    // Emit event when modal closes
+    emit('modal-closed');
 };
 
 const handleKeyDown = (event) => {

@@ -173,14 +173,17 @@
         <ProfessionalDashboardCalendarModalsEditEmptySessionModal
             ref="editEmptySessionModalRef"
             :modal="editEmptySessionModal"
+            @modal-closed="handleModalClosed"
         />
         <ProfessionalDashboardCalendarModalsEditManualSessionModal
             ref="editManualSessionModalRef"
             :modal="editManualSessionModal"
+            @modal-closed="handleModalClosed"
         />
         <ProfessionalDashboardCalendarModalsEditPersonalEventModal
             ref="editPersonalEventModalRef"
             :modal="editPersonalEventModal"
+            @modal-closed="handleModalClosed"
         />
         <ProfessionalDashboardCalendarModalsSessionDetailsModal
             ref="sessionDetailsModalRef"
@@ -208,11 +211,13 @@ import { ref, onMounted, onBeforeUnmount, reactive, watch, computed, nextTick } 
 import { useDynamicCalendar } from '~/composables/useDynamicCalendar'
 import { useUserStore } from "~/stores/UserStore";
 import { useTimeRangeStore } from "~/stores/professional/dashboard/calendar/TimeRangeStore";
+import { useDayNavigationStore } from "~/stores/professional/dashboard/calendar/DayNavigationStore";
 import { useToast } from "vue-toastification";
 import { useGeocoding } from "~/composables/maps/useGeocoding";
 
 // Stores and utilities
 const userStore = useUserStore();
+const dayNavigationStore = useDayNavigationStore();
 const toast = useToast();
 const runtimeConfig = useRuntimeConfig();
 const { getReverseGeocodingData } = useGeocoding();
@@ -527,10 +532,17 @@ const onSlotClick = ({ date, time }) => {
     return;
   }
   
-  console.log('✅ Updating selected date and time:', date, time);
-  updateCurrentlySelectedDate(date, time);
+  console.log('✅ Updating time (not date) for modal:', time);
+  // Solo actualizar la hora para el modal, NO cambiar la fecha del calendario principal
+  updateSelectedStartTimeFromString(time);
   console.log('📋 formattedStartTime after update:', formattedStartTime.value);
   emptySlotModal.handleClick(date, time);
+};
+
+// Handle modal closed - refresh calendar to ensure data consistency
+const handleModalClosed = async () => {
+  console.log('🔄 Modal closed - refreshing calendar data');
+  await getEvents();
 };
 
 const createGoogleMapsLink = async (coordinates) => {
@@ -546,6 +558,9 @@ const createGoogleMapsLink = async (coordinates) => {
 
 // Empty slot modal
 const emptySlotModal = reactive({
+  data: {
+    selectedDate: new Date()
+  },
   openModal: () => {
     if (emptySlotModalRef.value) {
       emptySlotModalRef.value.openModal();
@@ -561,7 +576,16 @@ const emptySlotModal = reactive({
     const { updateSelectedStartTimeFromString } = useTimeRangeStore();
     updateSelectedStartTimeFromString(time);
     
-    updateCurrentlySelectedDate(day, time);
+    // NO actualizar la fecha del calendario principal, solo guardar la fecha para el modal
+    // updateCurrentlySelectedDate(day, time); // Comentado para evitar cambiar la vista
+    
+    // Guardar la fecha del slot para que el modal la use
+    const clickedDate = new Date(day);
+    emptySlotModal.data.selectedDate = clickedDate;
+    
+    // Actualizar el DayNavigationStore para que el título del modal muestre la fecha correcta
+    dayNavigationStore.updateSelectedDate(clickedDate);
+    
     emptySlotModalRef.value.openModal();
   },
   addNewSession: () => {
@@ -861,9 +885,12 @@ const editEmptySessionModal = reactive({
       console.error('❌ editEmptySessionModalRef.value is null');
     }
   },
-  closeModal: () => {
+  closeModal: async () => {
     if (editEmptySessionModalRef.value) {
       editEmptySessionModalRef.value.closeModal();
+      // Asegurar que el calendario se actualice al cerrar el modal
+      await nextTick();
+      await getEvents();
     }
   },
   handleClick: (day, event) => {
@@ -879,6 +906,19 @@ const editEmptySessionModal = reactive({
     updateSelectedStartTimeFromString(event.start_time);
     if (event.end_time) {
       updateSelectedEndTimeFromString(event.end_time);
+    }
+    
+    // Actualizar el DayNavigationStore con la fecha del evento
+    if (event.date) {
+      // Parsear la fecha de manera explícita para evitar problemas de zona horaria
+      const [year, month, day] = event.date.split('-').map(Number);
+      const eventDate = new Date(year, month - 1, day); // month is 0-indexed
+      console.log('🔄 editEmptySessionModal - Event date info:', {
+        originalDate: event.date,
+        parsedParts: { year, month, day },
+        parsedDate: eventDate
+      });
+      dayNavigationStore.updateSelectedDate(eventDate);
     }
     
     updateCurrentlySelectedDate(day, event.start_time);
@@ -931,7 +971,8 @@ const editEmptySessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        getEvents();
+        await getEvents();
+        editEmptySessionModal.closeModal();
       } else {
         toast.error(response.message);
       }
@@ -940,7 +981,6 @@ const editEmptySessionModal = reactive({
       toast.error("Error al actualizar la sesión");
     } finally {
       editEmptySessionModal.data.updateSessionLoading = false;
-      editEmptySessionModal.closeModal();
     }
   },
   removeSession: async () => {
@@ -957,7 +997,8 @@ const editEmptySessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        getEvents();
+        await getEvents();
+        editEmptySessionModal.closeModal();
       } else {
         toast.error(response.message);
       }
@@ -966,7 +1007,6 @@ const editEmptySessionModal = reactive({
       toast.error("Error al eliminar la sesión");
     } finally {
       editEmptySessionModal.data.removeSessionLoading = false;
-      editEmptySessionModal.closeModal();
     }
   },
 });
@@ -988,9 +1028,12 @@ const editManualSessionModal = reactive({
       editManualSessionModalRef.value.openModal();
     }
   },
-  closeModal: () => {
+  closeModal: async () => {
     if (editManualSessionModalRef.value) {
       editManualSessionModalRef.value.closeModal();
+      // Asegurar que el calendario se actualice al cerrar el modal
+      await nextTick();
+      await getEvents();
     }
   },
   handleClick: (day, event) => {
@@ -1006,6 +1049,22 @@ const editManualSessionModal = reactive({
     updateSelectedStartTimeFromString(event.start_time);
     if (event.end_time) {
       updateSelectedEndTimeFromString(event.end_time);
+    }
+    
+    // Actualizar el DayNavigationStore con la fecha del evento
+    if (event.date) {
+      // Parsear la fecha de manera explícita para evitar problemas de zona horaria
+      const [year, month, day] = event.date.split('-').map(Number);
+      const eventDate = new Date(year, month - 1, day); // month is 0-indexed
+      console.log('🔄 editManualSessionModal - Event date info:', {
+        originalDate: event.date,
+        parsedParts: { year, month, day },
+        parsedDate: eventDate,
+        dayName: eventDate.toLocaleString('es-CL', { weekday: 'long' }),
+        dayNumber: eventDate.getDate(),
+        month: eventDate.toLocaleString('es-CL', { month: 'long' })
+      });
+      dayNavigationStore.updateSelectedDate(eventDate);
     }
     
     updateCurrentlySelectedDate(day, event.start_time);
@@ -1039,7 +1098,8 @@ const editManualSessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        getEvents();
+        await getEvents();
+        editManualSessionModal.closeModal();
       } else {
         toast.error(response.message);
       }
@@ -1048,7 +1108,6 @@ const editManualSessionModal = reactive({
       toast.error("Error al actualizar la sesión");
     } finally {
       editManualSessionModal.data.updateSessionLoading = false;
-      editManualSessionModal.closeModal();
     }
   },
   removeSession: async () => {
@@ -1065,7 +1124,8 @@ const editManualSessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        getEvents();
+        await getEvents();
+        editManualSessionModal.closeModal();
       } else {
         toast.error(response.message);
       }
@@ -1074,7 +1134,6 @@ const editManualSessionModal = reactive({
       toast.error("Error al eliminar la sesión");
     } finally {
       editManualSessionModal.data.removeSessionLoading = false;
-      editManualSessionModal.closeModal();
     }
   },
 });
@@ -1093,9 +1152,12 @@ const editPersonalEventModal = reactive({
       editPersonalEventModalRef.value.openModal();
     }
   },
-  closeModal: () => {
+  closeModal: async () => {
     if (editPersonalEventModalRef.value) {
       editPersonalEventModalRef.value.closeModal();
+      // Asegurar que el calendario se actualice al cerrar el modal
+      await nextTick();
+      await getEvents();
     }
   },
   handleClick: (day, event) => {
@@ -1108,6 +1170,19 @@ const editPersonalEventModal = reactive({
     updateSelectedStartTimeFromString(event.start_time);
     if (event.end_time) {
       updateSelectedEndTimeFromString(event.end_time);
+    }
+    
+    // Actualizar el DayNavigationStore con la fecha del evento
+    if (event.date) {
+      // Parsear la fecha de manera explícita para evitar problemas de zona horaria
+      const [year, month, day] = event.date.split('-').map(Number);
+      const eventDate = new Date(year, month - 1, day); // month is 0-indexed
+      console.log('🔄 editPersonalEventModal - Event date info:', {
+        originalDate: event.date,
+        parsedParts: { year, month, day },
+        parsedDate: eventDate
+      });
+      dayNavigationStore.updateSelectedDate(eventDate);
     }
     
     updateCurrentlySelectedDate(day, event.start_time);
@@ -1140,7 +1215,8 @@ const editPersonalEventModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        getEvents();
+        await getEvents();
+        editPersonalEventModal.closeModal();
       } else {
         toast.error(response.message);
       }
@@ -1149,7 +1225,6 @@ const editPersonalEventModal = reactive({
       toast.error("Error al actualizar el evento personal");
     } finally {
       editPersonalEventModal.data.updateSessionLoading = false;
-      editPersonalEventModal.closeModal();
     }
   },
   removeSession: async () => {
@@ -1166,7 +1241,8 @@ const editPersonalEventModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        getEvents();
+        await getEvents();
+        editPersonalEventModal.closeModal();
       } else {
         toast.error(response.message);
       }
@@ -1175,7 +1251,6 @@ const editPersonalEventModal = reactive({
       toast.error("Error al eliminar el evento personal");
     } finally {
       editPersonalEventModal.data.removeSessionLoading = false;
-      editPersonalEventModal.closeModal();
     }
   },
 });
