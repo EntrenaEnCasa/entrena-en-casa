@@ -1,7 +1,7 @@
 <template>
     <div>
         <Teleport to="body">
-            <CommonModal ref="modalRef">
+            <CommonModal ref="modalRef" @modal-closed="emit('modal-closed')">
                 <div class="px-4 py-4 sm:px-6">
                     <ProfessionalDashboardCalendarDayNavigation />
                     <form action="">
@@ -182,6 +182,7 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(['modal-closed'])
 import { useGeocoding } from "~/composables/maps/useGeocoding";
 import { useMapInteraction } from "~/composables/maps/useMapInteraction";
 

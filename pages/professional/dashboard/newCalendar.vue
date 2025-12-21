@@ -163,12 +163,14 @@
             :modal="emptySlotModal"
         />
         <ProfessionalDashboardCalendarModalsEmptySessionModal
-            ref="newEmptySessionModalRef"
-            :modal="newEmptySessionModal"
+          ref="newEmptySessionModalRef"
+          :modal="newEmptySessionModal"
+          @modal-closed="handleModalClosed"
         />
         <ProfessionalDashboardCalendarModalsNewEventModal
-            ref="newEventModalRef"
-            :modal="newEventModal"
+          ref="newEventModalRef"
+          :modal="newEventModal"
+          @modal-closed="handleModalClosed"
         />
         <ProfessionalDashboardCalendarModalsEditEmptySessionModal
             ref="editEmptySessionModalRef"
@@ -628,7 +630,9 @@ const newEmptySessionModal = reactive({
     newEmptySessionModal.openModal();
   },
   addNewEmptySession: async () => {
-    const localDateString = getFormattedDateString(selectedDate.value);
+    // Use the clicked slot date if available; otherwise fallback to current selectedDate
+    const creationDate = emptySlotModal?.data?.selectedDate ?? selectedDate.value;
+    const localDateString = getFormattedDateString(creationDate);
     newEmptySessionModal.loading = true;
 
     let link;
@@ -682,6 +686,8 @@ const newEmptySessionModal = reactive({
       toast.error("Error al crear la sesión");
     } finally {
       newEmptySessionModal.loading = false;
+      // Clear the temp slot date to avoid unintended reuse
+      if (emptySlotModal?.data) emptySlotModal.data.selectedDate = null;
       newEmptySessionModal.closeModal();
     }
   },
@@ -732,7 +738,9 @@ const newEventModal = reactive({
   },
   addNewEvent: async () => {
     newEventModal.data.loading = true;
-    const localDateString = getFormattedDateString(selectedDate.value);
+    // Use the clicked slot date if available; otherwise fallback to current selectedDate
+    const creationDate = emptySlotModal?.data?.selectedDate ?? selectedDate.value;
+    const localDateString = getFormattedDateString(creationDate);
 
     if (newEventModal.data.selectedEventType == "Nuevo entrenamiento") {
       const clientsIDs = newEventModal.data.manualSession.clients.map(
@@ -763,7 +771,7 @@ const newEventModal = reactive({
 
       const body = {
         user_id: userStore.user.user_id,
-        date: localDateString, // fecha en formato YYYY-MM-DD
+        date: localDateString, // fecha en formato YYYY-MM-DD (slot o fecha seleccionada)
         start_time: formattedStartTime.value, // hora en formato HH:MM
         end_time: formattedEndTime.value, // hora en formato HH:MM
         format: newEventModal.data.manualSession.selectedFormat, // "Personalizado" o "Grupal"
@@ -797,6 +805,8 @@ const newEventModal = reactive({
         toast.error("Error al crear la sesión");
       } finally {
         newEventModal.data.loading = false;
+        // Clear the temp slot date to avoid unintended reuse
+        if (emptySlotModal?.data) emptySlotModal.data.selectedDate = null;
         newEventModal.closeModal();
       }
     } else if (newEventModal.data.selectedEventType == "Evento personal") {
@@ -806,7 +816,7 @@ const newEventModal = reactive({
 
       const body = {
         user_id: userStore.user.user_id,
-        date: localDateString, // fecha en formato YYYY-MM-DD
+        date: localDateString, // fecha en formato YYYY-MM-DD (slot o fecha seleccionada)
         start_time: formattedStartTime.value, // hora en formato HH:MM
         end_time: formattedEndTime.value, // hora en formato HH:MM
         info: newEventModal.data.personalEvent.additionalInfo, // información adicional
@@ -1329,6 +1339,8 @@ const initializeCalendarData = () => {
     if (calendar) {
       calendar.viewMode = newMode;
     }
+    // Reload events when switching view to ensure consistency
+    getEvents(true);
   }, { immediate: true });
   
   // Watch for device changes and adjust view accordingly
@@ -1337,6 +1349,11 @@ const initializeCalendarData = () => {
       viewMode.value = 'day';
     }
   }, { immediate: false });
+
+  // Refresh events whenever the selected date changes (via navigation)
+  watch(selectedDate, async () => {
+    await getEvents(true);
+  });
 };
 
 // Fetch events from API with caching and debouncing

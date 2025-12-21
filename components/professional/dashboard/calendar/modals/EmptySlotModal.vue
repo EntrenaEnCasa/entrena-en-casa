@@ -1,7 +1,7 @@
 <template>
     <div>
         <Teleport to="body">
-            <CommonModal ref="modalRef">
+            <CommonModal ref="modalRef" @modal-closed="emit('modal-closed')">
                 <div class="flex flex-col gap-y-3 px-2 py-4 md:px-8 md:py-6">
                     <button
                         @click="modal.addNewSession"
@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['modal-closed'])
 const modalRef = ref(null);
 
 const props = defineProps({
