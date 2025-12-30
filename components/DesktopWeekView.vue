@@ -148,7 +148,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   selectedDate: {
@@ -171,8 +171,36 @@ const props = defineProps({
 
 const emit = defineEmits(['date-changed', 'event-click', 'slot-click'])
 
+// Reactive number of days to display based on screen width
+const daysToShow = ref(7)
+
+const updateDaysToShow = () => {
+  const width = window.innerWidth
+  
+  if (width < 640) {
+    daysToShow.value = 1 // Mobile: show 1 day
+  } else if (width < 768) {
+    daysToShow.value = 3 // Small tablets: show 3 days
+  } else if (width < 1024) {
+    daysToShow.value = 4 // Medium tablets: show 4 days
+  } else if (width < 1280) {
+    daysToShow.value = 5 // Large tablets: show 5 days
+  } else {
+    daysToShow.value = 7 // Desktop: show 7 days
+  }
+}
+
+onMounted(() => {
+  updateDaysToShow()
+  window.addEventListener('resize', updateDaysToShow)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateDaysToShow)
+})
+
 const gridCols = computed(() => ({
-  gridTemplateColumns: `120px repeat(7, 1fr)` // Always 7 days
+  gridTemplateColumns: `120px repeat(${daysToShow.value}, 1fr)`
 }))
 
 const weekDays = computed(() => {
@@ -185,8 +213,8 @@ const weekDays = computed(() => {
     baseDate.setTime(today.getTime())
   }
   
-  // Always show 7 consecutive days
-  for (let i = 0; i < 7; i++) {
+  // Show dynamic number of days based on screen width
+  for (let i = 0; i < daysToShow.value; i++) {
     const date = new Date(baseDate)
     date.setDate(baseDate.getDate() + i)
     
@@ -212,7 +240,7 @@ const weekTitle = computed(() => {
   if (weekDays.value.length === 0) return 'Semana'
   
   const firstDay = weekDays.value[0]?.date
-  const lastDay = weekDays.value[6]?.date // Always 7 days, so last is index 6
+  const lastDay = weekDays.value[weekDays.value.length - 1]?.date
   
   if (!firstDay || !lastDay) return 'Semana'
   
@@ -314,15 +342,15 @@ const canAddEventAtTime = (date, hour) => {
 const goToPreviousWeek = () => {
   if (!canGoToPreviousWeek.value) return
   
-  const prevWeek = new Date(props.selectedDate)
-  prevWeek.setDate(prevWeek.getDate() - 7)
-  emit('date-changed', prevWeek)
+  const prevPeriod = new Date(props.selectedDate)
+  prevPeriod.setDate(prevPeriod.getDate() - daysToShow.value)
+  emit('date-changed', prevPeriod)
 }
 
 const goToNextWeek = () => {
-  const nextWeek = new Date(props.selectedDate)
-  nextWeek.setDate(nextWeek.getDate() + 7)
-  emit('date-changed', nextWeek)
+  const nextPeriod = new Date(props.selectedDate)
+  nextPeriod.setDate(nextPeriod.getDate() + daysToShow.value)
+  emit('date-changed', nextPeriod)
 }
 
 const handleSlotClick = (date, hour) => {

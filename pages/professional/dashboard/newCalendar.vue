@@ -16,7 +16,7 @@
             <!-- View Mode Selector -->
             <div class="bg-gray-100 rounded-lg p-1 flex flex-row">
               <button 
-                v-for="mode in ['day', 'week', 'month']" 
+                v-for="mode in availableViewModes" 
                 :key="mode"
                 @click="setViewMode(mode)"
                 :class="[
@@ -46,7 +46,7 @@
               </button>
               
               <button 
-                @click="calendar.goToToday()"
+                @click="goToToday"
                 :class="[
                   'px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium rounded-md transition-colors',
                   isToday ? 'bg-primary-100 text-primary-600' : 'text-gray-600 hover:bg-gray-100'
@@ -239,6 +239,7 @@ const editMode = ref(false);
 const eventsCache = ref(new Map());
 const lastFetchDate = ref(null);
 let getEventsTimeout = null;
+let pendingRequest = null; // Track pending requests to avoid duplicates
 
 // Initialize calendar with empty events array
 const initialEvents = [];
@@ -284,17 +285,12 @@ const updateSelectedDate = (date) => {
 };
 
 const updateSelectedStartTimeFromString = (timeString) => {
-  console.log('🕐 updateSelectedStartTimeFromString called with:', timeString);
   if (timeString && typeof timeString === 'string') {
-    console.log('✅ Setting formattedStartTime to:', timeString);
     formattedStartTime.value = timeString;
     // También actualizar el end time sumando 1 hora por defecto
     const [hours, minutes] = timeString.split(':').map(Number);
     const endHours = hours + 1;
     formattedEndTime.value = `${endHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    console.log('✅ Setting formattedEndTime to:', formattedEndTime.value);
-  } else {
-    console.log('❌ Invalid timeString:', timeString);
   }
 };
 
@@ -329,13 +325,17 @@ const getFormattedDateString = (date) => {
 };
 
 const updateCurrentlySelectedDate = (date, timeString) => {
-  console.log('📝 updateCurrentlySelectedDate called with:', { date, timeString });
   updateSelectedDate(date);
   updateSelectedStartTimeFromString(timeString);
-  console.log('✅ After update - formattedStartTime:', formattedStartTime.value);
 };
 
 // Computed properties for UI
+const availableViewModes = computed(() => {
+  return calendar && calendar.isMobileView && calendar.isMobileView.value
+    ? ['day']
+    : ['day', 'week', 'month'];
+});
+
 const currentPeriodTitle = computed(() => {
   const date = selectedDate.value;
   const mode = viewMode.value;
@@ -449,7 +449,6 @@ const setViewMode = (mode) => {
 // Edit mode functions
 const toggleEditState = () => {
   editMode.value = !editMode.value;
-  console.log("🔧 Edit mode:", editMode.value);
 };
 
 // Watch events to disable edit mode when no events
@@ -492,7 +491,7 @@ const goToPrevious = async () => {
     calendar.goToPreviousMonth();
   }
   selectedDate.value = new Date(calendar.selectedDate.value);
-  await getEvents();
+  // Events will be loaded by selectedDate watcher
 };
 
 const goToNext = async () => {
@@ -505,13 +504,18 @@ const goToNext = async () => {
     calendar.goToNextMonth();
   }
   selectedDate.value = new Date(calendar.selectedDate.value);
-  await getEvents();
+  // Events will be loaded by selectedDate watcher
+};
+
+const goToToday = () => {
+  const today = new Date();
+  selectedDate.value = today;
+  calendar.selectDate(today);
+  // Events will be loaded by selectedDate watcher
 };
 
 // Event handlers for calendar interactions
 const onEventClick = (event) => {
-  console.log("🖱️", editMode.value ? "Edit mode" : "Info mode");
-  
   if (editMode.value) {
     const eventDateString = event.date || formatDateForAPI(selectedDate.value);
     editEventHandler.handleClick(eventDateString, event);
@@ -521,11 +525,8 @@ const onEventClick = (event) => {
 };
 
 const onSlotClick = ({ date, time }) => {
-  console.log('🎯 Slot clicked - Date:', date, 'Time:', time);
-  
   // En modo edición, no permitir agregar nuevos eventos en espacios vacíos
   if (editMode.value) {
-    console.log('⚠️ Edit mode active - slot clicks disabled for creating new events');
     return;
   }
   
@@ -534,17 +535,14 @@ const onSlotClick = ({ date, time }) => {
     return;
   }
   
-  console.log('✅ Updating time (not date) for modal:', time);
   // Solo actualizar la hora para el modal, NO cambiar la fecha del calendario principal
   updateSelectedStartTimeFromString(time);
-  console.log('📋 formattedStartTime after update:', formattedStartTime.value);
   emptySlotModal.handleClick(date, time);
 };
 
 // Handle modal closed - refresh calendar to ensure data consistency
 const handleModalClosed = async () => {
-  console.log('🔄 Modal closed - refreshing calendar data');
-  await getEvents();
+  await getEvents(true, 100); // Force refresh with short debounce
 };
 
 const createGoogleMapsLink = async (coordinates) => {
@@ -666,8 +664,6 @@ const newEmptySessionModal = reactive({
       coordinates: coordinates,
     };
 
-    console.log("create new empty session body: ", JSON.stringify(body, null, 2));
-
     try {
       const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/session`, {
         method: "POST",
@@ -682,7 +678,7 @@ const newEmptySessionModal = reactive({
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("Fetch error:", error);
+      console.error("Fetch error:", error);
       toast.error("Error al crear la sesión");
     } finally {
       newEmptySessionModal.loading = false;
@@ -782,8 +778,6 @@ const newEventModal = reactive({
         coordinates: coordinates,
       };
 
-      console.log("create new manual session body: ", body);
-
       try {
         const response = await $fetch(
           `${runtimeConfig.public.apiBase}/professional/session/manual`,
@@ -801,7 +795,7 @@ const newEventModal = reactive({
           toast.error(response.message);
         }
       } catch (error) {
-        console.log("Fetch error:", error);
+        console.error("Fetch error:", error);
         toast.error("Error al crear la sesión");
       } finally {
         newEventModal.data.loading = false;
@@ -841,7 +835,7 @@ const newEventModal = reactive({
           toast.error(response.message);
         }
       } catch (error) {
-        console.log("Fetch error:", error);
+        console.error("Fetch error:", error);
         toast.error("Error al crear el evento personal");
       } finally {
         newEventModal.data.loading = false;
@@ -859,7 +853,6 @@ const infoEventHandler = reactive({
 
 const editEventHandler = reactive({
   handleClick: (day, event) => {
-    console.log("🔧 Edit handler - Event type:", event.type);
     if (event.type === "session") {
       editEmptySessionModal.handleClick(day, event);
     } else if (event.type === "manual_session") {
@@ -867,7 +860,6 @@ const editEventHandler = reactive({
     } else if (event.type === "personal") {
       editPersonalEventModal.handleClick(day, event);
     } else {
-      console.log("❓ Unknown type, defaulting to session details");
       sessionDetailsModal.handleClick(event);
     }
   },
@@ -886,25 +878,17 @@ const editEmptySessionModal = reactive({
     updateSessionLoading: false,
   },
   openModal: () => {
-    console.log('🔍 editEmptySessionModal.openModal called');
-    console.log('🔍 editEmptySessionModalRef.value:', editEmptySessionModalRef.value);
     if (editEmptySessionModalRef.value) {
-      console.log('✅ Opening EditEmptySessionModal');
       editEmptySessionModalRef.value.openModal();
-    } else {
-      console.error('❌ editEmptySessionModalRef.value is null');
     }
   },
   closeModal: async () => {
     if (editEmptySessionModalRef.value) {
       editEmptySessionModalRef.value.closeModal();
-      // Asegurar que el calendario se actualice al cerrar el modal
-      await nextTick();
-      await getEvents();
+      // Modal will trigger @modal-closed event which calls handleModalClosed
     }
   },
   handleClick: (day, event) => {
-    console.log('🔧 editEmptySessionModal.handleClick called with:', { day, event });
     editEmptySessionModal.data.selectedFormat = event.session_info.format;
     editEmptySessionModal.data.selectedModality = event.session_info.modality;
     editEmptySessionModal.data.link = event.session_info.link;
@@ -923,16 +907,10 @@ const editEmptySessionModal = reactive({
       // Parsear la fecha de manera explícita para evitar problemas de zona horaria
       const [year, month, day] = event.date.split('-').map(Number);
       const eventDate = new Date(year, month - 1, day); // month is 0-indexed
-      console.log('🔄 editEmptySessionModal - Event date info:', {
-        originalDate: event.date,
-        parsedParts: { year, month, day },
-        parsedDate: eventDate
-      });
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
     updateCurrentlySelectedDate(day, event.start_time);
-    console.log('📞 Calling editEmptySessionModal.openModal()');
     editEmptySessionModal.openModal();
   },
   updateSession: async () => {
@@ -987,7 +965,7 @@ const editEmptySessionModal = reactive({
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("Fetch error:", error);
+      console.error("Fetch error:", error);
       toast.error("Error al actualizar la sesión");
     } finally {
       editEmptySessionModal.data.updateSessionLoading = false;
@@ -1013,7 +991,7 @@ const editEmptySessionModal = reactive({
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("Fetch error:", error);
+      console.error("Fetch error:", error);
       toast.error("Error al eliminar la sesión");
     } finally {
       editEmptySessionModal.data.removeSessionLoading = false;
@@ -1041,9 +1019,7 @@ const editManualSessionModal = reactive({
   closeModal: async () => {
     if (editManualSessionModalRef.value) {
       editManualSessionModalRef.value.closeModal();
-      // Asegurar que el calendario se actualice al cerrar el modal
-      await nextTick();
-      await getEvents();
+      // Modal will trigger @modal-closed event which calls handleModalClosed
     }
   },
   handleClick: (day, event) => {
@@ -1066,14 +1042,6 @@ const editManualSessionModal = reactive({
       // Parsear la fecha de manera explícita para evitar problemas de zona horaria
       const [year, month, day] = event.date.split('-').map(Number);
       const eventDate = new Date(year, month - 1, day); // month is 0-indexed
-      console.log('🔄 editManualSessionModal - Event date info:', {
-        originalDate: event.date,
-        parsedParts: { year, month, day },
-        parsedDate: eventDate,
-        dayName: eventDate.toLocaleString('es-CL', { weekday: 'long' }),
-        dayNumber: eventDate.getDate(),
-        month: eventDate.toLocaleString('es-CL', { month: 'long' })
-      });
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
@@ -1114,7 +1082,7 @@ const editManualSessionModal = reactive({
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("Fetch error:", error);
+      console.error("Fetch error:", error);
       toast.error("Error al actualizar la sesión");
     } finally {
       editManualSessionModal.data.updateSessionLoading = false;
@@ -1140,7 +1108,7 @@ const editManualSessionModal = reactive({
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("Fetch error:", error);
+      console.error("Fetch error:", error);
       toast.error("Error al eliminar la sesión");
     } finally {
       editManualSessionModal.data.removeSessionLoading = false;
@@ -1165,9 +1133,7 @@ const editPersonalEventModal = reactive({
   closeModal: async () => {
     if (editPersonalEventModalRef.value) {
       editPersonalEventModalRef.value.closeModal();
-      // Asegurar que el calendario se actualice al cerrar el modal
-      await nextTick();
-      await getEvents();
+      // Modal will trigger @modal-closed event which calls handleModalClosed
     }
   },
   handleClick: (day, event) => {
@@ -1187,11 +1153,6 @@ const editPersonalEventModal = reactive({
       // Parsear la fecha de manera explícita para evitar problemas de zona horaria
       const [year, month, day] = event.date.split('-').map(Number);
       const eventDate = new Date(year, month - 1, day); // month is 0-indexed
-      console.log('🔄 editPersonalEventModal - Event date info:', {
-        originalDate: event.date,
-        parsedParts: { year, month, day },
-        parsedDate: eventDate
-      });
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
@@ -1231,7 +1192,7 @@ const editPersonalEventModal = reactive({
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("Fetch error:", error);
+      console.error("Fetch error:", error);
       toast.error("Error al actualizar el evento personal");
     } finally {
       editPersonalEventModal.data.updateSessionLoading = false;
@@ -1257,7 +1218,7 @@ const editPersonalEventModal = reactive({
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("Fetch error:", error);
+      console.error("Fetch error:", error);
       toast.error("Error al eliminar el evento personal");
     } finally {
       editPersonalEventModal.data.removeSessionLoading = false;
@@ -1290,21 +1251,18 @@ const onDateChanged = async (newDate) => {
   const currentDateStr = getFormattedDateString(selectedDate.value);
   const newDateStr = getFormattedDateString(new Date(newDate));
   
-  // Only reload events if the date actually changed to a different day/month
+  // Only update date if it actually changed (watcher will handle loading)
   if (currentDateStr !== newDateStr) {
     updateSelectedDate(newDate);
-    // Use debounced version to prevent excessive calls
-    await getEvents();
+    // selectedDate watcher will handle getEvents with debouncing
   }
 };
 
 const onEventSelected = (event) => {
-  console.log('Event selected:', event);
+  // Event selected handler
 };
 
 const onEditEvent = (event) => {
-  console.log('Edit event:', event);
-
   if (!event) {
     console.error('Event is undefined or null');
     return;
@@ -1314,13 +1272,10 @@ const onEditEvent = (event) => {
 };
 
 const onNewEvent = () => {
-  console.log('New event requested');
   newEventModal.handleClick();
 };
 
 const onCreateEventAtTime = ({ date, time }) => {
-  console.log('Create event at:', date, time);
-  
   updateCurrentlySelectedDate(date, time);
   newEventModal.openModal();
 };
@@ -1339,8 +1294,7 @@ const initializeCalendarData = () => {
     if (calendar) {
       calendar.viewMode = newMode;
     }
-    // Reload events when switching view to ensure consistency
-    getEvents(true);
+    // Don't reload events on view mode change, use cached data
   }, { immediate: true });
   
   // Watch for device changes and adjust view accordingly
@@ -1350,79 +1304,109 @@ const initializeCalendarData = () => {
     }
   }, { immediate: false });
 
-  // Refresh events whenever the selected date changes (via navigation)
+  // Refresh events when date changes (with debouncing)
   watch(selectedDate, async () => {
-    await getEvents(true);
+    await getEvents(false, 500); // Use cache first, debounce 500ms
   });
 };
 
 // Fetch events from API with caching and debouncing
-const getEvents = async (forceRefresh = false) => {
-  if (fetchingEvents.value) return;
-  
+const getEvents = async (forceRefresh = false, debounceMs = 300) => {
+  // Return pending request if one exists for same date
   const localDateString = getFormattedDateString(selectedDate.value);
+  
+  if (pendingRequest && pendingRequest.date === localDateString) {
+    return pendingRequest.promise;
+  }
   
   // Check cache first unless forcing refresh
   if (!forceRefresh && eventsCache.value.has(localDateString)) {
     const cachedData = eventsCache.value.get(localDateString);
     const now = Date.now();
-    // Cache valid for 2 minutes
-    if (now - cachedData.timestamp < 120000) {
+    // Cache valid for 5 minutes (extended from 2 minutes)
+    if (now - cachedData.timestamp < 300000) {
       events.value = cachedData.events;
       if (calendar && calendar.events) {
         calendar.events.value = events.value;
       }
-      return;
+      return Promise.resolve();
     }
   }
   
-  fetchingEvents.value = true;
-
-  const body = {
-    user_id: userStore.user.user_id,
-    start_date: localDateString,
-  };
-
-  try {
-    const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
-      method: "POST",
-      credentials: "include",
-      body: body,
-    });
-
-    if (response.success) {
-      const eventsData = response.events || [];
-      events.value = [...eventsData];
-      
-      // Cache the result
-      eventsCache.value.set(localDateString, {
-        events: eventsData,
-        timestamp: Date.now()
-      });
-      
-      // Update calendar with events
-      if (calendar && calendar.updateEvents) {
-        calendar.updateEvents([...eventsData]);
-      } else if (calendar && calendar.events) {
-        // Fallback: crear nuevo ref en lugar de mutar
-        calendar.events = ref([...eventsData]);
-      }
-    } else {
-      events.value = [];
-      if (calendar && calendar.updateEvents) {
-        calendar.updateEvents([]);
-      } else if (calendar && calendar.events) {
-        calendar.events = ref([]);
-      }
-      toast.error(response.message || 'Error al cargar eventos');
-    }
-  } catch (error) {
-    console.error("Calendar fetch error:", error);
-    events.value = [];
-    toast.error("Error al obtener los eventos");
-  } finally {
-    fetchingEvents.value = false;
+  // Clear existing timeout
+  if (getEventsTimeout) {
+    clearTimeout(getEventsTimeout);
   }
+  
+  // Debounce the actual fetch
+  const fetchPromise = new Promise((resolve, reject) => {
+    getEventsTimeout = setTimeout(async () => {
+      if (fetchingEvents.value) {
+        resolve();
+        return;
+      }
+      
+      fetchingEvents.value = true;
+
+      const body = {
+        user_id: userStore.user.user_id,
+        start_date: localDateString,
+      };
+
+      try {
+        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/calendar`, {
+          method: "POST",
+          credentials: "include",
+          body: body,
+        });
+
+        if (response.success) {
+          const eventsData = response.events || [];
+          events.value = [...eventsData];
+          
+          // Cache the result
+          eventsCache.value.set(localDateString, {
+            events: eventsData,
+            timestamp: Date.now()
+          });
+          
+          // Update calendar with events
+          if (calendar && calendar.updateEvents) {
+            calendar.updateEvents([...eventsData]);
+          } else if (calendar && calendar.events) {
+            calendar.events = ref([...eventsData]);
+          }
+        } else {
+          events.value = [];
+          if (calendar && calendar.updateEvents) {
+            calendar.updateEvents([]);
+          } else if (calendar && calendar.events) {
+            calendar.events = ref([]);
+          }
+          if (response.message) {
+            toast.error(response.message);
+          }
+        }
+        resolve();
+      } catch (error) {
+        console.error("Calendar fetch error:", error);
+        events.value = [];
+        toast.error("Error al obtener los eventos");
+        reject(error);
+      } finally {
+        fetchingEvents.value = false;
+        pendingRequest = null;
+      }
+    }, debounceMs);
+  });
+  
+  // Store pending request
+  pendingRequest = {
+    date: localDateString,
+    promise: fetchPromise
+  };
+  
+  return fetchPromise;
 };
 
 // Fetch events on component mount
@@ -1452,8 +1436,8 @@ onMounted(async () => {
       }
     }, 100);
     
-    // Load events after setup is complete
-    await getEvents();
+    // Events will be loaded automatically by selectedDate watcher
+    // No need to call getEvents() manually here
   } catch (error) {
     console.error('Error initializing calendar:', error);
     toast.error('Error al inicializar el calendario');

@@ -1,5 +1,5 @@
 // composables/useDynamicCalendar.js
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, readonly } from 'vue'
 
 export const useDynamicCalendar = (initialEvents = [], options = {}) => {
   // Default options
