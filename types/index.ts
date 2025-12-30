@@ -6,6 +6,10 @@ declare global {
         last_name: string;
         title: string;
         phone: string | null;
+        photo_url: string | null;
+        birth_date: string | null;
+        institution: string | null;
+        biography: string | null;
     }
 
     interface Session {

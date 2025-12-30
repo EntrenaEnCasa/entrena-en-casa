@@ -39,10 +39,13 @@
                                     class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300"
                                     aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                     <span class="sr-only">Open user menu</span>
-                                    <NuxtImg v-if="user.user_type == 2" class="h-12 w-12 rounded-full"
+                                    <NuxtImg v-if="user.user_type == 2" class="h-12 w-12 rounded-full object-cover"
                                         src="/icons/dumbell-student.png" alt="user photo" />
-                                    <NuxtImg v-else class="h-12 w-12 rounded-full" src="/icons/dumbbell.png"
-                                        alt="user photo" />
+                                    <NuxtImg v-else-if="user.user_type == 1 && user.photo_url" 
+                                        class="h-12 w-12 rounded-full object-cover"
+                                        :src="user.photo_url" alt="user photo" />
+                                    <NuxtImg v-else class="h-12 w-12 rounded-full object-cover" 
+                                        src="/icons/dumbbell.png" alt="user photo" />
                                 </button>
                             </div>
                         </div>

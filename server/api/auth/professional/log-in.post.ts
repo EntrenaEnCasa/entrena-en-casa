@@ -1,4 +1,4 @@
-// server/api/auth/student/log-in.post.ts
+// server/api/auth/professional/log-in.post.ts
 export default defineEventHandler(async (event) => {
     interface Body {
         email: string;
@@ -19,6 +19,10 @@ export default defineEventHandler(async (event) => {
         last_name: string;
         title: string;
         phone: string;
+        photo_url: string | null;
+        birth_date: string | null;
+        institution: string | null;
+        biography: string | null;
         user_type: 0 | 1 | 2;
     }
 
