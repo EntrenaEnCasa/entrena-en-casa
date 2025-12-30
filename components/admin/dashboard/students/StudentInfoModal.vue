@@ -21,6 +21,9 @@
                                     Generar reporte de compras
                                 </CommonButton>
                             </div>
+                            <!-- <CommonButton @click="deleteUser()" 
+                                    class="mx-auto mb-5 px-3 py-2 text-white bg-red-600 hover:bg-red-700">
+                                    Eliminar usuario</CommonButton> -->
                             <div class="space-y-1 px-1">
                                 <h3 class="text-gray-500">Correo electrónico</h3>
                                 <p class="break-all text-2xl font-medium text-gray-700">
@@ -28,6 +31,7 @@
                                 </p>
                             </div>
                             <div class="flex">
+  
                                 <CommonButton @click="disableUser()" bg-color="tertiary"
                                     class="mx-auto mb-5 px-3 py-2 text-white" v-if="student && student.enabled">
                                     Deshabilitar usuario</CommonButton>
@@ -375,6 +379,35 @@ const formatCreditTranslation = (format: string) => {
         default: return format;
     }
 };
+const deleteUser = async () => {
+    if (!props.student) return;
+    if (!confirm(`¿Estás seguro de que deseas eliminar al usuario ${props.student.first_name} ${props.student.last_name}? Esta acción no se puede deshacer.`)) {
+        return;
+    }
+    try {
+        const response = await $fetch<APIResponse>(
+            `${runtimeConfig.public.apiBase}/admin/delete-account`,
+            {
+                method: "DELETE",
+                credentials: "include",
+                body: {
+                    user_id: props.student.user_id,
+                    user_type: 2
+                },
+            },
+        );
+        if (response.success) {
+            toast.success("Usuario eliminado");
+            modal.value?.closeModal();
+            reloadNuxtApp();
+        } else {
+            toast.error("Error al eliminar usuario");
+        }
+    } catch (error) {
+        console.error("Error al eliminar usuario:", error);
+        toast.error("Error al eliminar usuario");
+    }
+};
 
 const generatePurchaseReport = async () => {
     if (!props.student) {
@@ -443,5 +476,9 @@ const generatePurchaseReport = async () => {
     }
 };
 
-
+watch(() => props.student, (newVal) => {
+    if (newVal) {
+        console.log(newVal);
+    }
+});
 </script>

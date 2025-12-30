@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@nuxtjs/cloudinary':
+        specifier: ^4.0.0
+        version: 4.0.0(magicast@0.3.5)(typescript@5.8.3)
       '@nuxtjs/robots':
         specifier: ^5.4.0
         version: 5.4.0(magicast@0.3.5)(vue@3.5.17(typescript@5.8.3))
@@ -241,6 +244,24 @@ packages:
   '@cloudflare/kv-asset-handler@0.4.0':
     resolution: {integrity: sha512-+tv3z+SPp+gqTIcImN9o0hqE9xyfQjI1XD9pL6NuKjua9B1y7mNYv0S9cP+QEbA4ppVgGZEmKOvHX5G5Ei1CVA==}
     engines: {node: '>=18.0.0'}
+
+  '@cloudinary-util/types@1.6.0':
+    resolution: {integrity: sha512-YLpAkvrlQO9nmwA5poiOYYSXP0pMGIBX9IjHOqfU1kGf1ZBR5EwnHlY3b0er7H7uw/f+WlOlko5gE22JCma+TA==}
+
+  '@cloudinary-util/types@2.0.0-beta.1':
+    resolution: {integrity: sha512-HULoiceazjiboetlFRnE6Qo3Ax8oKpJxn37+pQCVerNmr6uXNj8Q/ppQkcDXH/tr7tvD/qRjtK4JfV08ZqMriA==}
+
+  '@cloudinary-util/url-loader@6.0.0':
+    resolution: {integrity: sha512-nlwV6d8uvJPPt4IBPVkhs2YwuT4mXDheIY9Me04bz82u3W0gIhsxWPyr78kC52A2jxt5Lx6+cZi3Po/sy8ykUA==}
+
+  '@cloudinary-util/util@4.1.0':
+    resolution: {integrity: sha512-01k2FWwxhVSauFGi3yJhz20WJ7M/l4ytJDHaBVDTIJlxQLNs36p24kynppgE44jn0dNa1DgYhCXB6BFmqUmfJA==}
+
+  '@cloudinary/transformation-builder-sdk@1.21.2':
+    resolution: {integrity: sha512-ehOgKUaP+Nvuf7B0TosmB8iilL0kdiVjzjl8tIK06cjvsNnwSJI3xP9nEJmKkvqNxwwFwvYXT+mxUTqnSv9JOA==}
+
+  '@cloudinary/url-gen@1.15.0':
+    resolution: {integrity: sha512-bjU67eZxLUgoRy/Plli4TQio7q6P31OYqnEgXxeN9TKXrzr6h0DeEdIUhKI9gy3HkEBWXWWJIPh7j7gkOJPnyA==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -795,6 +816,9 @@ packages:
     engines: {node: ^18.12.0 || ^20.9.0 || >=22.0.0}
     peerDependencies:
       vue: ^3.3.4
+
+  '@nuxtjs/cloudinary@4.0.0':
+    resolution: {integrity: sha512-2OUKTW+eUsippiOteUomv99G7rWyE3ukkcvTUNohd6hh2G/0HDKIQNrH9YWrXsEr7qW0O4R5BoaGLBQKAVCydQ==}
 
   '@nuxtjs/robots@5.4.0':
     resolution: {integrity: sha512-E+bzaVsRQRgyN1RjhUexaqVZDV3MLKHff2e3WYHPiXrUNnOQ/RverO3D0yrP7fH5HqOBG0nBV6X3gD/q3+kUEA==}
@@ -1642,6 +1666,12 @@ packages:
     resolution: {integrity: sha512-WFaiCVbBd39FK6Bx3GQskhgT9s45Vjx6dRQegYheVwU1AnF+FAfJVgWbrl21p6fRJcLAFp0xDz6wE18JYBM0eQ==}
     peerDependencies:
       vue: '>=3.5.13'
+
+  '@unpic/core@0.0.47':
+    resolution: {integrity: sha512-h8Jage7Jh4PS7j77syB/qQR75eDzF0aTJc7mkDfWwqp5HKDfLb7L/3i7ta8Iasg6qZzfySWX/hzy+kLuOJS5XA==}
+
+  '@unpic/vue@0.0.48':
+    resolution: {integrity: sha512-HQssz6cEG+doyWxaCiyGxocZfqOUC7LMtlv4TL7v+PoZ6PVEo7ZHi6SyW5odJ/wG1tyvZu3VmbArTXSylZJkQw==}
 
   '@vee-validate/nuxt@4.15.1':
     resolution: {integrity: sha512-vy+BYUmwy7d01js8jg3qApyrE8/nJHbHvPZNYZSe+hTQEblNqyVt+MnD1incyxMCcivED8FX5w4rjxdoUn7iMQ==}
@@ -5287,6 +5317,9 @@ packages:
     resolution: {integrity: sha512-6bc58dPYhCMHHuwxldQxO3RRNZ4eCogZ/st++0+fcC1nr0jiGUtAdBJ2qzmLQWSxbtz42pWt4QQMiZ9HvZf5cg==}
     engines: {node: '>=0.10.0'}
 
+  unpic@3.22.0:
+    resolution: {integrity: sha512-NFhB8HgHHWkNzTxwWg6KHx8+3RZnhWFm4Axdqp9iI176iY3wskzfP16NRSJ2SSTfXzyK4W6GsBqs8iOOdvOB3g==}
+
   unplugin-utils@0.2.4:
     resolution: {integrity: sha512-8U/MtpkPkkk3Atewj1+RcKIjb5WBimZ/WSLhhR3w6SsIj8XJuKTacSP8g+2JhfSGw0Cb125Y+2zA/IzJZDVbhA==}
     engines: {node: '>=18.12.0'}
@@ -5917,6 +5950,26 @@ snapshots:
   '@cloudflare/kv-asset-handler@0.4.0':
     dependencies:
       mime: 3.0.0
+
+  '@cloudinary-util/types@1.6.0': {}
+
+  '@cloudinary-util/types@2.0.0-beta.1': {}
+
+  '@cloudinary-util/url-loader@6.0.0':
+    dependencies:
+      '@cloudinary-util/types': 1.6.0
+      '@cloudinary-util/util': 4.1.0
+      '@cloudinary/url-gen': 1.15.0
+
+  '@cloudinary-util/util@4.1.0': {}
+
+  '@cloudinary/transformation-builder-sdk@1.21.2':
+    dependencies:
+      '@cloudinary/url-gen': 1.15.0
+
+  '@cloudinary/url-gen@1.15.0':
+    dependencies:
+      '@cloudinary/transformation-builder-sdk': 1.21.2
 
   '@colors/colors@1.6.0': {}
 
@@ -6633,6 +6686,17 @@ snapshots:
       - vti
       - vue-tsc
       - yaml
+
+  '@nuxtjs/cloudinary@4.0.0(magicast@0.3.5)(typescript@5.8.3)':
+    dependencies:
+      '@cloudinary-util/types': 2.0.0-beta.1
+      '@cloudinary-util/url-loader': 6.0.0
+      '@nuxt/kit': 3.17.7(magicast@0.3.5)
+      '@unpic/vue': 0.0.48(typescript@5.8.3)
+      defu: 6.1.4
+    transitivePeerDependencies:
+      - magicast
+      - typescript
 
   '@nuxtjs/robots@5.4.0(magicast@0.3.5)(vue@3.5.17(typescript@5.8.3))':
     dependencies:
@@ -7955,6 +8019,17 @@ snapshots:
       hookable: 5.5.3
       unhead: 2.0.12
       vue: 3.5.17(typescript@5.8.3)
+
+  '@unpic/core@0.0.47':
+    dependencies:
+      unpic: 3.22.0
+
+  '@unpic/vue@0.0.48(typescript@5.8.3)':
+    dependencies:
+      '@unpic/core': 0.0.47
+      vue: 3.5.17(typescript@5.8.3)
+    transitivePeerDependencies:
+      - typescript
 
   '@vee-validate/nuxt@4.15.1(magicast@0.3.5)(vue@3.5.17(typescript@5.8.3))':
     dependencies:
@@ -12156,6 +12231,8 @@ snapshots:
   unixify@1.0.0:
     dependencies:
       normalize-path: 2.1.1
+
+  unpic@3.22.0: {}
 
   unplugin-utils@0.2.4:
     dependencies:

@@ -1,7 +1,7 @@
 <template>
     <div>
         <Teleport to="body">
-            <CommonModal ref="modalRef">
+            <CommonModal ref="modalRef" @modal-closed="emit('modal-closed')">
                 <div class="px-4 py-4 sm:px-6">
                     <ProfessionalDashboardCalendarDayNavigation />
                     <form action="">
@@ -138,6 +138,7 @@
 </template>
 
 <script lang="ts" setup>
+const emit = defineEmits(['modal-closed'])
 import { useGeocoding } from "~/composables/maps/useGeocoding";
 import { useMapInteraction } from "~/composables/maps/useMapInteraction";
 
@@ -238,7 +239,14 @@ watch(
 );
 
 const handleOpenModal = () => {
-    modalRef.value?.openModal();
+    console.log('🔍 EditEmptySessionModal.handleOpenModal called');
+    console.log('🔍 modalRef.value:', modalRef.value);
+    if (modalRef.value) {
+        console.log('✅ Opening modal via modalRef');
+        modalRef.value.openModal();
+    } else {
+        console.error('❌ modalRef.value is null');
+    }
 };
 
 const handleCloseModal = () => {
