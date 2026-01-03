@@ -153,65 +153,80 @@
                     <div
                         v-for="(professional, index) in filteredProfessionals"
                         :key="index"
-                        class="grid grid-cols-1 place-items-center gap-4 rounded-xl border bg-white px-8 py-10 xl:grid-cols-3"
+                        class="flex flex-col gap-6 rounded-xl border bg-white p-6 md:flex-row md:items-center md:justify-between"
                     >
-                        <div class="col-span-1 text-center">
-                            <h3 class="text-2xl font-semibold">
-                                {{ professional.first_name + " " + professional.last_name }}
-                            </h3>
-                            <p class="text-sm">{{ professional.title }}</p>
+                        <!-- Professional Info Section -->
+                        <div class="flex flex-col items-center gap-4 md:items-start">
+                            <div class="flex items-center gap-4">
+                                <img
+                                    :src="professional.photo_url"
+                                    :alt="`${professional.first_name} ${professional.last_name}`"
+                                    class="h-20 w-20 rounded-full object-cover"
+                                />
+                                <div>
+                                    <h3 class="text-xl font-semibold">
+                                        {{ professional.first_name }} {{ professional.last_name }}
+                                    </h3>
+                                    <p class="text-sm text-gray-600">{{ professional.title }}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button
+                                    @click="openProfileModal(professional)"
+                                    class="flex items-center gap-1 rounded-md bg-primary px-4 py-2 text-white transition hover:bg-primary/90"
+                                >
+                                    <span>Ver Perfil</span>
+                                    <Icon name="heroicons:arrow-top-right-on-square" class="text-lg" />
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-span-1 px-5 text-center xl:col-span-2 xl:text-left">
-                            <div class="space-y-5">
-                                <div v-if="professional.customSessions.length > 0">
-                                    <h3 class="mb-2 font-medium">Personalizada</h3>
-                                    <div
-                                        class="flex flex-wrap items-center justify-center gap-2 xl:justify-start"
+
+                        <!-- Sessions Section -->
+                        <div class="flex-1 space-y-4 md:pl-6">
+                            <div v-if="professional.customSessions.length > 0">
+                                <h3 class="mb-2 font-medium">Personalizada</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    <button
+                                        v-for="session in professional.customSessions"
+                                        :key="session.session_info.session_id"
+                                        @click="openConfirmationModal(professional, session)"
+                                        class="rounded-full border bg-secondary px-4 py-1.5 text-white transition hover:bg-secondary/90"
                                     >
+                                        <p class="text">{{ session.start_time }}hrs</p>
+                                    </button>
+                                </div>
+                            </div>
+                            <div v-if="professional.groupSessions.length > 0">
+                                <h3 class="mb-2 font-medium">Grupal</h3>
+                                <div
+                                    class="flex flex-wrap gap-2"
+                                    :class="[isOnline ? 'gap-2' : 'gap-4']"
+                                >
+                                    <div
+                                        class="flex flex-col gap-2"
+                                        v-for="session in professional.groupSessions"
+                                    >
+                                        <a
+                                            v-if="!isOnline"
+                                            target="__blank"
+                                            :href="session.session_info.link"
+                                            class="text-secondary"
+                                        >
+                                            <Icon
+                                                name="fa6-solid:location-dot"
+                                                class="mr-1 text-xl"
+                                            />
+                                            <span
+                                                class="text-sm font-medium underline underline-offset-4"
+                                                >Ver ubicación</span
+                                            >
+                                        </a>
                                         <button
-                                            v-for="session in professional.customSessions"
-                                            :key="session.session_info.session_id"
                                             @click="openConfirmationModal(professional, session)"
-                                            class="rounded-full border bg-secondary px-4 py-1.5 text-white"
+                                            class="rounded-full border bg-secondary px-4 py-1.5 text-center text-white transition hover:bg-secondary/90"
                                         >
                                             <p class="text">{{ session.start_time }}hrs</p>
                                         </button>
-                                    </div>
-                                </div>
-                                <div v-if="professional.groupSessions.length > 0">
-                                    <h3 class="mb-2 font-medium">Grupal</h3>
-                                    <div
-                                        class="flex flex-wrap items-center justify-center xl:justify-start"
-                                        :class="[isOnline ? 'gap-2' : 'gap-4']"
-                                    >
-                                        <div
-                                            class="flex flex-col gap-2"
-                                            v-for="session in professional.groupSessions"
-                                        >
-                                            <a
-                                                v-if="!isOnline"
-                                                target="__blank"
-                                                :href="session.session_info.link"
-                                                class="text-secondary"
-                                            >
-                                                <Icon
-                                                    name="fa6-solid:location-dot"
-                                                    class="mr-1 text-xl"
-                                                />
-                                                <span
-                                                    class="text-sm font-medium underline underline-offset-4"
-                                                    >Ver ubicación</span
-                                                >
-                                            </a>
-                                            <button
-                                                @click="
-                                                    openConfirmationModal(professional, session)
-                                                "
-                                                class="rounded-full border bg-secondary px-4 py-1.5 text-center text-white"
-                                            >
-                                                <p class="text">{{ session.start_time }}hrs</p>
-                                            </button>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -325,6 +340,50 @@
                         >
                             Confirmar sesión
                         </CommonButton>
+                    </div>
+                </div>
+            </CommonModal>
+        </Teleport>
+        <Teleport to="body">
+            <CommonModal ref="profileModal">
+                <div class="px-2 py-4">
+                    <div v-if="professionalProfileLoading" class="flex justify-center py-10">
+                        <CommonLoading text="Cargando perfil" />
+                    </div>
+                    <div v-else-if="selectedProfessional" class="max-w-3xl">
+                        <!-- Header con foto y fondo -->
+                        <div class="relative mb-20 overflow-visible rounded-xl">
+                            <div 
+                                class="h-48 bg-cover bg-center"
+                                :style="{ backgroundImage: `url(${selectedProfessional.bgImage})` }"
+                            >
+                                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 rounded-xl"></div>
+                            </div>
+                            <div class="absolute -bottom-16 left-1/2 -translate-x-1/2 transform">
+                                <img
+                                    :src="selectedProfessional.photo_url"
+                                    :alt="`${selectedProfessional.first_name} ${selectedProfessional.last_name}`"
+                                    class="h-32 w-32 rounded-full border-4 border-white object-cover shadow-lg"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Información del profesional -->
+                        <div class="text-center">
+                            <h2 class="text-3xl font-bold text-gray-900">
+                                {{ selectedProfessional.first_name }} {{ selectedProfessional.last_name }}
+                            </h2>
+                            <p class="mt-2 text-lg text-gray-600">{{ selectedProfessional.title }}</p>
+                            <p v-if="selectedProfessional.institution" class="mt-1 text-sm text-gray-500">
+                                {{ selectedProfessional.institution }}
+                            </p>
+                        </div>
+
+                        <!-- Biografía -->
+                        <div v-if="selectedProfessional.biography" class="mt-8">
+                            <h3 class="mb-3 text-xl font-semibold text-gray-900">Sobre mí</h3>
+                            <p class="whitespace-pre-line text-gray-700">{{ selectedProfessional.biography }}</p>
+                        </div>
                     </div>
                 </div>
             </CommonModal>
@@ -495,9 +554,53 @@ const saveLocation = async () => {
             lng: markerCoordinates.value[0],
             lat: markerCoordinates.value[1],
         },
-    };
+    }; 
     userStore.setUser(newUser);
 };
+const profileModal = ref(null);
+const selectedProfessional = ref(null);
+const professionalProfileLoading = ref(false);
+
+const getRandomBgImage = () => {
+    const randomNum = Math.floor(Math.random() * 5) + 1;
+    return `/professional/bg-professional-${randomNum}.jpg`;
+};
+
+const openProfileModal = async (professional) => {
+    professionalProfileLoading.value = true;
+    profileModal.value.openModal();
+    
+    try {
+        const response = await $fetch(
+            `${runtimeConfig.public.apiBase}/student/professional/${professional.user_id}`,
+            {
+                method: "GET",
+                credentials: "include",
+            },
+        );
+
+        if (response.success && response.professional) {
+            selectedProfessional.value = {
+                ...response.professional,
+                bgImage: getRandomBgImage(),
+            };
+        }
+    } catch (error) {
+        console.log(error);
+        toast.error("Error al cargar el perfil del profesional");
+        closeProfileModal();
+    } finally {
+        professionalProfileLoading.value = false;
+    }
+};
+
+const closeProfileModal = () => {
+    profileModal.value.closeModal();
+    setTimeout(() => {
+        selectedProfessional.value = null;
+    }, 300);
+};
+
 
 const confirmationModal = ref(null);
 const selectedSession = ref(null);
@@ -517,6 +620,7 @@ const openConfirmationModal = (professionalData, sessionData) => {
         professional: {
             name: professionalData.first_name + " " + professionalData.last_name,
             title: professionalData.title,
+            photo: professionalData.photo_url,
         },
         session: {
             id: sessionData.session_info.session_id,
