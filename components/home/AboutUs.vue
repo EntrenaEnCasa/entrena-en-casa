@@ -1,7 +1,7 @@
 <template>
     <div class="mx-auto flex w-11/12 flex-col items-center py-10 sm:w-10/12">
         <p class="text-sm tracking-[.15rem]">SOBRE NOSOTROS</p>
-        <h2 class="text-3xl font-medium md:text-4xl">¿Qué es Entrena en Casa?</h2>
+        <h2 class="text-3xl text-4xl md:text-5xl font-bold text-gray-900">¿Qué es Entrena en Casa?</h2>
         <div class="mt-10">
             <div class="mx-auto grid grid-cols-1 items-center gap-6 lg:grid-cols-3">
                 <div class="lg:col-span-2">
