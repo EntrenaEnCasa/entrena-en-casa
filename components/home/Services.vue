@@ -1,7 +1,6 @@
 <template>
     <div class="mx-auto my-14 w-11/12 lg:mt-32 lg:w-10/12">
         <div class="mb-10 text-center">
-            <h3 class="tracking-[.3rem]">NUESTROS SERVICIOS</h3>
             <h2 class="my-3 text-4xl font-medium">¿Qué ofrecemos?</h2>
         </div>
         <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">

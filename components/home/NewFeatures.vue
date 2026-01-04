@@ -17,14 +17,14 @@
         <!-- Content Section -->
         <div class="order-1 lg:order-2">
           <!-- Badge -->
-          <div class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full mb-6">
-            <Icon name="mdi:shield-check" class="w-5 h-5" />
-            <span class="text-sm font-medium text-gray-700">Preventative care</span>
-          </div>
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm mb-6">
+          <Icon name="mdi:star" class="w-5 h-5 text-gray-700" />
+          <span class="text-sm font-medium text-gray-700">Beneficios</span>
+        </div>
 
           <!-- Title -->
           <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mb-8">
-            Titulo 3
+            Entrena desde donde estés, a tu ritmo
           </h2>
 
           <!-- Services List -->
@@ -69,19 +69,24 @@ interface Service {
 
 const services: Service[] = [
   {
-    icon: 'mdi:heart-pulse',
-    title: 'Health Counselling',
-    description: 'We offer guidance on healthy lifestyle behaviours'
+    icon: 'mdi:target',
+    title: 'Entrenamiento personalizado',
+    description: 'Para todos, a tu medida sin importar tu edad y nivel de condición física'
   },
   {
-    icon: 'mdi:clipboard-text',
-    title: 'Wellness Exams',
-    description: 'We offer guidance on healthy lifestyle behaviours'
+    icon: 'mdi:clock-outline',
+    title: 'Flexibilidad total',
+    description: 'Entrena sin moverte de tu hogar, no pierdas tiempo en traslados, el horario lo eliges tú'
   },
   {
-    icon: 'mdi:medication',
-    title: 'Preventative Medications',
-    description: 'We offer guidance on healthy lifestyle behaviours'
+    icon: 'mdi:piggy-bank',
+    title: 'Ahorra dinero',
+    description: 'En combustible y en planes de gimnasio que no asistes'
+  },
+  {
+    icon: 'mdi:account-multiple-check',
+    title: 'Asesoramiento integral',
+    description: 'Coaching, actividad física y nutrición con profesionales calificados'
   }
 ];
 </script>

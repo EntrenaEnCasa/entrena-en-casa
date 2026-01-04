@@ -5,10 +5,10 @@
       <!-- Header -->
       <div class="text-center mb-16">
         <h2 class="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">
-          What our Customers say
+          Opiniones de Nuestros Clientes
         </h2>
         <p class="text-md text-gray-500">
-          All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks.
+          Lo que dicen quienes han transformado su vida con nuestro entrenamiento personalizado.
         </p>
       </div>
 
@@ -126,21 +126,27 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: 'María Perez',
-    description: '56 años - Empresaria',
-    quote: 'Lorem ipsum dolor sit amet consectetur. Ipsum elementum senectus gravida nunc fermentum. Consequat lectus tortor adipiscing arcu et elementum.',
+    name: 'Claudio Romani',
+    description: 'Local Guide',
+    quote: 'Clases bien organizadas, profesores capacitados, buen nivel de conocimientos, excelencia y sobre todo comprometido con la actividad.',
     image: '/home/testimonial/1.jpg'
   },
   {
-    name: 'Carlos Rodríguez',
-    description: '45 años - Ingeniero',
-    quote: 'La experiencia ha sido increíble, los profesionales son muy atentos y me han ayudado a alcanzar mis objetivos de fitness de manera efectiva.',
+    name: 'Luisa Meléndez',
+    description: 'Cliente',
+    quote: 'Excelente servicio, las clases son muy dinámicas y entretenidas, se genera un ambiente de muchas buena onda! Los profes muy profesionales y simpáticos.',
     image: '/home/testimonial/1.jpg'
   },
   {
-    name: 'Ana Silva',
-    description: '38 años - Doctora',
-    quote: 'Excelente servicio y atención personalizada. He visto resultados sorprendentes en poco tiempo gracias al equipo profesional.',
+    name: 'Pedro Rodrigo Morales Pizarro',
+    description: 'Cliente',
+    quote: 'Excelentes entrenamientos para todo tipo de personas. Se adecuan a tus necesidades en un ambiente favorable para una actividad sana.',
+    image: '/home/testimonial/1.jpg'
+  },
+  {
+    name: 'Zeta',
+    description: 'Cliente',
+    quote: 'Profe muy motivado.',
     image: '/home/testimonial/1.jpg'
   }
 ];

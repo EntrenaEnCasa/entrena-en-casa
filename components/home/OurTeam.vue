@@ -4,14 +4,14 @@
       
       <!-- Header -->
       <div class="text-center mb-12">
-        <p class="text-gray-500 text-sm md:text-base mb-3">Subtitulo 4</p>
-        <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mb-6">
+<div class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm mb-6">
+          <Icon name="mdi:account-group" class="w-5 h-5 text-gray-700" />
+          <span class="text-sm font-medium text-gray-700">Equipo</span>
+        </div>        <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mb-6">
           Nuestros Profesionales
         </h2>
         <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto">
-          Get to Know the Passionate and Skilled Professionals Dedicated to
-          <br />
-          Helping You Achieve Your Fitness Goals
+          Conoce al equipo de expertos dedicados a ayudarte a alcanzar tus objetivos de fitness y bienestar.
         </p>
       </div>
 
@@ -53,8 +53,8 @@
                 <!-- Image -->
                 <div class="overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100">
                   <img
-                    :src="professional.image"
-                    :alt="professional.name"
+                    :src="professional.photo_url"
+                    :alt="`${professional.first_name} ${professional.last_name}`"
                     class="w-full h-[30vh] object-cover object-top"
                   />
                 </div>
@@ -62,20 +62,17 @@
                 <!-- Content -->
                 <div class="p-6">
                   <h3 class="text-2xl font-bold text-gray-900 mb-2">
-                    {{ professional.name }}
+                    {{ professional.first_name }} {{ professional.last_name }}
                   </h3>
-                  <p class="text-gray-600 font-medium mb-4">
-                    {{ professional.role }}
+                  <p class="text-gray-600 font-medium mb-2">
+                    {{ professional.title }}
                   </p>
-                  <p class="text-gray-600 mb-4 leading-relaxed">
-                    {{ professional.description }}
+                  <p class="text-gray-500 text-sm mb-4">
+                    {{ professional.institution }}
                   </p>
-                  
-                  <!-- Location -->
-                  <div class="flex items-center gap-2 text-gray-700">
-                    <Icon name="mdi:map-marker" class="w-5 h-5" />
-                    <span class="text-sm font-medium">{{ professional.location }}</span>
-                  </div>
+                  <p class="text-gray-600 leading-relaxed">
+                    {{ professional.biography }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -102,50 +99,17 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 interface Professional {
-  name: string;
-  role: string;
-  description: string;
-  location: string;
-  image: string;
+  user_id: string;
+  photo_url: string;
+  first_name: string;
+  last_name: string;
+  title: string;
+  institution: string;
+  biography: string;
 }
 
-const professionals: Professional[] = [
-  {
-    name: 'Alyssa Trent',
-    role: 'Head Personal Trainer',
-    description: 'There are many variations of passages of Lorem Ipsum available',
-    location: 'Valparaíso, Chile',
-    image: '/home/team/professional-1.jpg'
-  },
-  {
-    name: 'Franklin Hale',
-    role: 'Head Personal Trainer',
-    description: 'There are many variations of passages of Lorem Ipsum available',
-    location: 'Valparaíso, Chile',
-    image: '/home/team/professional-1.jpg'
-  },
-  {
-    name: 'Darius Kemp',
-    role: 'Content Strategist',
-    description: 'There are many variations of passages of Lorem Ipsum available',
-    location: 'Valparaíso, Chile',
-    image: '/home/team/professional-1.jpg'
-  },
-  {
-    name: 'María González',
-    role: 'Yoga Instructor',
-    description: 'There are many variations of passages of Lorem Ipsum available',
-    location: 'Valparaíso, Chile',
-    image: '/home/team/professional-1.jpg'
-  },
-  {
-    name: 'Carlos Silva',
-    role: 'Nutrition Coach',
-    description: 'There are many variations of passages of Lorem Ipsum available',
-    location: 'Valparaíso, Chile',
-    image: '/home/team/professional-1.jpg'
-  }
-];
+const runtimeConfig = useRuntimeConfig();
+const professionals = ref<Professional[]>([]);
 
 const currentIndex = ref(0);
 const itemsPerView = ref(3);
@@ -161,7 +125,7 @@ const updateItemsPerView = () => {
 };
 
 const nextSlide = () => {
-  if (currentIndex.value < professionals.length - itemsPerView.value) {
+  if (currentIndex.value < professionals.value.length - itemsPerView.value) {
     currentIndex.value++;
   }
 };
@@ -176,9 +140,24 @@ const goToSlide = (index: number) => {
   currentIndex.value = index;
 };
 
+const fetchProfessionals = async () => {
+  try {
+    const response = await $fetch<{ success: boolean; message: string; professionals: Professional[] }>(
+      `${runtimeConfig.public.apiBase}/user/professionals`,
+      {
+        method: 'GET',
+      }
+    );
+    professionals.value = response.professionals;
+  } catch (error) {
+    console.error('Error fetching professionals:', error);
+  }
+};
+
 onMounted(() => {
   updateItemsPerView();
   window.addEventListener('resize', updateItemsPerView);
+  fetchProfessionals();
 });
 
 onUnmounted(() => {

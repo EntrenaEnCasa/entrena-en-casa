@@ -2,10 +2,12 @@
     <div>
         <HomeNewBanner />
         <main>
-            <HomeServices />
+          <HomeServices/>
+            <HomeNewServices />
             <!-- <HomeSlider /> -->
-            <HomeNewFeatures />
             <HomeAboutUs />
+
+            <HomeNewFeatures />
             <HomeOurTeam />
             <HomeNewTestimonial />
             <HomeFAQ />

@@ -540,8 +540,15 @@ const onSlotClick = ({ date, time }) => {
   emptySlotModal.handleClick(date, time);
 };
 
+// Clear events cache
+const clearEventsCache = () => {
+  eventsCache.value.clear();
+  lastFetchDate.value = null;
+};
+
 // Handle modal closed - refresh calendar to ensure data consistency
 const handleModalClosed = async () => {
+  clearEventsCache(); // Clear cache to force fresh data
   await getEvents(true, 100); // Force refresh with short debounce
 };
 
@@ -672,7 +679,8 @@ const newEmptySessionModal = reactive({
       });
 
       if (response.success) {
-        await getEvents(true); // Force refresh after update
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh after update
         toast.success(response.message);
       } else {
         toast.error(response.message);
@@ -789,7 +797,8 @@ const newEventModal = reactive({
         );
 
         if (response.success) {
-          getEvents();
+          clearEventsCache(); // Clear cache before refresh
+          await getEvents(true, 100); // Force refresh
           toast.success(response.message);
         } else {
           toast.error(response.message);
@@ -829,7 +838,8 @@ const newEventModal = reactive({
         );
 
         if (response.success) {
-          getEvents();
+          clearEventsCache(); // Clear cache before refresh
+          await getEvents(true, 100); // Force refresh
           toast.success(response.message);
         } else {
           toast.error(response.message);
@@ -959,7 +969,8 @@ const editEmptySessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editEmptySessionModal.closeModal();
       } else {
         toast.error(response.message);
@@ -985,7 +996,8 @@ const editEmptySessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editEmptySessionModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1076,7 +1088,8 @@ const editManualSessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editManualSessionModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1102,7 +1115,8 @@ const editManualSessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editManualSessionModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1186,7 +1200,8 @@ const editPersonalEventModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editPersonalEventModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1212,7 +1227,8 @@ const editPersonalEventModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editPersonalEventModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1307,7 +1323,7 @@ const initializeCalendarData = () => {
   // Refresh events when date changes (with debouncing)
   watch(selectedDate, async () => {
     await getEvents(false, 500); // Use cache first, debounce 500ms
-  });
+  }, { immediate: true }); // Execute immediately to load initial events
 };
 
 // Fetch events from API with caching and debouncing

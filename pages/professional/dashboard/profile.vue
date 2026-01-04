@@ -658,10 +658,10 @@ const confirmPhotoChange = async (data: { file: File; url: string; transformatio
     try {
         toast.info('Procesando imagen...');
         
-        // Crop the image before uploading
-        const croppedBlob = await cropImageToCircle(data.url, data.transformations);
+        // Apply transformations to the image before uploading (square format)
+        const processedBlob = await processImageToSquare(data.url, data.transformations);
         
-        if (!croppedBlob) {
+        if (!processedBlob) {
             toast.error('Error al procesar la imagen');
             photoCropModal.value?.setUploading(false);
             photoCropModal.value?.closeModal();
@@ -670,9 +670,9 @@ const confirmPhotoChange = async (data: { file: File; url: string; transformatio
         
         toast.info('Subiendo imagen...');
         
-        // Upload cropped image to Cloudinary
-        const croppedFile = new File([croppedBlob], data.file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' });
-        const cloudinaryUrl = await uploadToCloudinary(croppedFile);
+        // Upload processed image to Cloudinary (square format)
+        const processedFile = new File([processedBlob], data.file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' });
+        const cloudinaryUrl = await uploadToCloudinary(processedFile);
         
         if (cloudinaryUrl) {
             // Update backend with new photo URL
@@ -715,8 +715,8 @@ const confirmPhotoChange = async (data: { file: File; url: string; transformatio
     }
 };
 
-// Crop image to circle using Canvas
-const cropImageToCircle = (imageUrl: string, transformations: any): Promise<Blob | null> => {
+// Process image to square with transformations (scale and position)
+const processImageToSquare = (imageUrl: string, transformations: any): Promise<Blob | null> => {
     return new Promise((resolve) => {
         const img = new Image();
         img.crossOrigin = 'anonymous';
@@ -738,11 +738,9 @@ const cropImageToCircle = (imageUrl: string, transformations: any): Promise<Blob
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             
-            // Create circular clip
-            ctx.beginPath();
-            ctx.arc(outputSize / 2, outputSize / 2, outputSize / 2, 0, Math.PI * 2);
-            ctx.closePath();
-            ctx.clip();
+            // Fill background with white (optional, for transparency handling)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, outputSize, outputSize);
             
             // Get transformations
             const scale = transformations.scale || 1;
