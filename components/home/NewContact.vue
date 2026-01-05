@@ -1,5 +1,5 @@
 <template>
-  <section id="contacto" class="relative py-20 md:py-32 bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden">
+  <section id="contacto" class="relative py-10 bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden">
     <!-- Background Decorative Elements -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div class="absolute -top-40 -right-40 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
@@ -24,17 +24,17 @@
       </div>
 
       <!-- Content Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-stretch max-w-7xl mx-auto">
         
         <!-- Form -->
-        <div class="order-2 lg:order-1">
-          <div class="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 p-8 md:p-10 border border-gray-100 hover:shadow-3xl transition-shadow duration-500">
+        <div class="order-2 lg:order-1 flex">
+          <div class="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 p-8 md:p-10 border border-gray-100 hover:shadow-3xl transition-shadow duration-500 flex flex-col w-full">
             <div class="mb-8">
               <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Envíanos un mensaje</h3>
               <p class="text-gray-600">Responderemos lo antes posible</p>
             </div>
 
-            <Form @submit="sendEmail" class="space-y-6" v-slot="{ meta }">
+            <Form @submit="sendEmail" class="space-y-6 flex-1 flex flex-col" v-slot="{ meta }">
               
               <!-- Email Input -->
               <div class="group">
@@ -79,7 +79,7 @@
               </div>
 
               <!-- Message Textarea -->
-              <div class="group">
+              <div class="group flex-1 flex flex-col">
                 <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">
                   Mensaje *
                 </label>
@@ -91,6 +91,7 @@
                   rows="6"
                   maxlength="350"
                   :rules="validateMessage"
+                  class="flex-1"
                 />
                 <div class="flex justify-between items-center mt-2">
                   <p class="text-xs text-gray-500">
@@ -122,7 +123,7 @@
         </div>
 
         <!-- Image & Contact Info -->
-        <div class="order-1 lg:order-2 space-y-8">
+        <div class="order-1 lg:order-2 space-y-8 flex flex-col">
           <!-- Image -->
           <div class="relative rounded-3xl overflow-hidden shadow-2xl shadow-gray-300/50 group">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -134,7 +135,7 @@
               alt="Contacto - Entrena En Casa"
             />
             <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-              <h4 class="text-xl font-bold mb-1">Jorge Venegas</h4>
+              <h4 class="text-xl font-bold mb-1">Jorge Sierra</h4>
               <p class="text-sm text-gray-200">Director y Fundador</p>
             </div>
           </div>

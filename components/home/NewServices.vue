@@ -1,5 +1,5 @@
 <template>
-  <section class="py-16 md:py-24 bg-white">
+  <section class="py-10 bg-white">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
       
       <!-- Header -->
@@ -135,8 +135,8 @@ const services: Service[] = [
     title: 'Clases Grupales Online/Presencial',
     description: 'Ejercita cuerpo y cerebro. Basado en el método Brain Functional Training, combina movimiento, coordinación, memoria y toma de decisiones. Ideal para adultos mayores y personas que buscan prevenir el deterioro cognitivo con protocolos avalados por investigación científica.',
     image: '/home/services/brain-training.jpg',
-    ctaText: 'Descubre este método innovador',
-    ctaLink: '/blog'
+    ctaText: 'Ver clases disponibles',
+    ctaLink: '/user/auth/login'
   },
   {
     icon: '🏢',

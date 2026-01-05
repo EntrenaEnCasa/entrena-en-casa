@@ -920,7 +920,7 @@ const editEmptySessionModal = reactive({
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
-    updateCurrentlySelectedDate(day, event.start_time);
+    // NO cambiar selectedDate del calendario para evitar que el evento se mueva de fecha
     editEmptySessionModal.openModal();
   },
   updateSession: async () => {
@@ -951,7 +951,7 @@ const editEmptySessionModal = reactive({
     const body = {
       user_id: userStore.user.user_id,
       session_id: event.session_info.session_id,
-      date: getFormattedDateString(selectedDate.value),
+      date: event.date, // Mantener la fecha original del evento
       time: formattedStartTime.value,
       format: editEmptySessionModal.data.selectedFormat,
       modality: editEmptySessionModal.data.selectedModality,
@@ -1057,7 +1057,7 @@ const editManualSessionModal = reactive({
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
-    updateCurrentlySelectedDate(day, event.start_time);
+    // NO cambiar selectedDate del calendario para evitar que el evento se mueva de fecha
     editManualSessionModal.openModal();
   },
   updateSession: async () => {
@@ -1067,7 +1067,7 @@ const editManualSessionModal = reactive({
       user_id: userStore.user.user_id,
       event_id: event.event_id,
       session_id: event.session_info.session_id,
-      date: getFormattedDateString(selectedDate.value),
+      date: event.date, // Mantener la fecha original del evento
       start_time: formattedStartTime.value,
       end_time: formattedEndTime.value,
       format: editManualSessionModal.data.selectedFormat,
@@ -1170,8 +1170,7 @@ const editPersonalEventModal = reactive({
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
-    updateCurrentlySelectedDate(day, event.start_time);
-    updateSelectedEndTimeFromString(event.end_time);
+    // NO cambiar selectedDate del calendario para evitar que el evento se mueva de fecha
     editPersonalEventModal.openModal();
   },
   updateSession: async () => {
@@ -1180,7 +1179,7 @@ const editPersonalEventModal = reactive({
     const body = {
       user_id: userStore.user.user_id,
       event_id: event.event_id,
-      date: getLocalDateString(selectedDate.value),
+      date: event.date, // Mantener la fecha original del evento
       start_time: formattedStartTime.value,
       end_time: formattedEndTime.value,
       info: editPersonalEventModal.data.additionalInfo,

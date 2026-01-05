@@ -32,7 +32,7 @@
           <button @click="() => navigateTo('/user/auth/register')" class="px-4 py-2 bg-secondary hover:bg-secondary-200 text-white font-medium rounded-lg transition-transform duration-300 transform hover:scale-105">
             Comienza ahora
           </button>
-          <button @click="() => navigateTo('/')" class=" bg-white hover:bg-gray-50 text-gray-900 px-4 py-2 font-medium rounded-lg border-2 border-gray-300  transition-transform duration-300 transform hover:scale-105">
+          <button @click="() => navigateTo('/blog')" class=" bg-white hover:bg-gray-50 text-gray-900 px-4 py-2 font-medium rounded-lg border-2 border-gray-300  transition-transform duration-300 transform hover:scale-105">
             Ver cómo funciona
           </button>
         </div>
@@ -68,7 +68,7 @@
           ★★★★★
         </div>
         <span class="text-gray-700 font-semibold text-lg">4,9</span>
-        <span class="text-gray-600">+1.200 sesiones agendadas</span>
+        <span class="text-gray-700">+1.200 sesiones agendadas</span>
       </div>
     </div>
   </div>

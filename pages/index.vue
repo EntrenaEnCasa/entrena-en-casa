@@ -3,16 +3,17 @@
         <HomeNewBanner />
         <main>
           <HomeServices/>
+            <HomeAboutUs />
+
             <HomeNewServices />
             <!-- <HomeSlider /> -->
-            <HomeAboutUs />
 
             <HomeNewFeatures />
             <HomeOurTeam />
             <HomeNewTestimonial />
             <HomeFAQ />
 
-            <HomeNewContact />
+            <HomeNewContact id="contact" />
         </main>
         <HomeWhatsappButton />
         <!-- <HomeSpecialOfferModal ref="specialOfferModal" /> -->
