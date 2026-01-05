@@ -131,7 +131,7 @@
               class="w-full h-[450px] object-cover transform group-hover:scale-105 transition-transform duration-700"
               width="500"
               height="450"
-              src="/home/Jorge.jpg"
+              src="/about-us/jorge.jpg"
               alt="Contacto - Entrena En Casa"
             />
             <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">

@@ -63,7 +63,7 @@
                 <div class="order-1 md:order-2">
                   <!-- Quote Icon -->
                   <div class="mb-6">
-                    <Icon name="mdi:format-quote-open" class="w-12 h-12 text-tertiary" />
+                    <Icon name="mdi:format-quote-open" class="w-12 h-12 text-quaternary" />
                   </div>
 
                   <!-- Stars -->
@@ -72,7 +72,7 @@
                       v-for="star in 5" 
                       :key="star" 
                       name="mdi:star" 
-                      class="w-6 h-6 text-tertiary"
+                      class="w-6 h-6 text-quaternary"
                     />
                   </div>
 
@@ -104,7 +104,7 @@
             :key="index"
             @click="goToTestimonial(index)"
             class="w-2.5 h-2.5 rounded-full transition-all duration-300"
-            :class="currentIndex === index ? 'bg-tertiary w-8' : 'bg-gray-300 hover:bg-gray-400'"
+            :class="currentIndex === index ? 'bg-quaternary w-8' : 'bg-gray-300 hover:bg-gray-400'"
           />
         </div>
 

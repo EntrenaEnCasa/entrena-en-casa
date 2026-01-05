@@ -92,7 +92,7 @@
             :key="index"
             @click="goToSlide(index)"
             class="w-2.5 h-2.5 rounded-full transition-all duration-300"
-            :class="currentIndex === index ? 'bg-tertiary w-8' : 'bg-gray-300 hover:bg-gray-400'"
+            :class="currentIndex === index ? 'bg-quaternary w-8' : 'bg-gray-300 hover:bg-gray-400'"
           />
         </div>
       </div>
