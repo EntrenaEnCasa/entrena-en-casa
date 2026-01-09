@@ -3,7 +3,7 @@
         <HomeNewBanner />
         <main>
           <HomeServices/>
-            <HomeAboutUs />
+            <HomeAboutUs id="about" />
 
             <HomeNewServices />
             <!-- <HomeSlider /> -->

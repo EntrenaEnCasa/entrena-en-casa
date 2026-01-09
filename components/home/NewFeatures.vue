@@ -17,7 +17,7 @@
         <!-- Content Section -->
         <div class="order-1 lg:order-2">
           <!-- Badge -->
-          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm mb-6">
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full w-full justify-center shadow-sm mb-6">
           <Icon name="mdi:star" class="w-5 h-5 text-gray-700" />
           <span class="text-sm font-medium text-gray-700">Beneficios</span>
         </div>
@@ -50,9 +50,11 @@
           </div>
 
           <!-- CTA Button -->
-          <button class="px-8 py-4 bg-secondary hover:bg-secondary-200 text-white text-lg font-medium rounded-lg transition-transform duration-300 transform hover:scale-105 shadow-lg">
+           <div class="w-full mx-auto">
+          <button class="px-8 py-4 bg-secondary hover:bg-secondary-200 text-white text-lg font-medium rounded-full transition-transform duration-300 transform hover:scale-105 shadow-lg mx-auto md:-mx-0 block md:flex">
             Conoce más
           </button>
+          </div>
         </div>
 
       </div>

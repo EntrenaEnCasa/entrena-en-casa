@@ -16,84 +16,82 @@
         </p>
       </div>
 
-      <!-- Slider Container -->
-      <div class="relative">
-        
-        <!-- Navigation Buttons -->
-        <button
-          @click="previousSlide"
-          class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-14 h-14 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
+      <!-- Accordion Container -->
+      <div class="max-w-5xl mx-auto space-y-4">
+        <div
+          v-for="(service, index) in services"
+          :key="index"
+          class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
         >
-          <Icon name="mdi:chevron-left" class="w-8 h-8 text-gray-700 group-hover:text-gray-900" />
-        </button>
-
-        <button
-          @click="nextSlide"
-          class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-14 h-14 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
-        >
-          <Icon name="mdi:chevron-right" class="w-8 h-8 text-gray-700 group-hover:text-gray-900" />
-        </button>
-
-        <!-- Cards Container -->
-        <div class="overflow-hidden py-2">
-          <div 
-            class="flex transition-transform duration-500 ease-in-out gap-6"
-            :style="{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }"
+          <!-- Accordion Header -->
+          <button
+            @click="toggleService(index)"
+            class="w-full flex items-center justify-between gap-4 p-6 text-left hover:bg-gray-50 transition-colors duration-200"
           >
-            <div
-              v-for="(service, index) in services"
-              :key="index"
-              class="flex-shrink-0 w-full md:w-1/2 lg:w-1/3"
-            >
-              <!-- Service Card -->
-              <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col">
-                <!-- Image -->
-                <div class="overflow-hidden h-64">
-                  <img
-                    :src="service.image"
-                    :alt="service.title"
-                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
+            <div class="flex items-center gap-4 flex-1">
+              <!-- Icon -->
+              <div class="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center text-2xl">
+                {{ service.icon }}
+              </div>
+              
+              <!-- Title -->
+              <h3 class="text-lg md:text-xl font-bold text-gray-900 flex-1">
+                {{ service.title }}
+              </h3>
+            </div>
 
-                <!-- Content -->
-                <div class="p-6 flex flex-col flex-grow">
-                  <!-- Icon -->
-                  <div class="mb-4">
-                    <span class="text-4xl">{{ service.icon }}</span>
+            <!-- Chevron Icon -->
+            <Icon
+              name="mdi:chevron-down"
+              class="w-6 h-6 text-gray-500 transition-transform duration-300 flex-shrink-0"
+              :class="{ 'rotate-180': openIndex === index }"
+            />
+          </button>
+
+          <!-- Accordion Content -->
+          <Transition
+            enter-active-class="transition-all duration-300 ease-out"
+            enter-from-class="opacity-0 max-h-0"
+            enter-to-class="opacity-100 max-h-[1000px]"
+            leave-active-class="transition-all duration-300 ease-in"
+            leave-from-class="opacity-100 max-h-[1000px]"
+            leave-to-class="opacity-0 max-h-0"
+          >
+            <div v-show="openIndex === index" class="overflow-hidden">
+              <div class="px-6 pb-6 pt-2">
+                <div class="border-t border-gray-100 pt-6">
+                  <!-- Content Grid: Image left, Text right on lg -->
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                    <!-- Image -->
+                    <div class="rounded-xl overflow-hidden">
+                      <img
+                        :src="service.image"
+                        :alt="service.title"
+                        class="w-full h-64 lg:h-auto lg:max-h-64 object-cover"
+                      />
+                    </div>
+
+                    <!-- Text and CTA -->
+                    <div class="flex flex-col justify-between">
+                      <!-- Description -->
+                      <p class="text-gray-600 leading-relaxed mb-6">
+                        {{ service.description }}
+                      </p>
+
+                      <!-- CTA Button -->
+                      <NuxtLink
+                        :to="service.ctaLink"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-secondary text-white font-semibold rounded-xl hover:bg-secondary/90 transition-all duration-200 hover:scale-105 shadow-lg shadow-secondary/25"
+                      >
+                        {{ service.ctaText }}
+                        <Icon name="mdi:arrow-right" class="w-5 h-5 ml-2" />
+                      </NuxtLink>
+                    </div>
                   </div>
-                  
-                  <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                    {{ service.title }}
-                  </h3>
-                  
-                  <p class="text-gray-600 leading-relaxed mb-6 flex-grow">
-                    {{ service.description }}
-                  </p>
-
-                  <!-- CTA Button -->
-                  <NuxtLink
-                    :to="service.ctaLink"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-secondary text-white font-semibold rounded-lg hover:bg-secondary/90 transition-all duration-200 hover:scale-105"
-                  >
-                    {{ service.ctaText }}
-                    <Icon name="mdi:arrow-right" class="w-5 h-5 ml-2" />
-                  </NuxtLink>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Dots Indicator -->
-        <div class="flex justify-center gap-2 mt-8">
-          <button
-            v-for="(dot, index) in Math.ceil(services.length / itemsPerView)"
-            :key="index"
-            @click="goToSlide(index)"
-            class="w-2.5 h-2.5 rounded-full transition-all duration-300"
-            :class="currentIndex === index ? 'bg-quaternary w-8' : 'bg-gray-300 hover:bg-gray-400'"
-          />
+          </Transition>
         </div>
       </div>
 
@@ -102,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref } from 'vue';
 
 interface Service {
   icon: string;
@@ -164,45 +162,13 @@ const services: Service[] = [
   }
 ];
 
-const currentIndex = ref(0);
-const itemsPerView = ref(3);
+const openIndex = ref<number | null>(null);
 
-const updateItemsPerView = () => {
-  if (window.innerWidth < 768) {
-    itemsPerView.value = 1;
-  } else if (window.innerWidth < 1024) {
-    itemsPerView.value = 2;
+const toggleService = (index: number) => {
+  if (openIndex.value === index) {
+    openIndex.value = null;
   } else {
-    itemsPerView.value = 3;
+    openIndex.value = index;
   }
 };
-
-const nextSlide = () => {
-  if (currentIndex.value < services.length - itemsPerView.value) {
-    currentIndex.value++;
-  } else {
-    currentIndex.value = 0;
-  }
-};
-
-const previousSlide = () => {
-  if (currentIndex.value > 0) {
-    currentIndex.value--;
-  } else {
-    currentIndex.value = services.length - itemsPerView.value;
-  }
-};
-
-const goToSlide = (index: number) => {
-  currentIndex.value = index;
-};
-
-onMounted(() => {
-  updateItemsPerView();
-  window.addEventListener('resize', updateItemsPerView);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateItemsPerView);
-});
 </script>

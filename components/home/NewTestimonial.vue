@@ -13,25 +13,25 @@
       </div>
 
       <!-- Testimonial Slider -->
-      <div class="relative max-w-6xl mx-auto">
+      <div class="relative max-w-6xl mx-auto px-12 md:px-0">
         
         <!-- Navigation Buttons -->
         <button
           @click="previousTestimonial"
-          class="absolute left-0 md:-left-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
+          class="absolute left-2 md:-left-16 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
           :class="{ 'opacity-50 cursor-not-allowed': currentIndex === 0 }"
           :disabled="currentIndex === 0"
         >
-          <Icon name="mdi:chevron-left" class="w-7 h-7 text-gray-700 group-hover:text-gray-900" />
+          <Icon name="mdi:chevron-left" class="w-5 h-5 md:w-7 md:h-7 text-gray-700 group-hover:text-gray-900" />
         </button>
 
         <button
           @click="nextTestimonial"
-          class="absolute right-0 md:-right-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
+          class="absolute right-2 md:-right-16 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
           :class="{ 'opacity-50 cursor-not-allowed': currentIndex === testimonials.length - 1 }"
           :disabled="currentIndex === testimonials.length - 1"
         >
-          <Icon name="mdi:chevron-right" class="w-7 h-7 text-gray-700 group-hover:text-gray-900" />
+          <Icon name="mdi:chevron-right" class="w-5 h-5 md:w-7 md:h-7 text-gray-700 group-hover:text-gray-900" />
         </button>
 
         <!-- Testimonials Container -->

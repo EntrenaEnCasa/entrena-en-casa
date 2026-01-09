@@ -12,7 +12,7 @@
                         <CommonVideoPlayer video-src="/videos/entrena-en-casa.mp4" />
                     </div>
                 </div>
-                <div class="mx-auto w-full font-light leading-tight lg:w-11/12">
+                <div class="mx-auto w-full font-light leading-tight text-center md:text-left lg:w-11/12">
                     <p>
                         Elige localidad y si quieres entrenar en tu casa, al aire libre o de manera
                         Online. Nuestros entrenamientos están pensados en hacer de la actividad

@@ -16,31 +16,31 @@
       </div>
 
       <!-- Slider Container -->
-      <div class="relative">
+      <div class="relative px-12 md:px-0">
         
         <!-- Navigation Buttons -->
         <button
           @click="previousSlide"
-          class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-14 h-14 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
+          class="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-12 z-10 w-10 h-10 md:w-14 md:h-14 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
           :class="{ 'opacity-50 cursor-not-allowed': currentIndex === 0 }"
           :disabled="currentIndex === 0"
         >
-          <Icon name="mdi:chevron-left" class="w-8 h-8 text-gray-700 group-hover:text-gray-900" />
+          <Icon name="mdi:chevron-left" class="w-6 h-6 md:w-8 md:h-8 text-gray-700 group-hover:text-gray-900" />
         </button>
 
         <button
           @click="nextSlide"
-          class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-14 h-14 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
+          class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 md:translate-x-12 z-10 w-10 h-10 md:w-14 md:h-14 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
           :class="{ 'opacity-50 cursor-not-allowed': currentIndex >= professionals.length - itemsPerView }"
           :disabled="currentIndex >= professionals.length - itemsPerView"
         >
-          <Icon name="mdi:chevron-right" class="w-8 h-8 text-gray-700 group-hover:text-gray-900" />
+          <Icon name="mdi:chevron-right" class="w-6 h-6 md:w-8 md:h-8 text-gray-700 group-hover:text-gray-900" />
         </button>
 
         <!-- Cards Container -->
         <div class="overflow-hidden py-2">
           <div 
-            class="flex transition-transform duration-500 ease-in-out gap-6"
+            class="flex transition-transform duration-500 ease-in-out gap-4 md:gap-6"
             :style="{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }"
           >
             <div
