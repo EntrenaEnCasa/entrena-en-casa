@@ -73,10 +73,24 @@
 
                     <!-- Text and CTA -->
                     <div class="flex flex-col justify-between">
-                      <!-- Description -->
-                      <p class="text-gray-600 leading-relaxed mb-6">
-                        {{ service.description }}
-                      </p>
+                      <div>
+                        <!-- Description -->
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                          {{ service.description }}
+                        </p>
+
+                        <!-- Features List -->
+                        <ul v-if="service.features" class="space-y-2 mb-6">
+                          <li
+                            v-for="(feature, idx) in service.features"
+                            :key="idx"
+                            class="flex items-start gap-2 text-gray-600"
+                          >
+                            <Icon name="mdi:check-circle" class="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
+                            <span>{{ feature }}</span>
+                          </li>
+                        </ul>
+                      </div>
 
                       <!-- CTA Button -->
                       <NuxtLink
@@ -106,6 +120,7 @@ interface Service {
   icon: string;
   title: string;
   description: string;
+  features?: string[];
   image: string;
   ctaText: string;
   ctaLink: string;
@@ -114,32 +129,59 @@ interface Service {
 const services: Service[] = [
   {
     icon: '💻',
-    title: 'Personal Trainer Online y Presencial',
-    description: 'Tu rutina, a un clic de distancia. Participa en clases dirigidas de Pilates, Yoga, HIIT, Funcional, Movilidad y más, guiadas por instructores certificados. Acceso desde cualquier ciudad o dispositivo con planes flexibles 2 o 3 veces por semana.',
+    title: 'Personal Trainer Personalizado Online y Presencial',
+    description: 'Entrena desde cualquier lugar o en la comodidad de tu hogar con un entrenador certificado y el respaldo de EntrenaEnCasa. Ideal para personas con poco tiempo, que viajan o prefieren entrenar desde casa. Modalidades: individual, dupla o familiar.',
+    features: [
+      'Evaluación inicial y planificación personalizada',
+      'Entrenamientos guiados en tiempo real (online) o presencial',
+      'Seguimiento y ajustes constantes',
+      'Soporte del equipo profesional',
+      'Garantía de continuidad del servicio'
+    ],
     image: '/home/services/personal-trainer.jpg',
-    ctaText: 'Únete a nuestras clases',
+    ctaText: 'Agenda una asesoría gratuita',
+    ctaLink: '#contact'
+  },
+  {
+    icon: '👥',
+    title: 'Clases Grupales Online y Presenciales',
+    description: 'Accede a clases grupales cerca de donde vives o entrena online en vivo con horarios flexibles y profesionales certificados de distintas partes del mundo. Todo con seguimiento y respaldo EntrenaEnCasa para que entrenar sea simple, accesible y continuo.',
+    features: [
+      'Explora clases disponibles cerca de tu ubicación',
+      'Gestiona tu asistencia desde nuestra plataforma',
+      'Accede a clases online en vivo con entrenadores internacionales',
+      'Pilates, Yoga, HIIT, Funcional, Movilidad y más'
+    ],
+    image: '/home/services/brain-training.jpg',
+    ctaText: 'Encuentra clases cerca de ti',
     ctaLink: '/user/auth/register'
   },
   {
     icon: '🧓',
     title: 'Programas de Entrenamiento para Longevidad',
-    description: 'Fuerza, equilibrio y autonomía a cualquier edad. Programa especializado basado en ciencia y experiencia. Ayuda a prevenir caídas, mantener independencia y mejorar la movilidad diaria con entrenadores especializados en longevidad y salud funcional.',
+    description: 'Fuerza, equilibrio y autonomía a cualquier edad. Programa especializado que ayuda a prevenir caídas, mantener independencia y mejorar la movilidad diaria. Entrenamiento seguro con base científica y acompañamiento humano.',
+    features: [
+      'Entrenadores especializados en longevidad y salud funcional',
+      'Ejercicios seguros, progresivos y controlados',
+      'Entrenamiento Funcional Motor Cognitivo (Brain Functional Training)',
+      'Coordinación con profesionales de la salud',
+      'Evaluaciones periódicas y seguimiento personalizado'
+    ],
     image: '/home/services/longevidad.jpg',
     ctaText: 'Conoce nuestros planes senior',
-    ctaLink: 'https://programa-de-entrenamient-n3t3rh7.gamma.site/'
-  },
-  {
-    icon: '🧠',
-    title: 'Clases Grupales Online/Presencial',
-    description: 'Ejercita cuerpo y cerebro. Basado en el método Brain Functional Training, combina movimiento, coordinación, memoria y toma de decisiones. Ideal para adultos mayores y personas que buscan prevenir el deterioro cognitivo con protocolos avalados por investigación científica.',
-    image: '/home/services/brain-training.jpg',
-    ctaText: 'Ver clases disponibles',
-    ctaLink: '/user/auth/login'
+    ctaLink: '#contact'
   },
   {
     icon: '🏢',
     title: 'Gestión de Gimnasios en Condominios y Empresas',
-    description: 'Llevamos la experiencia EntrenaEnCasa a tu comunidad o lugar de trabajo. Administramos, planificamos y operamos gimnasios con profesores certificados, registro de asistencia, reportes de impacto y programas personalizados para cada tipo de residente o colaborador.',
+    description: 'Llevamos la experiencia EntrenaEnCasa a tu comunidad o lugar de trabajo. Administramos, planificamos y operamos gimnasios con profesionales certificados. Transformamos espacios subutilizados en centros de bienestar activos.',
+    features: [
+      'Profesores certificados y evaluados',
+      'Registro de asistencia automatizado',
+      'Reportes de impacto y satisfacción',
+      'Programas personalizados para cada tipo de residente o colaborador',
+      'Gestión integral del espacio deportivo'
+    ],
     image: '/home/services/gimnasios.jpg',
     ctaText: 'Solicita una propuesta',
     ctaLink: '#contact'
@@ -147,7 +189,14 @@ const services: Service[] = [
   {
     icon: '🧑‍🏫',
     title: 'Asesorías Profesionales y Educación Continua',
-    description: 'Formamos entrenadores con propósito. Ofrecemos mentorías, cursos y capacitaciones para profesionales del movimiento que buscan mejorar su impacto y gestión. Cursos de entrenamiento funcional, fuerza y envejecimiento activo basados en evidencia científica.',
+    description: 'Formamos entrenadores con propósito. Ofrecemos mentorías, cursos y capacitaciones para profesionales del movimiento que buscan mejorar su impacto y gestión. Eleva tu práctica profesional con formación respaldada por experiencia y ciencia.',
+    features: [
+      'Cursos de entrenamiento funcional y fuerza',
+      'Programas de envejecimiento activo',
+      'Metodologías basadas en evidencia científica',
+      'Mentorías personalizadas para profesionales',
+      'Certificaciones y educación continua'
+    ],
     image: '/home/services/educacion.jpg',
     ctaText: 'Ver programas educativos',
     ctaLink: '/blog'
@@ -155,7 +204,14 @@ const services: Service[] = [
   {
     icon: '🏋️',
     title: 'Venta de Equipamiento Profesional',
-    description: 'Somos distribuidores oficiales de marcas líderes como Athletic, Reebok y Eleiko. Ofrecemos asesoría técnica completa, diseño de layout funcional, equipamiento profesional, instalación certificada y programas de entrenamiento para maximizar el uso del gimnasio.',
+    description: 'Somos distribuidores oficiales de marcas líderes como Athletic, Reebok y Eleiko. Solución integral para tu gimnasio. Maximiza tu inversión con equipamiento de calidad y el respaldo de expertos en fitness.',
+    features: [
+      'Asesoría técnica completa y personalizada',
+      'Diseño de layout funcional optimizado',
+      'Equipamiento profesional de alta calidad',
+      'Instalación certificada y garantizada',
+      'Programas de entrenamiento incluidos'
+    ],
     image: '/home/services/equipamiento.jpg',
     ctaText: 'Solicita tu cotización',
     ctaLink: '#contact'

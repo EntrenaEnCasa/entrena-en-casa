@@ -55,7 +55,7 @@
               class="overflow-hidden"
             >
               <div class="px-6 md:px-8 pb-6 pt-2">
-                <p class="text-gray-600 leading-relaxed">
+                <p class="text-gray-600 leading-relaxed whitespace-pre-line">
                   {{ faq.answer }}
                 </p>
               </div>
@@ -78,59 +78,39 @@ interface FAQ {
 
 const faqs: FAQ[] = [
   {
-    question: '¿Cómo funciona EntrenaEnCasa?',
-    answer: 'EntrenaEnCasa conecta a personas con entrenadores profesionales para realizar sesiones personalizadas a domicilio, online o al aire libre. Solo debes crear tu perfil, agendar tu evaluación gratuita y seleccionar el tipo de plan que mejor se adapte a tus objetivos. Luego, tu entrenador diseña un programa hecho especialmente para ti.'
+    question: '🚀 ¿Cómo funciona EntrenaEnCasa?',
+    answer: 'EntrenaEnCasa conecta a personas con entrenadores profesionales para realizar sesiones personalizadas a domicilio, online o al aire libre.\n\nSolo debes crear tu perfil, agendar tu evaluación y seleccionar el tipo de plan que mejor se adapte a tus objetivos.\n\n✅ Tu plan es gestionado y respaldado por EntrenaEnCasa\n✅ Pagos, agenda, seguimiento y continuidad están centralizados\n✅ Si tu entrenador no puede continuar, nosotros nos encargamos del reemplazo\n\n💡 No contratas solo a una persona. Contratas un sistema que te acompaña.'
   },
   {
-    question: '¿Necesito tener equipamiento para entrenar?',
-    answer: 'No necesariamente. Nuestros entrenadores adaptan cada sesión al espacio y materiales que tengas en casa. Podrás entrenar solo con tu peso corporal, y si lo deseas, el profesor puede llevar implementos básicos (bandas, pesas, TRX, etc.).'
+    question: '🏠 ¿Necesito tener equipamiento para entrenar?',
+    answer: 'No necesariamente. Nuestros entrenadores adaptan cada sesión al espacio y materiales que tengas en casa. Podrás entrenar solo con tu peso corporal, y si lo deseas, el profesor puede llevar implementos básicos (bandas, pesas, TRX, etc.). Además tenemos planes de Entrenamiento con kit de entrenamiento incluido.'
   },
   {
-    question: '¿Cuánto duran las sesiones?',
-    answer: 'Cada sesión tiene una duración promedio de 45 a 60 minutos, dependiendo de tu nivel, condición física y objetivos. El tiempo se adapta a ti, no al revés.'
+    question: '⏰ ¿Cuánto duran las sesiones?',
+    answer: 'Cada sesión tiene una duración promedio de 60 minutos, dependiendo de tu nivel, condición física y objetivos. El tiempo se adapta a ti, no al revés.'
   },
   {
-    question: '¿Quiénes son los entrenadores?',
-    answer: 'Todo nuestro equipo está formado por profesores de Educación Física y especialistas certificados en ejercicio físico y salud, con años de experiencia en entrenamiento funcional, fuerza, rehabilitación y longevidad.'
+    question: '🧠 ¿Qué diferencia a EntrenaEnCasa de un gimnasio tradicional?',
+    answer: 'Nuestro enfoque es personalizado, funcional e inclusivo. No solo entrenamos, educamos y acompañamos. Nos distingue la cercanía, el respaldo y la historia de un equipo que cree que el ejercicio es más que movimiento: es salud y bienestar.'
   },
   {
-    question: '¿Puedo entrenar online si no tengo experiencia?',
+    question: '💻 ¿Puedo entrenar online si no tengo experiencia?',
     answer: '¡Por supuesto! Nuestras sesiones online son guiadas en tiempo real por un entrenador que te acompaña, corrige y motiva. No necesitas experiencia previa, solo conexión a internet y disposición a moverte.'
   },
   {
-    question: '¿Tienen programas para adultos mayores?',
-    answer: 'Sí. EntrenaEnCasa es pionera en programas de entrenamiento funcional motor-cognitivo para personas mayores. Mejoramos fuerza, equilibrio y autonomía con ejercicios seguros, basados en evidencia científica.'
-  },
-  {
-    question: '¿Puedo entrenar si tengo una lesión o condición médica?',
-    answer: 'Sí. Trabajamos en coordinación con kinesiólogos y médicos deportivos cuando es necesario. Nuestros entrenadores están capacitados para adaptar los ejercicios y garantizar un entrenamiento seguro y progresivo.'
-  },
-  {
-    question: '¿Cómo agendo o reprogramo mis clases?',
+    question: '📅 ¿Cómo agendo mis clases?',
     answer: 'Desde tu celular, en nuestra plataforma puedes ver tu calendario, filtrar por ciudad y reservar tu clase disponible del día. También puedes reagendar fácilmente si surge un imprevisto.'
   },
   {
-    question: '¿Cuáles son los medios de pago?',
+    question: '💰 ¿Cuáles son los medios de pago?',
     answer: 'Puedes pagar tus planes con tarjeta de crédito, débito o transferencia electrónica a través de un sistema seguro. Además, contamos con renovación automática mensual para mayor comodidad.'
   },
   {
-    question: '¿Incluyen evaluaciones o seguimiento?',
-    answer: 'Sí. Todas las modalidades incluyen una evaluación inicial gratuita y seguimientos periódicos para medir tu progreso físico y funcional. Te entregamos reportes claros, basados en datos.'
+    question: '🌎 ¿En qué ciudades están disponibles?',
+    answer: 'Nuestros clientes se encuentran en Santiago, Nuñoa, Las Condes, Providencia, Chicureo, Vitacura, Lo Barnechea, Viña del Mar, Concón, Rancagua, Antofagasta, Huechuraba y nuevas zonas en expansión. También puedes entrenar desde cualquier parte del país vía online.'
   },
   {
-    question: '¿En qué ciudades están disponibles?',
-    answer: 'Actualmente ofrecemos servicios en Santiago, Viña del Mar, Concón, Rancagua, Antofagasta y nuevas zonas en expansión. También puedes entrenar desde cualquier parte del país vía online.'
-  },
-  {
-    question: '¿Qué diferencia a EntrenaEnCasa de un gimnasio tradicional?',
-    answer: 'Nuestro enfoque es personalizado, funcional e inclusivo. No solo entrenamos, educamos y acompañamos. Nos distingue la cercanía, el respaldo profesional y la historia de un equipo que cree que el ejercicio es más que movimiento: es salud y bienestar.'
-  },
-  {
-    question: '¿Ofrecen capacitaciones o mentorías para entrenadores?',
-    answer: 'Sí. A través de nuestra línea educativa, desarrollamos cursos y mentorías para profesionales del movimiento que buscan mejorar su práctica y gestión. Creemos en compartir conocimiento y elevar el estándar del entrenamiento en Chile.'
-  },
-  {
-    question: '¿Puedo probar antes de contratar un plan?',
+    question: '💬 ¿Puedo probar antes de contratar un plan?',
     answer: 'Sí. Ofrecemos una evaluación inicial gratuita, donde conocerás a tu entrenador, revisarán tus objetivos y recibirás tus primeras recomendaciones personalizadas.'
   }
 ];

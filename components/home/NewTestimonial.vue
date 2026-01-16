@@ -129,25 +129,25 @@ const testimonials: Testimonial[] = [
     name: 'Claudio Romani',
     description: 'Local Guide',
     quote: 'Clases bien organizadas, profesores capacitados, buen nivel de conocimientos, excelencia y sobre todo comprometido con la actividad.',
-    image: '/home/testimonial/1.jpg'
+    image: '/home/testimonial/1.jpeg'
   },
   {
     name: 'Luisa Meléndez',
     description: 'Cliente',
     quote: 'Excelente servicio, las clases son muy dinámicas y entretenidas, se genera un ambiente de muchas buena onda! Los profes muy profesionales y simpáticos.',
-    image: '/home/testimonial/1.jpg'
+    image: '/home/testimonial/1.jpeg'
   },
   {
     name: 'Pedro Rodrigo Morales Pizarro',
     description: 'Cliente',
     quote: 'Excelentes entrenamientos para todo tipo de personas. Se adecuan a tus necesidades en un ambiente favorable para una actividad sana.',
-    image: '/home/testimonial/1.jpg'
+    image: '/home/testimonial/1.jpeg'
   },
   {
     name: 'Zeta',
     description: 'Cliente',
     quote: 'Profe muy motivado.',
-    image: '/home/testimonial/1.jpg'
+    image: '/home/testimonial/1.jpeg'
   }
 ];
 

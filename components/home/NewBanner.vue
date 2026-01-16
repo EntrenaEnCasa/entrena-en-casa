@@ -15,16 +15,12 @@
       <div class="max-w-2xl my-auto text-center md:text-left">
         <!-- Heading -->
         <h1 class="text-5xl w-5/6 mx-auto md:mx-0 font-bold text-gray-900 mb-6 leading-tight">
-          Muévete mejor,
-          <br />
-          vive mejor.
+         Personal Trainer a Domicilio y Online
         </h1>
         
         <!-- Subheading -->
-        <p class="text-base  w-5/6 mx-auto md:mx-0 md:text-lg text-gray-700 mb-8 font-light">
-          Conecta con un profesor, agenda en 3 clics
-          <br class="hidden md:block" />
-          y entrena donde estés.
+        <p class="text-base  w-5/6 mx-auto md:mx-0 md:text-md text-gray-700 mb-8 font-light">
+          Nos acomodamos a tus tiempos, vamos donde ti o nos conectamos de manera remota. Te ayudamos a dar ese primer paso.
         </p>
         
         <!-- CTA Buttons -->
@@ -48,14 +44,27 @@
             'rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1'
           ]"
         >
-          <div class="relative h-36 sm:h-40 lg:h-40 overflow-hidden">
-            <h3 class="text-white text-[11px] sm:text-sm lg:text-base font-semibold leading-tight z-10 p-3 sm:p-4 absolute top-1/2 left-0 transform -translate-y-2/3 w-1/2">
-              {{ category.title }}
-            </h3>
+          <div :class="`relative h-36 sm:h-40 lg:h-40 overflow-hidden`" :style="{ backgroundColor: getCategoryColor(category.bgColor) }">
+            <!-- Background Gradient Overlay -->
+            <div 
+              :class="`absolute inset-y-0 left-0 w-[80%] sm:w-[60%] lg:w-[50%] z-[1]`"
+              :style="{
+                background: `linear-gradient(to right, ${getCategoryColor(category.bgColor)}, transparent)`
+              }"
+            ></div>
+            
+            <!-- Text -->
+            <div class="absolute top-1/2 left-0 transform -translate-y-2/3 w-1/2 z-10">
+              <h3 class="text-white text-base font-semibold leading-tight p-3 sm:p-4">
+                {{ category.title }}
+              </h3>
+            </div>
+            
+            <!-- Image -->
             <img
               :src="category.image"
               :alt="category.title"
-              class="absolute bottom-0 right-0 w-full h-full object-cover object-right transition-transform duration-300 transform hover:scale-105"
+              class="absolute bottom-0 right-0 h-full w-auto max-w-[70%] max-h-[80%] md:max-w-none  md:max-h-none object-contain object-bottom transition-transform duration-300 hover:scale-105"
             />
           </div>
         </div>
@@ -89,26 +98,36 @@ const scrollToAbout = () => {
   }
 };
 
+const getCategoryColor = (bgColorClass: string): string => {
+  const colorMap: Record<string, string> = {
+    'card-1': '#00A4E8',
+    'card-2': '#0EB3E0',
+    'card-3': '#B5CD13',
+    'card-4': '#EE7203'
+  };
+  return colorMap[bgColorClass] || '#00A4E8';
+};
+
 const categories: Category[] = [
   {
-    title: 'Movilidad En Adultos Mayores',
+    title: 'Entrenamiento para todos',
     image: '/home/card-1.png',
-    bgColor: 'bg-cyan-500'
+    bgColor: 'card-1'
   },
   {
-    title: 'Entrenamiento Personalizado',
+    title: 'Asesoría constante',
     image: '/home/card-2.png',
-    bgColor: 'bg-cyan-500'
+    bgColor: 'card-2'
   },
   {
-    title: 'Rehabilitación Guiada',
+    title: 'Profesionales capacitados',
     image: '/home/card-3.png',
-    bgColor: 'bg-lime-500'
+    bgColor: 'card-3'
   },
   {
-    title: 'Pausa Activa Corporativa',
+    title: 'Planes Corporativos',
     image: '/home/card-4.png',
-    bgColor: 'bg-orange-500'
+    bgColor: 'card-4'
   }
 ];
 </script>

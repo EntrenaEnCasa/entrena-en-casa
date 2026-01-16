@@ -2,18 +2,19 @@
     <div>
         <HomeNewBanner />
         <main>
-          <HomeServices/>
+          <!-- <HomeServices/> -->
+            <HomeNewProblems/>
             <HomeAboutUs id="about" />
 
             <HomeNewServices />
             <!-- <HomeSlider /> -->
-
             <HomeNewFeatures />
+
             <HomeOurTeam />
             <HomeNewTestimonial />
             <HomeFAQ />
 
-            <HomeNewContact id="contact" />
+            <HomeNewContact />
         </main>
         <HomeWhatsappButton />
         <!-- <HomeSpecialOfferModal ref="specialOfferModal" /> -->

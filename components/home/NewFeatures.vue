@@ -1,5 +1,5 @@
 <template>
-  <section class="py-10 bg-white">
+  <section id="beneficios" class="py-10 bg-white">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         
@@ -9,7 +9,7 @@
             <img
               src="/home/img-section-3.png"
               alt="Wellness and fitness lifestyle"
-              class="w-full h-auto rounded-3xl"
+              class="w-full hidden md:block h-auto rounded-3xl"
             />
           </div>
         </div>
