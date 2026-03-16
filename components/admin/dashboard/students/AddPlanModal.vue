@@ -44,10 +44,82 @@
                                             Selecciona un plan
                                         </option>
                                         <option v-for="plan in plans" :value="plan.plan_id">
-                                            {{ formatPlan(plan.credit_type) }} -
+                                            {{ formatPlan(plan.credit_type) }} {{ plan.format_credit }} -
                                             {{ plan.credit_quantity }} créditos
                                         </option>
                                     </select>
+                                </div>
+                                
+                                <!-- Búsqueda de segundo estudiante para planes dupla -->
+                                <div v-if="isDuplaPlan" class="flex w-full flex-col items-center py-5">
+                                    <label class="mb-2 w-full text-left text-gray-500">
+                                        Selecciona el segundo estudiante para el plan dupla
+                                    </label>
+                                    <div class="relative w-full">
+                                        <div
+                                            class="box-border w-full rounded-lg border bg-white px-5 py-3.5 text-sm text-gray-800"
+                                            :class="{ 'ring-2 ring-inset ring-primary': searchFocused }"
+                                        >
+                                            <div class="flex flex-wrap items-center gap-x-2 gap-y-4">
+                                                <input
+                                                    type="text"
+                                                    v-model="searchTerm"
+                                                    placeholder="Ingresa el correo electrónico o nombre"
+                                                    class="w-full outline-none"
+                                                    @focus="searchFocused = true"
+                                                    @blur="searchFocused = false"
+                                                    @input="delayedSearchStudents"
+                                                />
+                                                <div v-if="secondStudent">
+                                                    <span
+                                                        class="inline-flex items-center rounded-full bg-secondary px-2.5 py-1.5 text-xs font-medium text-white"
+                                                    >
+                                                        <Icon
+                                                            @click="removeSecondStudent"
+                                                            class="mr-1 cursor-pointer text-lg"
+                                                            name="fa6-solid:circle-xmark"
+                                                        />
+                                                        <span v-if="secondStudent.first_name">
+                                                            {{ secondStudent.first_name }} {{ secondStudent.last_name }}
+                                                        </span>
+                                                        <span v-else>
+                                                            {{ secondStudent.email }}
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="absolute left-0 right-0 top-[110%] z-40 rounded-md border bg-white p-3 shadow-lg"
+                                                v-if="searchFocused && searchTerm && !secondStudent"
+                                            >
+                                                <CommonLoading v-if="searchLoading" text="Buscando" />
+                                                <ul v-else>
+                                                    <li
+                                                        v-if="filteredStudents.length === 0 && !searchLoading && searchTerm"
+                                                        class="px-3 py-2"
+                                                    >
+                                                        No se encontraron resultados
+                                                    </li>
+                                                    <li
+                                                        class="rounded px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                                                        v-for="result in filteredStudents"
+                                                        :key="result.user_id"
+                                                        @mousedown="selectSecondStudent(result)"
+                                                    >
+                                                        <p v-if="result.first_name" class="font-medium">
+                                                            {{ result.first_name }} {{ result.last_name }}
+                                                        </p>
+                                                        <p v-else class="font-medium">
+                                                            {{ result.email }}
+                                                        </p>
+                                                        <p class="text-xs">
+                                                            {{ result.email }}
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                             <div v-show="selectedPlan !== 0">
@@ -69,6 +141,19 @@
                                                         {{
                                                             formatPlan(selectedPlanData.credit_type)
                                                         }}
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="px-6 py-2">
+                                                <div
+                                                    class="mx-auto mb-5 grid w-5/6 grid-cols-2 items-center gap-5"
+                                                >
+                                                    <p class="text-right font-light">Formato</p>
+                                                    <p class="text-left font-bold">
+                                                        {{ selectedPlanData.format_credit }}
                                                     </p>
                                                 </div>
                                             </td>
@@ -215,6 +300,13 @@ const selectedPlan = ref<number>(0);
 const addPlanLoading = ref(false);
 const selectedPlanData = ref<Plan | null>();
 
+const searchTerm = ref<string>("");
+const searchFocused = ref<boolean>(false);
+const searchLoading = ref<boolean>(false);
+const searchResults = ref<Student[]>([]);
+const secondStudent = ref<Student | null>(null);
+let searchTimeout: NodeJS.Timeout | null = null;
+
 const props = defineProps<{
     student: Student | null;
 }>();
@@ -226,10 +318,74 @@ const openModal = () => {
 const closeModal = () => {
     modal.value?.closeModal();
     selectedPlan.value = 0;
+    secondStudent.value = null;
+    searchTerm.value = "";
+    searchResults.value = [];
+};
+
+const delayedSearchStudents = () => {
+    if (searchTimeout) clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        if (searchTerm.value.trim() !== "") {
+            searchStudents();
+        } else {
+            searchResults.value = [];
+        }
+    }, 500);
+};
+
+const searchStudents = async () => {
+    searchLoading.value = true;
+    try {
+        const response = await $fetch<any>(
+            `${runtimeConfig.public.apiBase}/admin/students/search`,
+            {
+                method: "POST",
+                credentials: "include",
+                body: {
+                    searchTerm: searchTerm.value,
+                },
+            },
+        );
+        if (response.success) {
+            searchResults.value = response.students;
+        } else {
+            toast.error(response.message);
+        }
+    } catch (error) {
+        console.error(error);
+        toast.error("Error al buscar estudiantes");
+    } finally {
+        searchLoading.value = false;
+    }
+};
+
+const selectSecondStudent = (student: Student) => {
+    secondStudent.value = student;
+    searchTerm.value = "";
+    searchResults.value = [];
+};
+
+const removeSecondStudent = () => {
+    secondStudent.value = null;
 };
 
 defineExpose({
     openModal,
+});
+
+// Detectar si el plan seleccionado es dupla basándose en el campo format_credit
+const isDuplaPlan = computed(() => {
+    if (!selectedPlanData.value) return false;
+    // Verificar si el format_credit es "Dupla"
+    return selectedPlanData.value.format_credit === 'Dupla';
+});
+
+// Filtrar estudiantes para excluir al estudiante actual
+const filteredStudents = computed(() => {
+    return searchResults.value.filter(
+        student => student.user_id !== props.student?.user_id
+    ).slice(0, 5);
 });
 
 const plans = ref<Plan[]>([]);
@@ -259,9 +415,20 @@ const getPlans = async () => {
 };
 
 const addPlan = async () => {
+    // Validar que si es plan dupla, debe haber un segundo estudiante
+    if (isDuplaPlan.value && !secondStudent.value) {
+        toast.error("Debes seleccionar un segundo estudiante para el plan dupla");
+        return;
+    }
+
     addPlanLoading.value = true;
 
     try {
+        // Construir el array de user_id según si es dupla o no
+        const userIds = isDuplaPlan.value && secondStudent.value
+            ? [props.student?.user_id, secondStudent.value.user_id]
+            : [props.student?.user_id];
+
         const response = await $fetch<APIResponse>(
             `${runtimeConfig.public.apiBase}/admin/students/credits`,
             {
@@ -271,7 +438,7 @@ const addPlan = async () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    user_id: [props.student?.user_id],
+                    user_id: userIds,
                     plan_id: selectedPlan.value,
                 }),
             },
@@ -305,7 +472,13 @@ const formatPlan = (creditType: string) => {
 watch(
     selectedPlan,
     (newSelectedPlan) => {
+        // Actualizar los datos del plan seleccionado
         selectedPlanData.value = plans.value.find((plan) => plan.plan_id === newSelectedPlan);
+        
+        // Resetear el segundo estudiante cuando cambia el plan
+        secondStudent.value = null;
+        searchTerm.value = "";
+        searchResults.value = [];
     },
     { immediate: true },
 );
