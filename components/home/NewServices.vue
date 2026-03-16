@@ -129,14 +129,33 @@ interface Service {
 const services: Service[] = [
   {
     icon: '💻',
-    title: 'Personal Trainer Personalizado Online y Presencial',
-    description: 'Entrena desde cualquier lugar o en la comodidad de tu hogar con un entrenador certificado y el respaldo de EntrenaEnCasa. Ideal para personas con poco tiempo, que viajan o prefieren entrenar desde casa. Modalidades: individual, dupla o familiar.',
+    title: 'Personal Trainer Online',
+    description: 'Entrena desde cualquier lugar con la guía de un profesional y el respaldo de EntrenaEnCasa. Nuestro entrenamiento online son en vivo, cuenta con una planificación estructurada y seguimiento profesional, permitiéndote entrenar de forma segura, flexible y efectiva, estés donde estés.',
     features: [
-      'Evaluación inicial y planificación personalizada',
-      'Entrenamientos guiados en tiempo real (online) o presencial',
+      'Evaluación inicial online',
+      'Entrenamientos guiados en tiempo real',
+      'Planificación personalizada',
       'Seguimiento y ajustes constantes',
-      'Soporte del equipo profesional',
-      'Garantía de continuidad del servicio'
+      'Soporte del equipo EntrenaEnCasa',
+      'Ideal para personas con poco tiempo, que viajan o prefieren entrenar desde casa',
+      'Modalidades: individual, dupla o familiar'
+    ],
+    image: '/home/services/personal-trainer.jpg',
+    ctaText: 'Agenda una asesoría gratuita',
+    ctaLink: '#contact'
+  },
+  {
+    icon: '🏠',
+    title: 'Personal Trainer a Domicilio',
+    description: 'Entrena en la comodidad de tu hogar con un entrenador personal certificado, adaptando cada sesión a tu espacio, tiempo y objetivos. En EntrenaEnCasa diseñamos programas personalizados basados en evaluación inicial, planificación progresiva y seguimiento continuo, todo respaldado por nuestra plataforma y equipo profesional.',
+    features: [
+      'Evaluación inicial y definición de objetivos',
+      'Entrenador personal certificado',
+      'Planificación adaptada a tu nivel y espacio',
+      'Seguimiento y control del proceso',
+      'Garantía de continuidad del servicio',
+      'Ideal para quienes buscan resultados, privacidad y constancia sin ir al gimnasio',
+      'Modalidades: individual y dupla'
     ],
     image: '/home/services/personal-trainer.jpg',
     ctaText: 'Agenda una asesoría gratuita',
