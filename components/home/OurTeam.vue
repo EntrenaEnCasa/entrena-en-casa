@@ -1,6 +1,6 @@
 <template>
   <section class="py-10 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-12" v-show="professionals.length > 0">
       
       <!-- Header -->
       <div class="text-center mb-12">
