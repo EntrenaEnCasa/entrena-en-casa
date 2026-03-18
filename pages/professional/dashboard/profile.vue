@@ -6,36 +6,89 @@
                     class="flex h-full flex-col items-center rounded-lg border bg-white p-6 shadow-lg"
                 >
                     <!-- Circle image container -->
-                    <div class="-mt-40 mb-4 h-52 w-52 rounded-full bg-white p-4">
-                        <NuxtImg src="/icons/dumbbell.png" class="h-full w-full object-cover" />
+                    <div class="relative -mt-40 mb-4">
+                        <div class="h-52 w-52 overflow-hidden rounded-full bg-cyan-500 p-1">
+                            <img 
+                                v-if="profileData.photo_url" 
+                                :src="profileData.photo_url" 
+                                class="h-full w-full rounded-full object-cover" 
+                                alt="Profile Photo"
+                            />
+                            <NuxtImg 
+                                v-else 
+                                src="/icons/dumbbell.png" 
+                                class="h-full w-full rounded-full object-cover" 
+                            />
+                        </div>
+                        <!-- Camera icon button -->
+                        <button
+                            @click="openPhotoUploadModal"
+                            class="absolute bottom-0 right-0 flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-white shadow-lg hover:bg-secondary-600"
+                        >
+                            <Icon name="fa6-solid:camera" class="text-xl" />
+                        </button>
                     </div>
                     <!-- Content container -->
                     <div class="flex flex-col gap-4 text-center">
-                        <div v-if="userStore.user.first_name">
-                            <p class="text-sm text-gray-500">Nombre profesional</p>
+                        <div>
+                            <p class="text-sm text-gray-500">Nombre Profesional</p>
                             <p class="text-2xl font-semibold">
-                                {{ userStore.user.first_name }}
-                                {{ userStore.user.last_name }}
+                                {{ profileData.first_name && profileData.last_name 
+                                    ? `${profileData.first_name} ${profileData.last_name}` 
+                                    : 'Sin información' }}
                             </p>
                         </div>
-                        <div v-if="userStore.user.title">
-                            <p class="text-sm text-gray-500">Título</p>
+                        <div>
+                            <p class="text-sm text-gray-500">Fecha de Nacimiento</p>
                             <p class="text-lg font-medium">
-                                {{ userStore.user.title }}
+                                {{ formattedBirthDate || 'Sin información' }}
                             </p>
                         </div>
-                        <div v-if="userStore.user.email">
+                        <div>
                             <p class="text-sm text-gray-500">Correo contacto</p>
                             <p class="text-lg font-medium">
-                                {{ userStore.user.email }}
+                                {{ userStore.user?.email || 'Sin información' }}
                             </p>
                         </div>
-                        <div v-if="userStore.user.phone">
+                        <div>
                             <p class="text-sm text-gray-500">Número de teléfono de contacto</p>
                             <p class="text-lg font-medium">
-                                {{ userStore.user.phone }}
+                                {{ profileData.phone || 'Sin información' }}
                             </p>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Professional Information Section -->
+            <div class="rounded-lg border bg-white p-8 shadow-lg">
+                <div class="mb-6 flex items-center justify-between">
+                    <h3 class="text-2xl font-semibold">Información Profesional</h3>
+                    <button 
+                        @click="openEditProfileModal" 
+                        class="flex items-center gap-2 text-gray-600 hover:text-primary"
+                    >
+                        <span class="text-sm">Editar</span>
+                        <Icon name="fa6-solid:pen" class="text-sm" />
+                    </button>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-sm text-gray-500">Título Profesional *</p>
+                        <p class="text-lg font-medium">
+                            {{ profileData.title || 'No especificado' }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Instituto o Universidad</p>
+                        <p class="text-lg font-medium">
+                            {{ profileData.institution || 'No especificado' }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Biografía</p>
+                        <p class="text-base leading-relaxed text-gray-700">
+                            {{ profileData.biography || 'No hay biografía disponible' }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -50,12 +103,12 @@
                 <div v-else-if="getCoverageRangesError">
                     <p class="text-red-500">Hubo un error al cargar los rangos de cobertura</p>
                 </div>
-                <div v-else-if="!coverageRanges.success">
+                <div v-else-if="!coverageRanges?.success">
                     No hay rangos de cobertura actualmente
                 </div>
                 <div v-else class="flex flex-col items-center gap-y-2">
                     <div
-                        v-for="(range, index) in coverageRanges.data"
+                        v-for="(range, index) in coverageRanges?.data"
                         class="inline-flex items-center gap-x-2 rounded-full bg-gray-100 px-6 py-1.5"
                     >
                         <p class="font-semibold">{{ range.range_name }}</p>
@@ -187,29 +240,88 @@
                 </div>
             </CommonModal>
         </Teleport>
+        
+        <!-- Profile Modals -->
+        <ProfessionalDashboardProfileEditProfileModal
+            ref="editProfileModal"
+            :profileData="profileData"
+            @save="saveProfileChanges"
+        />
+        
+        <ProfessionalDashboardProfilePhotoUploadModal
+            ref="photoUploadModal"
+            @fileSelected="handleFileSelected"
+        />
+        
+        <ProfessionalDashboardProfilePhotoCropModal
+            ref="photoCropModal"
+            @confirm="confirmPhotoChange"
+        />
     </div>
 </template>
 
-<script setup>
-import * as turf from "@turf/turf";
+<script setup lang="ts">
+// @ts-ignore - TypeScript module resolution issue with @turf/circle
+import circle from "@turf/circle";
 import { useUserStore } from "~/stores/UserStore";
 import { useMapInteraction } from "~/composables/maps/useMapInteraction";
 import { useGeocoding } from "~/composables/maps/useGeocoding";
 import { useToast } from "vue-toastification";
 
-const DEFAULT_COORDINATES = [-71.593916, -33.040681];
+// Types
+interface CoverageRange {
+    range_id: number;
+    range_name: string;
+    radius: number;
+    lng: number;
+    lat: number;
+    short_code: string;
+}
+
+interface CoverageRangesResponse {
+    success: boolean;
+    message?: string;
+    data: CoverageRange[];
+}
+
+const DEFAULT_COORDINATES: [number, number] = [-71.593916, -33.040681];
 const DEFAULT_RADIUS = "1";
 const MIN_RADIUS = 1;
 const MAX_RADIUS = 30;
 const CIRCLE_OPACITY = 0.5;
 
 const editMode = ref(false);
-const editIndex = ref(null);
+const editIndex = ref<number | null>(null);
 
 const addCoverageRangeLoading = ref(false);
 const updateCoverageRangeLoading = ref(false);
 const deleteCoverageRangeLoading = ref(false);
 const rangeName = ref("");
+
+// Composables
+const userStore = useUserStore();
+
+// Profile data
+const profileData = reactive({
+    photo_url: (userStore.user as Professional)?.photo_url || null,
+    first_name: (userStore.user as Professional)?.first_name || '',
+    last_name: (userStore.user as Professional)?.last_name || '',
+    birth_date: (userStore.user as Professional)?.birth_date || '',
+    phone: (userStore.user as Professional)?.phone || '',
+    title: (userStore.user as Professional)?.title || '',
+    institution: (userStore.user as Professional)?.institution || '',
+    biography: (userStore.user as Professional)?.biography || ''
+});
+
+// Format birth date for display (DD/MM/YYYY)
+const formattedBirthDate = computed(() => {
+    if (!profileData.birth_date) return '';
+    const date = new Date(profileData.birth_date);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+});
 
 // IDs
 const markerID = ref("draggableMarker");
@@ -218,7 +330,7 @@ const mapID = ref("map");
 // Refs
 const mapRef = useMapboxRef(mapID.value);
 const marker = useMapboxMarkerRef(markerID.value);
-const geocoderComponent = ref(null);
+const geocoderComponent = ref<{ updateSearchTerm: (term: string) => void } | null>(null);
 
 // Data
 const mapZoom = computed(() => {
@@ -231,7 +343,7 @@ const inputRadiusMaxValue = ref(MAX_RADIUS);
 const inputRadius = ref(DEFAULT_RADIUS); // Default radius in kilometers (km)
 
 // Radius circle
-const markerCoordinates = ref(DEFAULT_COORDINATES);
+const markerCoordinates = ref<[number, number]>(DEFAULT_COORDINATES);
 
 const circleData = reactive({
     enabled: false,
@@ -243,7 +355,6 @@ const circleData = reactive({
 });
 
 // Composables
-const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const {
     prepareFlyTo,
@@ -261,8 +372,8 @@ const {
     error: getCoverageRangesError,
     pending: getCoverageRangesLoading,
     refresh: getCoverageRanges,
-} = await useFetch(
-    `${runtimeConfig.public.apiBase}/professional/range/user/${userStore.user.user_id}`,
+} = await useFetch<CoverageRangesResponse>(
+    `${runtimeConfig.public.apiBase}/professional/range/user/${userStore.user?.user_id}`,
     {
         method: "GET",
         credentials: "include",
@@ -276,7 +387,7 @@ const addCoverage = async () => {
     const short_code = geoData.context[3].short_code;
 
     const body = {
-        user_id: userStore.user.user_id,
+        user_id: userStore.user?.user_id,
         range_name: rangeName.value,
         radius: inputRadius.value,
         lng: markerCoordinates.value[0],
@@ -285,7 +396,7 @@ const addCoverage = async () => {
     };
 
     try {
-        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/range`, {
+        const response = await $fetch<{ success: boolean; message: string }>(`${runtimeConfig.public.apiBase}/professional/range`, {
             method: "POST",
             credentials: "include",
             body: body,
@@ -307,7 +418,7 @@ const addCoverage = async () => {
 
 const saveEditChanges = async () => {
     updateCoverageRangeLoading.value = true;
-    const rangeID = coverageRanges.value.data[editIndex.value].range_id;
+    const rangeID = coverageRanges.value!.data[editIndex.value!].range_id;
 
     // Prepare the request body
     const body = {
@@ -319,7 +430,7 @@ const saveEditChanges = async () => {
     };
 
     try {
-        const response = await $fetch(`${runtimeConfig.public.apiBase}/professional/range`, {
+        const response = await $fetch<{ success: boolean; message: string }>(`${runtimeConfig.public.apiBase}/professional/range`, {
             method: "PUT",
             credentials: "include",
             body: body,
@@ -342,10 +453,10 @@ const saveEditChanges = async () => {
 
 const deleteCoverage = async () => {
     deleteCoverageRangeLoading.value = true;
-    const rangeID = coverageRanges.value.data[editIndex.value].range_id;
+    const rangeID = coverageRanges.value!.data[editIndex.value!].range_id;
 
     try {
-        const response = await $fetch(
+        const response = await $fetch<{ success: boolean; message: string }>(
             `${runtimeConfig.public.apiBase}/professional/delete-range/${rangeID}`,
             {
                 method: "DELETE",
@@ -373,12 +484,12 @@ const resetModal = () => {
     setMarkerCoordinates(DEFAULT_COORDINATES);
 };
 
-const openEditModal = (index) => {
-    rangeName.value = coverageRanges.value.data[index].range_name;
-    inputRadius.value = coverageRanges.value.data[index].radius;
-    const coordinates = [
-        coverageRanges.value.data[index].lng,
-        coverageRanges.value.data[index].lat,
+const openEditModal = (index: number) => {
+    rangeName.value = coverageRanges.value!.data[index].range_name;
+    inputRadius.value = String(coverageRanges.value!.data[index].radius);
+    const coordinates: [number, number] = [
+        coverageRanges.value!.data[index].lng,
+        coverageRanges.value!.data[index].lat,
     ];
     setMarkerCoordinates(coordinates);
     editIndex.value = index;
@@ -386,11 +497,11 @@ const openEditModal = (index) => {
     openModal();
 };
 
-const createGeojsonCircle = (center, radiusInKm) => {
+const createGeojsonCircle = (center: number[], radiusInKm: string | number) => {
     if (!center || center.length !== 2 || !radiusInKm) {
-        throw new Error("Invalid inputs for creating a circle:", center, radiusInKm);
+        throw new Error(`Invalid inputs for creating a circle: ${center}, ${radiusInKm}`);
     }
-    return turf.circle(center, radiusInKm, { steps: 80, units: "kilometers" });
+    return circle(center, radiusInKm, { steps: 80, units: "kilometers" });
 };
 
 const circleGeoJSON = computed(() => {
@@ -415,22 +526,24 @@ watch(
     { immediate: true },
 );
 
-const flyToLocation = (location) => {
+const flyToLocation = (location: { center: number[] }) => {
     setCircleOpacity(0);
-    const newCoordinates = location.center;
+    const newCoordinates = location.center as [number, number];
     const currentLocation = mapRef.value?.getCenter().toArray();
     const { duration, zoom } = prepareFlyTo(currentLocation, newCoordinates, inputRadius.value);
 
     debounceFlyTo(newCoordinates, zoom, { duration });
 
-    mapRef.value.once("moveend", () => {
-        setMarkerCoordinates(newCoordinates);
-        setCircleOpacity(CIRCLE_OPACITY);
-        mapRef.value.off("moveend", addMarker);
-    });
+    if (mapRef.value) {
+        mapRef.value.once("moveend", () => {
+            setMarkerCoordinates(newCoordinates);
+            setCircleOpacity(CIRCLE_OPACITY);
+        });
+    }
 };
 
-const setMarkerCoordinates = (coordinates) => {
+const setMarkerCoordinates = (coordinates: [number, number]) => {
+    if (!marker.value) return;
     const currentCoordinates = marker.value.getLngLat().toArray();
     const { duration, zoom } = prepareFlyTo(currentCoordinates, coordinates, inputRadius.value);
     markerCoordinates.value = coordinates;
@@ -444,14 +557,14 @@ const onMarkerDragStart = () => {
 
 const onMarkerDragEnd = () => {
     if (!marker.value) return;
-    const newCoordinates = marker.value.getLngLat().toArray();
+    const newCoordinates = marker.value.getLngLat().toArray() as [number, number];
     markerCoordinates.value = newCoordinates;
     setCircleOpacity(CIRCLE_OPACITY);
     flyToCenter();
     updateInputValue();
 };
 
-const setCircleOpacity = (opacity) => {
+const setCircleOpacity = (opacity: number) => {
     circleData.opacity = opacity;
 };
 
@@ -459,18 +572,253 @@ const setCircleOpacity = (opacity) => {
 const updateInputValue = async () => {
     const geocodingData = await getReverseGeocodingData(markerCoordinates.value);
     const address = geocodingData.place_name;
-    geocoderComponent.value.updateSearchTerm(address);
+    if (geocoderComponent.value) {
+        geocoderComponent.value.updateSearchTerm(address);
+    }
 };
 
-// Modal
-const mapModal = ref(null);
+// Modal refs
+interface ModalRef {
+    openModal: () => void;
+    closeModal: () => void;
+}
 
+interface PhotoCropModalRef {
+    openModal: (data: { file: File; url: string }) => void;
+    closeModal: () => void;
+    setUploading: (value: boolean) => void;
+}
+
+const mapModal = ref<ModalRef | null>(null);
+const editProfileModal = ref<ModalRef | null>(null);
+const photoUploadModal = ref<ModalRef | null>(null);
+const photoCropModal = ref<PhotoCropModalRef | null>(null);
+
+// Map modal methods
 const openModal = () => {
-    mapModal.value.openModal();
+    mapModal.value?.openModal();
 };
 
 const closeModal = () => {
-    mapModal.value.closeModal();
+    mapModal.value?.closeModal();
+};
+
+// Profile editing modal methods
+const openEditProfileModal = () => {
+    editProfileModal.value?.openModal();
+};
+
+const saveProfileChanges = async (updatedData: Partial<typeof profileData>) => {
+    try {
+        toast.info('Guardando cambios...');
+        
+        const response = await $fetch<{ success: boolean; message: string }>(
+            `${runtimeConfig.public.apiBase}/professional/profile`,
+            {
+                method: 'PUT',
+                credentials: 'include',
+                body: {
+                    user_id: userStore.user?.user_id,
+                    updates: updatedData
+                }
+            }
+        );
+
+        if (response.success) {
+            // Update local profile data
+            Object.assign(profileData, updatedData);
+            
+            // Update userStore with new data
+            const updatedUser = { ...userStore.user, ...updatedData } as Professional;
+            userStore.setUser(updatedUser);
+            
+            toast.success(response.message || 'Perfil actualizado exitosamente');
+            editProfileModal.value?.closeModal();
+        } else {
+            toast.error(response.message || 'Error al actualizar el perfil');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        toast.error('Error al actualizar el perfil');
+    }
+};
+
+// Photo upload modal methods
+const openPhotoUploadModal = () => {
+    photoUploadModal.value?.openModal();
+};
+
+const handleFileSelected = (data: { file: File; url: string }) => {
+    if (photoCropModal.value) {
+        photoCropModal.value.openModal(data);
+    }
+};
+
+const confirmPhotoChange = async (data: { file: File; url: string; transformations: any }) => {
+    try {
+        toast.info('Procesando imagen...');
+        
+        // Apply transformations to the image before uploading (square format)
+        const processedBlob = await processImageToSquare(data.url, data.transformations);
+        
+        if (!processedBlob) {
+            toast.error('Error al procesar la imagen');
+            photoCropModal.value?.setUploading(false);
+            photoCropModal.value?.closeModal();
+            return;
+        }
+        
+        toast.info('Subiendo imagen...');
+        
+        // Upload processed image to Cloudinary (square format)
+        const processedFile = new File([processedBlob], data.file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' });
+        const cloudinaryUrl = await uploadToCloudinary(processedFile);
+        
+        if (cloudinaryUrl) {
+            // Update backend with new photo URL
+            const response = await $fetch<{ success: boolean; message: string }>(
+                `${runtimeConfig.public.apiBase}/professional/profile`,
+                {
+                    method: 'PUT',
+                    credentials: 'include',
+                    body: {
+                        user_id: userStore.user?.user_id,
+                        updates: {
+                            photo_url: cloudinaryUrl
+                        }
+                    }
+                }
+            );
+
+            if (response.success) {
+                profileData.photo_url = cloudinaryUrl;
+                
+                // Update userStore with new photo
+                const updatedUser = { ...userStore.user, photo_url: cloudinaryUrl } as Professional;
+                userStore.setUser(updatedUser);
+                
+                toast.success('Foto de perfil actualizada exitosamente');
+            } else {
+                toast.error(response.message || 'Error al actualizar la foto de perfil');
+            }
+            photoCropModal.value?.closeModal();
+        } else {
+            toast.error('Error al subir la imagen');
+            photoCropModal.value?.closeModal();
+        }
+    } catch (error) {
+        console.error('Error uploading photo:', error);
+        toast.error('Error al subir la imagen');
+        photoCropModal.value?.closeModal();
+    } finally {
+        photoCropModal.value?.setUploading(false);
+    }
+};
+
+// Process image to square with transformations (scale and position)
+const processImageToSquare = (imageUrl: string, transformations: any): Promise<Blob | null> => {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        
+        img.onload = () => {
+            const outputSize = 1024; // High quality output (1024x1024px)
+            const containerSize = 256; // Preview container size
+            const canvas = document.createElement('canvas');
+            canvas.width = outputSize;
+            canvas.height = outputSize;
+            const ctx = canvas.getContext('2d');
+            
+            if (!ctx) {
+                resolve(null);
+                return;
+            }
+            
+            // Enable image smoothing for better quality
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            
+            // Fill background with white (optional, for transparency handling)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, outputSize, outputSize);
+            
+            // Get transformations
+            const scale = transformations.scale || 1;
+            const posX = transformations.position?.x || 0;
+            const posY = transformations.position?.y || 0;
+            
+            // Calculate scale factor from container to output
+            const scaleFactor = outputSize / containerSize;
+            
+            // Calculate how the image is displayed with object-fit: contain
+            const imgAspect = img.naturalWidth / img.naturalHeight;
+            
+            let displayWidth, displayHeight;
+            
+            if (imgAspect > 1) {
+                // Wider image - width fills container, height is proportional
+                displayWidth = containerSize;
+                displayHeight = containerSize / imgAspect;
+            } else {
+                // Taller image - height fills container, width is proportional
+                displayHeight = containerSize;
+                displayWidth = containerSize * imgAspect;
+            }
+            
+            // Apply user scale transformation
+            const scaledWidth = displayWidth * scale * scaleFactor;
+            const scaledHeight = displayHeight * scale * scaleFactor;
+            
+            // Calculate centered position (object-fit: contain centers the image)
+            const baseX = (outputSize - scaledWidth) / 2;
+            const baseY = (outputSize - scaledHeight) / 2;
+            
+            // Apply user position transformations
+            const finalX = baseX + (posX * scaleFactor);
+            const finalY = baseY + (posY * scaleFactor);
+            
+            // Draw the image
+            ctx.drawImage(img, finalX, finalY, scaledWidth, scaledHeight);
+            
+            // Convert to blob with high quality JPEG
+            canvas.toBlob((blob) => {
+                resolve(blob);
+            }, 'image/jpeg', 0.95);
+        };
+        
+        img.onerror = () => {
+            resolve(null);
+        };
+        
+        img.src = imageUrl;
+    });
+};
+
+// Cloudinary upload function
+const uploadToCloudinary = async (file: File): Promise<string | null> => {
+    const cloudName = runtimeConfig.public.cloudinaryCloudName;
+    const uploadPreset = runtimeConfig.public.cloudinaryUploadPreset;
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', uploadPreset);
+    formData.append('folder', 'profile_photos');
+    
+    try {
+        const response = await fetch(
+            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+        
+        const data = await response.json();
+        return data.secure_url;
+    } catch (error) {
+        console.error('Cloudinary upload error:', error);
+        return null;
+    }
 };
 
 onMounted(() => {

@@ -9,7 +9,7 @@ export const useDayNavigationStore = defineStore({
     }),
     getters: {
         selectedDayName(state) {
-            return state.selectedDate.toLocaleString("default", {
+            return state.selectedDate.toLocaleString("es-CL", {
                 weekday: "long",
             });
         },
@@ -17,7 +17,7 @@ export const useDayNavigationStore = defineStore({
             return state.selectedDate.getDate();
         },
         selectedMonth(state) {
-            return state.selectedDate.toLocaleString("default", {
+            return state.selectedDate.toLocaleString("es-CL", {
                 month: "long",
             });
         },
@@ -48,6 +48,11 @@ export const useDayNavigationStore = defineStore({
 
         updateSelectedDate(date: Date) {
             const newDate = new Date(date);
+            console.log('📅 DayNavigationStore.updateSelectedDate:', {
+                oldDate: this.selectedDate,
+                newDate: newDate,
+                dateString: newDate.toISOString().split('T')[0]
+            });
             this.selectedDate = newDate;
         },
     },

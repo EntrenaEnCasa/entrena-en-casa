@@ -1,153 +1,195 @@
 <template>
-    <nav class="bg-gradiente">
-        <div class="mx-auto max-w-7xl px-2 lg:px-8">
-            <div class="relative z-30 flex h-20 items-center justify-between">
-                <div class="absolute inset-y-0 left-0 flex items-center lg:hidden">
-                    <!-- Mobile menu button-->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+        <div class="mx-auto max-w-7xl px-4 lg:px-8">
+            <div class="relative flex h-20 items-center justify-between">
+                <!-- Mobile menu button -->
+                <div class="flex items-center lg:hidden">
                     <button
                         type="button"
-                        class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-secondary hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        class="inline-flex items-center justify-center rounded-xl p-2.5 text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
                         aria-controls="mobile-menu"
-                        aria-expanded="false"
+                        :aria-expanded="menuOpen"
                         @click="toggleMenu"
                     >
                         <span class="sr-only">Open main menu</span>
-                        <!--
-            Icon when menu is closed.
-
-            Menu open: "hidden", Menu closed: "block"
-          -->
-                        <svg
-                            class="block h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                            />
-                        </svg>
-                        <!--
-            Icon when menu is open.
-
-            Menu open: "block", Menu closed: "hidden"
-          -->
-                        <svg
-                            class="hidden h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <Icon :name="menuOpen ? 'mdi:close' : 'mdi:menu'" class="h-6 w-6" />
                     </button>
                 </div>
-                <div
-                    class="flex flex-1 items-center justify-center lg:items-stretch lg:justify-between"
-                >
-                    <NuxtLink to="/" class="flex flex-shrink-0 items-center !bg-transparent">
-                        <NuxtImg
-                            class="h-12 w-auto"
-                            src="/logo-horizontal.png"
-                            alt="Logo entrena en casa"
-                        />
-                    </NuxtLink>
-                    <div class="hidden items-center lg:flex">
-                        <div class="flex space-x-2">
-                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <NuxtLink
-                                to="/"
-                                class="rounded-md px-4 py-2 font-medium hover:bg-secondary hover:text-white"
-                                aria-current="page"
-                                >Inicio</NuxtLink
-                            >
-                            <NuxtLink
-                                to="/plans"
-                                class="rounded-md px-4 py-2 font-medium text-gray-600 hover:bg-secondary hover:text-white"
-                            >
-                                Planes</NuxtLink
-                            >
-                            <NuxtLink
-                                to="/about-us"
-                                class="rounded-md px-4 py-2 font-medium text-gray-600 hover:bg-secondary hover:text-white"
-                            >
-                                Sobre nosotros</NuxtLink
-                            >
-                        </div>
-                    </div>
-                    <div class="hidden items-center space-x-2 font-medium text-gray-500 lg:flex">
-                        <nuxt-link to="/user/auth/register" class="rounded-xl px-3 py-2">
-                            Registrarse
-                        </nuxt-link>
-                        <nuxt-link
-                            to="/user/auth/login"
-                            class="rounded-3xl border-2 border-secondary px-7 py-2"
+
+                <!-- Logo -->
+                <NuxtLink to="/" class="flex flex-shrink-0 items-center logo-link">
+                    <NuxtImg
+                        class="h-12 w-auto"
+                        src="/logo-horizontal.png"
+                        alt="Logo entrena en casa"
+                    />
+                </NuxtLink>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center flex-1 justify-center">
+                    <div class="flex items-center space-x-1">
+                        <NuxtLink
+                            to="/"
+                            class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
                         >
-                            Iniciar sesión
-                        </nuxt-link>
+                            Inicio
+                        </NuxtLink>
+                        <NuxtLink
+                            to="/plans"
+                            class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                        >
+                            Planes
+                        </NuxtLink>
+                        <NuxtLink
+                            to="/about-us"
+                            class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                        >
+                            Sobre nosotros
+                        </NuxtLink>
+                        <a
+                            href="/#beneficios"
+                            class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                        >
+                            Beneficios
+                        </a>
+                        <a
+                            href="/#contacto"
+                            class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                        >
+                            Contacto
+                        </a>
+                        <NuxtLink
+                            to="/blog"
+                            class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                        >
+                            Blog
+                        </NuxtLink>
                     </div>
+                </div>
+
+                <!-- Desktop Auth Buttons -->
+                <div class="hidden lg:flex items-center space-x-3">
+                    <NuxtLink 
+                        to="/user/auth/login" 
+                        class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                    >
+                                                <Icon name="mdi:login" class="w-5 h-5" />
+                        Iniciar sesión
+                    </NuxtLink>
+                    <NuxtLink
+                        to="/user/auth/register"
+                        class="rounded-lg px-5 py-2.5 text-sm font-semibold bg-secondary text-white hover:bg-secondary-600 transition-all duration-200 shadow-sm"
+                    >
+                                                <Icon name="mdi:account-plus" class="w-5 h-5" />
+
+                        Registrarse
+                    </NuxtLink>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile menu, show/hide based on menu state. -->
-        <div class="bg-[#E1F7FF] lg:hidden" id="mobile-menu" :class="menuOpen ? 'block' : 'hidden'">
-            <div class="space-y-1 px-2 pb-3 pt-2">
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <nuxt-link
-                    to="/"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-secondary hover:text-white"
-                    >Inicio</nuxt-link
-                >
-                <!-- <nuxt-link to="/"
-                    class="text-gray-600 hover:bg-secondary hover:text-white block rounded-md px-3 py-2 text-base font-medium">Sobre
-                    Nosotros</nuxt-link> -->
-                <nuxt-link
-                    to="/plans"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-secondary hover:text-white"
-                >
-                    Planes
-                </nuxt-link>
-                <nuxt-link
-                    to="/about-us"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-secondary hover:text-white"
-                >
-                    Sobre nosotros
-                </nuxt-link>
-                <div class="space-y-1 py-5">
-                    <nuxt-link
-                        to="/user/auth/register"
-                        class="block rounded-md px-3 py-2 text-base font-medium hover:bg-secondary hover:text-white"
-                    >
-                        Registrarse
-                    </nuxt-link>
-                    <nuxt-link
-                        to="/user/auth/login"
-                        class="block rounded-md border-secondary px-3 py-2 text-base font-medium text-gray-600 hover:bg-secondary hover:text-white"
-                    >
-                        Iniciar sesión
-                    </nuxt-link>
+        <!-- Mobile menu -->
+        <Transition
+            enter-active-class="transition ease-out duration-200"
+            enter-from-class="opacity-0 -translate-y-1"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 -translate-y-1"
+        >
+            <div v-show="menuOpen" class="lg:hidden" id="mobile-menu">
+                <div class="backdrop-blur-xl bg-white/95 shadow-2xl border-t border-gray-100">
+                    <div class="space-y-1 px-4 py-6">
+                        <!-- Navigation Links -->
+                        <NuxtLink
+                            to="/"
+                            class="block rounded-xl px-4 py-3 text-base font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                            @click="toggleMenu"
+                        >
+                            Inicio
+                        </NuxtLink>
+                        
+                        <NuxtLink
+                            to="/plans"
+                            class="block rounded-xl px-4 py-3 text-base font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                            @click="toggleMenu"
+                        >
+                            Planes
+                        </NuxtLink>
+                        
+                        <NuxtLink
+                            to="/about-us"
+                            class="block rounded-xl px-4 py-3 text-base font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                            @click="toggleMenu"
+                        >
+                            Sobre nosotros
+                        </NuxtLink>
+
+                        <a
+                            href="/#beneficios"
+                            class="block rounded-xl px-4 py-3 text-base font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                            @click="toggleMenu"
+                        >
+                            Beneficios
+                        </a>
+
+                        <a
+                            href="/#contacto"
+                            class="block rounded-xl px-4 py-3 text-base font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                            @click="toggleMenu"
+                        >
+                            Contacto
+                        </a>
+
+                        <NuxtLink
+                            to="/blog"
+                            class="block rounded-xl px-4 py-3 text-base font-medium text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-all duration-200"
+                            @click="toggleMenu"
+                        >
+                            Blog
+                        </NuxtLink>
+                        
+                        <!-- Divider -->
+                        <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-4"></div>
+                        
+                        <!-- Auth Links -->
+                        <NuxtLink
+                            to="/user/auth/register"
+                            class="flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-base font-semibold bg-secondary text-white hover:bg-secondary-600 transition-all duration-200 shadow-lg shadow-secondary/25"
+                            @click="toggleMenu"
+                        >
+                            <Icon name="mdi:account-plus" class="w-5 h-5" />
+                            <span>Registrarse</span>
+                        </NuxtLink>
+                        
+                        <NuxtLink
+                            to="/user/auth/login"
+                            class="flex items-center justify-center gap-2 rounded-xl border-2 border-secondary px-4 py-3 text-base font-semibold text-secondary hover:bg-secondary hover:text-white transition-all duration-200"
+                            @click="toggleMenu"
+                        >
+                            <Icon name="mdi:login" class="w-5 h-5" />
+                            <span>Iniciar sesión</span>
+                        </NuxtLink>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Transition>
     </nav>
 </template>
 <style scoped>
-.router-link-active {
+.logo-link {
+    background: transparent !important;
+}
+
+.logo-link:hover {
+    background: transparent !important;
+}
+
+.router-link-active:not(.logo-link) {
     @apply text-secondary;
 }
 
-.router-link-active:hover {
+.router-link-active:not(.logo-link):hover {
     @apply bg-secondary text-white;
 }
 </style>

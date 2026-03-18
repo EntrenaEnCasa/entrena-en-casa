@@ -113,7 +113,7 @@ export default defineNuxtConfig({
             mapboxApiKey: process.env.MAPBOX_API_KEY,
             siteKey: process.env.RECAPTCHA_SITE_KEY,
             cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
-            cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+            cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
         },
     },
     
@@ -133,8 +133,8 @@ export default defineNuxtConfig({
             },
         },
     },
-    
-    nitro: {
-        preset: 'vercel'
-    }
+      nitro: {
+    preset: 'vercel'
+  },
+  devtools: { enabled: false },
 });

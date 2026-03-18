@@ -28,23 +28,37 @@
                             <div class="flex">
 
                                 <CommonButton @click="disableUser()" bg-color="tertiary"
-                                    class="mx-auto mb-5 px-3 py-2 text-white"
+                                    class="mx-auto  px-3 py-2 text-white"
                                     v-if="professional && professional.enabled">
                                     Deshabilitar usuario</CommonButton>
+                                
                                 <CommonButton @click="enableUser()" bg-color="primary"
-                                    class="mx-auto mb-5 px-3 py-2 text-white"
+                                    class="mx-auto  px-3 py-2 text-white"
                                     v-else-if="professional && !professional.enabled">
                                     Habilitar usuario</CommonButton>
                                 <!-- Botón para restablecer contraseña -->
                                 <CommonButton @click="resetPassword()" bg-color="secondary"
-                                    class="mx-auto mb-5 px-3 py-2 text-white">
+                                    class="mx-auto  px-3 py-2 text-white">
                                     Restablecer contraseña
                                 </CommonButton>
                             </div>
+
+                            <div class=" flex justify-center">
+                                <CommonButton @click="toggleVisibility()" bg-color="secondary"
+                                    class="mx-auto  px-3 py-2 text-white"
+                                    v-if="professional && !professional.visibility">
+                                    Hacer visible en Inicio</CommonButton>
+                                <CommonButton @click="toggleVisibility()" bg-color="tertiary"
+                                    class="mx-auto  px-3 py-2 text-white"
+                                    v-else-if="professional && professional.visibility">
+                                    Hacer no visible en Inicio</CommonButton>
+
+                                </div>
                             <div class="mt-5 flex justify-center">
                                 <CommonButton @click="showReportModal" bg-color="primary" class="px-3 py-2 text-white">
                                     Crear reporte
                                 </CommonButton>
+                                
                             </div>
                         </div>
                         <div class="mb-6 space-y-6">
@@ -258,6 +272,7 @@ interface Professional {
     phone: string | null;
     email: string;
     enabled: boolean;
+    visibility: boolean;
 }
 
 const modal = ref<Modal | null>(null);
@@ -316,6 +331,28 @@ const enableUser = async () => {
         reloadNuxtApp();
     } else {
         toast.error("Error al deshabilitar usuario");
+    }
+};
+
+const toggleVisibility = async () => {
+    if (!props.professional) return;
+    const response = await $fetch<APIResponse>(
+        `${runtimeConfig.public.apiBase}/admin/toggle-visibility`,
+        {
+            method: "PUT",
+            credentials: "include",
+            body: {
+                user_id: props.professional.user_id,
+                visibility: !props.professional.visibility
+            },
+        },
+    );
+    if (response.success) {
+        toast.success("Visibilidad del perfil actualizada");
+        modal.value?.closeModal();
+        reloadNuxtApp();
+    } else {
+        toast.error("Error al actualizar la visibilidad del perfil");
     }
 };
 

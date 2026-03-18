@@ -474,11 +474,13 @@ const newEmptySessionModal = reactive({
                 getEvents();
                 toast.success(response.message);
             } else {
-                toast.error(response.message);
+              //Añadir un toast con tiempo largo
+              toast.error(response.message + " No se creó el bloque de sesión disponible.");
+                
             }
         } catch (error) {
             console.log("Fetch error:", error);
-            toast.error("Error al crear la sesión");
+            toast.error("Error al crear el bloque de sesión disponible:"+ error.message);
         } finally {
             newEmptySessionModal.loading = false;
             newEmptySessionModal.closeModal();

@@ -1,5 +1,5 @@
 <template>
-    <CommonModal ref="modalRef">
+            <CommonModal ref="modalRef" @modal-closed="emit('modal-closed')">
         <div class="px-4 py-4 text-center sm:px-6">
             <h2 class="mb-4 text-2xl font-semibold">Información de la sesión</h2>
             <p class="text-lg font-medium">
@@ -92,6 +92,7 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['modal-closed'])
 import { useGeocoding } from "~/composables/maps/useGeocoding";
 
 const DEFAULT_COORDINATES = [-70.6506, -33.4372];

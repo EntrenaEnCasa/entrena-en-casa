@@ -92,6 +92,7 @@ interface Professional {
     phone: string | null;
     email: string;
     enabled: boolean;
+    visibility: boolean;
 }
 interface Session {
     session_id: number;
