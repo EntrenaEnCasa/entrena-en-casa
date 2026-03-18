@@ -113,7 +113,7 @@
 
             <!-- Copyright -->
             <div class="mt-8 pt-6 border-t border-gray-200 text-center">
-                <p class="text-gray-500 text-sm">© Copyright 2025</p>
+                <p class="text-gray-500 text-sm">© Desarrollado por el equipo de Entrena en Casa 2026</p>
             </div>
         </div>
     </div>
