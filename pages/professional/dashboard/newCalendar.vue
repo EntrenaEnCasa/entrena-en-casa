@@ -540,8 +540,15 @@ const onSlotClick = ({ date, time }) => {
   emptySlotModal.handleClick(date, time);
 };
 
+// Clear events cache
+const clearEventsCache = () => {
+  eventsCache.value.clear();
+  lastFetchDate.value = null;
+};
+
 // Handle modal closed - refresh calendar to ensure data consistency
 const handleModalClosed = async () => {
+  clearEventsCache(); // Clear cache to force fresh data
   await getEvents(true, 100); // Force refresh with short debounce
 };
 
@@ -672,7 +679,8 @@ const newEmptySessionModal = reactive({
       });
 
       if (response.success) {
-        await getEvents(true); // Force refresh after update
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh after update
         toast.success(response.message);
       } else {
         toast.error(response.message);
@@ -789,7 +797,8 @@ const newEventModal = reactive({
         );
 
         if (response.success) {
-          getEvents();
+          clearEventsCache(); // Clear cache before refresh
+          await getEvents(true, 100); // Force refresh
           toast.success(response.message);
         } else {
           toast.error(response.message);
@@ -829,7 +838,8 @@ const newEventModal = reactive({
         );
 
         if (response.success) {
-          getEvents();
+          clearEventsCache(); // Clear cache before refresh
+          await getEvents(true, 100); // Force refresh
           toast.success(response.message);
         } else {
           toast.error(response.message);
@@ -910,7 +920,7 @@ const editEmptySessionModal = reactive({
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
-    updateCurrentlySelectedDate(day, event.start_time);
+    // NO cambiar selectedDate del calendario para evitar que el evento se mueva de fecha
     editEmptySessionModal.openModal();
   },
   updateSession: async () => {
@@ -941,7 +951,7 @@ const editEmptySessionModal = reactive({
     const body = {
       user_id: userStore.user.user_id,
       session_id: event.session_info.session_id,
-      date: getFormattedDateString(selectedDate.value),
+      date: event.date, // Mantener la fecha original del evento
       time: formattedStartTime.value,
       format: editEmptySessionModal.data.selectedFormat,
       modality: editEmptySessionModal.data.selectedModality,
@@ -959,7 +969,8 @@ const editEmptySessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editEmptySessionModal.closeModal();
       } else {
         toast.error(response.message);
@@ -985,7 +996,8 @@ const editEmptySessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editEmptySessionModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1045,7 +1057,7 @@ const editManualSessionModal = reactive({
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
-    updateCurrentlySelectedDate(day, event.start_time);
+    // NO cambiar selectedDate del calendario para evitar que el evento se mueva de fecha
     editManualSessionModal.openModal();
   },
   updateSession: async () => {
@@ -1055,7 +1067,7 @@ const editManualSessionModal = reactive({
       user_id: userStore.user.user_id,
       event_id: event.event_id,
       session_id: event.session_info.session_id,
-      date: getFormattedDateString(selectedDate.value),
+      date: event.date, // Mantener la fecha original del evento
       start_time: formattedStartTime.value,
       end_time: formattedEndTime.value,
       format: editManualSessionModal.data.selectedFormat,
@@ -1076,7 +1088,8 @@ const editManualSessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editManualSessionModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1102,7 +1115,8 @@ const editManualSessionModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editManualSessionModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1156,8 +1170,7 @@ const editPersonalEventModal = reactive({
       dayNavigationStore.updateSelectedDate(eventDate);
     }
     
-    updateCurrentlySelectedDate(day, event.start_time);
-    updateSelectedEndTimeFromString(event.end_time);
+    // NO cambiar selectedDate del calendario para evitar que el evento se mueva de fecha
     editPersonalEventModal.openModal();
   },
   updateSession: async () => {
@@ -1166,7 +1179,7 @@ const editPersonalEventModal = reactive({
     const body = {
       user_id: userStore.user.user_id,
       event_id: event.event_id,
-      date: getLocalDateString(selectedDate.value),
+      date: event.date, // Mantener la fecha original del evento
       start_time: formattedStartTime.value,
       end_time: formattedEndTime.value,
       info: editPersonalEventModal.data.additionalInfo,
@@ -1186,7 +1199,8 @@ const editPersonalEventModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editPersonalEventModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1212,7 +1226,8 @@ const editPersonalEventModal = reactive({
 
       if (response.success) {
         toast.success(response.message);
-        await getEvents();
+        clearEventsCache(); // Clear cache before refresh
+        await getEvents(true, 100); // Force refresh
         editPersonalEventModal.closeModal();
       } else {
         toast.error(response.message);
@@ -1307,7 +1322,7 @@ const initializeCalendarData = () => {
   // Refresh events when date changes (with debouncing)
   watch(selectedDate, async () => {
     await getEvents(false, 500); // Use cache first, debounce 500ms
-  });
+  }, { immediate: true }); // Execute immediately to load initial events
 };
 
 // Fetch events from API with caching and debouncing

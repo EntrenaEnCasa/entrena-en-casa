@@ -159,9 +159,24 @@ const props = defineProps({
 
 const emit = defineEmits(['date-changed', 'event-click', 'slot-click'])
 
+const toLocalDateString = (date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const parseLocalDate = (value) => {
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const [year, month, day] = value.split('-').map(Number)
+    return new Date(year, month - 1, day)
+  }
+  return new Date(value)
+}
+
 // Computed properties
 const dayEvents = computed(() => {
-  const dateString = props.selectedDate.toISOString().split('T')[0]
+  const dateString = toLocalDateString(props.selectedDate)
   return props.events
     .filter(event => event.date === dateString)
     .sort((a, b) => (a.start_time || '').localeCompare(b.start_time || ''))
@@ -181,7 +196,7 @@ const quickDates = computed(() => {
     const date = new Date(startDate)
     date.setDate(startDate.getDate() + i)
     
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = toLocalDateString(date)
     const dayEvents = props.events.filter(event => event.date === dateString)
     
     dates.push({
@@ -225,7 +240,7 @@ const formatTime = (timeString) => {
 
 const isPastEvent = (event) => {
   const now = new Date()
-  const eventDate = new Date(event.date)
+  const eventDate = parseLocalDate(event.date)
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   
   // Solo considerar pasado si es de un día anterior
