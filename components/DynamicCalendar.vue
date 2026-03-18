@@ -439,6 +439,13 @@ const dayTimeSlots = computed(() => {
   return slots
 })
 
+const toLocalDateString = (date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 // Quick dates for mobile (next 7 days)
 const quickDates = computed(() => {
   const dates = []
@@ -448,7 +455,7 @@ const quickDates = computed(() => {
     const date = new Date(today)
     date.setDate(today.getDate() + i)
     
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = toLocalDateString(date)
     const hasEvents = events.value.some(event => event.date === dateString)
     
     dates.push({
@@ -484,7 +491,7 @@ const calendarDays = computed(() => {
     const date = new Date(startDate)
     date.setDate(startDate.getDate() + i)
     
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = toLocalDateString(date)
     const dayEvents = events.value.filter(event => event.date === dateString)
     
     days.push({
@@ -510,7 +517,7 @@ const weekDays = computed(() => {
   for (let i = 0; i < 7; i++) {
     const date = new Date(startOfWeek)
     date.setDate(startOfWeek.getDate() + i)
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = toLocalDateString(date)
     const dayEvents = events.value.filter(event => event.date === dateString)
     days.push({
       date: new Date(date),
@@ -525,7 +532,7 @@ const weekDays = computed(() => {
 })
 
 const selectedDateEvents = computed(() => {
-  const dateString = selectedDate.value.toISOString().split('T')[0];
+  const dateString = toLocalDateString(selectedDate.value);
   return events.value
     .filter(event => {
       // Ensure event exists and has the required properties

@@ -141,6 +141,21 @@ const props = defineProps({
 
 const emit = defineEmits(['date-changed', 'event-click', 'slot-click'])
 
+const toLocalDateString = (date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const parseLocalDate = (value) => {
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const [year, month, day] = value.split('-').map(Number)
+    return new Date(year, month - 1, day)
+  }
+  return new Date(value)
+}
+
 const canGoToPreviousWeek = computed(() => {
   const today = new Date()
   const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate())
@@ -159,7 +174,7 @@ const weekDays = computed(() => {
     const date = new Date(startOfWeek)
     date.setDate(startOfWeek.getDate() + i)
     
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = toLocalDateString(date)
     const dayEvents = props.events.filter(event => event.date === dateString)
     
     days.push({
@@ -189,7 +204,7 @@ const weekTitle = computed(() => {
 })
 
 const selectedDayEvents = computed(() => {
-  const dateString = props.selectedDate.toISOString().split('T')[0]
+  const dateString = toLocalDateString(props.selectedDate)
   return props.events
     .filter(event => event.date === dateString)
     .sort((a, b) => (a.start_time || '').localeCompare(b.start_time || ''))
@@ -244,7 +259,7 @@ const canSelectDate = (date) => {
 
 const canEditEvent = (event) => {
   const now = new Date()
-  const eventDate = new Date(event.date || event.start_time)
+  const eventDate = parseLocalDate(event.date || event.start_time)
   
   if (eventDate < new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
     return false
