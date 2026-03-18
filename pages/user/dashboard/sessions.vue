@@ -429,6 +429,9 @@
 
                         
                     </div>
+                    <div v-else class="flex justify-center py-10">
+                        <p class="text-gray-700">Este profesional aún no tiene perfil público o ocurrió un error al cargarlo.</p>
+                        </div>
                 </div>
             </CommonModal>
         </Teleport>
