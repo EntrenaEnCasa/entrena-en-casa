@@ -260,6 +260,7 @@ const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const formatter = useFormatter();
 const { getReverseGeocodingData } = useGeocoding();
+const DEBUG_TIME_DIAGNOSTICS = true;
 
 const { formatDateToFullLongFormat } = formatter;
 
@@ -269,9 +270,29 @@ const DEFAULT_ZOOM = 13;
 const mapID = "viewSessionMap";
 const markerID = "viewSessionMarker";
 const locationAddress = ref("");
+const PROGRAMMED_SESSIONS_SYNC_INTERVAL_MS = 30000;
+let programmedSessionsInterval = null;
+
+const refreshProgrammedSessions = async () => {
+    await Promise.all([refreshFutureSessions(), refreshPastSessions()]);
+};
+
+const handleProgrammedSessionsFocus = () => {
+    void refreshProgrammedSessions();
+};
+
+const handleProgrammedSessionsVisibility = () => {
+    if (document.visibilityState === "visible") {
+        void refreshProgrammedSessions();
+    }
+};
 
 // Fetch data
-const { data: futureSessions, status: futureSessionsStatus } = useFetch<APIResponse>(
+const {
+    data: futureSessions,
+    status: futureSessionsStatus,
+    refresh: refreshFutureSessions,
+} = useFetch<APIResponse>(
     `${runtimeConfig.public.apiBase}/professional/future-sessions/${userStore.user?.user_id}`,
     {
         method: "GET",
@@ -280,7 +301,12 @@ const { data: futureSessions, status: futureSessionsStatus } = useFetch<APIRespo
     },
 );
 
-const { data: pastSessions, status: pastSessionsStatus } = useFetch<APIResponse>(
+
+const {
+    data: pastSessions,
+    status: pastSessionsStatus,
+    refresh: refreshPastSessions,
+} = useFetch<APIResponse>(
     `${runtimeConfig.public.apiBase}/professional/past-sessions/${userStore.user?.user_id}`,
     {
         method: "GET",
@@ -396,6 +422,27 @@ watch(
     },
     { deep: true },
 );
+
+onMounted(() => {
+    if (!process.client) return;
+
+    window.addEventListener("focus", handleProgrammedSessionsFocus);
+    document.addEventListener("visibilitychange", handleProgrammedSessionsVisibility);
+    programmedSessionsInterval = window.setInterval(() => {
+        void refreshProgrammedSessions();
+    }, PROGRAMMED_SESSIONS_SYNC_INTERVAL_MS);
+});
+
+onBeforeUnmount(() => {
+    if (!process.client) return;
+
+    window.removeEventListener("focus", handleProgrammedSessionsFocus);
+    document.removeEventListener("visibilitychange", handleProgrammedSessionsVisibility);
+    if (programmedSessionsInterval) {
+        window.clearInterval(programmedSessionsInterval);
+        programmedSessionsInterval = null;
+    }
+});
 
 const { setSEO } = useSEO();
 setSEO({

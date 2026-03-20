@@ -277,7 +277,7 @@ const canSelectDate = (date) => {
 const getCurrentTimeSlot = () => {
   const now = new Date()
   const currentHour = now.getHours()
-  const nextHour = currentHour + 1
+  const nextHour = (currentHour + 1) % 24
   return `${nextHour.toString().padStart(2, '0')}:00`
 }
 

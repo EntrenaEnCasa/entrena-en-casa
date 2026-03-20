@@ -87,7 +87,7 @@
               <!-- Add Event Button -->
               <button 
                 v-if="!editMode"
-                @click="newEventModal.openModal()"
+                @click="openQuickCreateOptions()"
                 class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
               >
                 <Icon name="mdi:plus" class="w-6 h-6" />
@@ -210,6 +210,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, reactive, watch, computed, nextTick } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useDynamicCalendar } from '~/composables/useDynamicCalendar'
 import { useUserStore } from "~/stores/UserStore";
 import { useTimeRangeStore } from "~/stores/professional/dashboard/calendar/TimeRangeStore";
@@ -223,14 +224,17 @@ const dayNavigationStore = useDayNavigationStore();
 const toast = useToast();
 const runtimeConfig = useRuntimeConfig();
 const { getReverseGeocodingData } = useGeocoding();
+const DEBUG_TIME_DIAGNOSTICS = true;
 
 // Reactive data
 const events = ref([]);
 const fetchingEvents = ref(false);
 const selectedDate = ref(new Date());
-const formattedStartTime = ref('06:00');
-const formattedEndTime = ref('07:00');
+const timeRangeStore = useTimeRangeStore();
+const { formattedStartTime, formattedEndTime } = storeToRefs(timeRangeStore);
 const viewMode = ref('week'); // Local reactive viewMode
+const EVENTS_CACHE_TTL_MS = 15000;
+const EVENTS_SYNC_INTERVAL_MS = 30000;
 
 // Edit mode state
 const editMode = ref(false);
@@ -240,6 +244,7 @@ const eventsCache = ref(new Map());
 const lastFetchDate = ref(null);
 let getEventsTimeout = null;
 let pendingRequest = null; // Track pending requests to avoid duplicates
+let eventsSyncInterval = null;
 
 // Initialize calendar with empty events array
 const initialEvents = [];
@@ -286,17 +291,15 @@ const updateSelectedDate = (date) => {
 
 const updateSelectedStartTimeFromString = (timeString) => {
   if (timeString && typeof timeString === 'string') {
-    formattedStartTime.value = timeString;
-    // También actualizar el end time sumando 1 hora por defecto
-    const [hours, minutes] = timeString.split(':').map(Number);
-    const endHours = hours + 1;
-    formattedEndTime.value = `${endHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    timeRangeStore.updateSelectedStartTimeFromString(timeString);
+    // Keep the default 60-minute range and wrap after 23:59.
+    timeRangeStore.updateSelectedEndTimeFromString(addMinutesToTime(timeString, 60));
   }
 };
 
 const updateSelectedEndTimeFromString = (timeString) => {
   if (timeString && typeof timeString === 'string') {
-    formattedEndTime.value = timeString;
+    timeRangeStore.updateSelectedEndTimeFromString(timeString);
   }
 };
 
@@ -309,8 +312,8 @@ const goToStartOfWeek = () => {
 };
 
 const setSelectedStartTimeToFirstAvailableTime = () => {
-  formattedStartTime.value = '06:00';
-  formattedEndTime.value = '07:00';
+  timeRangeStore.updateSelectedStartTimeFromString('06:00');
+  timeRangeStore.updateSelectedEndTimeFromString('07:00');
 };
 
 const parseLocalDate = (value) => {
@@ -340,6 +343,8 @@ const getFormattedDateString = (date) => {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
+
+
 
 const updateCurrentlySelectedDate = (date, timeString) => {
   updateSelectedDate(date);
@@ -557,10 +562,33 @@ const onSlotClick = ({ date, time }) => {
   emptySlotModal.handleClick(date, time);
 };
 
+const openQuickCreateOptions = () => {
+  if (editMode.value) return;
+
+  setSelectedStartTimeToFirstAvailableTime();
+  const targetDate = new Date(selectedDate.value);
+  emptySlotModal.handleClick(targetDate, formattedStartTime.value);
+};
+
 // Clear events cache
 const clearEventsCache = () => {
   eventsCache.value.clear();
   lastFetchDate.value = null;
+};
+
+const refreshEventsFromServer = async () => {
+  clearEventsCache();
+  await getEvents(true, 100);
+};
+
+const handleWindowFocus = () => {
+  void refreshEventsFromServer();
+};
+
+const handleVisibilityChange = () => {
+  if (document.visibilityState === 'visible') {
+    void refreshEventsFromServer();
+  }
 };
 
 // Handle modal closed - refresh calendar to ensure data consistency
@@ -596,8 +624,7 @@ const emptySlotModal = reactive({
     }
   },
   handleClick: (day, time) => {
-    // Actualizar el store TimeRange con la hora seleccionada
-    const { updateSelectedStartTimeFromString } = useTimeRangeStore();
+    // Actualizar el rango horario desde el slot seleccionado.
     updateSelectedStartTimeFromString(time);
     
     // NO actualizar la fecha del calendario principal, solo guardar la fecha para el modal
@@ -923,7 +950,6 @@ const editEmptySessionModal = reactive({
     editEmptySessionModal.data.clients = event.clients ? [...event.clients] : [];
     
     // Actualizar el store TimeRange con las horas del evento
-    const { updateSelectedStartTimeFromString, updateSelectedEndTimeFromString } = useTimeRangeStore();
     updateSelectedStartTimeFromString(event.start_time);
     if (event.end_time) {
       updateSelectedEndTimeFromString(event.end_time);
@@ -1060,7 +1086,6 @@ const editManualSessionModal = reactive({
     editManualSessionModal.data.event = event;
     
     // Actualizar el store TimeRange con las horas del evento
-    const { updateSelectedStartTimeFromString, updateSelectedEndTimeFromString } = useTimeRangeStore();
     updateSelectedStartTimeFromString(event.start_time);
     if (event.end_time) {
       updateSelectedEndTimeFromString(event.end_time);
@@ -1173,7 +1198,6 @@ const editPersonalEventModal = reactive({
     editPersonalEventModal.data.event = event;
     
     // Actualizar el store TimeRange con las horas del evento
-    const { updateSelectedStartTimeFromString, updateSelectedEndTimeFromString } = useTimeRangeStore();
     updateSelectedStartTimeFromString(event.start_time);
     if (event.end_time) {
       updateSelectedEndTimeFromString(event.end_time);
@@ -1356,7 +1380,7 @@ const getEvents = async (forceRefresh = false, debounceMs = 300) => {
     const cachedData = eventsCache.value.get(localDateString);
     const now = Date.now();
     // Cache valid for 5 minutes (extended from 2 minutes)
-    if (now - cachedData.timestamp < 300000) {
+    if (now - cachedData.timestamp < EVENTS_CACHE_TTL_MS) {
       events.value = cachedData.events;
       if (calendar && calendar.events) {
         calendar.events.value = events.value;
@@ -1391,6 +1415,7 @@ const getEvents = async (forceRefresh = false, debounceMs = 300) => {
           credentials: "include",
           body: body,
         });
+
 
         if (response.success) {
           const eventsData = response.events || [];
@@ -1470,6 +1495,14 @@ onMounted(async () => {
     
     // Events will be loaded automatically by selectedDate watcher
     // No need to call getEvents() manually here
+
+    if (process.client) {
+      window.addEventListener('focus', handleWindowFocus);
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      eventsSyncInterval = window.setInterval(() => {
+        void refreshEventsFromServer();
+      }, EVENTS_SYNC_INTERVAL_MS);
+    }
   } catch (error) {
     console.error('Error initializing calendar:', error);
     toast.error('Error al inicializar el calendario');
@@ -1478,6 +1511,15 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   calendar.cleanup();
+
+  if (process.client) {
+    window.removeEventListener('focus', handleWindowFocus);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    if (eventsSyncInterval) {
+      window.clearInterval(eventsSyncInterval);
+      eventsSyncInterval = null;
+    }
+  }
 });
 
 // Assign editModal to a specific modal object

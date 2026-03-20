@@ -20,15 +20,33 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
   const loading = ref(false)
   const error = ref(null)
 
+  const toLocalDateString = (date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  const parseDateValue = (value) => {
+    if (value instanceof Date) {
+      return new Date(value)
+    }
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      const [year, month, day] = value.split('-').map(Number)
+      return new Date(year, month - 1, day)
+    }
+    return new Date(value)
+  }
+
   // Computed properties
   const today = computed(() => new Date())
   
   const selectedDateString = computed(() => {
-    return selectedDate.value.toISOString().split('T')[0]
+    return toLocalDateString(selectedDate.value)
   })
 
   const currentDateString = computed(() => {
-    return currentDate.value.toISOString().split('T')[0]
+    return toLocalDateString(currentDate.value)
   })
 
   // Get events for selected date
@@ -44,7 +62,7 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
     const month = currentDate.value.getMonth()
     
     return events.value.filter(event => {
-      const eventDate = new Date(event.date)
+      const eventDate = parseDateValue(event.date)
       return eventDate.getFullYear() === year && eventDate.getMonth() === month
     })
   })
@@ -86,7 +104,7 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
       const date = new Date(startDate)
       date.setDate(startDate.getDate() + i)
       
-      const dateString = date.toISOString().split('T')[0]
+      const dateString = toLocalDateString(date)
       const dayEvents = events.value.filter(event => event.date === dateString)
       
       days.push({
@@ -115,7 +133,7 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
       const date = new Date(baseDate)
       date.setDate(baseDate.getDate() + i)
       
-      const dateString = date.toISOString().split('T')[0]
+      const dateString = toLocalDateString(date)
       const dayEvents = events.value.filter(event => event.date === dateString)
       
       dates.push({
@@ -145,7 +163,7 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
       const date = new Date(startOfWeek)
       date.setDate(startOfWeek.getDate() + i)
       
-      const dateString = date.toISOString().split('T')[0]
+      const dateString = toLocalDateString(date)
       const dayEvents = events.value.filter(event => event.date === dateString)
       
       dates.push({
@@ -328,13 +346,13 @@ export const useDynamicCalendar = (initialEvents = [], options = {}) => {
 
   // Event filtering and searching
   const getEventsForDate = (date) => {
-    const dateString = typeof date === 'string' ? date : date.toISOString().split('T')[0]
+    const dateString = typeof date === 'string' ? date : toLocalDateString(parseDateValue(date))
     return events.value.filter(event => event.date === dateString)
   }
 
   const getEventsForDateRange = (startDate, endDate) => {
-    const start = typeof startDate === 'string' ? startDate : startDate.toISOString().split('T')[0]
-    const end = typeof endDate === 'string' ? endDate : endDate.toISOString().split('T')[0]
+    const start = typeof startDate === 'string' ? startDate : toLocalDateString(parseDateValue(startDate))
+    const end = typeof endDate === 'string' ? endDate : toLocalDateString(parseDateValue(endDate))
     
     return events.value.filter(event => {
       return event.date >= start && event.date <= end

@@ -423,12 +423,52 @@ const { flyTo, calculateDurationBasedOnDistance, calculateDistance } = useMapInt
 const runtimeConfig = useRuntimeConfig();
 const userStore = useUserStore();
 const toast = useToast();
+const DEBUG_TIME_DIAGNOSTICS = true;
 
 const isOnline = ref(false);
 const professionals = ref([]);
 
+const toLocalDateString = (value) => {
+    const date = value instanceof Date ? new Date(value) : new Date(value);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
+const logScheduleDiagnostics = (source, requestBody, response) => {
+    if (!DEBUG_TIME_DIAGNOSTICS) return;
+
+    const rows = [];
+    const professionalsList = response?.professionals || [];
+
+    professionalsList.forEach((professional) => {
+        const sessions = professional?.sessions || [];
+        sessions.forEach((session) => {
+            rows.push({
+                source,
+                professional_id: professional?.user_id,
+                professional_name: `${professional?.first_name || ""} ${professional?.last_name || ""}`.trim(),
+                session_id: session?.session_info?.session_id,
+                event_id: session?.event_id,
+                date: session?.date,
+                start_time: session?.start_time,
+                end_time: session?.end_time,
+                format: session?.session_info?.format,
+                modality: session?.session_info?.modality,
+            });
+        });
+    });
+
+    console.groupCollapsed(`[TIME-DIAG][${source}] start_date=${requestBody?.start_date} tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
+    console.log("requestBody", requestBody);
+    console.log("response.success", response?.success, "professionals", professionalsList.length);
+    console.table(rows);
+    console.groupEnd();
+};
+
 const filteredProfessionals = computed(() => {
-    const selectedDateString = selectedDate.value.toISOString().split("T")[0];
+    const selectedDateString = toLocalDateString(selectedDate.value);
 
     const filteredData = professionals.value
         .map((professional) => {
@@ -459,7 +499,7 @@ const filteredProfessionals = computed(() => {
 
 const hasSessionsOnDay = (day) => {
     // Convert the day to a YYYY-MM-DD string format
-    const dayString = day.toISOString().split("T")[0];
+    const dayString = toLocalDateString(day);
 
     // Check if there are professionals with sessions on this day
     return professionals.value.some((professional) =>
@@ -680,7 +720,7 @@ const getInPersonSessions = async () => {
         lng: markerCoordinates.value[0],
         lat: markerCoordinates.value[1],
         short_code: selectedLocation.value.context[3].short_code,
-        start_date: startOfWeek.value.toISOString().split("T")[0],
+        start_date: toLocalDateString(startOfWeek.value),
         user_id: userStore.user.user_id,
     };
 
@@ -696,8 +736,10 @@ const getInPersonSessions = async () => {
 
         if (response.success) {
             professionals.value = response.professionals;
+            logScheduleDiagnostics("student/sessions/in-person", body, response);
         } else {
             professionals.value = [];
+            logScheduleDiagnostics("student/sessions/in-person", body, response);
             toast.error(response.message);
         }
     } catch (error) {
@@ -713,7 +755,7 @@ const getOnlineSessions = async () => {
     sessionsLoading.value = true;
 
     const body = {
-        start_date: startOfWeek.value.toISOString().split("T")[0],
+        start_date: toLocalDateString(startOfWeek.value),
         user_id: userStore.user.user_id,
     };
 
@@ -724,7 +766,7 @@ const getOnlineSessions = async () => {
             body: body,
         });
 
-        console.log(response);
+        logScheduleDiagnostics("student/sessions/online", body, response);
 
         if (response.success) {
             professionals.value = response.professionals;
