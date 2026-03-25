@@ -59,6 +59,21 @@
           </div>
         </div>
       </div>
+      <!-- Legend -->
+    <div class="mt-6 flex flex-wrap justify-center gap-6 text-sm">
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 bg-primary-100 border-l-4 border-primary-400 rounded"></div>
+        <span class="text-gray-600">Disponible</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 bg-secondary-100 border-l-4 border-secondary-400 rounded"></div>
+        <span class="text-gray-600">Entrenamiento</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 bg-orange-100 border-l-4 border-orange-400 rounded"></div>
+        <span class="text-gray-600">Evento Personal</span>
+      </div>
+    </div>
     </div>
 </template>
 
