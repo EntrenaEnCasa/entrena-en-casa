@@ -5,8 +5,16 @@
       class="absolute inset-0 bg-cover lg:mb-8  lg:mx-8 lg:rounded-xl lg:shadow-lg "
       :style="{
         backgroundImage: 'url(/home/bg-banner-home.jpg)',
-        backgroundPosition: ' center'
+        backgroundPosition: isMobile ? '65% center' : 'center',
+        filter: isMobile ? 'blur(4px)' : 'blur(0px)'
       }"
+    />
+    
+    <!-- White Overlay - Mobile Only -->
+    <div 
+      v-if="isMobile"
+      class="absolute inset-0 bg-white lg:mb-8 lg:mx-8 lg:rounded-xl"
+      style="opacity: 0.3;"
     />
     
     <!-- Content Container -->
@@ -14,21 +22,21 @@
       <!-- Main Content -->
       <div class="max-w-2xl my-auto text-center md:text-left">
         <!-- Heading -->
-        <h1 class="text-5xl w-5/6 mx-auto md:mx-0 font-bold text-gray-900 mb-6 leading-tight">
+        <h1 class="text-4xl sm:text-5xl w-5/6 mx-auto md:mx-0 font-bold text-gray-900 mb-6 leading-tight">
          Personal Trainer a Domicilio y Online
         </h1>
         
         <!-- Subheading -->
-        <p class="text-base  w-5/6 mx-auto md:mx-0 md:text-md text-gray-700 mb-8 font-light">
+        <p class="text-xs sm:text-base w-5/6 mx-auto md:mx-0 md:text-md text-gray-800 mb-8 ">
           Nos acomodamos a tus tiempos, vamos donde ti o nos conectamos de manera remota. Te ayudamos a dar ese primer paso.
         </p>
         
         <!-- CTA Buttons -->
-        <div class="flex flex-row gap-4 mb-16 md:mb-24">
-          <button @click="() => navigateTo('/user/auth/register')" class="w-full sm:w-auto px-6 py-3 bg-secondary hover:bg-secondary-200 text-white font-medium rounded-full transition-transform duration-300 transform hover:scale-105 shadow-lg">
+        <div class="flex flex-row justify-center md:justify-start gap-4 mb-16 md:mb-24">
+          <button @click="() => navigateTo('/user/auth/register')" class="w-full sm:w-auto px-6 py-3 bg-secondary hover:bg-secondary-200 text-white font-medium rounded-full transition-transform duration-300 transform hover:scale-105 shadow-lg text-xs sm:text-base">
             Comienza ahora
           </button>
-          <button @click="scrollToAbout" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-900 px-6 py-3 font-medium rounded-full border-2 border-gray-300 transition-transform duration-300 transform hover:scale-105 shadow-md">
+          <button @click="scrollToAbout" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-900 px-6 py-3 font-medium rounded-full border-2 border-gray-300 transition-transform duration-300 transform hover:scale-105 shadow-md text-xs sm:text-base">
             <Icon name="iconamoon:play-circle-duotone" class="w-8 h-8 text-secondary" />
             <span>Ver video</span>
           </button>
@@ -54,8 +62,8 @@
             ></div>
             
             <!-- Text -->
-            <div class="absolute top-1/2 left-0 transform -translate-y-2/3 w-1/2 z-10">
-              <h3 class="text-white text-base font-semibold leading-tight p-3 sm:p-4">
+            <div class="absolute left-0 w-1/2 z-10 top-1 md:top-1/2 md:-translate-y-3/4">
+              <h3 class="text-white text-[0.9rem] sm:text-base md:text-lg font-semibold leading-tight p-3 sm:p-4">
                 {{ category.title }}
               </h3>
             </div>
@@ -85,6 +93,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
+
 interface Category {
   title: string;
   image: string;
@@ -97,6 +107,21 @@ const scrollToAbout = () => {
     element.scrollIntoView({ behavior: 'smooth' });
   }
 };
+
+const isMobile = ref(false);
+
+onMounted(() => {
+  const checkMobile = () => {
+    isMobile.value = window.innerWidth < 768;
+  };
+  
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+  
+  onUnmounted(() => {
+    window.removeEventListener('resize', checkMobile);
+  });
+});
 
 const getCategoryColor = (bgColorClass: string): string => {
   const colorMap: Record<string, string> = {
