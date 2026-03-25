@@ -248,7 +248,6 @@ const createPlan = async () => {
 
     const regions = chipsRegion.value.map((chip) => chip.value);
     newPlan.value.regions = regions;
-    console.log(newPlan.value.regions);
     const plan = {
         credit_quantity: Number(newPlan.value.credit_quantity),
         credit_type: newPlan.value.credit_type,

@@ -149,7 +149,6 @@ const updateLocationAddress = async () => {
 const modalRef = ref(null);
 
 const openModal = async () => {
-    console.log(props.modal.data.event);
     modalRef.value?.openModal();
     if (
         event.value?.session_info?.modality === "Presencial" &&

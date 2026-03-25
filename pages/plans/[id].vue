@@ -68,8 +68,6 @@ const handleBuyPlan = () => {
         loginModalRef.value?.openModal();
         return;
     }
-    // TODO: Handle purchase logic here
-    console.log("Plan to purchase: ", plan.value);
 };
 
 const openLoginModal = () => {

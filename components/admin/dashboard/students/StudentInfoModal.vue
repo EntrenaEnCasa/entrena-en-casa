@@ -476,9 +476,4 @@ const generatePurchaseReport = async () => {
     }
 };
 
-watch(() => props.student, (newVal) => {
-    if (newVal) {
-        console.log(newVal);
-    }
-});
 </script>

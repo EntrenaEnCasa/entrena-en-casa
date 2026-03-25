@@ -36,7 +36,6 @@ export default defineEventHandler(async (event) => {
     const { token } = await readBody(event);
 
     if (!token) {
-        console.log("no token found");
         setResponseStatus(event, 400);
         return {
             success: false,
@@ -89,9 +88,7 @@ export default defineEventHandler(async (event) => {
                         body: body,
                     },
                 );
-                console.log("responseAddCredits", responseAddCredits);
                 if (responseAddCredits.success) {
-                    console.log("Compra realizada exitosamente.");
                     return {
                         success: true,
                         message: "Compra realizada exitosamente"
@@ -108,7 +105,6 @@ export default defineEventHandler(async (event) => {
             } catch (error) {
                 setResponseStatus(event, 400);
                 console.log(error);
-                console.log("Ocurrió un error al intentar cargar los créditos.");
                 return {
                     success: false,
                     message: "Ocurrió un error al intentar cargar los créditos.",
@@ -121,12 +117,6 @@ export default defineEventHandler(async (event) => {
             };
         }
     } catch (error: any) {
-        if (error.hasOwnProperty("data")) {
-            console.log(error.data);
-        } else {
-            console.log(error);
-        }
-
         setResponseStatus(event, 400);
         return {
             success: false,

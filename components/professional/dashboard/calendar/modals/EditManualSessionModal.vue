@@ -242,7 +242,6 @@ watch(
 watch(
     () => props.modal.data.event,
     (newEvent) => {
-        console.log(newEvent);
         if (newEvent === null || !newEvent.session_info.coordinates) return;
         const coordinates = JSON.parse(newEvent.session_info.coordinates);
         setMarkerCoordinates(coordinates);

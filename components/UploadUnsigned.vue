@@ -31,7 +31,6 @@ const emit = defineEmits<{
 }>()
 
 function handleResult(result: any) {
-  console.log('Cloudinary result:', result) // Para debug
   
   // Cloudinary retorna result.info con los datos del asset
   const url = result?.info?.secure_url as string

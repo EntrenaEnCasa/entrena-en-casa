@@ -701,16 +701,10 @@ onMounted(() => {
 
   events.value = props.data
 
-  // Depuración: Verificar si los eventos llegan correctamente
-  console.log('DynamicCalendar mounted. Events:', props.data);
 });
 
 watch(() => props.data, (newEvents) => {
     events.value = newEvents
-  console.log('DynamicCalendar events updated:', newEvents);
 });
 
-watch(() => selectedDateEvents, (newSelectedEvents) => {
-  console.log('DynamicCalendar selectedDateEvents updated:', newSelectedEvents);
-});
 </script>

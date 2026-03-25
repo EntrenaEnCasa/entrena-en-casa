@@ -8,7 +8,6 @@ export const useAuthStore = defineStore("AuthStore", () => {
 
     const logIn = (userData: any) => {
         loggedIn.value = true;
-        console.log("User logged in, userData: ", userData);
         userStore.setUser(userData);
     };
 

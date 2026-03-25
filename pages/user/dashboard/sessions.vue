@@ -611,7 +611,6 @@ const confirmSession = async () => {
             refreshFutureSessions();
             toast.success("Asistencia confirmada con éxito");
         } else {
-            console.log(response.message);
             toast.error(response.message);
         }
     } catch (error) {

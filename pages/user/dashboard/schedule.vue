@@ -461,8 +461,6 @@ const logScheduleDiagnostics = (source, requestBody, response) => {
     });
 
     console.groupCollapsed(`[TIME-DIAG][${source}] start_date=${requestBody?.start_date} tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
-    console.log("requestBody", requestBody);
-    console.log("response.success", response?.success, "professionals", professionalsList.length);
     console.table(rows);
     console.groupEnd();
 };

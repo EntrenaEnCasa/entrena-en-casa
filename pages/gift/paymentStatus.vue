@@ -187,7 +187,6 @@ const modality = computed(() => {
 });
 
 const sendEmail = async () => {
-    console.log(giftStore.giftTransaction);
     const EmailResponse = await $fetch<APIResponse>("/api/gift/new-gift/send-gift-email", {
         method: "POST",
         body: {

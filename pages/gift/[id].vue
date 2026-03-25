@@ -123,8 +123,6 @@ const handleGiftPlan = async () => {
         giftData.value.has_account = true;
         giftData.value.user_id = checkEmailResponse.user_id;
     } else {
-        console.log("El correo no existe, se procederá a crear una cuenta");
-        console.log(giftData.value.recipient_email);
         const signUpResponse = await useFetch<SignUpResponse>(`${config.public.nuxtApiBase}/api/gift/new-gift/sign-up`, {
             method: "POST",
             body: JSON.stringify({

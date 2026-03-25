@@ -473,9 +473,4 @@ const deleteUser = async () => {
         toast.error("Error al eliminar usuario");
     }
 };
-watch(() => props.professional, (newVal) => {
-    if (newVal) {
-        console.log(newVal);
-    }
-});
 </script>

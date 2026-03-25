@@ -235,7 +235,4 @@ watch(
     },
 );
 
-onMounted(() => {
-    console.log(props.selectedFormat);
-});
 </script>

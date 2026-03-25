@@ -48,11 +48,6 @@ export const useDayNavigationStore = defineStore({
 
         updateSelectedDate(date: Date) {
             const newDate = new Date(date);
-            console.log('📅 DayNavigationStore.updateSelectedDate:', {
-                oldDate: this.selectedDate,
-                newDate: newDate,
-                dateString: newDate.toISOString().split('T')[0]
-            });
             this.selectedDate = newDate;
         },
     },
