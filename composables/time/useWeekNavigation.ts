@@ -59,7 +59,8 @@ export const useWeekNavigation = () => {
         };
         const formattedDate = new Intl.DateTimeFormat("es", options).format(date);
         const [day, month] = formattedDate.split(" de ");
-        return { day, month };
+        const weekday = new Intl.DateTimeFormat("es", { weekday: "long" }).format(date);
+        return { day, month, weekday };
     };
 
     return {

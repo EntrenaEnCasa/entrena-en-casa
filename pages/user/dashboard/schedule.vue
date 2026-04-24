@@ -75,6 +75,7 @@
                                 (isOnline && hasSessionsOnDay(day)),
                         }"
                     >
+                        <span class="text-xs capitalize">{{ formatDate(day).weekday }}</span>
                         <span class="text-2xl font-semibold">{{ formatDate(day).day }}</span>
                         <span class="capitalize">{{ formatDate(day).month }}</span>
                     </span>
