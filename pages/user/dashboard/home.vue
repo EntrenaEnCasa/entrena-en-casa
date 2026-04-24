@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="text-[#949494]">No tienes ninguna sesión a futuro.</div>
+                    <div class="text-[#949494]">No has participado de ninguna sesión.</div>
                 </div>
             </div>
             <!-- </div> -->
@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="text-[#949494]">No has participado de ninguna sesión.</div>
+                    <div class="text-[#949494]">No tienes próximas sesiones.</div>
                 </div>
             </div>
         </div>
@@ -169,10 +169,6 @@ const { data: pastSessions, pending: pastSessionsLoading } = await useFetch<Past
         lazy: true,
     },
 );
-
-onMounted(() => {
-    console.log(runtimeConfig.public.apiBase);
-});
 
 const {setSEO} = useSEO()
 setSEO({
