@@ -95,7 +95,7 @@
             <div v-else-if="pastSessions?.success">
                 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                     <div
-                        v-for="session in pastSessions.sessions"
+                        v-for="session in [...(pastSessions.sessions ?? [])].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())"
                         :key="session.session_id"
                         class="items-center gap-6 space-y-3 rounded-2xl border border-zinc-200 bg-white px-6 py-4 opacity-60 transition-opacity hover:opacity-100"
                         style="box-shadow: 0px 4px 50px -16px rgba(0, 0, 0, 0.1)"
