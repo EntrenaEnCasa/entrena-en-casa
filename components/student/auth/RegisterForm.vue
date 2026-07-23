@@ -1,95 +1,151 @@
 <template>
     <Form class="w-full" @submit="register" v-slot="{ meta }">
-        <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <CommonInput
-                label="Nombre"
-                v-model="formData.firstName"
-                name="first-name"
-                type="text"
-                id="first-name"
-                placeholder="Ingresa tu nombre"
-                :rules="(value) => !!value || 'El nombre es requerido'"
-            />
-            <CommonInput
-                label="Apellido"
-                v-model="formData.lastName"
-                name="last-name"
-                type="text"
-                id="last-name"
-                placeholder="Ingresa tu apellido"
-                :rules="(value) => !!value || 'El apellido es requerido'"
-            />
-            <CommonInput
-                label="Teléfono"
-                v-model="formData.phone"
-                name="phone"
-                type="tel"
-                id="phone"
-                icon="fa6-solid:phone"
-                placeholder="9 1234 5678"
-                :rules="validatePhone"
-                class="md:col-span-2"
-            />
-            <CommonInput
-                label="Correo electrónico"
-                v-model="formData.email"
-                name="email"
-                type="email"
-                id="email"
-                icon="fa6-solid:envelope"
-                placeholder="Ingresa tu correo electrónico"
-                :rules="validateEmail"
-                class="md:col-span-2"
-            />
-            <CommonInput
-                label="Contraseña"
-                v-model="formData.password"
-                name="password"
-                type="password"
-                id="password"
-                icon="fa6-solid:lock"
-                placeholder="* * * * * * * *"
-                :rules="validatePassword"
-            />
-            <CommonInput
-                label="Confirmar contraseña"
-                v-model="formData.passwordRepeat"
-                name="password-repeat"
-                type="password"
-                id="password-repeat"
-                icon="fa6-solid:lock"
-                placeholder="* * * * * * * *"
-                :rules="validatePasswordRepeat"
-            />
-            <CommonSelect
-                label="¿En qué región te encuentras?"
-                v-model="formData.region"
-                name="region"
-                id="region"
-                placeholder="Ingresa tu región"
-                :rules="validateRegion"
-                :options="regionOptions"
-                class="md:col-span-2"
-            />
-            
+        <!-- Step indicator -->
+        <div class="mb-8 flex items-center justify-center gap-4">
+            <div class="flex items-center gap-3">
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-base font-bold text-white"
+                >
+                    1
+                </div>
+                <div class="text-sm font-semibold text-secondary">Paso 1 de 2</div>
+            </div>
+            <div class="h-0.5 w-14 bg-gray-200"></div>
+            <div class="flex items-center gap-3">
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-base font-bold text-gray-400"
+                >
+                    2
+                </div>
+                <div class="text-sm font-medium text-gray-400">Paso 2 (opcional)</div>
+            </div>
         </div>
-        <!-- <div class="flex items-center space-x-1">
-            <input class="h-5 w-5 rounded-full shadow" id="remember" type="checkbox" />
-            <label class="text-gray-500" for="remember">
+
+        <div class="mb-6 space-y-5">
+            <div>
+                <label class="mb-2 block text-sm font-semibold text-gray-800" for="email">
+                    Correo electrónico
+                </label>
+                <div
+                    class="flex items-center rounded-xl border border-gray-200 bg-white px-4 py-3.5 transition focus-within:border-secondary focus-within:ring-2 focus-within:ring-secondary/20"
+                >
+                    <Icon name="fa6-solid:envelope" class="mr-3 text-base text-secondary" />
+                    <Field
+                        id="email"
+                        name="email"
+                        v-model="formData.email"
+                        type="email"
+                        placeholder="tucorreo@ejemplo.com"
+                        :rules="validateEmail"
+                        class="w-full text-sm text-gray-800 outline-none placeholder:text-gray-400"
+                    />
+                </div>
+                <ErrorMessage name="email" class="mt-1 block text-sm text-red-500" />
+            </div>
+
+            <div>
+                <label class="mb-2 block text-sm font-semibold text-gray-800" for="password">
+                    Contraseña
+                </label>
+                <div
+                    class="flex items-center rounded-xl border border-gray-200 bg-white px-4 py-3.5 transition focus-within:border-secondary focus-within:ring-2 focus-within:ring-secondary/20"
+                >
+                    <Icon name="fa6-solid:lock" class="mr-3 text-base text-secondary" />
+                    <Field
+                        id="password"
+                        name="password"
+                        v-model="formData.password"
+                        :type="showPassword ? 'text' : 'password'"
+                        placeholder="Crea una contraseña segura"
+                        :rules="validatePassword"
+                        class="w-full text-sm text-gray-800 outline-none placeholder:text-gray-400"
+                    />
+                    <button
+                        type="button"
+                        class="ml-2 text-gray-400 transition hover:text-gray-600"
+                        @click="showPassword = !showPassword"
+                    >
+                        <Icon :name="showPassword ? 'fa6-solid:eye-slash' : 'fa6-solid:eye'" class="text-base" />
+                    </button>
+                </div>
+                <ErrorMessage name="password" class="mt-1 block text-sm text-red-500" />
+            </div>
+
+            <div>
+                <label class="mb-2 block text-sm font-semibold text-gray-800" for="password-repeat">
+                    Repetir contraseña
+                </label>
+                <div
+                    class="flex items-center rounded-xl border border-gray-200 bg-white px-4 py-3.5 transition focus-within:border-secondary focus-within:ring-2 focus-within:ring-secondary/20"
+                >
+                    <Icon name="fa6-solid:lock" class="mr-3 text-base text-secondary" />
+                    <Field
+                        id="password-repeat"
+                        name="password-repeat"
+                        v-model="formData.passwordRepeat"
+                        :type="showPasswordRepeat ? 'text' : 'password'"
+                        placeholder="Repite tu contraseña"
+                        :rules="validatePasswordRepeat"
+                        class="w-full text-sm text-gray-800 outline-none placeholder:text-gray-400"
+                    />
+                    <button
+                        type="button"
+                        class="ml-2 text-gray-400 transition hover:text-gray-600"
+                        @click="showPasswordRepeat = !showPasswordRepeat"
+                    >
+                        <Icon
+                            :name="showPasswordRepeat ? 'fa6-solid:eye-slash' : 'fa6-solid:eye'"
+                            class="text-base"
+                        />
+                    </button>
+                </div>
+                <ErrorMessage name="password-repeat" class="mt-1 block text-sm text-red-500" />
+            </div>
+
+            <CommonListbox
+                id="region"
+                name="region"
+                v-model="formData.region"
+                label="Seleccionar región"
+                icon="fa6-solid:location-dot"
+                placeholder="Selecciona tu región"
+                :options="regionOptions"
+                :rules="validateRegion"
+            />
+        </div>
+
+        <div class="mb-6 flex items-start gap-3">
+            <input
+                v-model="formData.acceptTerms"
+                class="mt-1 h-5 w-5 rounded-md border-gray-300 text-secondary focus:ring-secondary"
+                id="terms"
+                type="checkbox"
+            />
+            <label class="text-sm text-gray-600" for="terms">
                 Acepto los
-                <span class="underline">
+                <NuxtLink to="/terms" class="text-secondary underline">
                     términos y condiciones
-                </span>
+                </NuxtLink>
             </label>
-        </div> -->
+        </div>
+
         <CommonButton
-            class="w-full py-2 font-medium"
-            text-size="xl"
-            :disabled="!meta.valid"
+            class="w-full py-3.5 font-semibold"
+            bg-color="secondary"
+            rounded-size="xl"
+            text-size="base"
+            :disabled="!meta.valid || !formData.acceptTerms"
             :loading="loading"
         >
-            Registrarse
+            Continuar
         </CommonButton>
+
+        <p class="mt-6 text-center text-sm text-gray-600">
+            ¿Ya tienes cuenta?
+            <router-link to="/user/auth/login" class="font-semibold text-secondary">
+                Iniciar sesión
+            </router-link>
+        </p>
     </Form>
 </template>
 <script setup>
@@ -108,10 +164,13 @@ const formData = reactive({
     region: "",
     firstName: "",
     lastName: "",
-    phone: ""
+    phone: "",
+    acceptTerms: false
 });
 
 const loading = ref(false);
+const showPassword = ref(false);
+const showPasswordRepeat = ref(false);
 
 const regionOptions = [
     { value: 11, label: "Aisén del General Carlos Ibañez del Campo" },
@@ -206,7 +265,7 @@ const validatePasswordRepeat = (passRepeat) => {
         return "Debes repetir la contraseña";
     }
 
-    if (passRepeat !== password.value) {
+    if (passRepeat !== formData.password) {
         return "Las contraseñas no coinciden";
     }
 
