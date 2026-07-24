@@ -30,8 +30,10 @@
         </div>
 
         <CommonButton
-            class="w-full py-2 font-medium"
-            text-size="xl"
+            class="w-full py-3.5 font-semibold disabled:cursor-not-allowed disabled:bg-secondary/40 "
+            bg-color="secondary"
+            rounded-size="xl"
+            text-size="base"
             :loading="loading"
             :disabled="!meta.valid || isLocked"
         >
