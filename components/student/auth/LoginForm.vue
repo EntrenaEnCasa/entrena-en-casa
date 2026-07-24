@@ -1,5 +1,5 @@
 <template>
-    <Form class="w-4/5 space-y-5" @submit="handleLogin" v-slot="{ meta }">
+    <Form class="w-full md:w-4/5 space-y-5" @submit="handleLogin" v-slot="{ meta }">
         <CommonInput
             label="Correo Electrónico"
             v-model="formData.email"

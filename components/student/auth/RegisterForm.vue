@@ -114,7 +114,7 @@
             />
         </div>
 
-        <div class="mb-6 flex items-start gap-3">
+        <!-- <div class="mb-6 flex items-start gap-3">
             <input
                 v-model="formData.acceptTerms"
                 class="mt-1 h-5 w-5 rounded-md border-gray-300 text-secondary focus:ring-secondary"
@@ -127,14 +127,14 @@
                     términos y condiciones
                 </NuxtLink>
             </label>
-        </div>
+        </div> -->
 
         <CommonButton
             class="w-full py-3.5 font-semibold"
             bg-color="secondary"
             rounded-size="xl"
             text-size="base"
-            :disabled="!meta.valid || !formData.acceptTerms"
+            :disabled="!meta.valid"
             :loading="loading"
         >
             Continuar

@@ -1,7 +1,7 @@
 <template>
     <div
         class="relative flex min-h-screen items-start justify-center bg-cover 
-        h-full bg-no-repeat px-6 pb-10 pt-14 lg:px-8 lg:pt-16"
+        h-full bg-no-repeat px-6 pb-10 pt-5 md:pt-14 lg:px-8 lg:pt-16"
         style="background-image: url('/auth/step-1-bg.jpg');"
     >
         <!-- <div
@@ -9,7 +9,7 @@
         ></div> -->
 
         <div
-            class="relative z-10 flex w-full max-w-6xl flex-col items-center gap-10 lg:flex-row lg:items-start lg:justify-between"
+            class="relative z-10 flex w-full max-w-6xl flex-col items-center md:gap-10 lg:flex-row lg:items-start lg:justify-between"
         >
             <div class="hidden max-h-[50vh] w-full flex-col justify-start text-white lg:flex">
                 <NuxtLink to="/">
@@ -40,7 +40,7 @@
             </div>
 
             <NuxtLink to="/" class="relative z-10 lg:hidden">
-                <NuxtImg src="/logo-white.png" class="mb-2 w-40" alt="logo" />
+                <NuxtImg src="/logo-white.png" class=" w-40" alt="logo" />
             </NuxtLink>
 
             <div class="w-full max-w-xl rounded-3xl bg-white p-8 shadow-2xl lg:p-10">
