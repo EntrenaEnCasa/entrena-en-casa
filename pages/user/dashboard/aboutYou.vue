@@ -15,7 +15,7 @@
                         >
                             1
                         </div>
-                        <div class="text-sm font-medium text-gray-400">Paso 1 de 2</div>
+                        <div class="text-xs md:text-sm font-medium text-gray-400">Paso 1 de 2</div>
                     </div>
                     <div class="h-0.5 w-14 bg-primary"></div>
                     <div class="flex items-center gap-3">
@@ -24,7 +24,7 @@
                         >
                             2
                         </div>
-                        <div class="text-sm font-semibold text-primary">Paso 2 (opcional)</div>
+                        <div class="text-xs md:text-sm font-semibold text-primary">Paso 2 (opcional)</div>
                     </div>
                 </div>
             </div>

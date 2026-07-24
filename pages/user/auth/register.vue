@@ -1,6 +1,7 @@
 <template>
     <div
-        class="relative flex min-h-screen items-start justify-center overflow-hidden bg-cover bg-center bg-no-repeat px-6 pb-10 pt-14 lg:px-8 lg:pt-16"
+        class="relative flex min-h-screen items-start justify-center bg-cover 
+        h-full bg-no-repeat px-6 pb-10 pt-14 lg:px-8 lg:pt-16"
         style="background-image: url('/auth/step-1-bg.jpg');"
     >
         <!-- <div
@@ -10,36 +11,36 @@
         <div
             class="relative z-10 flex w-full max-w-6xl flex-col items-center gap-10 lg:flex-row lg:items-start lg:justify-between"
         >
-            <div class="hidden w-full  flex-col text-white lg:flex">
+            <div class="hidden max-h-[50vh] w-full flex-col justify-start text-white lg:flex">
                 <NuxtLink to="/">
-                    <NuxtImg src="/logo-white.png" class="mb-6 w-40" alt="logo" />
+                    <NuxtImg src="/logo-white.png" class="mb-4 w-32" alt="logo" />
                 </NuxtLink>
-                <h1 class="mb-3 text-3xl font-bold leading-tight lg:text-[2.75rem]">
+                <h1 class="mb-2 text-2xl font-bold leading-tight lg:text-[2.25rem]">
                     Tu mejor versión<br />comienza aquí
                 </h1>
-                <p class="mb-6 text-md text-white/90">
+                <p class="mb-4 text-sm text-white/90">
                     Únete a miles de personas que ya<br />entrenan desde casa.
                 </p>
-                <div class="flex gap-6 w-[85%] rounded-2xl bg-white/95 p-5 shadow-xl backdrop-blur-sm">
+                <div class="flex w-4/5 gap-4 rounded-2xl bg-white/95 p-3 shadow-xl backdrop-blur-sm justify-center">
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-secondary">+10K</div>
-                        <div class="mt-1 text-sm text-gray-600">Usuarios activos</div>
+                        <div class="text-2xl font-bold text-secondary">+10K</div>
+                        <div class="mt-1 text-xs text-gray-600">Usuarios activos</div>
                     </div>
                     <div class="w-px bg-gray-300"></div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-secondary">+500</div>
-                        <div class="mt-1 text-sm text-gray-600">Entrenamientos</div>
+                        <div class="text-2xl font-bold text-secondary">+500</div>
+                        <div class="mt-1 text-xs text-gray-600">Entrenamientos</div>
                     </div>
                     <div class="w-px bg-gray-300"></div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-secondary">95%</div>
-                        <div class="mt-1 text-sm text-gray-600">Satisfacción</div>
+                        <div class="text-2xl font-bold text-secondary">95%</div>
+                        <div class="mt-1 text-xs text-gray-600">Satisfacción</div>
                     </div>
                 </div>
             </div>
 
             <NuxtLink to="/" class="relative z-10 lg:hidden">
-                <NuxtImg src="/logo.png" class="mb-2 w-40" alt="logo" />
+                <NuxtImg src="/logo-white.png" class="mb-2 w-40" alt="logo" />
             </NuxtLink>
 
             <div class="w-full max-w-xl rounded-3xl bg-white p-8 shadow-2xl lg:p-10">
